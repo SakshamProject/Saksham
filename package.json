@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"scripts": {
-		"start": "pnpm dotenx run -- tsx watch server.ts",
+		"start": "pnpm dotenvx run -- tsx watch server.ts",
 		"build": "pnpm dotenvx run -- tsc --build"
 	},
 	"dependencies": {
