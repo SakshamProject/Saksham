@@ -1,0 +1,52 @@
+name: Development
+run-name: ${{ github.actor }} has pushed to dev branch ${{ github.ref_name }}
+on:
+  push:
+    branches-ignore:
+      - main
+env:
+  NODE_ENV: development
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+          run_install: false
+
+      - name: Get PNPM Store Directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup PNPM Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Prisma Generate
+        run: pnpm prisma generate
+
+      - name: Run Tests
+        run: pnpm jest
+
+      - name: Build Backend
+        working-directory: ./backend
+        run: pnpm tsc --build
