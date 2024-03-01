@@ -1,8 +1,14 @@
 import express from "express";
 import config from "./config.js";
 import apiRouter from "./src/routes/api.js";
+import morgan from "morgan";
+import path from "path";
+import fs from "fs";
 
 const server = express();
+
+const accessLogStream = fs.createWriteStream(path.join(config.__dirname, 'access.log'), { flags: 'a' });
+server.use(morgan('combined', { stream: accessLogStream }));
 
 server.use("/api", apiRouter);
 
