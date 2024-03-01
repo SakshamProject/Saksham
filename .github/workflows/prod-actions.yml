@@ -8,9 +8,6 @@ on:
 env:
   NODE_ENV: production
 
-env:
-  NODE_ENV: development
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
