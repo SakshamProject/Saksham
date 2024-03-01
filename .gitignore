@@ -1,3 +1,6 @@
+# Jest
+coverage/
+
 # IDE Files
 .idea/
 .vscode/
