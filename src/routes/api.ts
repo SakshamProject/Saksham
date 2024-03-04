@@ -1,5 +1,6 @@
 import express, {Request, Response, Router} from "express";
 import { pingDB } from "../services/database/database.js";
+import serviceMasterRouter from "./serviceMaster/serviceMaster.js";
 
 const apiRouter = Router();
 
@@ -14,5 +15,7 @@ apiRouter.get("/check", async (request: Request, response: Response): Promise<vo
     }
     response.json({"message": "API is up and running!"});
 });
+
+apiRouter.use("/service", serviceMasterRouter);
 
 export default apiRouter;
