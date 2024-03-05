@@ -9,6 +9,13 @@ async function postService(request: Request, response: Response): Promise<void> 
 async function getService(request: Request, response: Response): Promise<void> {
     try {
         const query = getRequestSchema.parse(request.query);
+        if (query.orderBy) {
+            const order = query.reverse ? 'DESC' : 'ASC';
+            const column = query.orderBy;
+            const orderBy = {
+                column : order
+            }
+        }
         response.json(query);
     }
     catch (error) {
