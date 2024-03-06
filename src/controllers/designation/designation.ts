@@ -1,17 +1,18 @@
 import { Request, Response } from "express";
-import { getDesignationDB } from "../../services/database/designation/designation.js";
+import { getDesignationDB, getFeatureIdByNameDB } from "../../services/database/designation/designation.js";
 import getRequestSchema from "../getRequest.schema.js";
+
 
 async function getDesignation(
   request: Request,
   response: Response
 ): Promise<void> {
-
+    console.log("enters getdesignation controller function ")
   const { start, rows, orderBy, reverse } = getRequestSchema.parse(
     request.query
   );
   const orderByDirection: "asc" | "desc" = reverse === "true" ? "desc" : "asc";
-  const orderByColumn : string = orderBy;
+  const orderByColumn: string = orderBy;
 
   const results = await getDesignationDB(
     start,
@@ -26,5 +27,15 @@ async function getDesignation(
   response.send(results);
 }
 
+async function postDesignation(request:Request, response:Response){
 
-export { getDesignation };
+    //const reqBody = request.body;
+    const {state, district,sevaKendra,designation,features}=request.body;
+    const features_id = await Promise.all(features.map(getFeatureIdByNameDB));
+
+   // response.send(features_id)
+
+}
+
+
+export { getDesignation ,postDesignation};

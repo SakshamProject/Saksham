@@ -1,13 +1,13 @@
 import  { Router} from "express";
-import { getDesignation } from "../../controllers/designation/designation.js";
+import { getDesignation, postDesignation, putDesignation } from "../../controllers/designation/designation.js";
 
 const designationRouter = Router();
 
-console.log("[+]enters designationRouter")
+console.log("designatiorouter")
 
 
 designationRouter.get('/',getDesignation)
-
+designationRouter.post('/',postDesignation)
 
 
 export default designationRouter;
