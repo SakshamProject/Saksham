@@ -26,7 +26,7 @@ model SevaKendra {
   users         User[]
   city          City                    @relation(fields: [cityId], references: [id])
   contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])
-  roles         Role[]
+  designations         Designation[]
 }
 
 model ContactPerson {
@@ -103,9 +103,9 @@ model User {
   mail             String
   passwordId       String            @unique
   password         UserPassword      @relation(fields: [passwordId], references: [id])
-  role             Role              @relation(fields: [roleId], references: [id])
+  designation            Designation             @relation(fields: [roleId], references: [id])
   sevakendra       SevaKendra        @relation(fields: [sevaKendraId], references: [id])
-  featuresAssigned FeaturesOnRoles[]
+  featuresAssigned FeaturesOnDesignations[]
 }
 
 model UserPassword {
@@ -118,12 +118,12 @@ model UserPassword {
 model Feature {
   id    String            @id @default(uuid())
   name  String
-  roles FeaturesOnRoles[]
+  designations FeaturesOnDesignations[]
 }
 
 // e.g. coordinator , volunteers
 // or Designation
-model Role {
+model Designation {
   id   String @id @default(uuid())
   name String
 
@@ -131,11 +131,11 @@ model Role {
   sevaKendra   SevaKendra @relation(fields: [sevaKendraId], references: [id])
 
   users    User[]
-  features FeaturesOnRoles[]
+  features FeaturesOnDesignations[]
 }
 
 // mapping sidebar/feature to certain role e.g. users side bar to coordinator
-model FeaturesOnRoles {
+model FeaturesOnDesignations {
   id           String   @id @default(uuid())
   featureId    String
   roleId       String
@@ -144,7 +144,7 @@ model FeaturesOnRoles {
   assignedBy   User     @relation(fields: [assignedById], references: [id])
 
   feature Feature @relation(fields: [featureId], references: [id])
-  role    Role    @relation(fields: [roleId], references: [id])
+  designation    Designation   @relation(fields: [roleId], references: [id])
 }
 
 model DivyangPersonalDetails {
