@@ -26,7 +26,7 @@ model SevaKendra {
   users         User[]
   city          City                    @relation(fields: [cityId], references: [id])
   contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])
-  roles         Role[]
+  designations  Designation[]
 }
 
 model ContactPerson {
@@ -89,23 +89,23 @@ model State {
 }
 
 model User {
-  id               String            @id @default(uuid())
-  userId           String            @unique // check datatype
+  id               String                   @id @default(uuid())
+  userId           String                   @unique // check datatype
   firstName        String
   lastName         String
   gender           Gender
   dateOfBirth      DateTime
   contactNumber    String
   whatsappNumber   String
-  roleId           String
+  designationId    String
   sevaKendraId     String
   picture          String // url
   mail             String
-  passwordId       String            @unique
-  password         UserPassword      @relation(fields: [passwordId], references: [id])
-  role             Role              @relation(fields: [roleId], references: [id])
-  sevakendra       SevaKendra        @relation(fields: [sevaKendraId], references: [id])
-  featuresAssigned FeaturesOnRoles[]
+  passwordId       String                   @unique
+  password         UserPassword             @relation(fields: [passwordId], references: [id])
+  designation      Designation              @relation(fields: [designationId], references: [id])
+  sevakendra       SevaKendra               @relation(fields: [sevaKendraId], references: [id])
+  featuresAssigned FeaturesOnDesignations[]
 }
 
 model UserPassword {
@@ -116,14 +116,14 @@ model UserPassword {
 
 // side bars seva kendra master, service master
 model Feature {
-  id    String            @id @default(uuid())
-  name  String
-  roles FeaturesOnRoles[]
+  id           String                   @id @default(uuid())
+  name         String
+  designations FeaturesOnDesignations[]
 }
 
 // e.g. coordinator , volunteers
 // or Designation
-model Role {
+model Designation {
   id   String @id @default(uuid())
   name String
 
@@ -131,20 +131,20 @@ model Role {
   sevaKendra   SevaKendra @relation(fields: [sevaKendraId], references: [id])
 
   users    User[]
-  features FeaturesOnRoles[]
+  features FeaturesOnDesignations[]
 }
 
-// mapping sidebar/feature to certain role e.g. users side bar to coordinator
-model FeaturesOnRoles {
-  id           String   @id @default(uuid())
-  featureId    String
-  roleId       String
-  assignedOn   DateTime @default(now())
-  assignedById String
-  assignedBy   User     @relation(fields: [assignedById], references: [id])
+// mapping sidebar/feature to certain designation e.g. users side bar to coordinator
+model FeaturesOnDesignations {
+  id            String   @id @default(uuid())
+  featureId     String
+  designationId String
+  assignedOn    DateTime @default(now())
+  assignedById  String
+  assignedBy    User     @relation(fields: [assignedById], references: [id])
 
-  feature Feature @relation(fields: [featureId], references: [id])
-  role    Role    @relation(fields: [roleId], references: [id])
+  feature     Feature     @relation(fields: [featureId], references: [id])
+  designation Designation @relation(fields: [designationId], references: [id])
 }
 
 model DivyangPersonalDetails {
