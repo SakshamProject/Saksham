@@ -1,5 +1,5 @@
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client'
 import {promise} from "zod";
 
 const prisma = new PrismaClient();
@@ -13,4 +13,5 @@ async function pingDB(): Promise<void> {
     }
 }
 
-export { pingDB };
+export default prisma;
+export { pingDB};

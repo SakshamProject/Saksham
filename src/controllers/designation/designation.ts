@@ -1,0 +1,30 @@
+import { Request, Response } from "express";
+import { getDesignationDB } from "../../services/database/designation/designation.js";
+import getRequestSchema from "../getRequest.schema.js";
+
+async function getDesignation(
+  request: Request,
+  response: Response
+): Promise<void> {
+
+  const { start, rows, orderBy, reverse } = getRequestSchema.parse(
+    request.query
+  );
+  const orderByDirection: "asc" | "desc" = reverse === "true" ? "desc" : "asc";
+  const orderByColumn : string = orderBy;
+
+  const results = await getDesignationDB(
+    start,
+    rows,
+    orderByColumn,
+    orderByDirection
+  );
+  results["start"] = start + 1;
+  results["rows"] = rows;
+  results["orderBy"] = orderBy;
+  results["reverse"] = reverse;
+  response.send(results);
+}
+
+
+export { getDesignation };

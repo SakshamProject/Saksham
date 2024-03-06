@@ -10,6 +10,8 @@ const server = express();
 const accessLogStream = fs.createWriteStream(path.join(config.__dirname, 'access.log'), { flags: 'a' });
 server.use(morgan('combined', { stream: accessLogStream }));
 
+console.log("[+]enters mainserver")
+
 server.use("/api", apiRouter);
 
 server.listen(config.PORT, () => {
