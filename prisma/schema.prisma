@@ -26,7 +26,7 @@ model SevaKendra {
   users         User[]
   city          City                    @relation(fields: [cityId], references: [id])
   contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])
-  designations         Designation[]
+  designations  Designation[]
 }
 
 model ContactPerson {
@@ -89,22 +89,22 @@ model State {
 }
 
 model User {
-  id               String            @id @default(uuid())
-  userId           String            @unique // check datatype
+  id               String                   @id @default(uuid())
+  userId           String                   @unique // check datatype
   firstName        String
   lastName         String
   gender           Gender
   dateOfBirth      DateTime
   contactNumber    String
   whatsappNumber   String
-  roleId           String
+  designationId    String
   sevaKendraId     String
   picture          String // url
   mail             String
-  passwordId       String            @unique
-  password         UserPassword      @relation(fields: [passwordId], references: [id])
-  designation            Designation             @relation(fields: [roleId], references: [id])
-  sevakendra       SevaKendra        @relation(fields: [sevaKendraId], references: [id])
+  passwordId       String                   @unique
+  password         UserPassword             @relation(fields: [passwordId], references: [id])
+  designation      Designation              @relation(fields: [designationId], references: [id])
+  sevakendra       SevaKendra               @relation(fields: [sevaKendraId], references: [id])
   featuresAssigned FeaturesOnDesignations[]
 }
 
@@ -116,8 +116,8 @@ model UserPassword {
 
 // side bars seva kendra master, service master
 model Feature {
-  id    String            @id @default(uuid())
-  name  String
+  id           String                   @id @default(uuid())
+  name         String
   designations FeaturesOnDesignations[]
 }
 
@@ -134,17 +134,17 @@ model Designation {
   features FeaturesOnDesignations[]
 }
 
-// mapping sidebar/feature to certain role e.g. users side bar to coordinator
+// mapping sidebar/feature to certain designation e.g. users side bar to coordinator
 model FeaturesOnDesignations {
-  id           String   @id @default(uuid())
-  featureId    String
-  roleId       String
-  assignedOn   DateTime @default(now())
-  assignedById String
-  assignedBy   User     @relation(fields: [assignedById], references: [id])
+  id            String   @id @default(uuid())
+  featureId     String
+  designationId String
+  assignedOn    DateTime @default(now())
+  assignedById  String
+  assignedBy    User     @relation(fields: [assignedById], references: [id])
 
-  feature Feature @relation(fields: [featureId], references: [id])
-  designation    Designation   @relation(fields: [roleId], references: [id])
+  feature     Feature     @relation(fields: [featureId], references: [id])
+  designation Designation @relation(fields: [designationId], references: [id])
 }
 
 model DivyangPersonalDetails {
