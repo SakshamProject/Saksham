@@ -1,5 +1,6 @@
 
 import { z } from "zod";
+import defaults from "../../defaults.js";
 
 const getRequestSchema = z.object({
     rows: z.coerce.number().positive().optional(),
@@ -8,4 +9,9 @@ const getRequestSchema = z.object({
     reverse: z.enum(["true", "false"]).optional()
 });
 
-export default getRequestSchema;
+const inputFieldSchema = z.string()
+        .min(defaults.minFieldLength)
+        .trim()
+        .regex(/^[\w\s-]+$/gm, "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]");
+
+export { getRequestSchema, inputFieldSchema };
