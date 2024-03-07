@@ -18,10 +18,12 @@ import {
   createServicesOnSevaKendraDBObject,
   createSevaKendraAuditLogDBObject,
   createSevaKendraDBObject,
-} from "../../DTO/sevaKendra/create.js";
+} from "../../DTO/sevaKendra/sevaKendra.js";
+import { getSevaKendraDB } from "../../services/database/sevaKendra/get.js";
 
 const getSevaKendra = async (request: Request, response: Response) => {
-
+  const sevaKendras = await getSevaKendraDB();
+  response.send(sevaKendras);
 };
 const postSevaKendra = async (request: Request, response: Response) => {
   const newSevaKendra: SevaKendraRequestResponse = request.body;
