@@ -12,15 +12,17 @@ import {
   createServicesOnSevaKendraDB,
   createSevaKendraDB,
   createContactPersonDB,
-} from "../../services/database/sevaKendra/sevaKendra.js";
+} from "../../services/database/sevaKendra/create.js";
 import {
   createContactPersonDBObject,
   createServicesOnSevaKendraDBObject,
   createSevaKendraAuditLogDBObject,
   createSevaKendraDBObject,
-} from "../../DTO/sevaKendra/sevaKendra.js";
+} from "../../DTO/sevaKendra/create.js";
 
-const getSevaKendra = async (request: Request, response: Response) => {};
+const getSevaKendra = async (request: Request, response: Response) => {
+
+};
 const postSevaKendra = async (request: Request, response: Response) => {
   const newSevaKendra: SevaKendraRequestResponse = request.body;
   const contactPersonDBObject = createContactPersonDBObject(newSevaKendra);

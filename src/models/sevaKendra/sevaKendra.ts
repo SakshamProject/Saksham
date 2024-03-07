@@ -24,3 +24,10 @@ export interface SevaKendraRequestResponse {
     description: string;
   };
 }
+export interface SevaKendraDisplay {
+  name: string;
+  state: string;
+  district: string;
+  contactName: string;
+  contactNumber: string;
+}
