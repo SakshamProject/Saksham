@@ -5,7 +5,7 @@ export interface SevaKendraRequestResponse {
   address: string;
   landLineNumber: string;
   mobileNumber: string;
-  startDate: Date;
+  startDate: string;
   contactPerson: {
     name: string;
     email: string;
@@ -20,7 +20,7 @@ export interface SevaKendraRequestResponse {
   isActive: boolean;
   auditLog: {
     status: string;
-    date: Date;
+    date: string;
     description: string;
   };
 }

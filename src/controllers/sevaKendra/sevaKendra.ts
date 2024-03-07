@@ -25,23 +25,24 @@ const postSevaKendra = async (request: Request, response: Response) => {
   const newSevaKendra: SevaKendraRequestResponse = request.body;
   const contactPersonDBObject = createContactPersonDBObject(newSevaKendra);
   const contactPersonId = contactPersonDBObject.id;
-  createContactPersonDB(contactPersonDBObject);
+  await createContactPersonDB(contactPersonDBObject);
   const sevaKendraDBObject = createSevaKendraDBObject(
     newSevaKendra,
     contactPersonId
   );
   const sevaKendraId = sevaKendraDBObject.id;
-  createSevaKendraDB(sevaKendraDBObject);
+  await createSevaKendraDB(sevaKendraDBObject);
   const servicesOnSevaKendraDBObject: ServicesOnSevaKendras[] =
     createServicesOnSevaKendraDBObject(sevaKendraId, newSevaKendra);
 
-  createServicesOnSevaKendraDB(servicesOnSevaKendraDBObject);
+  await createServicesOnSevaKendraDB(servicesOnSevaKendraDBObject);
 
   const auditLogDBObject = createSevaKendraAuditLogDBObject(
     newSevaKendra,
     sevaKendraId
   );
-  createAuditLogDB(auditLogDBObject);
+  await createAuditLogDB(auditLogDBObject);
+  response.send("Mission step 1 SUCCESS");
 };
 const patchSevaKendra = async (request: Request, response: Response) => {};
 const putSevaKendra = async (request: Request, response: Response) => {};

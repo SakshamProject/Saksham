@@ -6,35 +6,36 @@ import {
   SevaKendraAuditLog,
 } from "@prisma/client";
 
-const createContactPersonDB = (contactPerson: ContactPerson) => {
-  const createdContactPerson = prisma.contactPerson.create({
+const createContactPersonDB = async (contactPerson: ContactPerson) => {
+  const createdContactPerson = await prisma.contactPerson.create({
     data: contactPerson,
   });
   console.log("\n contact created \n");
   console.log(createdContactPerson);
 };
-const createSevaKendraDB = (sevaKendra: SevaKendra) => {
-  const createdSevaKendra = prisma.sevaKendra.create({
+const createSevaKendraDB = async (sevaKendra: SevaKendra) => {
+  const createdSevaKendra = await prisma.sevaKendra.create({
     data: sevaKendra,
   });
   console.log("\n sevaKendra created \n");
   console.log(createdSevaKendra);
 };
 
-const createServicesOnSevaKendraDB = (
+const createServicesOnSevaKendraDB = async (
   sevaKendraServices: ServicesOnSevaKendras[]
 ) => {
   for (let service in sevaKendraServices) {
-    const createdServicesOnSevaKendra = prisma.servicesOnSevaKendras.create({
-      data: sevaKendraServices[service],
-    });
+    const createdServicesOnSevaKendra =
+      await prisma.servicesOnSevaKendras.create({
+        data: sevaKendraServices[service],
+      });
     console.log(createdServicesOnSevaKendra);
   }
 
   console.log("\n services on sevaKendra created \n");
 };
-const createAuditLogDB = (auditLog: SevaKendraAuditLog) => {
-  const createdAuditLog = prisma.sevaKendraAuditLog.create({
+const createAuditLogDB = async (auditLog: SevaKendraAuditLog) => {
+  const createdAuditLog = await prisma.sevaKendraAuditLog.create({
     data: auditLog,
   });
   console.log("\n sevaKendra auditlog created \n");

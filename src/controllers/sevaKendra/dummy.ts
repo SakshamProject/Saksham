@@ -1,22 +1,8 @@
-import {
-  ContactPerson,
-  ServicesOnSevaKendras,
-  SevaKendra,
-  SevaKendraAuditLog,
-} from "@prisma/client";
-
 const getDistrictId = (cityName: string): string => {
-  return "";
+  return "1";
 };
-
-
-
 
 const getServiceId = (serviceName: string): string => {
-  return "";
+  return serviceName;
 };
-export {
-  getDistrictId,
-
-  getServiceId,
-};
+export { getDistrictId, getServiceId };
