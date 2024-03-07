@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import {ZodError} from "zod";
-import getRequestSchema from "../getRequest.schema.js";
+import {getRequestSchema} from "../schemas/zodSchemas.js";
 
 async function postService(request: Request, response: Response): Promise<void> {
+
     response.json(request.body);
 }
 
