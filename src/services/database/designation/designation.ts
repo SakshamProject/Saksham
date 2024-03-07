@@ -7,6 +7,7 @@ import { JsonObject } from "@prisma/client/runtime/library";
 const prisma = new PrismaClient({
   log: ["query", "info", "warn", "error"],
 });
+
 async function getCount(tableName:string):Promise<number>{
 try{
     const count:number = await prisma[tableName].count();
@@ -16,7 +17,7 @@ try{
 }
 }
 
-async function getDataById(tableName:string, id:string){
+async function getDataByIdDB(tableName:string, id:string){
 
     try{
         const data = await prisma[tableName].findUnique({
@@ -30,16 +31,25 @@ async function getDataById(tableName:string, id:string){
     }
 }
 
-async function getFeatureIdByNameDB(feature:string){
+async function getIdByNameDB(tableName:string, name:string){
     try{
-        const feature_id= await prisma.feature.findUnique({
+        console.log("tableName");
+
+        console.log(tableName);
+        console.log("name");
+
+        console.log(name);
+        const feature_id= await prisma[tableName].findUnique({
             where: {
-              name: feature,
+              name: name,
             },
             select:{
                 id:true
             }
           })
+          console.log("result");
+
+          console.log(feature_id)
           return feature_id?.id;
     }catch(err){
         return err;
@@ -113,4 +123,4 @@ if (orderBy ) {
 }
 
 
-export { getDesignationDB ,getFeatureIdByNameDB};
+export { getDesignationDB ,getIdByNameDB};

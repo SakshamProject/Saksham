@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
-import { getDesignationDB, getFeatureIdByNameDB } from "../../services/database/designation/designation.js";
+import { getDesignationDB, getIdByNameDB } from "../../services/database/designation/designation.js";
 import getRequestSchema from "../getRequest.schema.js";
+
+
 
 
 async function getDesignation(
@@ -31,9 +33,11 @@ async function postDesignation(request:Request, response:Response){
 
     //const reqBody = request.body;
     const {state, district,sevaKendra,designation,features}=request.body;
-    const features_id = await Promise.all(features.map(getFeatureIdByNameDB));
+    const features_id = await Promise.all(features.map(name => getIdByNameDB('Feature', name)));
 
-   // response.send(features_id)
+    //const sevakendra_id = await getIdByNameDB('sevaKendra',sevaKendra);
+
+    response.send(features_id)
 
 }
 
