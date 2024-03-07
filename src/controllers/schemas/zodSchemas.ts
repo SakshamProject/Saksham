@@ -12,6 +12,6 @@ const getRequestSchema = z.object({
 const inputFieldSchema = z.string()
         .min(defaults.minFieldLength)
         .trim()
-        .regex(/^[\w\s-]+$/gm, "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]");
+        .regex(/^[\w\s.-]+$/gm, "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]");
 
 export { getRequestSchema, inputFieldSchema };
