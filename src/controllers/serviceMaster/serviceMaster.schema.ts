@@ -6,4 +6,6 @@ const postServiceMasterSchema = z.object({
     type: inputFieldSchema.optional(),
     subtype: inputFieldSchema.optional(),
     name: inputFieldSchema.optional()
-})
+});
+
+export default postServiceMasterSchema;
