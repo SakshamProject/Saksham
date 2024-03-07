@@ -90,7 +90,7 @@ CREATE TABLE "User" (
     "dateOfBirth" TIMESTAMP(3) NOT NULL,
     "contactNumber" TEXT NOT NULL,
     "whatsappNumber" TEXT NOT NULL,
-    "roleId" TEXT NOT NULL,
+    "designationId" TEXT NOT NULL,
     "sevaKendraId" TEXT NOT NULL,
     "picture" TEXT NOT NULL,
     "mail" TEXT NOT NULL,
@@ -116,23 +116,23 @@ CREATE TABLE "Feature" (
 );
 
 -- CreateTable
-CREATE TABLE "Role" (
+CREATE TABLE "Designation" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "sevaKendraId" TEXT NOT NULL,
 
-    CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Designation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "FeaturesOnRoles" (
+CREATE TABLE "FeaturesOnDesignations" (
     "id" TEXT NOT NULL,
     "featureId" TEXT NOT NULL,
-    "roleId" TEXT NOT NULL,
+    "designationId" TEXT NOT NULL,
     "assignedOn" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "assignedById" TEXT NOT NULL,
 
-    CONSTRAINT "FeaturesOnRoles_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "FeaturesOnDesignations_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -366,22 +366,22 @@ ALTER TABLE "District" ADD CONSTRAINT "District_stateId_fkey" FOREIGN KEY ("stat
 ALTER TABLE "User" ADD CONSTRAINT "User_passwordId_fkey" FOREIGN KEY ("passwordId") REFERENCES "UserPassword"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "User" ADD CONSTRAINT "User_designationId_fkey" FOREIGN KEY ("designationId") REFERENCES "Designation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_sevaKendraId_fkey" FOREIGN KEY ("sevaKendraId") REFERENCES "SevaKendra"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Role" ADD CONSTRAINT "Role_sevaKendraId_fkey" FOREIGN KEY ("sevaKendraId") REFERENCES "SevaKendra"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Designation" ADD CONSTRAINT "Designation_sevaKendraId_fkey" FOREIGN KEY ("sevaKendraId") REFERENCES "SevaKendra"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "FeaturesOnRoles" ADD CONSTRAINT "FeaturesOnRoles_assignedById_fkey" FOREIGN KEY ("assignedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "FeaturesOnDesignations" ADD CONSTRAINT "FeaturesOnDesignations_assignedById_fkey" FOREIGN KEY ("assignedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "FeaturesOnRoles" ADD CONSTRAINT "FeaturesOnRoles_featureId_fkey" FOREIGN KEY ("featureId") REFERENCES "Feature"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "FeaturesOnDesignations" ADD CONSTRAINT "FeaturesOnDesignations_featureId_fkey" FOREIGN KEY ("featureId") REFERENCES "Feature"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "FeaturesOnRoles" ADD CONSTRAINT "FeaturesOnRoles_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "FeaturesOnDesignations" ADD CONSTRAINT "FeaturesOnDesignations_designationId_fkey" FOREIGN KEY ("designationId") REFERENCES "Designation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "DivyangPersonalDetails" ADD CONSTRAINT "DivyangPersonalDetails_communityCategoryId_fkey" FOREIGN KEY ("communityCategoryId") REFERENCES "CommunityCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
