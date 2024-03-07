@@ -22,5 +22,5 @@ export interface SevaKendraRequestResponse {
     status: string;
     date: Date;
     description: string;
-  }[];
+  };
 }

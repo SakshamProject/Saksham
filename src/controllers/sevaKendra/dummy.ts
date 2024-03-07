@@ -2,27 +2,40 @@ import {
   ContactPerson,
   ServicesOnSevaKendras,
   SevaKendra,
+  SevaKendraAuditLog,
 } from "@prisma/client";
 
-const getCityId = (cityName: string): string => {
+const getDistrictId = (cityName: string): string => {
   return "";
 };
 
-const createContactPersonDB = (contactPerson: ContactPerson) => {};
-const createSevaKendraDB = (sevaKendra: SevaKendra): string => {
-  return "";
+const createContactPersonDB = (contactPerson: ContactPerson): ContactPerson => {
+  const createdContactPerson: ContactPerson = {
+    email: "",
+    id: "",
+    name: "",
+    phoneNumber1: "",
+    phoneNumber2: "",
+  };
+  return createdContactPerson;
 };
-const createSevaKendraServicesDB = (
+const createSevaKendraDB = (sevaKendra: SevaKendra): SevaKendra => {
+  const createdSevaKendra: SevaKendra = {};
+  return createdSevaKendra;
+};
+const createServicesOnSevaKendraDB = (
   sevaKendraServices: ServicesOnSevaKendras[]
 ) => {};
+const createAuditLogDB = (auditLog: SevaKendraAuditLog) => {};
 
 const getServiceId = (serviceName: string): string => {
   return "";
 };
 export {
-  getCityId,
+  getDistrictId,
   createContactPersonDB,
   createSevaKendraDB,
-  createSevaKendraServicesDB,
+  createServicesOnSevaKendraDB,
+  createAuditLogDB,
   getServiceId,
 };
