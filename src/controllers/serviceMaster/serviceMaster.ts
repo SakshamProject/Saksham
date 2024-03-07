@@ -25,13 +25,6 @@ async function getService(request: Request, response: Response): Promise<void> {
         // It is taken care of by getRequestSchema
         const services = await getServicesDB(query.start, query.rows);
 
-        if (query.orderBy) {
-            const order = query.reverse ? 'DESC' : 'ASC';
-            const column = query.orderBy;
-            const orderBy = {
-                column : order
-            }
-        }
         response.json(services);
     }
     catch (error) {
