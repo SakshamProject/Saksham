@@ -9,6 +9,7 @@ const getRequestSchema = z.object({
     reverse: z.enum(["true", "false"]).optional()
 });
 
+// TODO: Allow Punctuation
 const inputFieldSchema = z.string()
         .min(defaults.minFieldLength)
         .trim()
