@@ -16,21 +16,23 @@ datasource db {
 model SevaKendra {
   id              String   @id @default(uuid())
   name            String
-  cityId          String
+  districtId      String
+  address         String
   mobileNumber    String
   landLineNumber  String
   startDate       DateTime
-  contactPersonId String
+  contactPersonId String @unique
   createdAt String?
   createdBy String?
   updatedAt String?
   updatedBy String?
   isActive Boolean? @default(true)
 
+  district      District @relation(fields: [districtId],references: [id])
   auditLogs     SevaKendraAuditLog[]
   services      ServicesOnSevaKendras[]
   users         User[]
-  contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])
+  contactPerson ContactPerson @relation(fields: [contactPersonId], references: [id])
   roles         Role[]
 }
 
@@ -45,13 +47,13 @@ model SevaKendraAuditLog {
 }
 
 model ContactPerson {
-  id           String @id @default(uuid())
+  id           String @id @default(uuid()) 
   name         String
   email        String
   phoneNumber1 String
   phoneNumber2 String
-
-  sevaKendra SevaKendra[]
+  
+  sevaKendra SevaKendra?
 }
 
 model ServicesOnSevaKendras {
@@ -77,7 +79,7 @@ model Service {
   sevaKendras ServicesOnSevaKendras[]
   serviceType ServiceType             @relation(fields: [serviceTypeId], references: [id])
 }
-  
+
 model District {
   id      String @id @default(uuid())
   name    String
@@ -85,6 +87,7 @@ model District {
 
   state      State                    @relation(fields: [stateId], references: [id])
   disability DivyangPersonalDetails[]
+  sevaKendras SevaKendra[]
 }
 
 model State {

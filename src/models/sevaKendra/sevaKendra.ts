@@ -2,15 +2,16 @@ export interface SevaKendraRequestResponse {
   name: string;
   state: string;
   district: string;
-  city: string;
   address: string;
   landLineNumber: string;
   mobileNumber: string;
   startDate: Date;
-  contactPersonName: string;
-  contactPersonEmail: string;
-  contactPersonPhoneNumber1: string;
-  contactPersonPhoneNumber2: string;
+  contactPerson: {
+    name: string;
+    email: string;
+    phoneNumber1: string;
+    phoneNumber2: string;
+  };
   servicesBySevaKendra: string[];
   createdAt: string;
   createdBy: string;
@@ -23,4 +24,3 @@ export interface SevaKendraRequestResponse {
     description: string;
   }[];
 }
-
