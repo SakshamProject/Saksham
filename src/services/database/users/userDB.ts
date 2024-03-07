@@ -1,8 +1,7 @@
 import prisma from "../database.js";
-
 const getUserDB = async () => {
     const users = await prisma.user.findMany();
-    return users
+    console.log(users);
+    return "success"
 } 
-
 export { getUserDB };
