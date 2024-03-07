@@ -21,12 +21,27 @@ model SevaKendra {
   landLineNumber  String
   startDate       DateTime
   contactPersonId String
+  createdAt String?
+  createdBy String?
+  updatedAt String?
+  updatedBy String?
+  isActive Boolean? @default(true)
 
+  auditLogs     SevaKendraAuditLog[]
   services      ServicesOnSevaKendras[]
   users         User[]
-  city          City                    @relation(fields: [cityId], references: [id])
   contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])
   roles         Role[]
+}
+
+model SevaKendraAuditLog {
+  id String @id @default(uuid())
+  sevaKendraId String  
+  status String
+  date DateTime
+  description String
+
+ sevakendra SevaKendra @relation(fields: [sevaKendraId],references: [id]) 
 }
 
 model ContactPerson {
@@ -41,10 +56,10 @@ model ContactPerson {
 
 model ServicesOnSevaKendras {
   id           String @id @default(uuid())
-  sevakendraId String
+  sevaKendraId String
   serviceId    String
 
-  sevakendra SevaKendra @relation(fields: [sevakendraId], references: [id])
+  sevakendra SevaKendra @relation(fields: [sevaKendraId], references: [id])
   service    Service    @relation(fields: [serviceId], references: [id])
 }
 
@@ -62,22 +77,12 @@ model Service {
   sevaKendras ServicesOnSevaKendras[]
   serviceType ServiceType             @relation(fields: [serviceTypeId], references: [id])
 }
-
-model City {
-  id         String @id @default(uuid())
-  name       String
-  districtId String
-
-  sevakendra SevaKendra[]
-  district   District     @relation(fields: [districtId], references: [id])
-}
-
+  
 model District {
   id      String @id @default(uuid())
   name    String
   stateId String
 
-  cities     City[]
   state      State                    @relation(fields: [stateId], references: [id])
   disability DivyangPersonalDetails[]
 }

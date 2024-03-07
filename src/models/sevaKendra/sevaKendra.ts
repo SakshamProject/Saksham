@@ -1,11 +1,12 @@
-export interface SevaKendra {
+export interface SevaKendraRequestResponse {
   name: string;
   state: string;
   district: string;
+  city: string;
   address: string;
   landLineNumber: string;
   mobileNumber: string;
-  startDate: string;
+  startDate: Date;
   contactPersonName: string;
   contactPersonEmail: string;
   contactPersonPhoneNumber1: string;
@@ -18,7 +19,8 @@ export interface SevaKendra {
   isActive: boolean;
   auditLog: {
     status: string;
-    date: string;
+    date: Date;
     description: string;
   }[];
 }
+
