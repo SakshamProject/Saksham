@@ -112,6 +112,7 @@ model User {
   sevaKendraId     String
   picture          String // url
   mail             String
+  loginid          String                   @unique
   passwordId       String                   @unique
   password         UserPassword             @relation(fields: [passwordId], references: [id])
   designation      Designation              @relation(fields: [designationId], references: [id])
