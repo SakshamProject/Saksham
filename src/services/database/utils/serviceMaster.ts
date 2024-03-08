@@ -7,6 +7,20 @@ function serviceMasterColumnNameMapper(orderByColumn: string, reverse: boolean) 
         "name": sortOrder
     });
 
+    serviceMasterColumnNameMap.set("serviceSubTypeName", {
+        "subType": {
+            "name": sortOrder
+        }
+    });
+
+    serviceMasterColumnNameMap.set("serviceTypeName", {
+        "subType": {
+            "serviceType": {
+                "name": sortOrder
+            }
+        }
+    });
+
     return serviceMasterColumnNameMap.get(orderByColumn);
 }
 

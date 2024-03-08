@@ -2,13 +2,18 @@ import { Request, Response } from "express";
 import {ZodError} from "zod";
 import {getRequestSchema} from "../schemas/zodSchemas.js";
 import postServiceMasterSchema from "./serviceMaster.schema.js";
-import {getServiceByIdDB, getServicesDB} from "../../services/database/serviceMaster/serviceMaster.js";
+import {
+    createServiceByIdDB,
+    getServiceByIdDB,
+    getServicesDB
+} from "../../services/database/serviceMaster/serviceMaster.js";
 
 async function postService(request: Request, response: Response): Promise<void> {
     try {
         const body = postServiceMasterSchema.parse(request.body);
 
-        response.json(body);
+        const service = await createServiceByIdDB(body.name, body.subTypeId);
+        response.json(service);
     }
     catch (error) {
         if (error instanceof ZodError) {

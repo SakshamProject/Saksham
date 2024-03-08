@@ -3,8 +3,7 @@ import { z } from "zod";
 import {inputFieldSchema} from "../schemas/zodSchemas.js";
 
 const postServiceMasterSchema = z.object({
-    type: inputFieldSchema,
-    subtype: inputFieldSchema,
+    subTypeId: z.string().uuid(),
     name: inputFieldSchema
 });
 

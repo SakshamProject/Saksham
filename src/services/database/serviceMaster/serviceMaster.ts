@@ -64,4 +64,17 @@ async function getServiceByIdDB(id: string, skip= defaults.skip, take= defaults.
     }
 }
 
-export { getServicesDB, getServiceByIdDB }
+async function createServiceByIdDB(serviceName: string, serviceSubTypeID: string) {
+    // When adding using ID, serviceSubType is enough
+
+    const service = await prisma.service.create({
+        data: {
+            "name": serviceName,
+            "subTypeId": serviceSubTypeID
+        }
+    });
+
+    return service;
+}
+
+export { getServicesDB, getServiceByIdDB, createServiceByIdDB }
