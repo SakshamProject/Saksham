@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import {ZodError} from "zod";
 import {getRequestSchema} from "../schemas/zodSchemas.js";
 import postServiceMasterSchema from "./serviceMaster.schema.js";
-import {getServicesDB} from "../../services/database/serviceMaster/serviceMaster.js";
+import {getServiceByIdDB, getServicesDB} from "../../services/database/serviceMaster/serviceMaster.js";
 
 async function postService(request: Request, response: Response): Promise<void> {
     try {
@@ -17,7 +17,7 @@ async function postService(request: Request, response: Response): Promise<void> 
     }
 }
 
-async function getService(request: Request, response: Response): Promise<void> {
+async function getServices(request: Request, response: Response): Promise<void> {
     try {
         const query = getRequestSchema.parse(request.query);
 
@@ -34,4 +34,17 @@ async function getService(request: Request, response: Response): Promise<void> {
     }
 }
 
-export { postService, getService };
+async function getServiceByID(request: Request, response: Response) {
+    try {
+        const serviceId = request.serviceID;
+        const query = getRequestSchema.parse(request.query);
+        const service = await getServiceByIdDB(serviceId, query.start, query.rows);
+
+        response.json(service);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+export { postService, getServices, getServiceByID };
