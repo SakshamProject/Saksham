@@ -2,8 +2,10 @@
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
 import {query} from "express";
+import {serviceMasterColumnNameMapper} from "../utils/serviceMaster.js";
 
-async function getServicesDB(skip= defaults.skip, take= defaults.take) {
+async function getServicesDB(orderByColumn: string = "serviceName", reverse: boolean = false, skip= defaults.skip, take= defaults.take) {
+    // TODO: Default orderBy Value?
     try {
         // TODO: Interfaces
 
@@ -16,7 +18,8 @@ async function getServicesDB(skip= defaults.skip, take= defaults.take) {
                         serviceType: true
                     }
                 }
-            }
+            },
+            orderBy: serviceMasterColumnNameMapper(orderByColumn, reverse)
         }
 
         const services = await prisma.service.findMany(query);
