@@ -16,6 +16,6 @@ apiRouter.get("/check", async (request: Request, response: Response): Promise<vo
     response.json({"message": "API is up and running!"});
 });
 
-apiRouter.use("/service", serviceMasterRouter);
+apiRouter.use("/services", serviceMasterRouter);
 
 export default apiRouter;
