@@ -16,7 +16,7 @@ datasource db {
 model SevaKendra {
   id              String   @id @default(uuid())
   name            String
-  cityId          String
+  districtId      String
   mobileNumber    String
   landLineNumber  String
   startDate       DateTime
@@ -24,7 +24,7 @@ model SevaKendra {
 
   services      ServicesOnSevaKendras[]
   users         User[]
-  city          City                    @relation(fields: [cityId], references: [id])
+  district      District                @relation(fields: [districtId], references: [id])
   contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])
   designations  Designation[]
 }
@@ -74,21 +74,11 @@ model Service {
   divyang     DivyangServiceMapping[]
 }
 
-model City {
-  id         String @id @default(uuid())
-  name       String
-  districtId String
-
-  sevakendra SevaKendra[]
-  district   District     @relation(fields: [districtId], references: [id])
-}
-
 model District {
-  id      String @id @default(uuid())
-  name    String
-  stateId String
-
-  cities     City[]
+  id         String                   @id @default(uuid())
+  name       String
+  stateId    String
+  sevakendra SevaKendra[]
   state      State                    @relation(fields: [stateId], references: [id])
   disability DivyangPersonalDetails[]
 }
