@@ -12,4 +12,5 @@ async function pingDB(): Promise<void> {
     }
 }
 
+export default prisma;
 export { pingDB };
