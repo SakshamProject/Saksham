@@ -1,5 +1,5 @@
 import  { Router} from "express";
-import { getDesignation, postDesignation, putDesignation } from "../../controllers/designation/designation.js";
+import { getDesignation, postDesignation } from "../../controllers/designation/designation.js";
 
 const designationRouter = Router();
 

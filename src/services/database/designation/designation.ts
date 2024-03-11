@@ -61,7 +61,7 @@ async function getIdByNameDB(tableName:string, name:string){
 async function getDesignationDB(
   skip: number = defaults.skip,
   take: number = defaults.take,
-  orderBy: string = "",
+  orderByColumn: string = "",
   orderByDirection: "asc" | "desc" = "asc"
 ): Promise<Designation[]> {
 
@@ -83,14 +83,15 @@ async function getDesignationDB(
                     contactPerson:true
                 }
             }
-        }
+        },
+        orderBy:designatonColumnNameMapper(orderByColumn,orderByColumn)
     };
     
-if (orderBy ) {
-    query.orderBy = {
-        [orderBy]: orderByDirection
-    };
-}
+// if (orderBy ) {
+//     query.orderBy = {
+//         [orderBy]: orderByDirection
+//     };
+// }
 
   try {
     const results = await prisma.designation.findMany(query);
