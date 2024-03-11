@@ -49,18 +49,29 @@ model ServicesOnSevaKendras {
 }
 
 model ServiceType {
-  id      String    @id @default(uuid())
-  name    String
-  service Service[]
+  id       String           @id @default(uuid())
+  name     String
+  subTypes ServiceSubType[]
+}
+
+model ServiceSubType {
+  id       String    @id @default(uuid())
+  name     String
+  services Service[]
+
+  serviceTypeId String
+  serviceType   ServiceType @relation(fields: [serviceTypeId], references: [id])
 }
 
 model Service {
-  id            String @id @default(uuid())
-  name          String
-  serviceTypeId String
+  id        String   @id @default(uuid())
+  name      String
+  subTypeId String
+  createdAt DateTime @default(now())
 
+  subType     ServiceSubType          @relation(fields: [subTypeId], references: [id])
   sevaKendras ServicesOnSevaKendras[]
-  serviceType ServiceType             @relation(fields: [serviceTypeId], references: [id])
+  divyang     DivyangServiceMapping[]
 }
 
 model City {
@@ -101,6 +112,7 @@ model User {
   sevaKendraId     String
   picture          String // url
   mail             String
+  loginid          String                   @unique
   passwordId       String                   @unique
   password         UserPassword             @relation(fields: [passwordId], references: [id])
   designation      Designation              @relation(fields: [designationId], references: [id])
@@ -224,13 +236,16 @@ model DivyangPersonalDetails {
 
   disabilities          DisabilityOfDivyang[]
   eductionQualification DivyangEducationalQualification[]
+  services              DivyangServiceMapping[]
 }
 
 model DivyangServiceMapping {
-  id                 String   @id @default(uuid())
+  id                 String                 @id @default(uuid())
   divyangId          String
+  divyang            DivyangPersonalDetails @relation(fields: [divyangId], references: [id])
   userId             String
-  serviceSubType     Int
+  serviceId          String
+  service            Service                @relation(fields: [serviceId], references: [id])
   dateOfService      DateTime
   dueDate            DateTime
   isFollowUpRequired Boolean
@@ -347,4 +362,9 @@ enum BloodGroup {
   AB_NEGATIVE
   HH
   others
+}
+
+enum Status {
+  PENDING
+  COMPLETED
 }
