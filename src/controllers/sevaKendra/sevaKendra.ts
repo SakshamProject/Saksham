@@ -20,10 +20,24 @@ import {
   createSevaKendraDBObject,
 } from "../../DTO/sevaKendra/sevaKendra.js";
 import { getSevaKendraDB } from "../../services/database/sevaKendra/get.js";
+import { orderBySevaKendraColumns } from "../../models/sevaKendra/orderBy.js";
 
 const getSevaKendra = async (request: Request, response: Response) => {
-  const sevaKendras = await getSevaKendraDB();
-  response.send(sevaKendras);
+  const orderByString: string = request.params.orderBy;
+  console.log(orderByString);
+  if (Object.values(orderBySevaKendraColumns).includes(orderByString)) {
+    const orderBy: orderBySevaKendraColumns =
+      orderBySevaKendraColumns[
+        orderByString as keyof typeof orderBySevaKendraColumns
+      ];
+    const sevaKendras = await getSevaKendraDB(orderBy);
+    response.send(sevaKendras);
+  } else if (orderByString === undefined) {
+    const sevaKendras = await getSevaKendraDB();
+    response.send(sevaKendras);
+  } else {
+    response.status(400).send("Invalid orderBy parameter");
+  }
 };
 const postSevaKendra = async (request: Request, response: Response) => {
   const newSevaKendra: SevaKendraRequestResponse = request.body;

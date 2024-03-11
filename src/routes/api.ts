@@ -18,6 +18,6 @@ apiRouter.get(
   }
 );
 
-apiRouter.use("/sevaKendra", sevaKendraRouter);
+apiRouter.use("/sevakendra", sevaKendraRouter);
 
 export default apiRouter;

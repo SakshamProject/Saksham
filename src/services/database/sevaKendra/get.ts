@@ -1,14 +1,15 @@
-import { ContactPerson, SevaKendra } from "@prisma/client";
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
-import { skip } from "node:test";
+import { orderBySevaKendraColumns } from "../../../models/sevaKendra/orderBy.js";
 
-const getSevaKendraDB = async () => {
+const getSevaKendraDB = async (orderByColumn ) => {
+  const defaultOrderBy: orderBySevaKendraColumns = orderBySevaKendraColumns.name; // Provide a default value
+  const selectedOrderBy = orderByColumn || defaultOrderBy;
   const sevaKendra = await prisma.sevaKendra.findMany({
     take: defaults.take,
     skip: defaults.skip,
     orderBy: {
-      name: "asc",
+      [orderByColumn]: "asc",
     },
     select: {
       name: true,
