@@ -6,6 +6,7 @@ on:
       - main
 env:
   NODE_ENV: development
+  DATABASE_URL:
 
 jobs:
   deploy:
