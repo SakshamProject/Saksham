@@ -4,7 +4,7 @@
     "start": "pnpm dotenvx run -- tsx watch server.ts",
     "build": "pnpm dotenvx run -- tsc --build",
     "check": "pnpm dotenvx run -- tsc --build --noEmit",
-    "test": "mocha --timeout 10000"
+    "test": "mocha --timeout 10000 --exit"
   },
   "dependencies": {
     "@prisma/client": "^5.10.2",
