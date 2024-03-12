@@ -49,5 +49,4 @@ jobs:
         run: pnpm jest
 
       - name: Build Backend
-        working-directory: ./backend
         run: pnpm tsc --build

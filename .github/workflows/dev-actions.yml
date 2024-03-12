@@ -42,9 +42,6 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Sync Prisma DB
-        run: pnpm prisma db push
-
       - name: Prisma Generate
         run: pnpm prisma generate
 
@@ -52,5 +49,4 @@ jobs:
         run: pnpm test
 
       - name: Build Backend
-        working-directory: ./backend
         run: pnpm tsc --build
