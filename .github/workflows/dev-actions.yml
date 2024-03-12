@@ -6,7 +6,7 @@ on:
       - main
 env:
   NODE_ENV: development
-  DATABASE_URL:
+  DATABASE_URL: postgresql://c756e046-e7e2-480e-8870-312e80624095-user:pw-13731656-8d7c-4f6c-94ef-3095b869d082@postgres-free-tier-v2020.gigalixir.com:5432/c756e046-e7e2-480e-8870-312e80624095
 
 jobs:
   deploy:
@@ -42,11 +42,14 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
+      - name: Sync Prisma DB
+        run: pnpm prisma db push
+
       - name: Prisma Generate
         run: pnpm prisma generate
 
       - name: Run Tests
-        run: pnpm jest
+        run: pnpm test
 
       - name: Build Backend
         working-directory: ./backend
