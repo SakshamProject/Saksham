@@ -18,7 +18,7 @@ async function clearTableDB(tables: string[]): Promise<void> {
     try {
         for (const table of tables) {
             // Delete ALL rows of the database
-            await prisma["user"].deleteMany({ where: {}});
+            await prisma[table].deleteMany({ where: {}});
         }
     }
     catch(error) {
