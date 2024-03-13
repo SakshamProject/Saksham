@@ -3,7 +3,7 @@ import {StatusCodes} from "http-status-codes";
 import {expect} from "chai";
 import server from "../server.js";
 
-const testServer = supertest(server);
+const testServer = supertest("");
 describe("# Server", () => {
     describe("GET /api/check", () => {
 
@@ -19,3 +19,5 @@ describe("# Server", () => {
 
     });
 });
+
+export default testServer;
