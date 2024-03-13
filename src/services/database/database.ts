@@ -1,5 +1,5 @@
 
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -14,7 +14,7 @@ async function pingDB(): Promise<void> {
 
 // WARN: This function is for testing only!
 // Do not use in code
-async function clearTableDB(tables: string[]): Promise<void> {
+async function clearTableDB(tables: Prisma.ModelName[]): Promise<void> {
     try {
         for (const table of tables) {
             // Delete ALL rows of the database

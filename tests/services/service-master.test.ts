@@ -8,7 +8,7 @@ describe("# Service Master", () => {
     describe("GET /services", () => {
         describe("No Data in Database / Response", () => {
             before(async () => {
-                await clearTableDB(["service"]);
+                await clearTableDB(["Service"]);
             });
 
             it("Should return empty array with default values", async () => {
