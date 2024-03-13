@@ -3,7 +3,7 @@ import {ZodError} from "zod";
 import {getRequestSchema} from "../schemas/zodSchemas.js";
 import postServiceMasterSchema from "./serviceMaster.schema.js";
 import {
-    createServiceByIdDB,
+    createServiceByIdDB, deleteServiceByIdDB,
     getServiceByIdDB,
     getServicesDB
 } from "../../services/database/serviceMaster/serviceMaster.js";
@@ -52,4 +52,17 @@ async function getServiceByID(request: Request, response: Response) {
     }
 }
 
-export { postService, getServices, getServiceByID };
+async function deleteServiceById(request: Request, response: Response) {
+    try {
+        const serviceID = request.serviceID;
+
+        const result = await deleteServiceByIdDB(serviceID);
+
+        response.json(result);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+export { postService, getServices, getServiceByID, deleteServiceById };

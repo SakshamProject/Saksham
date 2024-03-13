@@ -65,8 +65,8 @@ async function getServiceByIdDB(id: string, skip= defaults.skip, take= defaults.
 }
 
 async function createServiceByIdDB(serviceName: string, serviceSubTypeID: string) {
-    // When adding using ID, serviceSubType is enough
 
+    // When adding using ID, serviceSubType is enough
     const service = await prisma.service.create({
         data: {
             "name": serviceName,
@@ -77,4 +77,19 @@ async function createServiceByIdDB(serviceName: string, serviceSubTypeID: string
     return service;
 }
 
-export { getServicesDB, getServiceByIdDB, createServiceByIdDB }
+async function deleteServiceByIdDB(serviceId: string) {
+
+    const result = await prisma.service.delete({
+        where: {
+            id: serviceId,
+        }
+    });
+
+    if (!result) {
+        // Row was not found
+    }
+
+    return result;
+}
+
+export { getServicesDB, getServiceByIdDB, createServiceByIdDB, deleteServiceByIdDB }
