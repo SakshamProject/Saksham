@@ -15,3 +15,5 @@ server.use("/api", apiRouter);
 server.listen(config.PORT, () => {
     console.log(`Server is listening at PORT: ${config.PORT}`);
 });
+
+export default server;
