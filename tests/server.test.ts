@@ -9,7 +9,7 @@ describe("# Server", () => {
 
         it ("Should check if the API is alive", async () => {
             try {
-                const response = await testServer.get("/api/check");
+                const response = await testServer.get("/check");
                 expect(response.status).to.be.equal(StatusCodes.OK);
             }
             catch (error) {
