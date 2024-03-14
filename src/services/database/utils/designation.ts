@@ -1,5 +1,5 @@
-function designationColumnNameMapper(orderByColumn: string, reverse: boolean) {
-    const sortOrder = reverse ? "desc" : "asc";
+function designationColumnNameMapper(orderByColumn: string, reverse:string) {
+    const sortOrder = reverse;
     const designationColumnNameMap: Map<string, any> = new Map();
 
     designationColumnNameMap.set("designationName", {
@@ -14,11 +14,12 @@ function designationColumnNameMapper(orderByColumn: string, reverse: boolean) {
 
    designationColumnNameMap.set("sevaKendraDistrict", {
         "sevaKendra": {
-            "serviceType": {
+            "district": {
                 "name": sortOrder
             }
         }
     });
+    console.log(designationColumnNameMap.get(orderByColumn))
 
     return designationColumnNameMap.get(orderByColumn);
 }
