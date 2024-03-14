@@ -2,8 +2,9 @@ import supertest from "supertest";
 import {StatusCodes} from "http-status-codes";
 import config from "../config.js";
 import { expect } from "chai";
+import server from "../server.js";
 
-const testServer = supertest(config.base_url);
+const testServer = supertest(server);
 describe("# Server", () => {
     describe("GET /api/check", () => {
 
