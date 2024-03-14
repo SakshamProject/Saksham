@@ -8,13 +8,8 @@ describe("# Server", () => {
     describe("GET /api/check", () => {
 
         it ("Should check if the API is alive", async () => {
-            try {
-                const response = await testServer.get("/check");
-                expect(response.status).to.be.equal(StatusCodes.OK);
-            }
-            catch (error) {
-                console.log(error);
-            }
+            const response = await testServer.get("/check");
+            expect(response.status).to.be.equal(StatusCodes.OK);
         });
 
     });
