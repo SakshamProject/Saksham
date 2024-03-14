@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { getUserDB , CreateNewUserDB, passwordHasherDB} from "../../services/database/users/userDB.js";
+import { getUserDB , CreateNewUserDB, passwordHasherDB,getsevakendra} from "../../services/database/users/userDB.js";
 import express, { NextFunction, Request, Response, Router } from "express";
 const GetRequestParser = async (req:Request,res:Response,next:NextFunction)=>{
     const data = Object.keys(req.query)
@@ -13,6 +13,7 @@ const GetRequestParser = async (req:Request,res:Response,next:NextFunction)=>{
 }
 const PostRequestParser = async (req:Request,res:Response,next:NextFunction)=>{
     const data = req.body
+    const sevakendraid = getsevakendra(data)
     // console.log('Parameters received:', data);
     // res.status(StatusCodes.ACCEPTED)
     // res.send("successfully recived i controller")
@@ -25,10 +26,15 @@ const getUser = async (req: Request, res: Response) => {
     res.send(user)
 }
 const AddUser = async (req: Request, res: Response) => {
-    const pass = await passwordHasherDB(req.body.passwordid)
+    const pass = await PasswordHasher(req.body.passwordid)
     console.log(pass.id)
     req.body.passwordid = pass.id
     const newUser = await CreateNewUserDB(req, res)  
     res.json(newUser);
+}
+const PasswordHasher = async (pass: string) => {
+    const passid = await passwordHasherDB(pass)
+    return passid
+    
 }
 export { getUser , GetRequestParser,AddUser,PostRequestParser};

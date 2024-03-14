@@ -5,6 +5,11 @@ const getUserDB = async () => {
     console.log(users);
     return users
 } 
+const getsevakendra = async (req:Request) => {
+    const sevaId = await prisma.sevaKendra.findFirst({
+    })
+    return sevaId
+}
 const CreateNewUserDB = async (req:Request,res:Response) => {
     const newUser = await prisma.user.create({ data: req.body })
     console.log("created new user")
@@ -18,4 +23,4 @@ const passwordHasherDB = async (passw:string) => {
     })
     return passid
 }
-export { getUserDB , CreateNewUserDB,passwordHasherDB};
+export { getUserDB , CreateNewUserDB,passwordHasherDB,getsevakendra};
