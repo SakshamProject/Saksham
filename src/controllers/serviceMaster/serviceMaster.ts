@@ -7,7 +7,9 @@ import {
     getServiceByIdDB,
     getServicesDB
 } from "../../services/database/serviceMaster/serviceMaster.js";
-
+import { Service } from "@prisma/client";
+import { start } from "repl";
+import {previous,next} from "../../middlewares/Resparser.js";
 async function postService(request: Request, response: Response): Promise<void> {
     try {
         const body = postServiceMasterSchema.parse(request.body);
@@ -29,7 +31,8 @@ async function getServices(request: Request, response: Response): Promise<void> 
         // No need to decrement query (query.start - 1).
         // It is taken care of by getRequestSchema
         const services = await getServicesDB(query.orderBy, query.reverse, query.start, query.rows);
-
+        services.next = await next(query.start, query.rows,services?.total_fields);
+        services.previous = await previous(query.start, query.rows);
         response.json(services);
     }
     catch (error) {
@@ -38,7 +41,6 @@ async function getServices(request: Request, response: Response): Promise<void> 
         }
     }
 }
-
 async function getServiceByID(request: Request, response: Response) {
     try {
         const serviceId = request.serviceID;
