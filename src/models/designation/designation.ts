@@ -10,7 +10,7 @@ interface DesignationResult{
             districtId: string;
             mobileNumber: string;
             landLineNumber: string;
-            startDate: string;
+            startDate: Date;
             contactPersonId: string;
             district: {
                 id: string;
@@ -34,12 +34,12 @@ interface DesignationResult{
 }
 
 interface DesignationResponse{
-    results:[DesignationResult],
+    results:DesignationResult[],
     count: number,
 	start: number,
 	rows: number,
 	orderBy: string,
-	reverse:boolean
+	orderByDirection:string
 }
 
 export {DesignationResponse};

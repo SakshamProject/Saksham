@@ -7,7 +7,10 @@ console.log("designatiorouter")
 
 
 designationRouter.get('/',getDesignation)
+designationRouter.get('/:id',)
 designationRouter.post('/',postDesignation)
+designationRouter.delete('/',)
+designationRouter.put("/")
 
 
 export default designationRouter;
