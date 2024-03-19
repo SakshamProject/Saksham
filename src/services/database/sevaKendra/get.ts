@@ -1,24 +1,49 @@
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
+import { orderByDirectionEnum } from "../../../controllers/getRequest.schema.js";
+const getSevaKendrabyIdDB = async (id: string) => {
+  const sevaKendra = await prisma.sevaKendra.findUnique({
+    where: { id: id },
 
-const getSevaKendraDB = async () => {
-  const sevaKendra = await prisma.sevaKendra.findMany({
-    take: defaults.take,
-    skip: defaults.skip,
-
-    select: {
-      name: true,
-      districtId: true,
-      contactPerson: {
-        select: {
-          id: false,
-          name: true,
-          phoneNumber1: true,
+    include: {
+      contactPerson: true,
+      _count: true,
+      auditLogs: true,
+      services: true,
+      district: {
+        include: {
+          state: true,
         },
       },
     },
   });
+  console.log(sevaKendra);
   return sevaKendra;
 };
 
-export { getSevaKendraDB };
+const getSevaKendraDB = async (
+  orderByColumnAndDirection: Object = { name: orderByDirectionEnum.ascending },
+  skip = defaults.skip,
+  take = defaults.take
+) => {
+  const sevaKendras = await prisma.sevaKendra.findMany({
+    take: take,
+    skip: skip,
+
+    include: {
+      contactPerson: true,
+      _count: true,
+      auditLogs: true,
+      services: true,
+      district: {
+        include: {
+          state: true,
+        },
+      },
+    },
+    orderBy: orderByColumnAndDirection,
+  });
+  return sevaKendras;
+};
+
+export { getSevaKendraDB, getSevaKendrabyIdDB };

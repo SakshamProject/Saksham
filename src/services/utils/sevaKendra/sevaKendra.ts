@@ -1,27 +1,30 @@
-// Map Column Names to OrderBy Queries
-function sevaKendraColumnNameMapper(orderByColumn: string, reverse: boolean) {
-    const sortOrder = reverse ? "desc" : "asc";
-    const sevaKendraColumnNameMap: Map<string, any> = new Map();
+import { orderByDirectionEnum } from "../../../controllers/getRequest.schema.js";
 
-    sevaKendraColumnNameMap.set("name", {
-        "name": sortOrder
-    });
+const sevaKendraColumnNameMapper = (
+  orderByColumn: string = "name",
+  orderByDirection: orderByDirectionEnum = orderByDirectionEnum.ascending
+) => {
+  const sevaKendraColumnNameMap: Map<string, any> = new Map();
 
-    sevaKendraColumnNameMap.set("serviceSubTypeName", {
-        "subType": {
-            "name": sortOrder
-        }
-    });
+  sevaKendraColumnNameMap.set("name", {
+    name: orderByDirection,
+  });
 
-    sevaKendraColumnNameMap.set("serviceTypeName", {
-        "subType": {
-            "serviceType": {
-                "name": sortOrder
-            }
-        }
-    });
+  sevaKendraColumnNameMap.set("district", {
+    district: {
+      name: orderByDirection,
+    },
+  });
 
-    return sevaKendraColumnNameMap.get(orderByColumn);
-}
+  sevaKendraColumnNameMap.set("state", {
+    district: {
+      state: {
+        name: orderByDirection,
+      },
+    },
+  });
+
+  return sevaKendraColumnNameMap.get(orderByColumn);
+};
 
 export { sevaKendraColumnNameMapper };

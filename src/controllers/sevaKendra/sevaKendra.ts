@@ -18,13 +18,25 @@ import {
   createSevaKendraAuditLogDBObject,
   createSevaKendraDBObject,
 } from "../../DTO/sevaKendra/sevaKendra.js";
-import { getSevaKendraDB } from "../../services/database/sevaKendra/get.js";
+import {
+  getSevaKendraDB,
+  getSevaKendrabyIdDB,
+} from "../../services/database/sevaKendra/get.js";
 import getRequestSchema from "../getRequest.schema.js";
+import { sevaKendraColumnNameMapper } from "../../services/utils/sevaKendra/sevaKendra.js";
 
 const getSevaKendra = async (request: Request, response: Response) => {
-  // const requestBody = getRequestSchema.parse(request);
-  // const sevaKendras = await getSevaKendraDB(requestBody);
-  // response.send(sevaKendras);
+  const query = getRequestSchema.parse(request.query);
+  const orderByColumnAndDirection = sevaKendraColumnNameMapper(
+    query.orderByColumn,
+    query.orderByDirection
+  );
+  const sevaKendras = await getSevaKendraDB(
+    orderByColumnAndDirection,
+    query.start,
+    query.rows
+  );
+  response.send(sevaKendras);
 };
 const postSevaKendra = async (request: Request, response: Response) => {
   const newSevaKendra: SevaKendraRequestResponse = request.body;
@@ -48,7 +60,13 @@ const postSevaKendra = async (request: Request, response: Response) => {
     sevaKendraId
   );
   await createAuditLogDB(auditLogDBObject);
-  response.send("Mission step 1 SUCCESS");
+  response.send("Seva Kendra created Successfully");
+};
+const getSevaKendraById = async (request: Request, response: Response) => {
+  const id = request.params.id;
+  console.log(id);
+  const sevaKendra = await getSevaKendrabyIdDB(id);
+  response.send(sevaKendra);
 };
 const patchSevaKendra = async (request: Request, response: Response) => {};
 const putSevaKendra = async (request: Request, response: Response) => {};
@@ -60,4 +78,5 @@ export {
   putSevaKendra,
   patchSevaKendra,
   deleteSevaKendra,
+  getSevaKendraById,
 };

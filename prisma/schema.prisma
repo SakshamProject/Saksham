@@ -20,7 +20,7 @@ model SevaKendra {
   address         String
   mobileNumber    String
   landLineNumber  String
-  startDate       DateTime
+  startDate       String
   contactPersonId String @unique
   createdAt String?
   createdBy String?
@@ -28,6 +28,7 @@ model SevaKendra {
   updatedBy String?
   isActive Boolean? @default(true)
 
+  district      District @relation(fields: [districtId],references: [id])
   auditLogs     SevaKendraAuditLog[]
   services      ServicesOnSevaKendras[]
   contactPerson ContactPerson @relation(fields: [contactPersonId], references: [id])
@@ -65,6 +66,7 @@ model District{
     name String @unique
     stateId String
  
+    sevaKendra SevaKendra []
     state State @relation(fields: [stateId],references: [id])
 }
 model State{

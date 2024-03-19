@@ -1,5 +1,5 @@
 import { z } from "zod";
-enum orderByDirection {
+export enum orderByDirectionEnum {
   ascending = "asc",
   descending = "desc",
 }
@@ -11,7 +11,7 @@ const getRequestSchema = z.object({
     .positive()
     .transform((val) => val - 1)
     .optional(),
-  orderBy: z.string().optional(),
-  orderByDirection: z.nativeEnum(orderByDirection).optional(),
+  orderByColumn: z.string().optional(),
+  orderByDirection: z.nativeEnum(orderByDirectionEnum).optional(),
 });
 export default getRequestSchema;
