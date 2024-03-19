@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { orderByDirection } from "../models/json.js";
+enum orderByDirection {
+  ascending = "asc",
+  descending = "desc",
+}
 
 const getRequestSchema = z.object({
   rows: z.coerce.number().positive().optional(),
@@ -9,6 +12,6 @@ const getRequestSchema = z.object({
     .transform((val) => val - 1)
     .optional(),
   orderBy: z.string().optional(),
-  reverse: z.nativeEnum(orderByDirection).optional(),
+  orderByDirection: z.nativeEnum(orderByDirection).optional(),
 });
 export default getRequestSchema;

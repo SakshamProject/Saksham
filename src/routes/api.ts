@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import { pingDB } from "../services/database/database.js";
 import sevaKendraRouter from "./sevaKendra/sevaKendra.js";
+import typeMasterRouter from "./typeMaster/typeMaster.js";
 
 const apiRouter = Router();
 
@@ -18,6 +19,6 @@ apiRouter.get(
   }
 );
 
-apiRouter.use("/sevakendra", sevaKendraRouter);
-
+apiRouter.use("/sevakendras", sevaKendraRouter);
+apiRouter.use("/typemaster", typeMasterRouter);
 export default apiRouter;

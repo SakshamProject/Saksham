@@ -1,6 +1,5 @@
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
-import { orderBySevaKendraColumns } from "../../../models/sevaKendra/orderBy.js";
 
 const getSevaKendraDB = async () => {
   const sevaKendra = await prisma.sevaKendra.findMany({

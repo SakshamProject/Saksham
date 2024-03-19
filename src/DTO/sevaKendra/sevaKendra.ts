@@ -6,19 +6,18 @@ import {
 } from "@prisma/client";
 import { SevaKendraRequestResponse } from "../../models/sevaKendra/sevaKendra.js";
 import { randomUUID } from "crypto";
-import {
-  getDistrictId,
-  getServiceId,
-} from "../../controllers/sevaKendra/dummy.js";
+import { getServiceId } from "../../controllers/sevaKendra/dummy.js";
+import { getDistrictIdByName } from "../../services/database/typeMaster/get.js";
 
-const createSevaKendraDBObject = (
+const createSevaKendraDBObject = async (
   sevaKendra: SevaKendraRequestResponse,
   contactPersonId: string
-): SevaKendra => {
+): Promise<SevaKendra> => {
+  const districtId: string = await getDistrictIdByName(sevaKendra.district);
   const sevaKendraDB: SevaKendra = {
     id: randomUUID(),
     name: sevaKendra.name,
-    districtId: getDistrictId(sevaKendra.district),
+    districtId: districtId,
     address: sevaKendra.address,
     mobileNumber: sevaKendra.mobileNumber,
     landLineNumber: sevaKendra.landLineNumber,
