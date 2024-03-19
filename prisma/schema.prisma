@@ -60,3 +60,16 @@ model ServicesOnSevaKendras {
 
   sevakendra SevaKendra @relation(fields: [sevaKendraId], references: [id])
 }
+model District{
+    id String @id @default(uuid())
+    name String
+    stateId String
+ 
+    state State @relation(fields: [stateId],references: [id])
+}
+model State{
+    id String @id @default(uuid())
+    name String
+
+    districts District[]
+}

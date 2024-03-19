@@ -20,12 +20,10 @@ import {
   createSevaKendraDBObject,
 } from "../../DTO/sevaKendra/sevaKendra.js";
 import { getSevaKendraDB } from "../../services/database/sevaKendra/get.js";
-import { orderBySevaKendraColumns } from "../../models/sevaKendra/orderBy.js";
 
 const getSevaKendra = async (request: Request, response: Response) => {
   const sevaKendras = await getSevaKendraDB();
   response.send(sevaKendras);
-
 };
 const postSevaKendra = async (request: Request, response: Response) => {
   const newSevaKendra: SevaKendraRequestResponse = request.body;
