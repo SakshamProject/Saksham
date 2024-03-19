@@ -2,14 +2,15 @@
 import defaults from "../../../defaults.js";
 import { Designation } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
-import { JsonObject } from "@prisma/client/runtime/library";
+import { JsonObject, PrismaClientValidationError } from "@prisma/client/runtime/library";
 import { designationColumnNameMapper } from "../utils/designation.js";
+import { DesignationResponse, PrismaTable } from "../../../models/designation/designation.js";
 
 const prisma = new PrismaClient({
   log: ["query", "info", "warn", "error"],
 });
 
-async function getCount(tableName: string): Promise<number> {
+async function getCount(tableName: PrismaTable): Promise<any> {
   try {
     const count: number = await prisma[tableName].count();
     return count;
@@ -18,27 +19,10 @@ async function getCount(tableName: string): Promise<number> {
   }
 }
 
-async function getDataByIdDB(tableName: string, id: string) {
+
+async function getIdByNameDB(tableName: PrismaTable, name: string) {
   try {
-    const data = await prisma[tableName].findUnique({
-      where: {
-        id: id,
-      },
-    });
-    return data;
-  } catch (err) {
-    return err;
-  }
-}
-
-async function getIdByNameDB(tableName: string, name: string) {
-  try {
-    //console.log("tableName");
-
-    //console.log(tableName);
-    //console.log("name");
-
-    //console.log(name);
+    
     const feature_id = await prisma[tableName].findUnique({
       where: {
         name: name,
@@ -47,9 +31,7 @@ async function getIdByNameDB(tableName: string, name: string) {
         id: true,
       },
     });
-    //console.log("result");
 
-    //console.log(feature_id)
     return feature_id?.id;
   } catch (err) {
     return err;
@@ -80,21 +62,18 @@ async function getDesignationDB(
     orderBy: designationColumnNameMapper(orderByColumn, orderByDirection),
   };
 
-  // if (orderBy ) {
-  //     query.orderBy = {
-  //         [orderBy]: orderByDirection
-  //     };
-  // }
+
 
   try {
     const results = await prisma.designation.findMany(query);
-    // console.log(results)
-    const count = await getCount("designation");
+    const count:number = await prisma.designation.count();
 
-    const jsonObject: JsonObject = {
+    const response:DesignationResponse = {
       results: results,
       count: count,
     };
+
+
 
     return jsonObject;
   } catch (err) {

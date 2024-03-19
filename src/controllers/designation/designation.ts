@@ -10,12 +10,11 @@ async function getDesignation(
   request: Request,
   response: Response
 ): Promise<void> {
-  console.log("enters getdesignation controller function ");
   const { start, rows, orderBy, reverse } = getRequestSchema.parse(
     request.query
   );
   const orderByDirection: "asc" | "desc" = reverse === "true" ? "desc" : "asc";
-  const orderByColumn: string = orderBy;
+  const orderByColumn: string|undefined = orderBy;
 
   const results = await getDesignationDB(
     start,
@@ -24,7 +23,7 @@ async function getDesignation(
     orderByDirection
   );
   results["start"] = start + 1;
-  results["rows"] = rows;
+  results["rows"] = results["results"].length;
   results["orderBy"] = orderBy;
   results["reverse"] = reverse;
   response.send(results);
