@@ -7,8 +7,6 @@ import {
     getServiceByIdDB,
     getServicesDB
 } from "../../services/database/serviceMaster/serviceMaster.js";
-import { Service } from "@prisma/client";
-import { start } from "repl";
 import {previous,next} from "../../middlewares/Resparser.js";
 async function postService(request: Request, response: Response): Promise<void> {
     try {
