@@ -4,13 +4,13 @@ import {
   SevaKendra,
   SevaKendraAuditLog,
 } from "@prisma/client";
-import { SevaKendraRequestResponse } from "../../models/sevaKendra/sevaKendra.js";
+import { SevaKendraRequest } from "../../models/sevaKendra/Request.js";
 import { randomUUID } from "crypto";
 import { getServiceId } from "../../controllers/sevaKendra/dummy.js";
 import { getDistrictIdByName } from "../../services/database/typeMaster/get.js";
 
 const createSevaKendraDBObject = async (
-  sevaKendra: SevaKendraRequestResponse,
+  sevaKendra: SevaKendraRequest,
   contactPersonId: string
 ): Promise<SevaKendra> => {
   const districtId: string = await getDistrictIdByName(sevaKendra.district);
@@ -33,7 +33,7 @@ const createSevaKendraDBObject = async (
 };
 
 const createContactPersonDBObject = (
-  sevaKendra: SevaKendraRequestResponse
+  sevaKendra: SevaKendraRequest
 ): ContactPerson => {
   const contactPersonDBObject: ContactPerson = {
     id: randomUUID(),
@@ -48,7 +48,7 @@ const createContactPersonDBObject = (
 
 const createServicesOnSevaKendraDBObject = (
   sevaKendraId: string,
-  sevaKendra: SevaKendraRequestResponse
+  sevaKendra: SevaKendraRequest
 ): ServicesOnSevaKendras[] => {
   let servicesOnSevaKendra: ServicesOnSevaKendras[] = [];
 
@@ -63,7 +63,7 @@ const createServicesOnSevaKendraDBObject = (
   return servicesOnSevaKendra;
 };
 const createSevaKendraAuditLogDBObject = (
-  sevaKendra: SevaKendraRequestResponse,
+  sevaKendra: SevaKendraRequest,
   sevaKendraId: string
 ): SevaKendraAuditLog => {
   const sevaKendraAuditLog: SevaKendraAuditLog = {

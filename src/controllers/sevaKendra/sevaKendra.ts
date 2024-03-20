@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { SevaKendraRequestResponse } from "../../models/sevaKendra/sevaKendra.js";
+import { SevaKendraRequest } from "../../models/sevaKendra/Request.js";
 import {
   ContactPerson,
   ServicesOnSevaKendras,
@@ -24,6 +24,7 @@ import {
 } from "../../services/database/sevaKendra/get.js";
 import getRequestSchema from "../getRequest.schema.js";
 import { sevaKendraColumnNameMapper } from "../../services/utils/sevaKendra/sevaKendra.js";
+import { SevaKendraResponse } from "../../models/sevaKendra/Response.js";
 
 const getSevaKendra = async (request: Request, response: Response) => {
   const query = getRequestSchema.parse(request.query);
@@ -39,7 +40,7 @@ const getSevaKendra = async (request: Request, response: Response) => {
   response.send(sevaKendras);
 };
 const postSevaKendra = async (request: Request, response: Response) => {
-  const newSevaKendra: SevaKendraRequestResponse = request.body;
+  const newSevaKendra: SevaKendraRequest = request.body;
   const contactPersonDBObject: ContactPerson =
     createContactPersonDBObject(newSevaKendra);
   const contactPersonId: string = contactPersonDBObject.id;

@@ -1,4 +1,4 @@
-export interface SevaKendraRequestResponse {
+export interface SevaKendraRequest {
   name: string;
   state: string;
   district: string;
