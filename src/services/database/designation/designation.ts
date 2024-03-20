@@ -78,53 +78,32 @@ async function getDesignationDB(
   
 }
 
-
+async function getDesignationByID(id:string){
+ try{
+  const designation = await prisma.designation.findUnique({
+    where: {
+      id: id,
+    },
+  })
+  return designation;
+ }catch(err){
+  return err;
+ }
+}
 
 async function createDesignationDB(
   sevaKendraId: string,
   designation: string,
-  features_id: string[]
 ) {
   try {
     const newDesignation:Designation = await prisma.designation.create({
-        data: {
-          name: designation,
-          sevaKendraId: sevaKendraId,
-          features: {
-            connectOrCreate: [
-              { 
-                where: { 
-                  feature: { name: 'divyang-details' }, // Accessing name property from Feature model
-                  designationId: newDesignation.id // Assuming newDesignation has been created earlier in the code
-                },
-                create: { 
-                  feature: { 
-                    create: { name: 'divyang-details' } // Create the Feature if it doesn't exist
-                  },
-                  designationId: newDesignation.id
-                }
-              },
-              { 
-                where: { 
-                  feature: { name: 'users' }, // Accessing name property from Feature model
-                  designationId: newDesignation.id // Assuming newDesignation has been created earlier in the code
-                },
-                create: { 
-                  feature: { 
-                    create: { name: 'users' } // Create the Feature if it doesn't exist
-                  },
-                  designationId: newDesignation.id
-                }
-              }
-            ]
-          }
-        },
-        include: {
-          features: true
-        }
-      });
+      data:{
+        name : designation,
+        sevaKendraId : sevaKendraId
+      }
 
-    console.log("New Designation:", newDesignation);
+    });
+    console.log(newDesignation.id);
 
     return newDesignation;
   } catch (err) {
@@ -132,4 +111,4 @@ async function createDesignationDB(
   }
 }
 
-export { getDesignationDB, getIdByNameDB, createDesignationDB };
+export { getDesignationDB, getIdByNameDB, createDesignationDB,getDesignationByID };
