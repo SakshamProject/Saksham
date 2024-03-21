@@ -36,15 +36,15 @@ async function clearTableDB(tables: Prisma.ModelName[]): Promise<void> {
     }
 }
 
-async function getTotalRowCount(table: Prisma.ModelName): Promise<number> {
+async function getTotalRowsDB(table: Prisma.ModelName) {
     try {
-        const count = await prisma[table].count();
-        return count;
-    } catch (error) {
-        console.error('Error counting total rows:', error);
-        throw error;
+        const rows = await prisma[table].count();
+        return rows;
+    }
+    catch(error) {
+        console.log(error);
     }
 }
 
 export default prisma;
-export { pingDB, clearTableDB, getTotalRowCount };
+export { pingDB, clearTableDB, getTotalRowsDB };

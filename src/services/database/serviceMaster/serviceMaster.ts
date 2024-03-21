@@ -1,9 +1,11 @@
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
 import { serviceMasterColumnNameMapper } from "../utils/serviceMaster.js";
+import { ZodAny, any, promise } from "zod";
+import { Prisma } from "@prisma/client";
+//import { promise } from "zod";
 import APIError from "../../errors/APIError.js";
 import { StatusCodes } from "http-status-codes";
-import { Prisma } from "@prisma/client";
 
 async function getServicesDB(
   orderByColumn: string = "serviceName",
@@ -11,7 +13,7 @@ async function getServicesDB(
   skip = defaults.skip,
   take = defaults.take
 ) {
-  // TODO: Default orderBy Value?
+
   try {
     // TODO: Interfaces
 
@@ -29,6 +31,7 @@ async function getServicesDB(
     };
 
     const services = await prisma.service.findMany(query);
+    return services;
   
     return services;
   } catch (error) {

@@ -10,17 +10,13 @@ import {
   getServicesDB,
   updateServiceByIdDB,
 } from "../../services/database/serviceMaster/serviceMaster.js";
-import { Service } from "@prisma/client";
-import { start } from "repl";
-import { previous, next } from "../../middlewares/Resparser.js";
-import { getTotalRowCount } from "../../services/database/database.js";
-async function postService(
-  request: Request,
-  response: Response
-): Promise<void> {
-  try {
-    const body = postServiceMasterSchema.parse(request.body);
 
+import defaults from "../../defaults.js";
+import generateResponse from "../utils/generateResponse.js";
+
+async function postService(request: Request, response: Response): Promise<void> {
+    try {
+        const body = postServiceMasterSchema.parse(request.body);
     const service = await createServiceByIdDB(body.name, body.subTypeId);
     response.json(service);
   } catch (error) {
@@ -37,30 +33,19 @@ async function getServices(
   try {
     const query = getRequestSchema.parse(request.query);
 
-    // No need to decrement query (query.start - 1).
-    // It is taken care of by getRequestSchema
-    const services = await getServicesDB(
-      query.orderBy,
-      query.reverse,
-      query.start,
-      query.rows
-    );
-      const total = await getTotalRowCount("Service");
-    const n = await next(query.start, query.rows, services?.length || 0);
-    const p = await previous(1, 1);
-      response.json({
-          total: total,
-          next: n,
-          previous: p,
-          rows: services?.length,
-          data: services,
-    });
-  } catch (error) {
-    if (error instanceof ZodError) {
-      response.json(error);
+        // No need to decrement query (query.start - 1).
+        // It is taken care of by getRequestSchema
+        const services = await getServicesDB(query.orderBy, query.reverse, query.start, query.rows);
+
+        response.json(await generateResponse(query, services));
     }
-  }
-}
+    catch (error) {
+        if (error instanceof ZodError) {
+            response.json(error);
+        }
+    }
+  } 
+
 async function putService(
   request: Request,
   response: Response

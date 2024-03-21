@@ -12,10 +12,12 @@ const getRequestSchema = z.object({
     // so instead of z.enum(["true", "false"]) we explicitly convert them to boolean
 });
 
+type Query = z.infer<typeof getRequestSchema>;
+
 // TODO: Allow Punctuation
 const inputFieldSchema = z.string()
         .min(defaults.minFieldLength)
         .trim()
         .regex(/^[\w\s.-]+$/gm, "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]");
         
-export { getRequestSchema, inputFieldSchema };
+export { getRequestSchema, inputFieldSchema, Query };
