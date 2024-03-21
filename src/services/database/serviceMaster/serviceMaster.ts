@@ -11,7 +11,7 @@ async function getServicesDB(
   skip = defaults.skip,
   take = defaults.take
 ) {
-  // TODO: Default orderBy Value?
+
   try {
     // TODO: Interfaces
 
@@ -29,11 +29,7 @@ async function getServicesDB(
     };
 
     const services = await prisma.service.findMany(query);
-    const resp = {
-        total_fields: services.length,
-        data: services,
-    };
-    return resp
+    return services;
   } catch (error) {
     console.log(error);
   }
