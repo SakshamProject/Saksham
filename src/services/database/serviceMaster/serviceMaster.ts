@@ -1,9 +1,9 @@
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
-import { query } from "express";
 import { serviceMasterColumnNameMapper } from "../utils/serviceMaster.js";
-import { ZodAny, any, promise } from "zod";
-//import { promise } from "zod";
+import APIError from "../../errors/APIError.js";
+import { StatusCodes } from "http-status-codes";
+import { Prisma } from "@prisma/client";
 
 async function getServicesDB(
   orderByColumn: string = "serviceName",
@@ -29,11 +29,8 @@ async function getServicesDB(
     };
 
     const services = await prisma.service.findMany(query);
-    const resp = {
-        total_fields: services.length,
-        data: services,
-    };
-    return resp
+  
+    return services;
   } catch (error) {
     console.log(error);
   }
@@ -86,6 +83,38 @@ async function createServiceByIdDB(
 
   return service;
 }
+async function updateServiceByIdDB(
+
+  serviceId: string,
+  serviceSubTypeID:string,
+  serviceName: string
+) {
+  // When adding using ID, serviceSubType is enough
+  try {
+    const service = await prisma.service.update({
+      where: {
+        id: serviceId
+      },
+      data: {
+        subTypeId : serviceSubTypeID,
+        name: serviceName
+      }
+    })
+    console.log("reached services");
+    return service;
+  }
+  catch (error) {
+    throw new APIError(
+    "There was an error updating the database",
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "DatabaseUpdationError",
+            1004,
+            "E",
+            error.meta.cause
+    );
+  }
+}
+
 
 async function deleteServiceByIdDB(serviceId: string) {
   const result = await prisma.service.delete({
@@ -100,19 +129,11 @@ async function deleteServiceByIdDB(serviceId: string) {
 
   return result;
 }
-async function getTotalRowCount(query: any): Promise<number> {
-    try {
-        const count = await prisma.service.count();
-        return count;
-    } catch (error) {
-        console.error('Error counting total rows:', error);
-        throw error;
-    }
-}
 
 export {
   getServicesDB,
   getServiceByIdDB,
   createServiceByIdDB,
   deleteServiceByIdDB,
+  updateServiceByIdDB
 };

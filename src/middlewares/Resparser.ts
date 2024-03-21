@@ -1,43 +1,37 @@
 import { Service } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 
-async function previous(start:any, rows : any): Promise<object|null>  {
-    try {
-        let previous_field:object|null
-        if (start !== 0) {
-            previous_field = {
-                start: start - rows,
-                rows: rows
-            }
-        }
-        else {
-            previous_field = null
-            
-        }
-        return previous_field
-    }
-    catch (error) {
-        console.log(error)
-        return null
-    }
+function previous(start: number, rows: number):object | null {
+  console.log(start, rows);
+  let previous_field: object | null = null;
+  if (start !== 0) {
+    previous_field = {
+      start: start - rows,
+      rows: null,
+    };
+  }
+  else {
+    previous_field = null;
+  }
+  return previous_field;
 }
-async function next(start:any, rows :any ,fields : any): Promise<object|null> {
-    try {
-        let next_field :object |null
-        if (fields < rows ) {
-            next_field = null
-        }
-        else {
-            next_field = {
-                start: start + rows,
-                rows : rows
-            }
-        }
-        return next_field
-    }
-    catch (error) {
-        console.log(error)
-        return null
-    }
+function next(
+  start: any,
+  rows: any,
+  fields: any
+):object | null {
+  let next_field: object | null;
+  if (fields < rows) {
+    next_field = null;
+  } else {
+    next_field = {
+      start: start + rows,
+      rows: rows,
+    };
+  }
+  return next_field;
 }
-export {previous,next};
+function generateResponse(): {
+  
+}
+export { previous, next ,generateResponse};

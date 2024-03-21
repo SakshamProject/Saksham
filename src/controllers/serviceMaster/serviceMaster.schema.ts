@@ -6,5 +6,9 @@ const postServiceMasterSchema = z.object({
     subTypeId: z.string().uuid(),
     name: inputFieldSchema
 });
+const putServiceMasterSchema = z.object({
+    subTypeId: z.string().uuid(),
+    name: inputFieldSchema
+});
 
-export default postServiceMasterSchema;
+export { postServiceMasterSchema, putServiceMasterSchema };
