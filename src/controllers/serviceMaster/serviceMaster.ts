@@ -7,7 +7,9 @@ import {
     getServiceByIdDB,
     getServicesDB
 } from "../../services/database/serviceMaster/serviceMaster.js";
-import {previous,next} from "../../middlewares/Resparser.js";
+import {getTotalRowsDB} from "../../services/database/database.js";
+import defaults from "../../defaults.js";
+
 async function postService(request: Request, response: Response): Promise<void> {
     try {
         const body = postServiceMasterSchema.parse(request.body);
@@ -29,9 +31,47 @@ async function getServices(request: Request, response: Response): Promise<void> 
         // No need to decrement query (query.start - 1).
         // It is taken care of by getRequestSchema
         const services = await getServicesDB(query.orderBy, query.reverse, query.start, query.rows);
-        services.next = await next(query.start, query.rows,services?.total_fields);
-        services.previous = await previous(query.start, query.rows);
-        response.json(services);
+
+        const total = await getTotalRowsDB("Service");
+
+        const start: number = query.start || defaults.skip;
+        const rows: number = query.rows || defaults.take;
+
+        let next: {start: number, rows: number} | null = null;
+        let prev: {start: number, rows: number} | null = null;
+
+        if (start + rows < total) {
+            next = {
+                start: start + rows + 1,
+                rows: rows
+            }
+        }
+
+        if (start !== 0) {
+            if (start - rows > 0) {
+                prev = {
+                    start: start - rows + 1,
+                    rows: rows
+                }
+            }
+            else {
+                prev = {
+                    start: 0,
+                    rows: rows
+                }
+            }
+        }
+
+        response.json({
+            data: services,
+            total: total,
+            rows: (services || []).length,
+            reverse: query.reverse,
+            orderBy: query.orderBy,
+            start: start + 1,
+            next: next,
+            prev: prev,
+        });
     }
     catch (error) {
         if (error instanceof ZodError) {
