@@ -9,6 +9,7 @@ import {
 } from "../../services/database/serviceMaster/serviceMaster.js";
 import {getTotalRowsDB} from "../../services/database/database.js";
 import defaults from "../../defaults.js";
+import generateResponse from "../utils/generateResponse.js";
 
 async function postService(request: Request, response: Response): Promise<void> {
     try {
@@ -32,46 +33,7 @@ async function getServices(request: Request, response: Response): Promise<void> 
         // It is taken care of by getRequestSchema
         const services = await getServicesDB(query.orderBy, query.reverse, query.start, query.rows);
 
-        const total = await getTotalRowsDB("Service");
-
-        const start: number = query.start || defaults.skip;
-        const rows: number = query.rows || defaults.take;
-
-        let next: {start: number, rows: number} | null = null;
-        let prev: {start: number, rows: number} | null = null;
-
-        if (start + rows < total) {
-            next = {
-                start: start + rows + 1,
-                rows: rows
-            }
-        }
-
-        if (start !== 0) {
-            if (start - rows > 0) {
-                prev = {
-                    start: start - rows + 1,
-                    rows: rows
-                }
-            }
-            else {
-                prev = {
-                    start: 0,
-                    rows: rows
-                }
-            }
-        }
-
-        response.json({
-            data: services,
-            total: total,
-            rows: (services || []).length,
-            reverse: query.reverse,
-            orderBy: query.orderBy,
-            start: start + 1,
-            next: next,
-            prev: prev,
-        });
+        response.json(await generateResponse(query, services));
     }
     catch (error) {
         if (error instanceof ZodError) {

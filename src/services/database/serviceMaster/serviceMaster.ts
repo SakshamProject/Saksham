@@ -3,6 +3,7 @@ import defaults from "../../../defaults.js";
 import { query } from "express";
 import { serviceMasterColumnNameMapper } from "../utils/serviceMaster.js";
 import { ZodAny, any, promise } from "zod";
+import { Prisma } from "@prisma/client";
 //import { promise } from "zod";
 
 async function getServicesDB(
