@@ -35,5 +35,15 @@ async function clearTableDB(tables: Prisma.ModelName[]): Promise<void> {
     }
 }
 
+async function getTotalRowsDB(table: Prisma.ModelName) {
+    try {
+        const rows = await prisma[table].count();
+        return rows;
+    }
+    catch(error) {
+        console.log(error);
+    }
+}
+
 export default prisma;
-export { pingDB, clearTableDB };
+export { pingDB, clearTableDB, getTotalRowsDB };
