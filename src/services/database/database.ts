@@ -12,10 +12,11 @@ async function pingDB(): Promise<void> {
     catch (error) {
         throw new APIError(
             "There was an error connecting to the database",
-                    StatusCodes.INTERNAL_SERVER_ERROR,
-                    "DatabaseConnectivityError",
-                    1001,
-                    "S"
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "DatabaseConnectivityError",
+            1001,
+            "S",
+            "additional info"
             );
     }
 }

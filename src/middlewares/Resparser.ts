@@ -32,6 +32,5 @@ function next(
   return next_field;
 }
 function generateResponse(): {
-  
 }
 export { previous, next ,generateResponse};
