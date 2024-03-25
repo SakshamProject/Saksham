@@ -43,7 +43,7 @@ const updateServicesOnSevaKendraDB = async (
   }
   console.log("\n services on sevaKendra updated \n");
 };
-const updateAuditLogDB = async (auditLog: SevaKendraAuditLog[]) => {
+const updateSevaKendraAuditLogDB = async (auditLog: SevaKendraAuditLog[]) => {
   for (const log of auditLog) {
     const updatedAuditLog = await prisma.sevaKendraAuditLog.upsert({
       where: {
@@ -61,5 +61,5 @@ export {
   updateContactPersonDB,
   updateSevaKendraDB,
   updateServicesOnSevaKendraDB,
-  updateAuditLogDB,
+  updateSevaKendraAuditLogDB,
 };

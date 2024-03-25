@@ -25,6 +25,19 @@ import {
 import getRequestSchema from "../getRequest.schema.js";
 import { sevaKendraColumnNameMapper } from "../../services/utils/sevaKendra/sevaKendra.js";
 import { SevaKendraResponse } from "../../models/sevaKendra/Response.js";
+import SevaKendraUpdateRequest from "../../models/sevaKendra/update.js";
+import {
+  updateContactPersonDBObject,
+  updateServicesOnSevaKendraDBObject,
+  updateSevaKendraAuditLogDBObject,
+  updateSevaKendraDBObject,
+} from "../../DTO/sevaKendra/update.js";
+import {
+  updateContactPersonDB,
+  updateServicesOnSevaKendraDB,
+  updateSevaKendraAuditLogDB,
+  updateSevaKendraDB,
+} from "../../services/database/sevaKendra/update.js";
 
 const getSevaKendra = async (request: Request, response: Response) => {
   const query = getRequestSchema.parse(request.query);
@@ -69,7 +82,24 @@ const getSevaKendraById = async (request: Request, response: Response) => {
   const sevaKendra = await getSevaKendrabyIdDB(id);
   response.send(sevaKendra);
 };
-const putSevaKendra = async (request: Request, response: Response) => {};
+const putSevaKendra = async (request: Request, response: Response) => {
+  const sevaKendraUpdateRequest: SevaKendraUpdateRequest = request.body;
+  const contactPersonDBObject: ContactPerson =
+    await updateContactPersonDBObject(sevaKendraUpdateRequest);
+  await updateContactPersonDB(contactPersonDBObject);
+  const sevaKendraDBObject: SevaKendra = await updateSevaKendraDBObject(
+    sevaKendraUpdateRequest
+  );
+  await updateSevaKendraDB(sevaKendraDBObject);
+  const servicesOnSevaKendraDBObject = await updateServicesOnSevaKendraDBObject(
+    sevaKendraUpdateRequest
+  );
+  await updateServicesOnSevaKendraDB(servicesOnSevaKendraDBObject);
+  const auditLogDBObject = await updateSevaKendraAuditLogDBObject(
+    sevaKendraUpdateRequest
+  );
+  await updateSevaKendraAuditLogDB(auditLogDBObject);
+};
 const deleteSevaKendra = async (request: Request, response: Response) => {};
 
 export {
