@@ -41,8 +41,8 @@ async function generateResponse(query: Query, data: results) {
         reverse: query.reverse,
         orderBy: query.orderBy,
         start: start + 1,
-        next: next,
-        prev: prev,
+        // next: next,
+        // prev: prev,
     });
 }
 
