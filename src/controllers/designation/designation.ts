@@ -1,20 +1,21 @@
 import { Request, Response } from "express";
 import {
   createDesignationDB,
+  createFeaturesOnDesignationDB,
   getDesignationByID,
+  getDesignationByNameDB,
   getDesignationDB,
-  getIdByNameDB,
 } from "../../services/database/designation/designation.js";
 import getRequestSchema from "../getRequest.schema.js";
+import { postRequestSchema } from "./designation.schema.js";
+import { createDesignationDBObject, createFeaturesOnDesignationDBObject } from "../../DTO/designation/designation.js";
+import { Designation } from "@prisma/client";
 
-async function getDesignation(
-  request: Request,
-  response: Response
-){
-  const { start, rows, orderBy, orderByDirection} = getRequestSchema.parse(
+async function getDesignation(request: Request, response: Response) {
+  const { start, rows, orderBy, orderByDirection } = getRequestSchema.parse(
     request.query
   );
-  const orderByColumn: string|undefined = orderBy;
+  const orderByColumn: string | undefined = orderBy;
 
   const results = await getDesignationDB(
     start,
@@ -22,27 +23,43 @@ async function getDesignation(
     orderByColumn,
     orderByDirection
   );
- 
+
   response.send(results);
 }
 
-async function getDesignationById( request: Request,response: Response){
-  const id = request.params.id;
+async function getDesignationById(request: Request, response: Response) {
+  const id: string = request.params.id;
   const designation = await getDesignationByID(id);
-  response.send(designation);
+  response.send({
+    "data":designation
+  })
+}
+
+async function getDesignationByName(request: Request, response: Response) {
+  const name: string = request.params.name;
+  const designation = await getDesignationByNameDB(name);
  
+  response.send({
+    "data":designation
+  })
 }
 
 async function postDesignation(request: Request, response: Response) {
-  const { state, districtId, sevaKendraId, designation, featuresId } = request.body;
-  console.log(state )
-  console.log(designation)
 
-  const newDesignation = await createDesignationDB(
-    sevaKendraId,
-    designation,
-  );
+  const postDesignationRequest = postRequestSchema.parse(request.body);
+  const dataObject = await createDesignationDBObject(postDesignationRequest);
+  const newDesignation:Designation = await createDesignationDB(dataObject);
+  const designationId:string = newDesignation.id;
+  const FeaturesOnDesignationsDBObjects = createFeaturesOnDesignationDBObject(designationId,postDesignationRequest);
+  await createFeaturesOnDesignationDB(FeaturesOnDesignationsDBObjects);
+  console.log(FeaturesOnDesignationsDBObjects);
   response.send(newDesignation);
+
 }
 
-export { getDesignation, postDesignation,getDesignationById };
+export {
+  getDesignation,
+  postDesignation,
+  getDesignationById,
+  getDesignationByName,
+};

@@ -1,6 +1,6 @@
 //import prisma from "../database.js";
 import defaults from "../../../defaults.js";
-import { Designation } from "@prisma/client";
+import { Designation, FeaturesOnDesignations } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import { JsonObject, PrismaClientValidationError } from "@prisma/client/runtime/library";
 import { designationColumnNameMapper } from "../../utils/designation/designation.js";
@@ -13,23 +13,7 @@ const prisma = new PrismaClient({
 
 
 
-async function getIdByNameDB(tableName: PrismaTable, name: string) {
-  try {
-    
-    const feature_id = await prisma[tableName].findUnique({
-      where: {
-        name: name,
-      },
-      select: {
-        id: true,
-      },
-    });
 
-    return feature_id?.id;
-  } catch (err) {
-    return err;
-  }
-}
 
 async function getDesignationDB(
   skip: number = defaults.skip,
@@ -91,24 +75,38 @@ async function getDesignationByID(id:string){
  }
 }
 
-async function createDesignationDB(
-  sevaKendraId: string,
-  designation: string,
-) {
+async function getDesignationByNameDB(name: string) {
   try {
-    const newDesignation:Designation = await prisma.designation.create({
-      data:{
-        name : designation,
-        sevaKendraId : sevaKendraId
-      }
-
+    
+    const designation = await prisma.designation.findMany({
+      where: {
+        name: name,
+      },
     });
-    console.log(newDesignation.id);
-
-    return newDesignation;
+    console.log(designation);
+    return designation;
   } catch (err) {
     return err;
   }
 }
 
-export { getDesignationDB, getIdByNameDB, createDesignationDB,getDesignationByID };
+async function createDesignationDB(
+dataObject:Designation):Promise<Designation>{
+  
+    const newDesignation:Designation = await prisma.designation.create({
+      data:dataObject
+
+    });
+    console.log(newDesignation.id);
+
+    return newDesignation;
+}
+
+async function createFeaturesOnDesignationDB(FeaturesOnDesignationsDBObjects:FeaturesOnDesignations[]){
+  for (let FeaturesOnDesignationsDBObject of FeaturesOnDesignationsDBObjects)
+  await prisma.featuresOnDesignations.create({
+    data:FeaturesOnDesignationsDBObject
+  })
+}
+
+export { getDesignationDB, createDesignationDB,getDesignationByID ,getDesignationByNameDB,createFeaturesOnDesignationDB};
