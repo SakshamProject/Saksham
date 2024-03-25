@@ -17,7 +17,7 @@ import {
   createServicesOnSevaKendraDBObject,
   createSevaKendraAuditLogDBObject,
   createSevaKendraDBObject,
-} from "../../DTO/sevaKendra/sevaKendra.js";
+} from "../../DTO/sevaKendra/create.js";
 import {
   getSevaKendraDB,
   getSevaKendrabyIdDB,
@@ -69,7 +69,6 @@ const getSevaKendraById = async (request: Request, response: Response) => {
   const sevaKendra = await getSevaKendrabyIdDB(id);
   response.send(sevaKendra);
 };
-const patchSevaKendra = async (request: Request, response: Response) => {};
 const putSevaKendra = async (request: Request, response: Response) => {};
 const deleteSevaKendra = async (request: Request, response: Response) => {};
 
@@ -77,7 +76,6 @@ export {
   getSevaKendra,
   postSevaKendra,
   putSevaKendra,
-  patchSevaKendra,
   deleteSevaKendra,
   getSevaKendraById,
 };

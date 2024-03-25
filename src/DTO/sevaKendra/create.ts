@@ -52,7 +52,7 @@ const createServicesOnSevaKendraDBObject = (
 ): ServicesOnSevaKendras[] => {
   let servicesOnSevaKendra: ServicesOnSevaKendras[] = [];
 
-  for (let service in sevaKendra.servicesBySevaKendra) {
+  for (const service of sevaKendra.servicesBySevaKendra) {
     const servicesOnSevaKendraDBObject: ServicesOnSevaKendras = {
       id: randomUUID(),
       sevaKendraId: sevaKendraId,
