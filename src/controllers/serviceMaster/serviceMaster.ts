@@ -53,7 +53,7 @@ async function putService(
   try {
     const body = putServiceMasterSchema.parse(request.body)
     console.log("reached controllers")
-    const service = await updateServiceByIdDB(request.serviceID,body.subTypeId,body.name);// updateService
+    const service = await updateServiceByIdDB(request.params.serviceID,body.subTypeId,body.name);// updateService
     response.json(service);
   } catch (error) {
     if (error instanceof ZodError) {
@@ -66,7 +66,7 @@ async function putService(
 }
 async function getServiceByID(request: Request, response: Response) {
   try {
-    const serviceId = request.serviceID;
+    const serviceId = request.params.serviceID;
     const query = getRequestSchema.parse(request.query);
     const service = await getServiceByIdDB(serviceId, query.start, query.rows);
 
@@ -78,7 +78,7 @@ async function getServiceByID(request: Request, response: Response) {
 
 async function deleteServiceById(request: Request, response: Response) {
   try {
-    const serviceID = request.serviceID;
+    const serviceID = request.params.serviceID;
 
     const result = await deleteServiceByIdDB(serviceID);
 
