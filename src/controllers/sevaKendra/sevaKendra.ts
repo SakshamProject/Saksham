@@ -19,6 +19,7 @@ import {
   createSevaKendraDBObject,
 } from "../../DTO/sevaKendra/create.js";
 import {
+  getContactPersonIdBySevaKendraId,
   getSevaKendraDB,
   getSevaKendrabyIdDB,
 } from "../../services/database/sevaKendra/get.js";
@@ -38,6 +39,12 @@ import {
   updateSevaKendraAuditLogDB,
   updateSevaKendraDB,
 } from "../../services/database/sevaKendra/update.js";
+import {
+  deleteContactPersonDB,
+  deleteSerivesOnSevaKendraDB,
+  deleteSevaKendraAuditLogsDB,
+  deleteSevaKendraDB,
+} from "../../services/database/sevaKendra/delete.js";
 
 const getSevaKendra = async (request: Request, response: Response) => {
   const query = getRequestSchema.parse(request.query);
@@ -100,7 +107,14 @@ const putSevaKendra = async (request: Request, response: Response) => {
   );
   await updateSevaKendraAuditLogDB(auditLogDBObject);
 };
-const deleteSevaKendra = async (request: Request, response: Response) => {};
+const deleteSevaKendra = async (request: Request, response: Response) => {
+  const id = request.params.id;
+  const contactPersonId = await getContactPersonIdBySevaKendraId(id);
+  await deleteContactPersonDB(contactPersonId);
+  await deleteSevaKendraDB(id);
+  await deleteSerivesOnSevaKendraDB(id);
+  await deleteSevaKendraAuditLogsDB(id);
+};
 
 export {
   getSevaKendra,

@@ -1,6 +1,7 @@
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
 import { orderByDirectionEnum } from "../../../controllers/getRequest.schema.js";
+import { ContactPerson } from "@prisma/client";
 const getSevaKendrabyIdDB = async (id: string) => {
   const sevaKendra = await prisma.sevaKendra.findUnique({
     where: { id: id },
@@ -155,5 +156,26 @@ const getSevaKendraDB = async (
   });
   return sevaKendras;
 };
+const getContactPersonIdBySevaKendraId = async (
+  sevaKendraId: string
+): Promise<any> => {
+  const contactPersonId = await prisma.sevaKendra.findFirst({
+    where: {
+      id: sevaKendraId,
+    },
+    select: {
+      contactPerson: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+  return contactPersonId?.contactPerson?.id;
+};
 
-export { getSevaKendraDB, getSevaKendrabyIdDB };
+export {
+  getSevaKendraDB,
+  getSevaKendrabyIdDB,
+  getContactPersonIdBySevaKendraId,
+};
