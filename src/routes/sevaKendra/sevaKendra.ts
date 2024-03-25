@@ -13,6 +13,6 @@ sevaKendraRouter.get("/", getSevaKendra);
 sevaKendraRouter.get("/:id", getSevaKendraById);
 sevaKendraRouter.post("/", postSevaKendra);
 sevaKendraRouter.put("/", putSevaKendra);
-sevaKendraRouter.delete("/", deleteSevaKendra);
+sevaKendraRouter.delete("/:id", deleteSevaKendra);
 
 export default sevaKendraRouter;
