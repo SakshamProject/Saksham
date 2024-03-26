@@ -87,7 +87,6 @@ async function createServiceByIdDB(
   return service;
 }
 async function updateServiceByIdDB(
-
   serviceId: string,
   serviceSubTypeID:string,
   serviceName: string
@@ -107,30 +106,24 @@ async function updateServiceByIdDB(
     return service;
   }
   catch (error) {
-    throw new APIError(
-    "There was an error updating the database",
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            "DatabaseUpdationError",
-            1004,
-            "E",
-            error.meta.cause
-    );
+    console.log(error);
   }
 }
 
 
 async function deleteServiceByIdDB(serviceId: string) {
-  const result = await prisma.service.delete({
-    where: {
-      id: serviceId,
-    },
-  });
+  try {
+    const result = await prisma.service.delete({
+      where: {
+        id: serviceId,
+      },
+    });
 
-  if (!result) {
-    // Row was not found
+    return result;
   }
+  catch(error) {
 
-  return result;
+  }
 }
 
 export {

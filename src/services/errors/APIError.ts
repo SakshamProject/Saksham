@@ -7,7 +7,7 @@ class APIError extends Error {
   message: string;
 
   constructor(
-    message: string,
+    message: string = "Sorry! Could not complete your request. Some error has occurred.",
     statusCode: number,
     name: string,
     severity: Severity,
