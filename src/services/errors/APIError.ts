@@ -4,6 +4,7 @@ class APIError extends Error {
   statusCode: number;
   severity: Severity;
   name: string;
+  message: string;
 
   constructor(
     message: string,
@@ -13,6 +14,7 @@ class APIError extends Error {
   ) {
     super(message);
 
+    this.message = message;
     this.statusCode = statusCode;
     this.name = name;
     this.severity = severity;
