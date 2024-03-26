@@ -4,21 +4,18 @@ class APIError extends Error {
   statusCode: number;
   severity: Severity;
   name: string;
-  additionalInfo: string;
 
   constructor(
     message: string,
     statusCode: number,
     name: string,
     severity: Severity,
-    additionalInfo: string
   ) {
     super(message);
 
     this.statusCode = statusCode;
     this.name = name;
     this.severity = severity;
-    this.additionalInfo = additionalInfo;
 
     // Capture Stack Trace
     Error.captureStackTrace(this, this.constructor);
