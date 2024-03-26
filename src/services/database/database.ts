@@ -14,9 +14,7 @@ async function pingDB(): Promise<void> {
             "There was an error connecting to the database",
             StatusCodes.INTERNAL_SERVER_ERROR,
             "DatabaseConnectivityError",
-            1001,
-            "S",
-            "additional info"
+            "S"
             );
     }
 }

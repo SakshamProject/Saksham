@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import {NextFunction, Request, Response} from "express";
 import { ZodError } from "zod";
 import { getRequestSchema } from "../schemas/zodSchemas.js";
 import { postServiceMasterSchema, putServiceMasterSchema } from "./serviceMaster.schema.js";
@@ -76,7 +76,7 @@ async function getServiceByID(request: Request, response: Response) {
   }
 }
 
-async function deleteServiceById(request: Request, response: Response) {
+async function deleteServiceById(request: Request, response: Response, next: NextFunction) {
   try {
     const serviceID = request.params.serviceID;
 
@@ -84,7 +84,7 @@ async function deleteServiceById(request: Request, response: Response) {
 
     response.json(result);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 }
 

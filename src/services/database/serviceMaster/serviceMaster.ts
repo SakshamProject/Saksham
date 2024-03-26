@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 //import { promise } from "zod";
 import APIError from "../../errors/APIError.js";
 import { StatusCodes } from "http-status-codes";
+import throwDatabaseError from "../utils/errorHandler.js";
 
 async function getServicesDB(
   orderByColumn: string = "serviceName",
@@ -101,12 +102,13 @@ async function updateServiceByIdDB(
         subTypeId : serviceSubTypeID,
         name: serviceName
       }
-    })
-    console.log("reached services");
+    });
     return service;
   }
   catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
   }
 }
 
@@ -122,7 +124,9 @@ async function deleteServiceByIdDB(serviceId: string) {
     return result;
   }
   catch(error) {
-
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
   }
 }
 
