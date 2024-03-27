@@ -7,17 +7,15 @@ import {
 import { SevaKendraRequest } from "../../models/sevaKendra/Request.js";
 import { randomUUID } from "crypto";
 import { getServiceId } from "../../controllers/sevaKendra/dummy.js";
-import { getDistrictIdByName } from "../../services/database/typeMaster/get.js";
 
 const createSevaKendraDBObject = async (
   sevaKendra: SevaKendraRequest,
   contactPersonId: string
 ): Promise<SevaKendra> => {
-  const districtId: string = await getDistrictIdByName(sevaKendra.district);
   const sevaKendraDB: SevaKendra = {
     id: randomUUID(),
     name: sevaKendra.name,
-    districtId: districtId,
+    districtId: sevaKendra.districtId,
     address: sevaKendra.address,
     mobileNumber: sevaKendra.mobileNumber,
     landLineNumber: sevaKendra.landLineNumber,

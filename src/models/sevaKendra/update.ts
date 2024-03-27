@@ -2,7 +2,7 @@ export interface SevaKendraUpdateRequest {
   id: string;
   name: string;
   state: string;
-  district: string;
+  districtId: string;
   address: string;
   landLineNumber: string;
   mobileNumber: string;

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   district,
   districtSchema,
@@ -15,7 +15,11 @@ import {
   createStateDB,
 } from "../../services/database/typeMaster/create.js";
 
-const postState = async (request: Request, response: Response) => {
+const postState = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const state: state = stateSchema.parse(request.body);
     const stateDBObject: Prisma.StateUncheckedCreateInput =
@@ -23,11 +27,15 @@ const postState = async (request: Request, response: Response) => {
     const result = await createStateDB(stateDBObject);
     response.send(result);
   } catch (error) {
-    return error;
+    next(error);
   }
 };
 
-const postDistrict = async (request: Request, response: Response) => {
+const postDistrict = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
   try {
     const district: district = districtSchema.parse(request.body);
     const districtDBObject: Prisma.DistrictUncheckedCreateInput =
@@ -35,7 +43,7 @@ const postDistrict = async (request: Request, response: Response) => {
     const result = await createDistrictDB(districtDBObject);
     response.send(result);
   } catch (error) {
-    return error;
+    next(error);
   }
 };
 

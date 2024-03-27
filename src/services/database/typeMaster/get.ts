@@ -1,41 +1,27 @@
-import { District, State } from "@prisma/client";
 import prisma from "../database.js";
+import throwDatabaseError from "../utils/errorHandler.js";
 
-const getStateIdByName = async (name: string): Promise<string> => {
-  console.log(name);
-  const stateId = await prisma.state.findFirst({
-    where: {
-      name: name,
-    },
-    select: {
-      id: true,
-    },
-  });
-  console.log(stateId);
-  return stateId?.id == undefined ? "007" : stateId?.id;
+const getStateDB = async () => {
+  try {
+    const states = await prisma.state.findMany();
+    return states;
+  } catch (error) {
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
+  }
 };
-const getDistrictIdByName = async (name: string): Promise<string> => {
-  console.log(name);
-  const districtId = await prisma.district.findFirst({
-    where: {
-      name: name,
-    },
-    select: {
-      id: true,
-    },
-  });
-  console.log(districtId);
-  return districtId?.id == undefined ? "007" : districtId?.id;
-};
-const getStateDB = async (): Promise<State[]> => {
-  const states = await prisma.state.findMany();
-  return states;
-};
-const getDistrictDB = async (): Promise<District[]> => {
-  const districts = await prisma.district.findMany({
-    include: { state: true },
-  });
-  return districts;
+const getDistrictDB = async () => {
+  try {
+    const districts = await prisma.district.findMany({
+      include: { state: true },
+    });
+    return districts;
+  } catch (error) {
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
+  }
 };
 
-export { getStateIdByName, getStateDB, getDistrictDB, getDistrictIdByName };
+export { getStateDB, getDistrictDB };

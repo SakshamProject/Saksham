@@ -4,7 +4,6 @@ import {
   SevaKendra,
   SevaKendraAuditLog,
 } from "@prisma/client";
-import { getDistrictIdByName } from "../../services/database/typeMaster/get.js";
 import SevaKendraUpdateRequest from "../../models/sevaKendra/update.js";
 import { getServiceId } from "../../controllers/sevaKendra/dummy.js";
 import { randomUUID } from "crypto";
@@ -25,11 +24,10 @@ const updateContactPersonDBObject = async (
 const updateSevaKendraDBObject = async (
   sevaKendra: SevaKendraUpdateRequest
 ): Promise<SevaKendra> => {
-  const districtId: string = await getDistrictIdByName(sevaKendra.district);
   const sevaKendraDB: SevaKendra = {
     id: sevaKendra.id,
     name: sevaKendra.name,
-    districtId: districtId,
+    districtId: sevaKendra.districtId,
     address: sevaKendra.address,
     mobileNumber: sevaKendra.mobileNumber,
     landLineNumber: sevaKendra.landLineNumber,
