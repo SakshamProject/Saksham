@@ -1,11 +1,7 @@
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
 import { serviceMasterColumnNameMapper } from "../utils/serviceMaster.js";
-import { ZodAny, any, promise } from "zod";
-import { Prisma } from "@prisma/client";
-//import { promise } from "zod";
-import APIError from "../../errors/APIError.js";
-import { StatusCodes } from "http-status-codes";
+
 import throwDatabaseError from "../utils/errorHandler.js";
 
 async function getServicesDB(
@@ -34,9 +30,10 @@ async function getServicesDB(
     const services = await prisma.service.findMany(query);
     return services;
   
-    return services;
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
   }
 }
 
@@ -69,7 +66,9 @@ async function getServiceByIdDB(
 
     return services;
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
   }
 }
 

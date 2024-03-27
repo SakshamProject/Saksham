@@ -12,22 +12,17 @@ import {
 } from "../../services/database/serviceMaster/serviceMaster.js";
 import generateResponse from "../utils/generateResponse.js";
 
-async function postService(request: Request, response: Response): Promise<void> {
+async function postService(request: Request, response: Response, next: NextFunction) {
     try {
         const body = postServiceMasterSchema.parse(request.body);
     const service = await createServiceByIdDB(body.name, body.subTypeId);
     response.json(service);
   } catch (error) {
-    if (error instanceof ZodError) {
-      response.json(error);
-    }
+    next(error)
   }
 }
 
-async function getServices(
-  request: Request,
-  response: Response
-): Promise<void> {
+async function getServices(request: Request, response: Response, next: NextFunction) {
   try {
     const query = getRequestSchema.parse(request.query);
 
@@ -38,31 +33,21 @@ async function getServices(
         response.json(await generateResponse(query, services));
     }
     catch (error) {
-        if (error instanceof ZodError) {
-            response.json(error);
-        }
+      next(error)
     }
   } 
 
-async function putService(
-  request: Request,
-  response: Response
-): Promise<void> {
+async function putService(request: Request, response: Response, next: NextFunction) {
   try {
     const body = putServiceMasterSchema.parse(request.body)
     console.log("reached controllers")
     const service = await updateServiceByIdDB(request.params.serviceID,body.subTypeId,body.name);// updateService
     response.json(service);
   } catch (error) {
-    if (error instanceof ZodError) {
-      response.json(error);
-    }
-    if (error instanceof APIError) {
-      response.json(error);
-    }
+    next(error)
   }
 }
-async function getServiceByID(request: Request, response: Response) {
+async function getServiceByID(request: Request, response: Response, next: NextFunction) {
   try {
     const serviceId = request.params.serviceID;
     const query = getRequestSchema.parse(request.query);
@@ -70,7 +55,7 @@ async function getServiceByID(request: Request, response: Response) {
 
     response.json(service);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 }
 
