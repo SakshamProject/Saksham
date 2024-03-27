@@ -3,6 +3,9 @@ import defaults from "../../../defaults.js";
 import { serviceMasterColumnNameMapper } from "../utils/serviceMaster.js";
 
 import throwDatabaseError from "../utils/errorHandler.js";
+import {Prisma} from "@prisma/client";
+import APIError from "../../errors/APIError.js";
+import {StatusCodes} from "http-status-codes";
 
 async function getServicesDB(
   orderByColumn: string = "serviceName",
@@ -39,20 +42,14 @@ async function getServicesDB(
 
 async function getServiceByIdDB(
   id: string,
-  skip = defaults.skip,
-  take = defaults.take
 ) {
   try {
     // TODO: Interfaces
 
     const query = {
       where: {
-        id: {
-          equals: id,
-        },
+        id: id
       },
-      take: take,
-      skip: skip,
       include: {
         subType: {
           include: {
@@ -62,9 +59,18 @@ async function getServiceByIdDB(
       },
     };
 
-    const services = await prisma.service.findMany(query);
+    const service = await prisma.service.findUnique(query);
 
-    return services;
+    if (!service) {
+      throw new APIError(
+          "The specified record could not be found",
+          StatusCodes.INTERNAL_SERVER_ERROR,
+          "DatabaseDeletionError",
+          "E"
+      );
+    }
+
+    return service;
   } catch (error) {
     if (error instanceof Error) {
       throwDatabaseError(error);
@@ -76,15 +82,22 @@ async function createServiceByIdDB(
   serviceName: string,
   serviceSubTypeID: string
 ) {
-  // When adding using ID, serviceSubType is enough
-  const service = await prisma.service.create({
-    data: {
-      name: serviceName,
-      subTypeId: serviceSubTypeID,
-    },
-  });
+  try {
+    // When adding using ID, serviceSubType is enough
+    const service = await prisma.service.create({
+      data: {
+        name: serviceName,
+        subTypeId: serviceSubTypeID,
+      },
+    });
 
-  return service;
+    return service;
+  }
+  catch (error) {
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
+  }
 }
 async function updateServiceByIdDB(
   serviceId: string,
@@ -93,14 +106,16 @@ async function updateServiceByIdDB(
 ) {
   // When adding using ID, serviceSubType is enough
   try {
+
+    const updateData: Prisma.ServiceUncheckedCreateInput = {
+      subTypeId : serviceSubTypeID,
+      name: serviceName
+    }
     const service = await prisma.service.update({
       where: {
         id: serviceId
       },
-      data: {
-        subTypeId : serviceSubTypeID,
-        name: serviceName
-      }
+      data: updateData,
     });
     return service;
   }

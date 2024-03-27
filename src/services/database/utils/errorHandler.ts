@@ -3,6 +3,14 @@ import APIError from "../../errors/APIError.js";
 import {StatusCodes} from "http-status-codes";
 
 function throwDatabaseError(error: Error) {
+    if (error instanceof APIError) {
+        throw new APIError(
+            error.message,
+            error.statusCode,
+            error.name,
+            error.severity
+        );
+    }
     if (error instanceof Error) {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === "P2025") {
