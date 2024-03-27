@@ -24,7 +24,7 @@ const postState = async (
     const state: state = stateSchema.parse(request.body);
     const stateDBObject: Prisma.StateUncheckedCreateInput =
       createStateDBObject(state);
-    const result = await createStateDB(stateDBObject);
+    const result: state | undefined = await createStateDB(stateDBObject);
     response.send(result);
   } catch (error) {
     next(error);
@@ -40,7 +40,9 @@ const postDistrict = async (
     const district: district = districtSchema.parse(request.body);
     const districtDBObject: Prisma.DistrictUncheckedCreateInput =
       createDistrictDBObject(district);
-    const result = await createDistrictDB(districtDBObject);
+    const result: district | undefined = await createDistrictDB(
+      districtDBObject
+    );
     response.send(result);
   } catch (error) {
     next(error);

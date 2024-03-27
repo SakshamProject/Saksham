@@ -20,7 +20,6 @@ apiRouter.get(
   }
 );
 
-apiRouter.use("/sevakendras", sevaKendraRouter);
 apiRouter.use("/typemaster", typeMasterRouter);
 apiRouter.use(errorHandler);
 export default apiRouter;
