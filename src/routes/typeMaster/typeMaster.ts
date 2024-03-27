@@ -1,10 +1,6 @@
 import express from "express";
-import {
-  getDistrict,
-  getState,
-  postDistrict,
-  postState,
-} from "../../controllers/typeMaster/typeMaster.js";
+import { getDistrict, getState } from "../../controllers/typeMaster/get.js";
+import { postDistrict, postState } from "../../controllers/typeMaster/post.js";
 
 const typeMasterRouter = express.Router();
 typeMasterRouter.get("/states", getState);
