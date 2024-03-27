@@ -1,6 +1,5 @@
 import express, { Request, Response, Router } from "express";
 import { pingDB } from "../services/database/database.js";
-import sevaKendraRouter from "./sevaKendra/sevaKendra.js";
 import typeMasterRouter from "./typeMaster/typeMaster.js";
 import errorHandler from "../middlewares/errorHandler.js";
 
