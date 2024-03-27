@@ -12,13 +12,9 @@ const createDistrictDB = async (
         stateId: district.stateId,
       },
     });
-    console.log("\n District created \n");
-    console.log(createdDistrict);
     return createdDistrict;
   } catch (error) {
     if (error instanceof Error) {
-      console.log("db error");
-      console.log(error);
       throwDatabaseError(error);
     }
   }
@@ -31,8 +27,6 @@ const createStateDB = async (state: Prisma.StateUncheckedCreateInput) => {
         name: state.name,
       },
     });
-    console.log("\nCreated State");
-    console.log(createdState);
     return createdState;
   } catch (error) {
     if (error instanceof Error) {

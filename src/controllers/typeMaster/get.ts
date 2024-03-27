@@ -3,14 +3,19 @@ import {
   getDistrictDB,
   getStateDB,
 } from "../../services/database/typeMaster/get.js";
+import {
+  getDistrictsWithState,
+  getState,
+} from "../../models/typeMaster/get.js";
 
 const getState = async (request: Request, response: Response) => {
-  const result = await getStateDB();
+  const result: getState[] | undefined = await getStateDB();
   response.send(result);
 };
 
 const getDistrict = async (request: Request, response: Response) => {
-  const result = await getDistrictDB();
+  const result: getDistrictsWithState[] | undefined = await getDistrictDB();
   response.send(result);
 };
+
 export { getState, getDistrict };
