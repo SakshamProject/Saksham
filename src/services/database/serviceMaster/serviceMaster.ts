@@ -59,16 +59,7 @@ async function getServiceByIdDB(
       },
     };
 
-    const service = await prisma.service.findUnique(query);
-
-    if (!service) {
-      throw new APIError(
-          "The specified record could not be found",
-          StatusCodes.INTERNAL_SERVER_ERROR,
-          "DatabaseDeletionError",
-          "E"
-      );
-    }
+    const service = await prisma.service.findUniqueOrThrow(query);
 
     return service;
   } catch (error) {
