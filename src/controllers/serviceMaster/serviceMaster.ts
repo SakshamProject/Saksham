@@ -10,8 +10,6 @@ import {
   getServicesDB,
   updateServiceByIdDB,
 } from "../../services/database/serviceMaster/serviceMaster.js";
-
-import defaults from "../../defaults.js";
 import generateResponse from "../utils/generateResponse.js";
 
 async function postService(request: Request, response: Response): Promise<void> {
