@@ -86,12 +86,18 @@ model Service {
 }
 
 model District {
-  id         String                   @id @default(uuid())
-  name       String
-  stateId    String
-  sevakendra SevaKendra[]
-  state      State                    @relation(fields: [stateId], references: [id])
-  disability DivyangPersonalDetails[]
+  id                String                   @id @default(uuid())
+  name              String
+  stateId           String
+  sevakendra        SevaKendra[]
+  state             State                    @relation(fields: [stateId], references: [id])
+  disability        DivyangPersonalDetails[]
+  MPConstituencies  MPConstituency[]
+  MLAConstituencies MLAConstituency[]
+  TownPanchayats    TownPanchayat[]
+  Municipalities    Municipality[]
+  Corporations      Corporation[]
+  PanchayatUnion    PanchayatUnion[]
 }
 
 model State {
@@ -291,33 +297,45 @@ model DisabilityType {
 }
 
 model MPConstituency {
-  id   String @id @default(uuid())
-  name String
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
 }
 
 model MLAConstituency {
-  Id   String @id @default(uuid())
-  name String
+  Id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
 }
 
 model PanchayatUnion {
-  id   String @id @default(uuid())
-  name String
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
 }
 
 model TownPanchayat {
-  id   String @id @default(uuid())
-  name String
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
 }
 
 model Municipality {
-  id   String @id @default(uuid())
-  name String
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
 }
 
 model Corporation {
-  id   String @id @default(uuid())
-  name String
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
 }
 
 model CommunityCategory {

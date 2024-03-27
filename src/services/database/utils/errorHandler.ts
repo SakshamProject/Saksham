@@ -11,26 +11,24 @@ function throwDatabaseError(error: Error) {
             error.severity
         );
     }
-    if (error instanceof Error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            if (error.code === "P2025") {
-                throw new APIError(
-                    "The specified record could not be found",
-                    StatusCodes.INTERNAL_SERVER_ERROR,
-                    "DatabaseDeletionError",
-                    "E"
-                );
-            }
-        }
-        else {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === "P2025") {
             throw new APIError(
-                "Some database error occurred",
+                "The specified record could not be found",
                 StatusCodes.INTERNAL_SERVER_ERROR,
-                "DatabaseError",
+                "DatabaseDeletionError",
                 "E"
             );
         }
+    } else {
+        throw new APIError(
+            "Some database error occurred",
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "DatabaseError",
+            "E"
+        );
     }
+
 }
 
 export default throwDatabaseError;
