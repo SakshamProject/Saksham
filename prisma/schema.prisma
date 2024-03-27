@@ -22,11 +22,21 @@ model SevaKendra {
   startDate       DateTime
   contactPersonId String
 
-  services      ServicesOnSevaKendras[]
-  users         User[]
-  district      District                @relation(fields: [districtId], references: [id])
-  contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])
-  designations  Designation[]
+  services           ServicesOnSevaKendras[]
+  district           District                @relation(fields: [districtId], references: [id])
+  contactPerson      ContactPerson           @relation(fields: [contactPersonId], references: [id])
+  designations       Designation[]
+  SevaKendraAuditLog SevaKendraAuditLog[]
+}
+
+model SevaKendraAuditLog {
+  id           String @id @default(uuid())
+  sevaKendraId String
+  status       String
+  date         String
+  description  String
+
+  sevakendra SevaKendra @relation(fields: [sevaKendraId], references: [id])
 }
 
 model ContactPerson {
@@ -65,7 +75,8 @@ model ServiceSubType {
 
 model Service {
   id        String   @id @default(uuid())
-  name      String
+  name      String   @unique
+  updatedAt DateTime @updatedAt
   subTypeId String
   createdAt DateTime @default(now())
 
@@ -99,14 +110,12 @@ model User {
   contactNumber    String
   whatsappNumber   String
   designationId    String
-  sevaKendraId     String
   picture          String // url
   mail             String
   loginid          String                   @unique
   passwordId       String                   @unique
   password         UserPassword             @relation(fields: [passwordId], references: [id])
   designation      Designation              @relation(fields: [designationId], references: [id])
-  sevakendra       SevaKendra               @relation(fields: [sevaKendraId], references: [id])
   featuresAssigned FeaturesOnDesignations[]
 }
 

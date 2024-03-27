@@ -1,7 +1,5 @@
-
-import APIError from "../errors/APIError.js";
-import {StatusCodes} from "http-status-codes";
 import { Prisma, PrismaClient } from "@prisma/client";
+import throwDatabaseError from "./utils/errorHandler.js";
 
 const prisma = new PrismaClient();
 
@@ -10,14 +8,9 @@ async function pingDB(): Promise<void> {
         await prisma.$queryRaw`SELECT 1 + 1 as result`;
     }
     catch (error) {
-        throw new APIError(
-            "There was an error connecting to the database",
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            "DatabaseConnectivityError",
-            1001,
-            "S",
-            "additional info"
-            );
+        if (error instanceof Error) {
+            throwDatabaseError(error);
+          }
     }
 }
 
@@ -32,7 +25,9 @@ async function clearTableDB(tables: Prisma.ModelName[]): Promise<void> {
         }
     }
     catch(error) {
-        console.log(error);
+        if (error instanceof Error) {
+            throwDatabaseError(error);
+          }
     }
 }
 
@@ -42,7 +37,9 @@ async function getTotalRowsDB(table: Prisma.ModelName) {
         return rows;
     }
     catch(error) {
-        console.log(error);
+        if (error instanceof Error) {
+            throwDatabaseError(error);
+        }
     }
 }
 

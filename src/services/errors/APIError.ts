@@ -2,26 +2,22 @@ type Severity = "I" | "S" | "E" | "W"; // I - informational, S - severe, E - err
 
 class APIError extends Error {
   statusCode: number;
-  errorCode: number;
   severity: Severity;
   name: string;
-  additionalInfo: string;
+  message: string;
 
   constructor(
-    message: string,
+    message: string = "Sorry! Could not complete your request. Some error has occurred.",
     statusCode: number,
     name: string,
-    errorCode: number,
     severity: Severity,
-    additionalInfo: string
   ) {
     super(message);
 
+    this.message = message;
     this.statusCode = statusCode;
-    this.errorCode = errorCode;
     this.name = name;
     this.severity = severity;
-    this.additionalInfo = additionalInfo;
 
     // Capture Stack Trace
     Error.captureStackTrace(this, this.constructor);

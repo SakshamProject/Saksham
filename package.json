@@ -8,11 +8,10 @@
     "studio": "prisma studio"
   },
   "dependencies": {
-    "@prisma/client": "^5.10.2",
+    "@prisma/client": "^5.11.0",
     "express": "^4.18.3",
     "http-status-codes": "^2.3.0",
     "morgan": "^1.10.0",
-    "prisma": "^5.10.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -25,6 +24,7 @@
     "@types/supertest": "^6.0.2",
     "chai": "^5.1.0",
     "mocha": "^10.3.0",
+    "prisma": "^5.11.0",
     "supertest": "^6.3.4",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3"

@@ -1,11 +1,8 @@
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
 import { serviceMasterColumnNameMapper } from "../utils/serviceMaster.js";
-import { ZodAny, any, promise } from "zod";
-import { Prisma } from "@prisma/client";
-//import { promise } from "zod";
-import APIError from "../../errors/APIError.js";
-import { StatusCodes } from "http-status-codes";
+
+import throwDatabaseError from "../utils/errorHandler.js";
 
 async function getServicesDB(
   orderByColumn: string = "serviceName",
@@ -33,9 +30,10 @@ async function getServicesDB(
     const services = await prisma.service.findMany(query);
     return services;
   
-    return services;
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
   }
 }
 
@@ -68,7 +66,9 @@ async function getServiceByIdDB(
 
     return services;
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
   }
 }
 
@@ -87,7 +87,6 @@ async function createServiceByIdDB(
   return service;
 }
 async function updateServiceByIdDB(
-
   serviceId: string,
   serviceSubTypeID:string,
   serviceName: string
@@ -102,35 +101,32 @@ async function updateServiceByIdDB(
         subTypeId : serviceSubTypeID,
         name: serviceName
       }
-    })
-    console.log("reached services");
+    });
     return service;
   }
   catch (error) {
-    throw new APIError(
-    "There was an error updating the database",
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            "DatabaseUpdationError",
-            1004,
-            "E",
-            error.meta.cause
-    );
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
   }
 }
 
 
 async function deleteServiceByIdDB(serviceId: string) {
-  const result = await prisma.service.delete({
-    where: {
-      id: serviceId,
-    },
-  });
+  try {
+    const result = await prisma.service.delete({
+      where: {
+        id: serviceId,
+      },
+    });
 
-  if (!result) {
-    // Row was not found
+    return result;
   }
-
-  return result;
+  catch(error) {
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
+  }
 }
 
 export {

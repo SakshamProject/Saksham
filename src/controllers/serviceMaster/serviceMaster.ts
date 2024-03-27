@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import {NextFunction, Request, Response} from "express";
 import { ZodError } from "zod";
 import { getRequestSchema } from "../schemas/zodSchemas.js";
 import { postServiceMasterSchema, putServiceMasterSchema } from "./serviceMaster.schema.js";
@@ -14,22 +14,17 @@ import {
 import defaults from "../../defaults.js";
 import generateResponse from "../utils/generateResponse.js";
 
-async function postService(request: Request, response: Response): Promise<void> {
+async function postService(request: Request, response: Response, next: NextFunction) {
     try {
         const body = postServiceMasterSchema.parse(request.body);
     const service = await createServiceByIdDB(body.name, body.subTypeId);
     response.json(service);
   } catch (error) {
-    if (error instanceof ZodError) {
-      response.json(error);
-    }
+    next(error)
   }
 }
 
-async function getServices(
-  request: Request,
-  response: Response
-): Promise<void> {
+async function getServices(request: Request, response: Response, next: NextFunction) {
   try {
     const query = getRequestSchema.parse(request.query);
 
@@ -40,51 +35,41 @@ async function getServices(
         response.json(await generateResponse(query, services));
     }
     catch (error) {
-        if (error instanceof ZodError) {
-            response.json(error);
-        }
+      next(error)
     }
   } 
 
-async function putService(
-  request: Request,
-  response: Response
-): Promise<void> {
+async function putService(request: Request, response: Response, next: NextFunction) {
   try {
     const body = putServiceMasterSchema.parse(request.body)
     console.log("reached controllers")
-    const service = await updateServiceByIdDB(request.serviceID,body.subTypeId,body.name);// updateService
+    const service = await updateServiceByIdDB(request.params.serviceID,body.subTypeId,body.name);// updateService
     response.json(service);
   } catch (error) {
-    if (error instanceof ZodError) {
-      response.json(error);
-    }
-    if (error instanceof APIError) {
-      response.json(error);
-    }
+    next(error)
   }
 }
-async function getServiceByID(request: Request, response: Response) {
+async function getServiceByID(request: Request, response: Response, next: NextFunction) {
   try {
-    const serviceId = request.serviceID;
+    const serviceId = request.params.serviceID;
     const query = getRequestSchema.parse(request.query);
     const service = await getServiceByIdDB(serviceId, query.start, query.rows);
 
     response.json(service);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 }
 
-async function deleteServiceById(request: Request, response: Response) {
+async function deleteServiceById(request: Request, response: Response, next: NextFunction) {
   try {
-    const serviceID = request.serviceID;
+    const serviceID = request.params.serviceID;
 
     const result = await deleteServiceByIdDB(serviceID);
 
     response.json(result);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 }
 

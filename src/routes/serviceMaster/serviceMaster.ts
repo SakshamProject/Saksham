@@ -6,18 +6,9 @@ const serviceMasterRouter: Router = Router();
 
 serviceMasterRouter.post("/", postService);
 serviceMasterRouter.get("/", getServices);
-serviceMasterRouter.put("/:serviceID", (request: Request, response: Response, next: NextFunction) => {
-    request.serviceID = request.params.serviceID;
-    next();
-}, putService);
-serviceMasterRouter.get("/:serviceID", (request: Request, response: Response, next: NextFunction) => {
-    request.serviceID = request.params.serviceID;
-    next();
-}, getServiceByID);
+serviceMasterRouter.put("/:serviceID",  putService);
+serviceMasterRouter.get("/:serviceID", getServiceByID);
 
-serviceMasterRouter.delete("/:serviceID", (request: Request, response: Response, next: NextFunction) => {
-    request.serviceID = request.params.serviceID;
-    next();
-}, deleteServiceById)
+serviceMasterRouter.delete("/:serviceID",  deleteServiceById)
 
 export default serviceMasterRouter;
