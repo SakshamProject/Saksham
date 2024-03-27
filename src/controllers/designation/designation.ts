@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   createDesignationDB,
   createFeaturesOnDesignationDB,
+  deleteDesignationDB,
   getDesignationByID,
   getDesignationByNameDB,
   getDesignationDB,
@@ -10,6 +11,7 @@ import getRequestSchema from "../getRequest.schema.js";
 import { postRequestSchema } from "./designation.schema.js";
 import { createDesignationDBObject, createFeaturesOnDesignationDBObject } from "../../DTO/designation/designation.js";
 import { Designation } from "@prisma/client";
+
 
 async function getDesignation(request: Request, response: Response) {
   const { start, rows, orderBy, orderByDirection } = getRequestSchema.parse(
@@ -57,9 +59,23 @@ async function postDesignation(request: Request, response: Response) {
 
 }
 
+async function deleteDesignation(request:Request, response:Response){
+
+  const id: string = request.params.id;
+  const deletedDesignation:Designation = await deleteDesignationDB(id);
+  response.send(deletedDesignation);
+}
+
+async function putDesignation(request:Request, response:Response){
+  const id:string = request.params.id;
+  const body = getRequestSchema.parse(request.body);
+ 
+}
+
 export {
   getDesignation,
   postDesignation,
   getDesignationById,
   getDesignationByName,
+  deleteDesignation
 };

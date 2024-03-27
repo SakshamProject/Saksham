@@ -109,4 +109,14 @@ async function createFeaturesOnDesignationDB(FeaturesOnDesignationsDBObjects:Fea
   })
 }
 
-export { getDesignationDB, createDesignationDB,getDesignationByID ,getDesignationByNameDB,createFeaturesOnDesignationDB};
+async function deleteDesignationDB(id:string){
+
+  const deletedDesignation:Designation = await prisma.designation.delete({
+    where: {
+      id: id,
+    },
+  })
+  return deletedDesignation;
+}
+
+export { getDesignationDB, createDesignationDB,getDesignationByID ,getDesignationByNameDB,createFeaturesOnDesignationDB,deleteDesignationDB};
