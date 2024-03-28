@@ -1,12 +1,19 @@
 import express from "express";
 import {
   getDistrict,
+  getDistrictById,
   getState,
   getStateById,
 } from "../../controllers/typeMaster/get.js";
 import { postDistrict, postState } from "../../controllers/typeMaster/post.js";
-import { deleteState } from "../../controllers/typeMaster/delete.js";
-import { updateState } from "../../controllers/typeMaster/update.js";
+import {
+  deleteDistrict,
+  deleteState,
+} from "../../controllers/typeMaster/delete.js";
+import {
+  updateDistrict,
+  updateState,
+} from "../../controllers/typeMaster/update.js";
 import stateMasterRouter from "./stateMaster.js";
 
 const typeMasterRouter = express.Router();
@@ -21,4 +28,7 @@ typeMasterRouter.put("/states/:id", updateState);
 
 typeMasterRouter.post("/districts", postDistrict);
 typeMasterRouter.get("/districts", getDistrict);
+typeMasterRouter.get("/districts/:id", getDistrictById);
+typeMasterRouter.delete("/districts/:id", deleteDistrict);
+typeMasterRouter.put("districts/:id", updateDistrict);
 export default typeMasterRouter;

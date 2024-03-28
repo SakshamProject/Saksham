@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, response } from "express";
 import {
+  getDistrictByIdDB,
   getDistrictDB,
   getStateByIdDB,
   getStateDB,
@@ -49,4 +50,19 @@ const getDistrict = async (
   }
 };
 
-export { getState, getDistrict, getStateById };
+const getDistrictById = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  try {
+    const id: string = request.params.id;
+    const result: getDistrictsWithState | undefined = await getDistrictByIdDB(
+      id
+    );
+    response.send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+export { getState, getDistrict, getStateById, getDistrictById };
