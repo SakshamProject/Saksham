@@ -8,8 +8,8 @@ const deleteState = async (
   next: NextFunction
 ) => {
   try {
-    const state: getState = request.body;
-    const result: getState | undefined = await deleteStateDB(state);
+    const id: string = request.params.id;
+    const result: getState | undefined = await deleteStateDB(id);
     response.send(result);
   } catch (error) {
     next(error);

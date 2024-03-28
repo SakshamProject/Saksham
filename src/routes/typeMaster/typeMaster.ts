@@ -16,8 +16,8 @@ typeMasterRouter.use("/statemaster", stateMasterRouter);
 typeMasterRouter.get("/states", getState);
 typeMasterRouter.post("/states", postState);
 typeMasterRouter.get("/states/:id", getStateById);
-typeMasterRouter.delete("/states", deleteState);
-typeMasterRouter.put("/states", updateState);
+typeMasterRouter.delete("/states/:id", deleteState);
+typeMasterRouter.put("/states/:id", updateState);
 
 typeMasterRouter.post("/districts", postDistrict);
 typeMasterRouter.get("/districts", getDistrict);

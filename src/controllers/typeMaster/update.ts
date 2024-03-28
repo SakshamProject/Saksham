@@ -8,8 +8,9 @@ const updateState = async (
   next: NextFunction
 ) => {
   try {
+    const id: string = request.params.id;
     const state: getState = request.body;
-    const result: getState | undefined = await updateStateDB(state);
+    const result: getState | undefined = await updateStateDB(state, id);
     response.send(result);
     return updateState;
   } catch (error) {

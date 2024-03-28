@@ -8,13 +8,11 @@ import { state } from "../../../models/typeMaster/zod.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 
-const deleteStateDB = async (
-  state: getState
-): Promise<getState | undefined> => {
+const deleteStateDB = async (id: string): Promise<getState | undefined> => {
   try {
     const deletedState: getState = await prisma.state.delete({
       where: {
-        id: state.id,
+        id: id,
       },
     });
     return deletedState;
@@ -26,12 +24,12 @@ const deleteStateDB = async (
 };
 
 const deleteDistrictDB = async (
-  district: getDistrict
+  id: string
 ): Promise<getDistrict | undefined> => {
   try {
     const deletedDistrict: getDistrict = await prisma.district.delete({
       where: {
-        id: district.id,
+        id: id,
       },
     });
     return deletedDistrict;
