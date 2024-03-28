@@ -3,7 +3,8 @@ import {
   deleteDistrictDB,
   deleteStateDB,
 } from "../../services/database/typeMaster/delete.js";
-import { district, state } from "../../models/typeMaster/zod.js";
+import { State } from "../../types/typeMaster/stateMaster/stateSchema.js";
+import { District } from "../../types/typeMaster/stateMaster/districtSchema.js";
 
 const deleteState = async (
   request: Request,
@@ -12,7 +13,7 @@ const deleteState = async (
 ) => {
   try {
     const id: string = request.params.id;
-    const result: state | undefined = await deleteStateDB(id);
+    const result: State | undefined = await deleteStateDB(id);
     response.send(result);
   } catch (error) {
     next(error);
@@ -25,7 +26,7 @@ const deleteDistrict = async (
 ) => {
   try {
     const id: string = request.params.id;
-    const result: district | undefined = await deleteDistrictDB(id);
+    const result: District | undefined = await deleteDistrictDB(id);
     response.send(result);
   } catch (error) {
     next(error);

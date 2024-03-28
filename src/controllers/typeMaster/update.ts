@@ -1,15 +1,16 @@
 import { NextFunction, Request, Response } from "express";
-import { getState } from "../../models/typeMaster/get.js";
 import {
   updateDistrictDB,
   updateStateDB,
 } from "../../services/database/typeMaster/update.js";
 import {
-  district,
-  districtSchema,
-  state,
+  State,
   stateSchema,
-} from "../../models/typeMaster/zod.js";
+} from "../../types/typeMaster/stateMaster/stateSchema.js";
+import {
+  District,
+  districtSchema,
+} from "../../types/typeMaster/stateMaster/districtSchema.js";
 
 const updateState = async (
   request: Request,
@@ -18,8 +19,8 @@ const updateState = async (
 ) => {
   try {
     const id: string = request.params.id;
-    const state: state = stateSchema.parse(request.body);
-    const result: state | undefined = await updateStateDB(state, id);
+    const state: State = stateSchema.parse(request.body);
+    const result: State | undefined = await updateStateDB(state, id);
     response.send(result);
   } catch (error) {
     next(error);
@@ -32,8 +33,8 @@ const updateDistrict = async (
 ) => {
   try {
     const id: string = request.params.id;
-    const district: district = districtSchema.parse(request.body);
-    const result: state | undefined = await updateDistrictDB(id, district);
+    const district: District = districtSchema.parse(request.body);
+    const result: State | undefined = await updateDistrictDB(id, district);
     response.send(result);
   } catch (error) {
     next(error);

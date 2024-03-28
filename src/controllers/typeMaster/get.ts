@@ -5,10 +5,8 @@ import {
   getStateByIdDB,
   getStateDB,
 } from "../../services/database/typeMaster/get.js";
-import {
-  getDistrictsWithState,
-  getState,
-} from "../../models/typeMaster/get.js";
+import { getState } from "../../types/typeMaster/stateMaster/stateSchema.js";
+import { getDistrictsWithState } from "../../types/typeMaster/stateMaster/districtSchema.js";
 
 const getState = async (
   request: Request,

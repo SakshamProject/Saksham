@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { district, state } from "../../models/typeMaster/zod.js";
+import { district, state } from "../../types/typeMaster/zod.js";
 
 const createStateDBObject = (
   state: state
