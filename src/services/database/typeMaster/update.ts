@@ -1,4 +1,4 @@
-import { getState } from "../../../models/typeMaster/get.js";
+import { getDistrict, getState } from "../../../models/typeMaster/get.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 
@@ -23,4 +23,26 @@ const updateStateDB = async (
   }
 };
 
-export { updateStateDB };
+const updateDistrictDB = async (
+  id: string,
+  district: getDistrict
+): Promise<getDistrict | undefined> => {
+  try {
+    const updatedDistrict: getDistrict = await prisma.district.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: district.name,
+        stateId: district.stateId,
+      },
+    });
+    return updatedDistrict;
+  } catch (error) {
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
+  }
+};
+
+export { updateStateDB, updateDistrictDB };
