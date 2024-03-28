@@ -1,11 +1,13 @@
 import { z } from "zod";
 
 const stateSchema = z.object({
+  id: z.string().optional(),
   name: z.string(),
 });
 type state = z.infer<typeof stateSchema>;
 
 const districtSchema = z.object({
+  id: z.string().optional(),
   name: z.string(),
   stateId: z.string(),
 });

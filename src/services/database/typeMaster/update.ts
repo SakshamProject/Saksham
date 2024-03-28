@@ -1,11 +1,11 @@
-import { getDistrict, getState } from "../../../models/typeMaster/get.js";
+import { district, state } from "../../../models/typeMaster/zod.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 
 const updateStateDB = async (
-  state: getState,
+  state: state,
   id: string
-): Promise<getState | undefined> => {
+): Promise<state | undefined> => {
   try {
     const updatedState = await prisma.state.update({
       where: {
@@ -25,10 +25,10 @@ const updateStateDB = async (
 
 const updateDistrictDB = async (
   id: string,
-  district: getDistrict
-): Promise<getDistrict | undefined> => {
+  district: district
+): Promise<district | undefined> => {
   try {
-    const updatedDistrict: getDistrict = await prisma.district.update({
+    const updatedDistrict: district = await prisma.district.update({
       where: {
         id: id,
       },
