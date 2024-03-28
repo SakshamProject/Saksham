@@ -15,3 +15,9 @@ if (process.env.NODE_ENV !== 'production') {
     format: winston.format.simple(),
   }));
 }
+
+try {
+    logger.error('404');
+  } catch (error) {
+    console.error('Error during logging:', error);
+  }
