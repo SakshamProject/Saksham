@@ -1,6 +1,6 @@
 
 import { z } from "zod";
-import defaults from "../../defaults.js";
+import defaults from "../defaults.js";
 
 const getRequestSchema = z.object({
     rows: z.coerce.number().positive().optional(),

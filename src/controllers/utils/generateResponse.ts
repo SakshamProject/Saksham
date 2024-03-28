@@ -1,5 +1,5 @@
 import defaults from "../../defaults.js";
-import {Query} from "../schemas/zodSchemas.js";
+import {Query} from "../../models/zodSchemas.js";
 import {getTotalRowsDB} from "../../services/database/database.js";
 import { results } from "../../types/custom.js";
 

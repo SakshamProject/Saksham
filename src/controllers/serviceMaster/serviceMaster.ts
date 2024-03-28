@@ -1,6 +1,6 @@
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response} from "express";
 import { ZodError } from "zod";
-import { getRequestSchema } from "../schemas/zodSchemas.js";
+import { getRequestSchema } from "../../types/zodSchemas.js";
 import { postServiceMasterSchema, putServiceMasterSchema } from "./serviceMaster.schema.js";
 import APIError from "../../services/errors/APIError.js";
 import {
@@ -51,7 +51,7 @@ async function getServiceByID(request: Request, response: Response, next: NextFu
   try {
     const serviceId = request.params.serviceID;
     const query = getRequestSchema.parse(request.query);
-    const service = await getServiceByIdDB(serviceId, query.start, query.rows);
+    const service = await getServiceByIdDB(serviceId);
 
     response.json(service);
   } catch (error) {

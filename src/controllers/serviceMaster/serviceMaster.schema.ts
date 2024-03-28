@@ -1,6 +1,6 @@
 
 import { z } from "zod";
-import {inputFieldSchema} from "../schemas/zodSchemas.js";
+import { inputFieldSchema } from "../../types/zodSchemas.js";
 
 const postServiceMasterSchema = z.object({
     subTypeId: z.string().uuid(),
