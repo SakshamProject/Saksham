@@ -1,9 +1,9 @@
-import { getDistrictsWithState } from "../../../../types/typeMaster/stateMaster/districtSchema.js";
+import { getDistrictsWithStateSchema } from "../../../../types/typeMaster/stateMaster/districtSchema.js";
 import prisma from "../../database.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 
 const getDistrictDB = async (): Promise<
-  getDistrictsWithState[] | undefined
+  getDistrictsWithStateSchema[] | undefined
 > => {
   try {
     const districts = await prisma.district.findMany({
@@ -19,9 +19,9 @@ const getDistrictDB = async (): Promise<
 
 const getDistrictByIdDB = async (
   id: string
-): Promise<getDistrictsWithState | undefined> => {
+): Promise<getDistrictsWithStateSchema | undefined> => {
   try {
-    const district: getDistrictsWithState =
+    const district: getDistrictsWithStateSchema =
       await prisma.district.findFirstOrThrow({
         where: {
           id: id,

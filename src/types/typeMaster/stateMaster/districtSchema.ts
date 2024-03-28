@@ -2,10 +2,10 @@ import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import inputFieldSchema from "../../inputField.js";
 
-type getDistrictsWithState = Prisma.DistrictGetPayload<{
+type getDistrictsWithStateSchema = Prisma.DistrictGetPayload<{
   include: { state: true };
 }>;
-type getDistrict = Prisma.DistrictGetPayload<{}>;
+type getDistrictSchema = Prisma.DistrictGetPayload<{}>;
 
 const districtSchema = z.object({
   id: inputFieldSchema.optional(),
@@ -14,4 +14,9 @@ const districtSchema = z.object({
 });
 type District = z.infer<typeof districtSchema>;
 
-export { getDistrictsWithState, getDistrict, District, districtSchema };
+export {
+  getDistrictSchema,
+  getDistrictsWithStateSchema,
+  District,
+  districtSchema,
+};

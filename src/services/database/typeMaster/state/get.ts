@@ -1,8 +1,8 @@
-import { getState } from "../../../../types/typeMaster/stateMaster/stateSchema.js";
+import { getStateSchema } from "../../../../types/typeMaster/stateMaster/stateSchema.js";
 import prisma from "../../database.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 
-const getStateDB = async (): Promise<getState[] | undefined> => {
+const getStateDB = async (): Promise<getStateSchema[] | undefined> => {
   try {
     const states = await prisma.state.findMany();
     return states;
@@ -12,7 +12,7 @@ const getStateDB = async (): Promise<getState[] | undefined> => {
     }
   }
 };
-const getStateByIdDB = async (id: string): Promise<getState | undefined> => {
+const getStateByIdDB = async (id: string): Promise<getStateSchema | undefined> => {
   try {
     const state = await prisma.state.findFirstOrThrow({
       where: {

@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import inputFieldSchema from "../../inputField.js";
 
-type getState = Prisma.StateGetPayload<{}>;
+type getStateSchema = Prisma.StateGetPayload<{}>;
 
 const stateSchema = z.object({
   id: inputFieldSchema.optional(),
@@ -10,4 +10,4 @@ const stateSchema = z.object({
 });
 type State = z.infer<typeof stateSchema>;
 
-export { State, stateSchema, getState };
+export { State, stateSchema, getStateSchema };
