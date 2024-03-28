@@ -9,7 +9,7 @@ import {StatusCodes} from "http-status-codes";
 
 async function getServicesDB(
   orderByColumn: string = "serviceName",
-  reverse: boolean = false,
+  reverse: "asc" | "desc" = "asc",
   skip = defaults.skip,
   take = defaults.take
 ) {
