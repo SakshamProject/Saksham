@@ -30,5 +30,5 @@ typeMasterRouter.post("/districts", postDistrict);
 typeMasterRouter.get("/districts", getDistrict);
 typeMasterRouter.get("/districts/:id", getDistrictById);
 typeMasterRouter.delete("/districts/:id", deleteDistrict);
-typeMasterRouter.put("districts/:id", updateDistrict);
+typeMasterRouter.put("/districts/:id", updateDistrict);
 export default typeMasterRouter;
