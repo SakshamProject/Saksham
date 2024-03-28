@@ -10,7 +10,7 @@ import {
   getServicesDB,
   updateServiceByIdDB,
 } from "../../services/database/serviceMaster/serviceMaster.js";
-import generateResponse from "../utils/generateResponse.js";
+import generateGetResponse from "../utils/generateGetResponse.js";
 
 async function postService(request: Request, response: Response, next: NextFunction) {
     try {
@@ -30,7 +30,7 @@ async function getServices(request: Request, response: Response, next: NextFunct
         // It is taken care of by getRequestSchema
         const services = await getServicesDB(query.orderBy, query.reverse, query.start, query.rows);
 
-        response.json(await generateResponse(query, services));
+        response.json(await generateGetResponse(query, services));
     }
     catch (error) {
       next(error)
@@ -71,4 +71,4 @@ async function deleteServiceById(request: Request, response: Response, next: Nex
   }
 }
 
-export { postService, getServices, getServiceByID, deleteServiceById,putService};
+export { postService, getServices, getServiceByID, deleteServiceById, putService };
