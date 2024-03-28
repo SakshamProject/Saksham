@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response} from "express";
 import { ZodError } from "zod";
 import { getRequestSchema } from "../../types/zodSchemas.js";
-import { postServiceMasterSchema, putServiceMasterSchema } from "./serviceMaster.schema.js";
+import { postServiceMasterSchema, putServiceMasterSchema } from "../../types/schemas/serviceMaster.schema.js";
 import APIError from "../../services/errors/APIError.js";
 import {
   createServiceByIdDB,
