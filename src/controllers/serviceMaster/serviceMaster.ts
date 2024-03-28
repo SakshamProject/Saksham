@@ -11,6 +11,7 @@ import {
   updateServiceByIdDB,
 } from "../../services/database/serviceMaster/serviceMaster.js";
 import generateGetResponse from "../utils/generateGetResponse.js";
+import {getTotalRowsDB} from "../../services/database/database.js";
 
 async function postService(request: Request, response: Response, next: NextFunction) {
     try {
@@ -29,8 +30,8 @@ async function getServices(request: Request, response: Response, next: NextFunct
         // No need to decrement query (query.start - 1).
         // It is taken care of by getRequestSchema
         const services = await getServicesDB(query.orderBy, query.reverse, query.start, query.rows);
-
-        response.json(await generateGetResponse(query, services));
+      const total = await getTotalRowsDB("Service");
+        response.json(await generateGetResponse(query, services, total));
     }
     catch (error) {
       next(error)
