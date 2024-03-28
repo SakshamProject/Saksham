@@ -44,4 +44,25 @@ const getDistrictDB = async (): Promise<
   }
 };
 
-export { getStateDB, getStateByIdDB, getDistrictDB };
+const getDistrictByIdDB = async (
+  id: string
+): Promise<getDistrictsWithState | undefined> => {
+  try {
+    const district: getDistrictsWithState =
+      await prisma.district.findFirstOrThrow({
+        where: {
+          id: id,
+        },
+        include: {
+          state: true,
+        },
+      });
+    return district;
+  } catch (error) {
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
+  }
+};
+
+export { getStateDB, getStateByIdDB, getDistrictDB, getDistrictByIdDB };
