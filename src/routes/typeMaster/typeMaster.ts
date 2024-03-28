@@ -7,8 +7,12 @@ import {
 import { postDistrict, postState } from "../../controllers/typeMaster/post.js";
 import { deleteState } from "../../controllers/typeMaster/delete.js";
 import { updateState } from "../../controllers/typeMaster/update.js";
+import stateMasterRouter from "./stateMaster.js";
 
 const typeMasterRouter = express.Router();
+
+typeMasterRouter.use("/statemaster", stateMasterRouter);
+
 typeMasterRouter.get("/states", getState);
 typeMasterRouter.post("/states", postState);
 typeMasterRouter.get("/states/:id", getStateById);
