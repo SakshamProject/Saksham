@@ -10,6 +10,6 @@ async function updateServiceStatus(): Promise<void> {
         // const getDivayangDetails: object | null = await prisma.divyangServiceMapping.findUnique({})
     }
     catch (error) {
-        throw error;
+        console.log(error)
     }
 }
