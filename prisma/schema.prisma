@@ -230,7 +230,12 @@ model DivyangDetails {
   spouseIncome     Int?
 
   communityCategory CommunityCategory @relation(fields: [communityCategoryId], references: [id])
-  
+  corporation Corporation? @relation(fields: [corporationId],references: [id])
+  mlaconstituency MLAConstituency? @relation(fields: [MLAConstituencyId],references: [id])
+  mpconstituency MPConstituency? @relation(fields: [MPConstituancyId],references: [id])
+  municipality Municipality? @relation(fields: [municipalityId],references: [id])
+  townPanchayat TownPanchayat? @relation(fields: [townPanchayatId],references: [id])
+  taluk Taluk? @relation(fields: [talukId],references: [id])
   panchayatUnion PanchayatUnion? @relation(fields: [panchayatUnionId],references: [id])
   district District? @relation(fields: [districtId], references: [id])
   disabilities          DisabilityOfDivyang[]
@@ -296,7 +301,7 @@ model DisabilityOfDivyang {
 
 model DisabilitySubType {
   id               String @id @default(uuid())
-  name             String
+  name             String @unique
   disabilityTypeId String
 
   divyang    DisabilityOfDivyang[]
@@ -314,13 +319,15 @@ model MPConstituency {
   name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model MLAConstituency {
-  Id         String   @id @default(uuid())
+  id         String   @id @default(uuid())
   name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model PanchayatUnion {
@@ -336,6 +343,7 @@ model TownPanchayat {
   name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model Municipality {
@@ -343,6 +351,7 @@ model Municipality {
   name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model Corporation {
@@ -350,6 +359,7 @@ model Corporation {
   name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model CommunityCategory {
@@ -371,15 +381,15 @@ model DivyangEducationalQualification {
 // e.g. 1 - b.tech (IT)
 model EducationQualification {
   id      String                            @id @default(uuid())
-  name    String
+  name    String                            @unique
   educationQualificationTypeId String
   educationQualificationType EducationQualificationType @relation(fields: [educationQualificationTypeId],references: [id])
   divyang DivyangEducationalQualification[]
 }
 
 model EducationQualificationType {
-  id String @id @default(uuid())
-  name String
+  id String                             @id @default(uuid())
+  name String                           @unique
   educationQualification EducationQualification[]
 }
 
@@ -420,4 +430,5 @@ model Taluk {
   name     String @unique
   districtId String
   district   District @relation(fields: [districtId],references: [id])
+  DivyangDetails DivyangDetails[]
 }
