@@ -1,0 +1,4 @@
+import express from 'express';
+
+const CommunityCategoryRouter = express.Router()
+CommunityCategoryRouter.use("/", getCommunityCategory)

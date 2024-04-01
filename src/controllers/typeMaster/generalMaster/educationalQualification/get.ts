@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { getEducationalQualificationSchema } from "../../../types/typeMaster/generalMaster/educationalQualificationSchema.js";
-import { getEducationalQualificationDB } from "../../../services/database/typeMaster/generalMaster/educationalQualification/get.js";
+import { getEducationalQualificationSchema } from "../../../../types/typeMaster/generalMaster/educationalQualificationSchema.js";
+import { getEducationalQualificationDB } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/read.js";
 
 const getEducationalQualification = async (request: Request, response: Response, next: NextFunction) => {
     try {
