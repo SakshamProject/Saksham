@@ -5,7 +5,7 @@ import {
 } from "../../../../types/typeMaster/generalMaster/districtSchema.js";
 import { Prisma } from "@prisma/client";
 import { createDistrictDBObject } from "../../../../dto/typeMaster/generalMaster/state/post.js";
-import { createDistrictDB } from "../../../../services/database/typeMaster/stateMaster/district/create.js";
+import { createDistrictDB } from "../../../../services/database/typeMaster/generalMaster/district/create.js";
 
 const postDistrict = async (
   request: Request,

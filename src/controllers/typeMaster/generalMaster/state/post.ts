@@ -5,7 +5,7 @@ import {
 } from "../../../../types/typeMaster/generalMaster/stateSchema.js";
 import { Prisma } from "@prisma/client";
 import { createStateDBObject } from "../../../../dto/typeMaster/generalMaster/state/post.js";
-import { createStateDB } from "../../../../services/database/typeMaster/stateMaster/state/create.js";
+import { createStateDB } from "../../../../services/database/typeMaster/generalMaster/state/create.js";
 
 const postState = async (
   request: Request,

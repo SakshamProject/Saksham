@@ -6,10 +6,14 @@ const getCorporation = async (
   next: NextFunction
 ) => {};
 
-const getByIdCorporation = async (
+const getCorporationById = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {};
-
-export { getByIdCorporation, getCorporation };
+const getCorporationByDistrictId = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {};
+export { getCorporationById, getCorporation, getCorporationByDistrictId };

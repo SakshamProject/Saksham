@@ -3,7 +3,7 @@ import { getStateSchema } from "../../../../types/typeMaster/generalMaster/state
 import {
   getStateByIdDB,
   getStateDB,
-} from "../../../../services/database/typeMaster/stateMaster/state/read.js";
+} from "../../../../services/database/typeMaster/generalMaster/state/read.js";
 
 const getState = async (
   request: Request,

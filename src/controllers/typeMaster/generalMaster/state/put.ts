@@ -3,7 +3,7 @@ import {
   State,
   stateSchema,
 } from "../../../../types/typeMaster/generalMaster/stateSchema.js";
-import { updateStateDB } from "../../../../services/database/typeMaster/stateMaster/district/update.js";
+import { updateStateDB } from "../../../../services/database/typeMaster/generalMaster/district/update.js";
 
 const updateState = async (
   request: Request,
