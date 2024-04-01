@@ -5,3 +5,5 @@ const postPanchayatUnion = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { postPanchayatUnion };

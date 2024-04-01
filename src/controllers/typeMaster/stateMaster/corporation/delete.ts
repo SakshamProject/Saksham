@@ -5,3 +5,4 @@ const deleteCorporation = async (
   response: Response,
   next: NextFunction
 ) => {};
+export { deleteCorporation };

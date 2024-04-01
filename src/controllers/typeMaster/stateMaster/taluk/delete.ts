@@ -5,3 +5,5 @@ const deleteTaluk = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { deleteTaluk };

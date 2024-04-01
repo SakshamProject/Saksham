@@ -11,3 +11,5 @@ const getByIdMunicipality = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { getByIdMunicipality, getMunicipality };

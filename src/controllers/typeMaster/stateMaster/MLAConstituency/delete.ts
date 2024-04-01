@@ -5,3 +5,5 @@ const deleteMLAConstituency = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { deleteMLAConstituency };

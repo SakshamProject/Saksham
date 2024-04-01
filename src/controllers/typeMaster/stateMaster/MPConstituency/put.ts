@@ -5,3 +5,4 @@ const putMPConstituency = async (
   response: Response,
   next: NextFunction
 ) => {};
+export { putMPConstituency };

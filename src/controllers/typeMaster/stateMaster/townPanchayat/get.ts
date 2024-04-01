@@ -11,3 +11,5 @@ const getByIdTownPanchayat = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { getTownPanchayat, getByIdTownPanchayat };

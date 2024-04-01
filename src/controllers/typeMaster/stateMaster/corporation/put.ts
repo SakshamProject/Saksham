@@ -5,3 +5,5 @@ const putCorporation = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { putCorporation };

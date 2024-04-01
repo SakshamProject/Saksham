@@ -5,3 +5,4 @@ const postCorporation = async (
   response: Response,
   next: NextFunction
 ) => {};
+export { postCorporation };

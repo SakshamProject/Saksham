@@ -5,3 +5,5 @@ const postTownPanchayat = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { postTownPanchayat };

@@ -11,3 +11,5 @@ const getByIdCorporation = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { getByIdCorporation, getCorporation };

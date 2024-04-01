@@ -5,3 +5,5 @@ const deleteMunicipality = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { deleteMunicipality };

@@ -11,3 +11,5 @@ const getByIdMLAConstituency = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { getByIdMLAConstituency, getMLAConstituency };

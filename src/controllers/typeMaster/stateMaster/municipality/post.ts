@@ -5,3 +5,5 @@ const postMunicipality = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { postMunicipality };

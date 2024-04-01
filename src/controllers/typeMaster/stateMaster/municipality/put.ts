@@ -5,3 +5,5 @@ const putMunicipality = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { putMunicipality };

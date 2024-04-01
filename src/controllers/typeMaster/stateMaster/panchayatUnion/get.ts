@@ -11,3 +11,5 @@ const getByIdPanchayatUnion = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { getPanchayatUnion, getByIdPanchayatUnion };

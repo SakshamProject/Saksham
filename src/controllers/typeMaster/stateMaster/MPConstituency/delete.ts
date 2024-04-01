@@ -5,3 +5,5 @@ const deleteMPConstituency = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { deleteMPConstituency };

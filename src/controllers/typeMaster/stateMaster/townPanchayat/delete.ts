@@ -5,3 +5,5 @@ const deleteTownPanchayat = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { deleteTownPanchayat };

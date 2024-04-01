@@ -11,3 +11,5 @@ const getByIdMPConstituency = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { getByIdMPConstituency, getMPConstituency };

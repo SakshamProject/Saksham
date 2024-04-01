@@ -1,7 +1,7 @@
 import express from "express";
 
 const MLAConstituencyRouter = express.Router();
-MLAConstituencyRouter.post("",postMLAConstituency)
+MLAConstituencyRouter.post("/",)
 MLAConstituencyRouter.get("/", getMLAConstituency)
 MLAConstituencyRouter.get("/:id", getByIdMLAConstituency)
 

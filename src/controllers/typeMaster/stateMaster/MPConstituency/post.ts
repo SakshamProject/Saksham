@@ -5,3 +5,5 @@ const postMPConstituency = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { postMPConstituency };

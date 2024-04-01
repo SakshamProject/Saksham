@@ -5,3 +5,5 @@ const putTaluk = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { putTaluk };

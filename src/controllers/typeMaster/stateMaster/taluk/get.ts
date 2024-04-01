@@ -11,3 +11,5 @@ const getByIdTaluk = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { getTaluk, getByIdTaluk };

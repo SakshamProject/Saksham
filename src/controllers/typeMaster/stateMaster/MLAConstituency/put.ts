@@ -5,3 +5,5 @@ const putMLAConstituency = async (
   response: Response,
   next: NextFunction
 ) => {};
+
+export { putMLAConstituency };
