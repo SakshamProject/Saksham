@@ -1,7 +1,6 @@
-import { District } from "../../../../../types/typeMaster/stateMaster/districtSchema.js";
+import { District } from "../../../../../types/typeMaster/generalMaster/districtSchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
-
 
 const deleteDistrictDB = async (id: string): Promise<District | undefined> => {
   try {

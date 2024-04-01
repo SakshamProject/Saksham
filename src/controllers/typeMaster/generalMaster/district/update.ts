@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { District, districtSchema } from "../../../../types/typeMaster/stateMaster/districtSchema.js";
-import { State } from "../../../../types/typeMaster/stateMaster/stateSchema.js";
+import {
+  District,
+  districtSchema,
+} from "../../../../types/typeMaster/generalMaster/districtSchema.js";
+import { State } from "../../../../types/typeMaster/generalMaster/stateSchema.js";
 import { updateDistrictDB } from "../../../../services/database/typeMaster/stateMaster/district/update.js";
 
 const updateDistrict = async (

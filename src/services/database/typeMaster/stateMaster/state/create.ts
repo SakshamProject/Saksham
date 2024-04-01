@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { State } from "../../../../../types/typeMaster/stateMaster/stateSchema.js";
+import { State } from "../../../../../types/typeMaster/generalMaster/stateSchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 

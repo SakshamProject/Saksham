@@ -1,8 +1,10 @@
 import { Prisma } from "@prisma/client";
-import { district, state } from "../../types/typeMaster/zod.js";
+import { District } from "../../../../types/typeMaster/generalMaster/districtSchema.js";
+import { State } from "../../../../types/typeMaster/generalMaster/stateSchema.js";
+//import { district, state } from "../../types/typeMaster/zod.js";
 
 const createStateDBObject = (
-  state: state
+  state: State
 ): Prisma.StateUncheckedCreateInput => {
   const newState: Prisma.StateUncheckedCreateInput = {
     name: state.name,
@@ -11,7 +13,7 @@ const createStateDBObject = (
 };
 
 const createDistrictDBObject = (
-  district: district
+  district: District
 ): Prisma.DistrictUncheckedCreateInput => {
   const newDistrict: Prisma.DistrictUncheckedCreateInput = {
     name: district.name,

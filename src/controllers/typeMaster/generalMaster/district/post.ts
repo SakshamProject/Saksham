@@ -1,7 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { District, districtSchema } from "../../../../types/typeMaster/stateMaster/districtSchema.js";
+import {
+  District,
+  districtSchema,
+} from "../../../../types/typeMaster/generalMaster/districtSchema.js";
 import { Prisma } from "@prisma/client";
-import { createDistrictDBObject } from "../../../../dto/typeMaster/post.js";
+import { createDistrictDBObject } from "../../../../dto/typeMaster/generalMaster/state/post.js";
 import { createDistrictDB } from "../../../../services/database/typeMaster/stateMaster/district/create.js";
 
 const postDistrict = async (

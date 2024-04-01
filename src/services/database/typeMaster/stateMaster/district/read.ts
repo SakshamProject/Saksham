@@ -1,4 +1,4 @@
-import { getDistrictsWithStateSchema } from "../../../../../types/typeMaster/stateMaster/districtSchema.js";
+import { getDistrictsWithStateSchema } from "../../../../../types/typeMaster/generalMaster/districtSchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
