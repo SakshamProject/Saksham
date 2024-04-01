@@ -3,9 +3,12 @@ import { Corporation } from "../../../../../types/typeMaster/stateMaster/corpora
 import throwDatabaseError from "../../../utils/errorHandler.js";
 import prisma from "../../../database.js";
 
-const updateCorporation = async (id: string, corporation: Corporation) => {
+const updateCorporationDB = async (
+  id: string,
+  corporation: Corporation
+): Promise<Corporation | undefined> => {
   try {
-    const updatedCorporation = await prisma.corporation.update({
+    const updatedCorporation: Corporation = await prisma.corporation.update({
       where: {
         id: id,
         districtId: corporation.districtId,
@@ -14,9 +17,10 @@ const updateCorporation = async (id: string, corporation: Corporation) => {
         name: corporation.name,
       },
     });
+    return updatedCorporation;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
 
-export { updateCorporation };
+export { updateCorporationDB };

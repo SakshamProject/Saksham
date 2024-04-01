@@ -182,13 +182,13 @@ CREATE TABLE "DivyangDetails" (
     "districtId" TEXT,
     "isRural" BOOLEAN,
     "villageName" TEXT,
-    "panchayatUnion" TEXT,
-    "taluk" TEXT,
-    "townPanchayat" TEXT,
-    "municipality" TEXT,
-    "corporation" TEXT,
-    "MLAConstituency" TEXT,
-    "MPConstituancy" TEXT,
+    "panchayatUnionId" TEXT,
+    "talukId" TEXT,
+    "townPanchayatId" TEXT,
+    "municipalityId" TEXT,
+    "corporationId" TEXT,
+    "MLAConstituencyId" TEXT,
+    "MPConstituancyId" TEXT,
     "pincode" INTEGER,
     "isDisabilitySinceBirth" BOOLEAN,
     "disabilitySince" TIMESTAMP(3),
@@ -303,11 +303,11 @@ CREATE TABLE "MPConstituency" (
 
 -- CreateTable
 CREATE TABLE "MLAConstituency" (
-    "Id" TEXT NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "districtId" TEXT NOT NULL,
 
-    CONSTRAINT "MLAConstituency_pkey" PRIMARY KEY ("Id")
+    CONSTRAINT "MLAConstituency_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -347,6 +347,15 @@ CREATE TABLE "Corporation" (
 );
 
 -- CreateTable
+CREATE TABLE "Taluk" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "districtId" TEXT NOT NULL,
+
+    CONSTRAINT "Taluk_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "CommunityCategory" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -378,15 +387,6 @@ CREATE TABLE "EducationQualificationType" (
     "name" TEXT NOT NULL,
 
     CONSTRAINT "EducationQualificationType_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Taluk" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "districtId" TEXT NOT NULL,
-
-    CONSTRAINT "Taluk_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -421,6 +421,42 @@ CREATE UNIQUE INDEX "DivyangServiceMapping_donorId_key" ON "DivyangServiceMappin
 
 -- CreateIndex
 CREATE UNIQUE INDEX "DisabilityOfDivyang_disabilitySubTypeId_key" ON "DisabilityOfDivyang"("disabilitySubTypeId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "DisabilitySubType_name_key" ON "DisabilitySubType"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "DisabilityType_name_key" ON "DisabilityType"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MPConstituency_name_key" ON "MPConstituency"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "MLAConstituency_name_key" ON "MLAConstituency"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PanchayatUnion_name_key" ON "PanchayatUnion"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "TownPanchayat_name_key" ON "TownPanchayat"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Municipality_name_key" ON "Municipality"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Corporation_name_key" ON "Corporation"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Taluk_name_key" ON "Taluk"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "CommunityCategory_name_key" ON "CommunityCategory"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "EducationQualification_name_key" ON "EducationQualification"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "EducationQualificationType_name_key" ON "EducationQualificationType"("name");
 
 -- AddForeignKey
 ALTER TABLE "SevaKendra" ADD CONSTRAINT "SevaKendra_districtId_fkey" FOREIGN KEY ("districtId") REFERENCES "District"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -463,6 +499,27 @@ ALTER TABLE "FeaturesOnDesignations" ADD CONSTRAINT "FeaturesOnDesignations_desi
 
 -- AddForeignKey
 ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_communityCategoryId_fkey" FOREIGN KEY ("communityCategoryId") REFERENCES "CommunityCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_corporationId_fkey" FOREIGN KEY ("corporationId") REFERENCES "Corporation"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_MLAConstituencyId_fkey" FOREIGN KEY ("MLAConstituencyId") REFERENCES "MLAConstituency"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_MPConstituancyId_fkey" FOREIGN KEY ("MPConstituancyId") REFERENCES "MPConstituency"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_municipalityId_fkey" FOREIGN KEY ("municipalityId") REFERENCES "Municipality"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_townPanchayatId_fkey" FOREIGN KEY ("townPanchayatId") REFERENCES "TownPanchayat"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_talukId_fkey" FOREIGN KEY ("talukId") REFERENCES "Taluk"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_panchayatUnionId_fkey" FOREIGN KEY ("panchayatUnionId") REFERENCES "PanchayatUnion"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_districtId_fkey" FOREIGN KEY ("districtId") REFERENCES "District"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -516,6 +573,9 @@ ALTER TABLE "Municipality" ADD CONSTRAINT "Municipality_districtId_fkey" FOREIGN
 ALTER TABLE "Corporation" ADD CONSTRAINT "Corporation_districtId_fkey" FOREIGN KEY ("districtId") REFERENCES "District"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Taluk" ADD CONSTRAINT "Taluk_districtId_fkey" FOREIGN KEY ("districtId") REFERENCES "District"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "DivyangEducationalQualification" ADD CONSTRAINT "DivyangEducationalQualification_educationalQualificationId_fkey" FOREIGN KEY ("educationalQualificationId") REFERENCES "EducationQualification"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -523,6 +583,3 @@ ALTER TABLE "DivyangEducationalQualification" ADD CONSTRAINT "DivyangEducational
 
 -- AddForeignKey
 ALTER TABLE "EducationQualification" ADD CONSTRAINT "EducationQualification_educationQualificationTypeId_fkey" FOREIGN KEY ("educationQualificationTypeId") REFERENCES "EducationQualificationType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Taluk" ADD CONSTRAINT "Taluk_districtId_fkey" FOREIGN KEY ("districtId") REFERENCES "District"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -5,7 +5,7 @@ import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const createCorporationDB = async (
   corporation: Prisma.CorporationUncheckedCreateInput
-) => {
+): Promise<Corporation | undefined> => {
   try {
     const newCorporation: Corporation = await prisma.corporation.create({
       data: {

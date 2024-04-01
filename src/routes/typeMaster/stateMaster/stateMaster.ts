@@ -9,12 +9,12 @@ import TownPanchayatRouter from "./townPanchayat.js";
 
 const stateMasterRouter = express.Router();
 
-stateMasterRouter.use("/corporation", CorporationRouter);
-stateMasterRouter.use("/mla-constituency", MLAConstituencyRouter);
-stateMasterRouter.use("/mp-constituency", MPConstituencyRouter);
-stateMasterRouter.use("/municipality", MunicipalityRouter);
-stateMasterRouter.use("/panchayat-union", PanchayatUnionRouter);
-stateMasterRouter.use("/taluk", TalukRouter);
-stateMasterRouter.use("/town-panchayat", TownPanchayatRouter);
+stateMasterRouter.use("/corporations", CorporationRouter);
+stateMasterRouter.use("/mla-constituencies", MLAConstituencyRouter);
+stateMasterRouter.use("/mp-constituencies", MPConstituencyRouter);
+stateMasterRouter.use("/municipalities", MunicipalityRouter);
+stateMasterRouter.use("/panchayat-unions", PanchayatUnionRouter);
+stateMasterRouter.use("/taluks", TalukRouter);
+stateMasterRouter.use("/town-panchayats", TownPanchayatRouter);
 
 export default stateMasterRouter;

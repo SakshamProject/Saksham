@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { corporationSchema } from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
 import { deleteCorporationDB } from "../../../../services/database/typeMaster/stateMaster/corporation/delete.js";
+import { Corporation } from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
 
 const deleteCorporation = async (
   request: Request,
@@ -8,8 +8,8 @@ const deleteCorporation = async (
   next: NextFunction
 ) => {
   try {
-    const id = request.params.id;
-    const result = await deleteCorporationDB(id);
+    const id: string = request.params.id;
+    const result: Corporation | undefined = await deleteCorporationDB(id);
     response.send(result);
   } catch (error) {
     next(error);
