@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  State,
-  stateSchema,
-} from "../../../types/typeMaster/stateMaster/stateSchema.js";
-import { updateStateDB } from "../../../services/database/typeMaster/state/update.js";
+import { State, stateSchema } from "../../../../types/typeMaster/stateMaster/stateSchema.js";
+import { updateStateDB } from "../../../../services/database/typeMaster/stateMaster/district/update.js";
 
 const updateState = async (
   request: Request,

@@ -10,7 +10,8 @@ function throwDatabaseError(error: Error) {
       error.name,
       error.severity
     );
-  } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+  }
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
     if (error.code === "P2025") {
       throw new APIError(
         "The specified record could not be found",
@@ -26,14 +27,13 @@ function throwDatabaseError(error: Error) {
         "Unique constraint violation",
         "E"
       );
-    } else {
-      throw new APIError(
-        "Some database error occurred",
-        StatusCodes.INTERNAL_SERVER_ERROR,
-        "DatabaseError",
-        "E"
-      );
     }
+    throw new APIError(
+      "Some database error occurred",
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      "DatabaseError",
+      "E"
+    );
   }
 }
 

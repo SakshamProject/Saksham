@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
-import { State } from "../../../../types/typeMaster/stateMaster/stateSchema.js";
-import prisma from "../../database.js";
-import throwDatabaseError from "../../utils/errorHandler.js";
+import { State } from "../../../../../types/typeMaster/stateMaster/stateSchema.js";
+import prisma from "../../../database.js";
+import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const createStateDB = async (
   state: Prisma.StateUncheckedCreateInput

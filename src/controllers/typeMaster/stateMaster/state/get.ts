@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response, response } from "express";
-import {
-  getStateByIdDB,
-  getStateDB,
-} from "../../../services/database/typeMaster/state/get.js";
-import { getStateSchema } from "../../../types/typeMaster/stateMaster/stateSchema.js";
+import { getStateSchema } from "../../../../types/typeMaster/stateMaster/stateSchema.js";
+import { getStateByIdDB, getStateDB } from "../../../../services/database/typeMaster/stateMaster/state/read.js";
 
 const getState = async (
   request: Request,

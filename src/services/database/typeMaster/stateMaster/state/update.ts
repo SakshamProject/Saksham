@@ -1,6 +1,6 @@
-import { State } from "../../../../types/typeMaster/stateMaster/stateSchema.js";
-import prisma from "../../database.js";
-import throwDatabaseError from "../../utils/errorHandler.js";
+import { State } from "../../../../../types/typeMaster/stateMaster/stateSchema.js";
+import prisma from "../../../database.js";
+import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const updateStateDB = async (
   state: State,

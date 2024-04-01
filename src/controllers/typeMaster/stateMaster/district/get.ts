@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response, response } from "express";
-import { getDistrictsWithStateSchema } from "../../../types/typeMaster/stateMaster/districtSchema.js";
-import {
-  getDistrictByIdDB,
-  getDistrictDB,
-} from "../../../services/database/typeMaster/district/get.js";
+import { getDistrictsWithStateSchema } from "../../../../types/typeMaster/stateMaster/districtSchema.js";
+import { getDistrictByIdDB, getDistrictDB } from "../../../../services/database/typeMaster/stateMaster/district/read.js";
 
 const getDistrict = async (
   request: Request,

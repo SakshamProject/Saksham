@@ -1,11 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  State,
-  stateSchema,
-} from "../../../types/typeMaster/stateMaster/stateSchema.js";
+import { State, stateSchema } from "../../../../types/typeMaster/stateMaster/stateSchema.js";
 import { Prisma } from "@prisma/client";
-import { createStateDBObject } from "../../../dto/typeMaster/post.js";
-import { createStateDB } from "../../../services/database/typeMaster/state/create.js";
+import { createStateDBObject } from "../../../../dto/typeMaster/post.js";
+import { createStateDB } from "../../../../services/database/typeMaster/stateMaster/state/create.js";
 
 const postState = async (
   request: Request,

@@ -1,6 +1,6 @@
-import { getDistrictsWithStateSchema } from "../../../../types/typeMaster/stateMaster/districtSchema.js";
-import prisma from "../../database.js";
-import throwDatabaseError from "../../utils/errorHandler.js";
+import { getDistrictsWithStateSchema } from "../../../../../types/typeMaster/stateMaster/districtSchema.js";
+import prisma from "../../../database.js";
+import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getDistrictDB = async (): Promise<
   getDistrictsWithStateSchema[] | undefined

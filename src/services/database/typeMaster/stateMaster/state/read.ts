@@ -1,6 +1,6 @@
-import { getStateSchema } from "../../../../types/typeMaster/stateMaster/stateSchema.js";
-import prisma from "../../database.js";
-import throwDatabaseError from "../../utils/errorHandler.js";
+import { getStateSchema } from "../../../../../types/typeMaster/stateMaster/stateSchema.js";
+import prisma from "../../../database.js";
+import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getStateDB = async (): Promise<getStateSchema[] | undefined> => {
   try {
@@ -12,7 +12,9 @@ const getStateDB = async (): Promise<getStateSchema[] | undefined> => {
     }
   }
 };
-const getStateByIdDB = async (id: string): Promise<getStateSchema | undefined> => {
+const getStateByIdDB = async (
+  id: string
+): Promise<getStateSchema | undefined> => {
   try {
     const state = await prisma.state.findFirstOrThrow({
       where: {
