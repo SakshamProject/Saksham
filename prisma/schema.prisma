@@ -90,6 +90,7 @@ model District {
   Corporations      Corporation[]
   PanchayatUnion    PanchayatUnion[]
   sevaKendraFollowUp SevaKendraFollowUp[]
+  taluk Taluk[]
 }
 
 model State {
@@ -410,4 +411,11 @@ enum CertificateIssueAuthority {
   MEDICAL_BOARD
   GOVERNMENT_DOCTOR
   PRIVATE_DOCTOR
+}
+
+model Taluk {
+  id       String @id @default(uuid())
+  name     String
+  districtId String
+  district   District @relation(fields: [districtId],references: [id])
 }

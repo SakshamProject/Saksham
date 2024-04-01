@@ -380,6 +380,15 @@ CREATE TABLE "EducationQualificationType" (
     CONSTRAINT "EducationQualificationType_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Taluk" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "districtId" TEXT NOT NULL,
+
+    CONSTRAINT "Taluk_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "SevaKendra_name_key" ON "SevaKendra"("name");
 
@@ -514,3 +523,6 @@ ALTER TABLE "DivyangEducationalQualification" ADD CONSTRAINT "DivyangEducational
 
 -- AddForeignKey
 ALTER TABLE "EducationQualification" ADD CONSTRAINT "EducationQualification_educationQualificationTypeId_fkey" FOREIGN KEY ("educationQualificationTypeId") REFERENCES "EducationQualificationType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Taluk" ADD CONSTRAINT "Taluk_districtId_fkey" FOREIGN KEY ("districtId") REFERENCES "District"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
