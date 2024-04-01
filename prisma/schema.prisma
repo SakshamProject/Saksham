@@ -362,6 +362,14 @@ model Corporation {
   DivyangDetails DivyangDetails[]
 }
 
+model Taluk {
+  id       String @id @default(uuid())
+  name     String @unique
+  districtId String
+  district   District @relation(fields: [districtId],references: [id])
+  DivyangDetails DivyangDetails[]
+}
+
 model CommunityCategory {
   id      String                   @id @default(uuid())
   name    String                   @unique
@@ -423,12 +431,4 @@ enum CertificateIssueAuthority {
   MEDICAL_BOARD
   GOVERNMENT_DOCTOR
   PRIVATE_DOCTOR
-}
-
-model Taluk {
-  id       String @id @default(uuid())
-  name     String @unique
-  districtId String
-  district   District @relation(fields: [districtId],references: [id])
-  DivyangDetails DivyangDetails[]
 }
