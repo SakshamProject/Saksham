@@ -1,7 +1,7 @@
 import prisma from "../../../database.js"
 import throwDatabaseError from "../../../utils/errorHandler.js"
 
-const getCommunityCategoryDB = async (): Promise<getCommunityCategorySchema[] | undefined> => {
+const getCommunityCategoryDB = async () => {
     try {
         const communityCategories = await prisma.communityCategory.findMany({})
         return communityCategories
@@ -11,3 +11,5 @@ const getCommunityCategoryDB = async (): Promise<getCommunityCategorySchema[] | 
         }
     }
 }
+
+export { getCommunityCategoryDB }
