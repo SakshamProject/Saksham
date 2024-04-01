@@ -196,13 +196,13 @@ model DivyangDetails {
   districtId      String?
   isRural Boolean?
   villageName     String?
-  panchayatUnion  String?
-  taluk           String?
-  townPanchayat   String?
-  municipality    String?
-  corporation     String?
-  MLAConstituency String?
-  MPConstituancy  String?
+  panchayatUnionId  String?
+  talukId          String?
+  townPanchayatId   String?
+  municipalityId    String?
+  corporationId     String?
+  MLAConstituencyId String?
+  MPConstituancyId  String?
   pincode         Int?
 
   isDisabilitySinceBirth    Boolean?
@@ -230,7 +230,8 @@ model DivyangDetails {
   spouseIncome     Int?
 
   communityCategory CommunityCategory @relation(fields: [communityCategoryId], references: [id])
-
+  
+  panchayatUnion PanchayatUnion? @relation(fields: [panchayatUnionId],references: [id])
   district District? @relation(fields: [districtId], references: [id])
   disabilities          DisabilityOfDivyang[]
   eductionQualification DivyangEducationalQualification[]
@@ -304,55 +305,56 @@ model DisabilitySubType {
 
 model DisabilityType {
   id         String              @id @default(uuid())
-  name       String
+  name       String              @unique
   disability DisabilitySubType[]
 }
 
 model MPConstituency {
   id         String   @id @default(uuid())
-  name       String
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
 }
 
 model MLAConstituency {
   Id         String   @id @default(uuid())
-  name       String
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
 }
 
 model PanchayatUnion {
   id         String   @id @default(uuid())
-  name       String
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  divyangDetails DivyangDetails[]
 }
 
 model TownPanchayat {
   id         String   @id @default(uuid())
-  name       String
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
 }
 
 model Municipality {
   id         String   @id @default(uuid())
-  name       String
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
 }
 
 model Corporation {
   id         String   @id @default(uuid())
-  name       String
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
 }
 
 model CommunityCategory {
   id      String                   @id @default(uuid())
-  name    String
+  name    String                   @unique
   divyang DivyangDetails[]
 }
 
@@ -415,7 +417,7 @@ enum CertificateIssueAuthority {
 
 model Taluk {
   id       String @id @default(uuid())
-  name     String
+  name     String @unique
   districtId String
   district   District @relation(fields: [districtId],references: [id])
 }
