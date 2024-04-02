@@ -1,23 +1,23 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  Corporation,
-  corporationSchema,
-} from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
-import { createCorporationDB } from "../../../../services/database/typeMaster/stateMaster/corporation/create.js";
+  TownPanchayat,
+  townPanchayatSchema,
+} from "../../../../types/typeMaster/stateMaster/townPanchayatSchema.js";
+import { createTownPanchayatDB } from "../../../../services/database/typeMaster/stateMaster/townPanchayat/create.js";
 
-const postCorporation = async (
+const postTownPanchayat = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
   try {
-    const corporation: Corporation = corporationSchema.parse(request.body);
-    const result: Corporation | undefined = await createCorporationDB(
-      corporation
+    const townPnachayat: TownPanchayat = townPanchayatSchema.parse(request.body);
+    const result: TownPanchayat | undefined = await createTownPanchayatDB(
+      townPnachayat
     );
     response.send(result);
   } catch (error) {
     next(error);
   }
 };
-export { postCorporation };
+export { postTownPanchayat };

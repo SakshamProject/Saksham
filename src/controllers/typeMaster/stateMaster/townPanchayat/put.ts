@@ -1,21 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  Corporation,
-  corporationSchema,
-} from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
-import { updateCorporationDB } from "../../../../services/database/typeMaster/stateMaster/corporation/update.js";
+  TownPanchayat,
+  townPanchayatSchema,
+} from "../../../../types/typeMaster/stateMaster/townPanchayatSchema.js";
+import { updateTownPanchayatDB } from "../../../../services/database/typeMaster/stateMaster/townPanchayat/update.js";
 
-const putCorporation = async (
+const putTownPanchayat = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
   try {
     const id = request.params.id;
-    const corporation = corporationSchema.parse(request.body);
-    const result: Corporation | undefined = await updateCorporationDB(
+    const townPanchayat = townPanchayatSchema.parse(request.body);
+    const result: TownPanchayat | undefined = await updateTownPanchayatDB(
       id,
-      corporation
+      townPanchayat
     );
 
     response.send(result);
@@ -24,4 +24,4 @@ const putCorporation = async (
   }
 };
 
-export { putCorporation };
+export { putTownPanchayat };

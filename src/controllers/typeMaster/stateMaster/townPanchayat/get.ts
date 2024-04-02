@@ -1,20 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  getCorporationByDistrictIdDB,
-  getCorporationByIdDB,
-  getCorporationDB,
-} from "../../../../services/database/typeMaster/stateMaster/corporation/read.js";
+  getTownPanchayatByDistrictIdDB,
+  getTownPanchayatByIdDB,
+  getTownPanchayatDB,
+} from "../../../../services/database/typeMaster/stateMaster/townPanchayat/read.js";
 import getRequestSchema from "../../../getRequest.schema.js";
-import { Corporation } from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
+import { TownPanchayat } from "../../../../types/typeMaster/stateMaster/townPanchayatSchema.js";
 
-const getCorporation = async (
+const getTownPanchayat = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result: Corporation[] | undefined = await getCorporationDB(
+    const result: TownPanchayat[] | undefined = await getTownPanchayatDB(
       query.sortOrder,
       query.start,
       query.rows,
@@ -26,7 +26,7 @@ const getCorporation = async (
   }
 };
 
-const getCorporationById = async (
+const getTownPanchayatById = async (
   request: Request,
   response: Response,
   next: NextFunction
@@ -34,7 +34,7 @@ const getCorporationById = async (
   try {
     const id = request.params.id;
     const query = getRequestSchema.parse(request.query);
-    const result: Corporation | undefined | null = await getCorporationByIdDB(
+    const result: TownPanchayat | undefined | null = await getTownPanchayatByIdDB(
       id,
       query.sortOrder,
       query.start,
@@ -45,7 +45,7 @@ const getCorporationById = async (
     next(error);
   }
 };
-const getCorporationByDistrictId = async (
+const getTownPanchayatByDistrictId = async (
   request: Request,
   response: Response,
   next: NextFunction
@@ -53,8 +53,8 @@ const getCorporationByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const query = getRequestSchema.parse(request.query);
-    const result: Corporation[] | undefined =
-      await getCorporationByDistrictIdDB(
+    const result: TownPanchayat[] | undefined =
+      await getTownPanchayatByDistrictIdDB(
         districtId,
         query.sortOrder,
         query.start,
@@ -66,4 +66,4 @@ const getCorporationByDistrictId = async (
   }
 };
 
-export { getCorporationById, getCorporation, getCorporationByDistrictId };
+export { getTownPanchayatById, getTownPanchayat, getTownPanchayatByDistrictId };
