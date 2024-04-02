@@ -4,7 +4,7 @@ import inputFieldSchema from "../../inputField.js";
 import { Prisma, PrismaClient } from "@prisma/client";
 
 
-type getServiceTypeWithServiceSchema = Prisma.ServiceTypeGetPayload<{
+type getSelectedServiceTypeWithServiceSchema = Prisma.ServiceTypeGetPayload<{
     select:{
         id: true, 
         name: true,
@@ -15,6 +15,12 @@ type getServiceTypeWithServiceSchema = Prisma.ServiceTypeGetPayload<{
         },
     },
 }>;
+
+type getServiceTypeWithServiceSchema = Prisma.ServiceTypeGetPayload<{
+    include: {
+        service: true 
+      }
+}>
 
 const postRequestSchema= z.object({
     id: inputFieldSchema.optional(),
@@ -29,4 +35,4 @@ type postServiceTypeType = Prisma.ServiceTypeCreateInput;
 
 type postServiceType = Prisma.ServiceCreateInput;
 
-  export{getServiceTypeWithServiceSchema, postRequestSchema, postRequestSchemaType,postServiceTypeType ,postServiceType};
+  export{getServiceTypeWithServiceSchema, postRequestSchema, postRequestSchemaType,postServiceTypeType ,postServiceType,getSelectedServiceTypeWithServiceSchema};

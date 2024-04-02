@@ -15,51 +15,45 @@ import {
   createServiceDB,
   createServiceTypeDB,
 } from "../../../../services/database/typeMaster/generalMaster/serviceType/create.js";
-import { postTransaction } from "../../../../services/database/typeMaster/generalMaster/serviceType/transactions/post.js";
+import { getServiceTypeById } from "./get.js";
+import { getServiceTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
 
-// async function postServiceType(
-//   request: Request,
-//   response: Response,
-//   next: NextFunction
-// ) {
-//   try{const body: postRequestSchemaType = postRequestSchema.parse(request.body);
-
-//   const postServiceTypeDBObject = createPostServiceTypeDBObject(body);
-
-//     const serviceType: ServiceType | undefined
-//      = await createServiceTypeDB(
-//         postServiceTypeDBObject
-//       );
-   
-//     const postServiceDBObject: postServiceType = createPostServiceDBObject(
-//     body,
-//     serviceType?.id
-//   );
-
-//     const service: Service | undefined = await createServiceDB(
-//     postServiceDBObject
-//   );
-//   response.send(serviceType);}catch(err){
-    
-//   }
-// }
 
 async function postServiceType(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ) {
-    try{const body: postRequestSchemaType = postRequestSchema.parse(request.body);
+  request: Request,
+  response: Response,
+  next: NextFunction
+) {
+  try{const body: postRequestSchemaType = postRequestSchema.parse(request.body);
 
-      const serviceType  = postTransaction(body);
-  
-  
-      
+  const postServiceTypeDBObject = createPostServiceTypeDBObject(body);
 
-    response.send(serviceType);}catch(err){
+    const serviceType: ServiceType | undefined
+     = await createServiceTypeDB(
+        postServiceTypeDBObject
+      );
+
+      for(let serviceName of body.serviceName){
+
+        const postServiceDBObject: postServiceType = createPostServiceDBObject(
+          serviceName,
+          serviceType?.id
+        );
       
-  next(err);
+        const service: Service | undefined = await createServiceDB(
+          postServiceDBObject
+        );
+      }
+
+      const result= await getServiceTypeByIdDB(serviceType?.id);
+   
+    
+   
+  response.send(result);}catch(err){
+    next(err)
   }
 }
+
+
 
 export { postServiceType };
