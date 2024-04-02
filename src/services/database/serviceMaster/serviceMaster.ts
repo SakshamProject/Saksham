@@ -4,9 +4,6 @@ import { serviceMasterColumnNameMapper } from "../utils/serviceMaster.js";
 
 import throwDatabaseError from "../utils/errorHandler.js";
 import {Prisma} from "@prisma/client";
-import APIError from "../../errors/APIError.js";
-import {StatusCodes} from "http-status-codes";
-import { truncate } from "fs";
 
 async function getServicesDB(
   orderByColumn: string = "createdAt",
