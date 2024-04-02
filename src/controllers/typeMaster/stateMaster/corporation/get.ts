@@ -3,7 +3,6 @@ import {
   getCorporationByDistrictIdDB,
   getCorporationByIdDB,
   getCorporationDB,
-  searchCorporationByNameDB,
 } from "../../../../services/database/typeMaster/stateMaster/corporation/read.js";
 import getRequestSchema from "../../../getRequest.schema.js";
 import { Corporation } from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
@@ -20,7 +19,7 @@ const getCorporation = async (
     const searchText: string =
       queryParamsSchema.parse(request.query.searchName) || "";
     const query = getRequestSchema.parse(request.query);
-    const result = await getCorporationDB(
+    const result: Corporation[] | undefined = await getCorporationDB(
       query.sortOrder,
       query.start,
       query.rows,
@@ -59,12 +58,13 @@ const getCorporationByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const query = getRequestSchema.parse(request.query);
-    const result = await getCorporationByDistrictIdDB(
-      districtId,
-      query.sortOrder,
-      query.start,
-      query.rows
-    );
+    const result: Corporation[] | undefined =
+      await getCorporationByDistrictIdDB(
+        districtId,
+        query.sortOrder,
+        query.start,
+        query.rows
+      );
     response.send(result);
   } catch (error) {
     next(error);
