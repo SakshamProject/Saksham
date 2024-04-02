@@ -13,5 +13,6 @@ const getRequestSchema = z.object({
     .optional(),
   orderByColumn: z.string().optional(),
   sortOrder: z.nativeEnum(orderByDirectionEnum).optional(),
+  searchText: z.string().optional(),
 });
 export default getRequestSchema;

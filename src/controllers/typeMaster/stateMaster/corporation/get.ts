@@ -6,9 +6,6 @@ import {
 } from "../../../../services/database/typeMaster/stateMaster/corporation/read.js";
 import getRequestSchema from "../../../getRequest.schema.js";
 import { Corporation } from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
-import inputFieldSchema, {
-  queryParamsSchema,
-} from "../../../../types/inputField.js";
 
 const getCorporation = async (
   request: Request,
@@ -16,14 +13,12 @@ const getCorporation = async (
   next: NextFunction
 ) => {
   try {
-    const searchText: string =
-      queryParamsSchema.parse(request.query.searchName) || "";
     const query = getRequestSchema.parse(request.query);
     const result: Corporation[] | undefined = await getCorporationDB(
       query.sortOrder,
       query.start,
       query.rows,
-      searchText
+      query.searchText || ""
     );
     response.send(result);
   } catch (error) {

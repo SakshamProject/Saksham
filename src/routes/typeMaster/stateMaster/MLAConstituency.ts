@@ -1,8 +1,8 @@
 import express from "express";
 import { postMLAConstituency } from "../../../controllers/typeMaster/stateMaster/MLAConstituency/post.js";
 import {
-  getByIdMLAConstituency,
   getMLAConstituency,
+  getMLAConstituencyById,
 } from "../../../controllers/typeMaster/stateMaster/MLAConstituency/get.js";
 import { putMLAConstituency } from "../../../controllers/typeMaster/stateMaster/MLAConstituency/put.js";
 import { deleteMLAConstituency } from "../../../controllers/typeMaster/stateMaster/MLAConstituency/delete.js";
@@ -10,7 +10,7 @@ import { deleteMLAConstituency } from "../../../controllers/typeMaster/stateMast
 const MLAConstituencyRouter = express.Router();
 MLAConstituencyRouter.post("/", postMLAConstituency);
 MLAConstituencyRouter.get("/", getMLAConstituency);
-MLAConstituencyRouter.get("/:id", getByIdMLAConstituency);
+MLAConstituencyRouter.get("/:id", getMLAConstituencyById);
 MLAConstituencyRouter.put("/:id", putMLAConstituency);
 MLAConstituencyRouter.delete("/:id", deleteMLAConstituency);
 
