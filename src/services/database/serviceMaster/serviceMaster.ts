@@ -21,11 +21,7 @@ async function getServicesDB(
       take: take,
       skip: skip,
       include: {
-        subType: {
-          include: {
-            serviceType: true,
-          },
-        },
+        serviceType: true,
       },
       orderBy: serviceMasterColumnNameMapper(orderByColumn, reverse),
     };
@@ -51,11 +47,7 @@ async function getServiceByIdDB(
         id: id
       },
       include: {
-        subType: {
-          include: {
-            serviceType: true,
-          },
-        },
+        serviceType: true,
       },
     };
 
@@ -71,14 +63,14 @@ async function getServiceByIdDB(
 
 async function createServiceByIdDB(
   serviceName: string,
-  serviceSubTypeID: string
+  serviceTypeID: string
 ) {
   try {
     // When adding using ID, serviceSubType is enough
     const service = await prisma.service.create({
       data: {
         name: serviceName,
-        subTypeId: serviceSubTypeID,
+        serviceTypeId: serviceTypeID,
       },
     });
 
@@ -92,14 +84,14 @@ async function createServiceByIdDB(
 }
 async function updateServiceByIdDB(
   serviceId: string,
-  serviceSubTypeID:string,
+  serviceTypeID:string,
   serviceName: string
 ) {
   // When adding using ID, serviceSubType is enough
   try {
 
     const updateData: Prisma.ServiceUncheckedCreateInput = {
-      subTypeId : serviceSubTypeID,
+      serviceTypeId : serviceTypeID,
       name: serviceName
     }
     const service = await prisma.service.update({
