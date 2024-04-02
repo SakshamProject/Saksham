@@ -61,14 +61,14 @@ model ServicesOnSevaKendras {
 model ServiceType {
   id       String           @id @default(uuid())
   name     String           @unique
-  service  Service[]
+ service  Service[]
 }
 
 model Service {
   id        String   @id @default(uuid())
   name      String   @unique
   updatedAt DateTime @updatedAt
-  serviceTypeId String
+  serviceTypeId String 
   createdAt DateTime @default(now())
 
   serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id])
@@ -90,6 +90,7 @@ model District {
   Corporations      Corporation[]
   PanchayatUnion    PanchayatUnion[]
   sevaKendraFollowUp SevaKendraFollowUp[]
+  taluk Taluk[]
 }
 
 model State {
@@ -410,4 +411,11 @@ enum CertificateIssueAuthority {
   MEDICAL_BOARD
   GOVERNMENT_DOCTOR
   PRIVATE_DOCTOR
+}
+
+model Taluk {
+  id       String @id @default(uuid())
+  name     String
+  districtId String
+  district   District @relation(fields: [districtId],references: [id])
 }
