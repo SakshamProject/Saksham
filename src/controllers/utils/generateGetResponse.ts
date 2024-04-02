@@ -1,7 +1,5 @@
 import defaults from "../../defaults.js";
 import {Query} from "../../types/zodSchemas.js";
-import {getTotalRowsDB} from "../../services/database/database.js";
-import { Prisma } from "@prisma/client";
 
 // TODO: Convert data:any to appropriate type
 async function generateGetResponse(query: Query, data:any, total: number) {
