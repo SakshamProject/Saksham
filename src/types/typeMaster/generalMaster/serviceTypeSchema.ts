@@ -18,8 +18,8 @@ type getServiceTypeWithServiceSchema = Prisma.ServiceTypeGetPayload<{
 
 const postRequestSchema= z.object({
     id: inputFieldSchema.optional(),
-    serviceType: inputFieldSchema,
-    serviceName:z.array(inputFieldSchema),
+    serviceType: inputFieldSchema.transform((value) => value.toUpperCase()),
+    serviceName:z.array(inputFieldSchema).transform((value) => value.map((serviceName) => serviceName.toUpperCase())),
 
 })
 
