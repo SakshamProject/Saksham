@@ -79,36 +79,4 @@ const getCorporationByIdDB = async (
   }
 };
 
-const searchCorporationByNameDB = async (
-  searchText: string,
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
-  start: number = defaults.skip,
-  rows: number = defaults.take
-): Promise<Corporation[] | undefined> => {
-  try {
-    console.log(searchText, sortOrder, "output");
-    const searchedCorporations: Corporation[] =
-      await prisma.corporation.findMany({
-        where: {
-          name: {
-            search: searchText,
-          },
-        },
-        orderBy: {
-          name: sortOrder,
-        },
-        skip: start,
-        take: rows,
-      });
-    return searchedCorporations;
-  } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
-  }
-};
-
-export {
-  getCorporationDB,
-  getCorporationByDistrictIdDB,
-  getCorporationByIdDB,
-  searchCorporationByNameDB,
-};
+export { getCorporationDB, getCorporationByDistrictIdDB, getCorporationByIdDB };
