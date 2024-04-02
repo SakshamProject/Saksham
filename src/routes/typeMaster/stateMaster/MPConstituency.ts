@@ -1,8 +1,8 @@
 import express from "express";
 import { postMPConstituency } from "../../../controllers/typeMaster/stateMaster/MPConstituency/post.js";
 import {
-  getByIdMPConstituency,
   getMPConstituency,
+  getMPConstituencyById,
 } from "../../../controllers/typeMaster/stateMaster/MPConstituency/get.js";
 import { putMPConstituency } from "../../../controllers/typeMaster/stateMaster/MPConstituency/put.js";
 import { deleteMPConstituency } from "../../../controllers/typeMaster/stateMaster/MPConstituency/delete.js";
@@ -10,7 +10,7 @@ import { deleteMPConstituency } from "../../../controllers/typeMaster/stateMaste
 const MPConstituencyRouter = express.Router();
 MPConstituencyRouter.post("/", postMPConstituency);
 MPConstituencyRouter.get("/", getMPConstituency);
-MPConstituencyRouter.get("/:id", getByIdMPConstituency);
+MPConstituencyRouter.get("/:id", getMPConstituencyById);
 MPConstituencyRouter.put("/:id", putMPConstituency);
 MPConstituencyRouter.delete("/:id", deleteMPConstituency);
 
