@@ -8,7 +8,6 @@ const createCommunityCategoryDB = async (communityCategory: Prisma.CommunityCate
         const createdCommunityCategory = await prisma.communityCategory.create({
             data: {
                 name: communityCategory.name,
-                id: communityCategory.id
             },
         });
         return createdCommunityCategory
