@@ -5,7 +5,7 @@ import { communityCategoryRouter } from "./CommunityCategory.js";
 const generalMasterRouter = express.Router();
 
 generalMasterRouter.use("/educationalQualification", educationalQualificationRouter)
-generalMasterRouter.use("/communityCategory", communityCategoryRouter)
+generalMasterRouter.use("/community-category", communityCategoryRouter)
 generalMasterRouter.use()
 
 export default generalMasterRouter;
