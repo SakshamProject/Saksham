@@ -6,6 +6,7 @@ import throwDatabaseError from "../utils/errorHandler.js";
 import {Prisma} from "@prisma/client";
 import APIError from "../../errors/APIError.js";
 import {StatusCodes} from "http-status-codes";
+import { truncate } from "fs";
 
 async function getServicesDB(
   orderByColumn: string = "serviceName",
@@ -17,11 +18,17 @@ async function getServicesDB(
   try {
 
     const query = {
+      select: {
+        id: true,
+        name: true,
+        serviceType: {
+          select: {
+            name: true,
+          }
+        }
+      },
       take: take,
       skip: skip,
-      include: {
-        serviceType: true,
-      },
       orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
     };
 
@@ -30,6 +37,7 @@ async function getServicesDB(
   
   } catch (error) {
     if (error instanceof Error) {
+      console.log(error);
       throwDatabaseError(error);
     }
   }
