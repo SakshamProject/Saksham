@@ -6,6 +6,5 @@ const generalMasterRouter = express.Router();
 
 generalMasterRouter.use("/educationalQualification", educationalQualificationRouter)
 generalMasterRouter.use("/community-category", communityCategoryRouter)
-generalMasterRouter.use()
 
 export default generalMasterRouter;

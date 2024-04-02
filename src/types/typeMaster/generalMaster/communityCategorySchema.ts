@@ -5,8 +5,8 @@ import { z } from "zod";
 type getCommunityCategorySchema = Prisma.CommunityCategoryGetPayload<{}>;
 
 const communityCategorySchema = z.object ({
-    id: inputFieldSchema,
-    name: inputFieldSchema
+    id: inputFieldSchema.optional(),
+    name: z.string().toUpperCase()
 })
 
 type CommunityCategory = z.infer<typeof communityCategorySchema>
