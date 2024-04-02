@@ -1,20 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  getCorporationByDistrictIdDB,
-  getCorporationByIdDB,
-  getCorporationDB,
-} from "../../../../services/database/typeMaster/stateMaster/corporation/read.js";
+  getPanchayatUnionByDistrictIdDB,
+  getPanchayatUnionByIdDB,
+  getPanchayatUnionDB,
+} from "../../../../services/database/typeMaster/stateMaster/panchayatUnion/read.js";
 import getRequestSchema from "../../../getRequest.schema.js";
-import { Corporation } from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
+import { PanchayatUnion } from "../../../../types/typeMaster/stateMaster/panchayatUnionSchema.js";
 
-const getCorporation = async (
+const getPanchayatUnion = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result: Corporation[] | undefined = await getCorporationDB(
+    const result: PanchayatUnion[] | undefined = await getPanchayatUnionDB(
       query.sortOrder,
       query.start,
       query.rows,
@@ -26,7 +26,7 @@ const getCorporation = async (
   }
 };
 
-const getCorporationById = async (
+const getPanchayatUnionById = async (
   request: Request,
   response: Response,
   next: NextFunction
@@ -34,18 +34,19 @@ const getCorporationById = async (
   try {
     const id = request.params.id;
     const query = getRequestSchema.parse(request.query);
-    const result: Corporation | undefined | null = await getCorporationByIdDB(
-      id,
-      query.sortOrder,
-      query.start,
-      query.rows
-    );
+    const result: PanchayatUnion | undefined | null =
+      await getPanchayatUnionByIdDB(
+        id,
+        query.sortOrder,
+        query.start,
+        query.rows
+      );
     response.send(result);
   } catch (error) {
     next(error);
   }
 };
-const getCorporationByDistrictId = async (
+const getPanchayatUnionByDistrictId = async (
   request: Request,
   response: Response,
   next: NextFunction
@@ -53,8 +54,8 @@ const getCorporationByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const query = getRequestSchema.parse(request.query);
-    const result: Corporation[] | undefined =
-      await getCorporationByDistrictIdDB(
+    const result: PanchayatUnion[] | undefined =
+      await getPanchayatUnionByDistrictIdDB(
         districtId,
         query.sortOrder,
         query.start,
@@ -66,4 +67,8 @@ const getCorporationByDistrictId = async (
   }
 };
 
-export { getCorporationById, getCorporation, getCorporationByDistrictId };
+export {
+  getPanchayatUnionById,
+  getPanchayatUnion,
+  getPanchayatUnionByDistrictId,
+};

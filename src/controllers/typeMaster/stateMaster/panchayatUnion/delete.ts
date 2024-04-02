@@ -1,18 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { deleteCorporationDB } from "../../../../services/database/typeMaster/stateMaster/corporation/delete.js";
-import { Corporation } from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
+import { deletePanchayatUnionDB } from "../../../../services/database/typeMaster/stateMaster/panchayatUnion/delete.js";
+import { PanchayatUnion } from "../../../../types/typeMaster/stateMaster/panchayatUnionSchema.js";
 
-const deleteCorporation = async (
+const deletePanchayatUnion = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
   try {
     const id: string = request.params.id;
-    const result: Corporation | undefined = await deleteCorporationDB(id);
+    const result: PanchayatUnion | undefined = await deletePanchayatUnionDB(id);
     response.send(result);
   } catch (error) {
     next(error);
   }
 };
-export { deleteCorporation };
+export { deletePanchayatUnion };
