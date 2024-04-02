@@ -3,7 +3,7 @@ import inputFieldSchema from "../../inputField.js";
 
 const MPConstituencySchema = z.object({
   id: inputFieldSchema.optional(),
-  name: inputFieldSchema,
+  name: inputFieldSchema.toUpperCase(),
   districtId: inputFieldSchema,
 });
 type MPConstituency = z.infer<typeof MPConstituencySchema>;
