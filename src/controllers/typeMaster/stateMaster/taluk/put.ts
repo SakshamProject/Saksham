@@ -1,21 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  Corporation,
-  corporationSchema,
-} from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
-import { updateCorporationDB } from "../../../../services/database/typeMaster/stateMaster/corporation/update.js";
+  Taluk,
+  talukSchema,
+} from "../../../../types/typeMaster/stateMaster/talukSchema.js";
+import { updateTalukDB } from "../../../../services/database/typeMaster/stateMaster/taluk/update.js";
 
-const putCorporation = async (
+const putTaluk = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
   try {
     const id = request.params.id;
-    const corporation = corporationSchema.parse(request.body);
-    const result: Corporation | undefined = await updateCorporationDB(
+    const taluk = talukSchema.parse(request.body);
+    const result: Taluk | undefined = await updateTalukDB(
       id,
-      corporation
+      taluk
     );
 
     response.send(result);
@@ -24,4 +24,4 @@ const putCorporation = async (
   }
 };
 
-export { putCorporation };
+export { putTaluk };

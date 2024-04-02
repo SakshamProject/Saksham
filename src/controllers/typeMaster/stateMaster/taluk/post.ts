@@ -1,23 +1,23 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  Corporation,
-  corporationSchema,
-} from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
-import { createCorporationDB } from "../../../../services/database/typeMaster/stateMaster/corporation/create.js";
+  Taluk,
+  talukSchema,
+} from "../../../../types/typeMaster/stateMaster/talukSchema.js";
+import { createTalukDB } from "../../../../services/database/typeMaster/stateMaster/taluk/create.js";
 
-const postCorporation = async (
+const postTaluk = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
   try {
-    const corporation: Corporation = corporationSchema.parse(request.body);
-    const result: Corporation | undefined = await createCorporationDB(
-      corporation
+    const taluk: Taluk = talukSchema.parse(request.body);
+    const result: Taluk | undefined = await createTalukDB(
+      taluk
     );
     response.send(result);
   } catch (error) {
     next(error);
   }
 };
-export { postCorporation };
+export { postTaluk };
