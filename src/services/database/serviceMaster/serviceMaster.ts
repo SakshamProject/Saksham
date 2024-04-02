@@ -44,7 +44,6 @@ async function getServiceByIdDB(
   id: string,
 ) {
   try {
-    // TODO: Interfaces
 
     const query = {
       where: {
