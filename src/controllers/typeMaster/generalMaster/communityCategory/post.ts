@@ -6,9 +6,9 @@ import { createCommunityCategoryDB } from "../../../../services/database/typeMas
 
 const postCommunityCategory = async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const communityCategory: CommunityCategory = communityCategorySchema.parse(request.body); //Schema goes into types layer
-        const communityCategoryDBObject: Prisma.CommunityCategoryUncheckedCreateInput = createCommunityCategoryDBObject(communityCategory); // DBObject goes into dto
-        const result: CommunityCategory | undefined = await createCommunityCategoryDB(communityCategoryDBObject); //DB goes into databse layer
+        const communityCategory: CommunityCategory = communityCategorySchema.parse(request.body);
+        const communityCategoryDBObject: Prisma.CommunityCategoryUncheckedCreateInput = createCommunityCategoryDBObject(communityCategory);
+        const result: CommunityCategory | undefined = await createCommunityCategoryDB(communityCategoryDBObject);
         response.send(result);
     } catch (error) {
         next(error)

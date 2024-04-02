@@ -12,4 +12,19 @@ const getCommunityCategoryDB = async () => {
     }
 }
 
-export { getCommunityCategoryDB }
+const getCommunityCategoryByIdDB = async (id: string) => {
+    try {
+        const communityCategory = await prisma.communityCategory.findFirstOrThrow({
+            where: {
+                id: id
+            }
+        })
+        return communityCategory
+    } catch (error) {
+        if (error instanceof Error) {
+            throwDatabaseError(error)
+        }
+    }
+}
+
+export { getCommunityCategoryDB, getCommunityCategoryByIdDB }
