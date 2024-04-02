@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response} from "express";
-import { ZodError } from "zod";
 import { getRequestSchema } from "../../types/zodSchemas.js";
 import { postServiceMasterSchema, putServiceMasterSchema } from "../../types/schemas/serviceMaster/serviceMaster.schema.js";
-import APIError from "../../services/errors/APIError.js";
 import {
   createServiceByIdDB,
   deleteServiceByIdDB,
@@ -16,10 +14,10 @@ import {getTotalRowsDB} from "../../services/database/database.js";
 async function postService(request: Request, response: Response, next: NextFunction) {
     try {
         const body = postServiceMasterSchema.parse(request.body);
-    const service = await createServiceByIdDB(body.name, body.subTypeId);
+    const service = await createServiceByIdDB(body.name, body.serviceTypeId);
     response.json(service);
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
