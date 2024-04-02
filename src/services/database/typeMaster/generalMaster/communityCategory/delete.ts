@@ -2,7 +2,7 @@ import { CommunityCategory } from "../../../../../types/typeMaster/generalMaster
 import prisma from "../../../database.js"
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
-const deleteCommunityCategoryDB = async (id: string) => {
+const deleteCommunityCategoryDB = async (id: string): Promise<CommunityCategory | undefined> => {
     try {
          const deletedCommunityCategory: CommunityCategory = await prisma.communityCategory.delete({
             where: {
