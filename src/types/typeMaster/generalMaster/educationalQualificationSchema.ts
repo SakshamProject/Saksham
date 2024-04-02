@@ -8,4 +8,4 @@ const educationalQualificationSchema = z.object ({
     
 })
 
-export {getEducationalQualificationSchema}
+export { getEducationalQualificationSchema }

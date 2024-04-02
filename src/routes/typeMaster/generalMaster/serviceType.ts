@@ -1,5 +1,4 @@
 import express from "express";
-//import educationalQualificationRouter from "./educationalQualification.js";
 
 const serviceTypeRouter = express.Router();
 
