@@ -1,8 +1,13 @@
 import express from 'express';
 import { getCommunityCategory, getCommunityCategoryById } from '../../../controllers/typeMaster/generalMaster/communityCategory/get.js'
 import { postCommunityCategory } from '../../../controllers/typeMaster/generalMaster/communityCategory/post.js';
+import { deleteCommunityCategory } from '../../../controllers/typeMaster/generalMaster/communityCategory/delete.js';
 
-const CommunityCategoryRouter = express.Router()
-CommunityCategoryRouter.use("/", getCommunityCategory)
-CommunityCategoryRouter.use("/", postCommunityCategory)
-CommunityCategoryRouter.use("/:id", getCommunityCategoryById)
+const communityCategoryRouter = express.Router()
+communityCategoryRouter.get("/", getCommunityCategory)
+communityCategoryRouter.post("/", postCommunityCategory)
+communityCategoryRouter.get("/:id", getCommunityCategoryById)
+communityCategoryRouter.delete("/:id", deleteCommunityCategory)
+// communityCategoryRouter.put("/:id", updateCommunityCategory)
+
+export { communityCategoryRouter }
