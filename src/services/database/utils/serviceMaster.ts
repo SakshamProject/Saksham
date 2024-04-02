@@ -6,6 +6,10 @@ function serviceMasterColumnNameMapper(orderByColumn: string, sortOrder: "asc" |
         "name": sortOrder
     });
 
+    serviceMasterColumnNameMap.set("createdAt", {
+        "createdAt": sortOrder
+    })
+
     serviceMasterColumnNameMap.set("serviceTypeName", {
         "serviceType": {
             "name": sortOrder

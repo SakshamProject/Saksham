@@ -9,7 +9,7 @@ import {StatusCodes} from "http-status-codes";
 import { truncate } from "fs";
 
 async function getServicesDB(
-  orderByColumn: string = "serviceName",
+  orderByColumn: string = "createdAt",
   sortOrder: "asc" | "desc" = "asc",
   skip = defaults.skip,
   take = defaults.take
