@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import { Corporation } from "../../../../../types/typeMaster/stateMaster/corporationSchema.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 import prisma from "../../../database.js";
