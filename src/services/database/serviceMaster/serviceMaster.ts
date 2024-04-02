@@ -69,13 +69,11 @@ async function createServiceByIdDB(
   serviceTypeID: string
 ) {
   try {
-    // When adding using ID, serviceSubType is enough
-    const service = await prisma.service.create({
-      data: {
+    const query: Prisma.ServiceUncheckedCreateInput = {
         name: serviceName,
         serviceTypeId: serviceTypeID,
-      },
-    });
+    }
+    const service  = await prisma.service.create({ data: query });
 
     return service;
   }
@@ -90,7 +88,6 @@ async function updateServiceByIdDB(
   serviceTypeID:string,
   serviceName: string
 ) {
-  // When adding using ID, serviceSubType is enough
   try {
 
     const updateData: Prisma.ServiceUncheckedCreateInput = {
