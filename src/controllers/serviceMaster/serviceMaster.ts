@@ -40,7 +40,7 @@ async function putService(request: Request, response: Response, next: NextFuncti
   try {
     const body = putServiceMasterSchema.parse(request.body)
     console.log("reached controllers")
-    const service = await updateServiceByIdDB(request.params.serviceID,body.subTypeId,body.name);// updateService
+    const service = await updateServiceByIdDB(request.params.serviceID,body.serviceTypeId, body.name);// updateService
     response.json(service);
   } catch (error) {
     next(error)
