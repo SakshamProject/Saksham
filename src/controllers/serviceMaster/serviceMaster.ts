@@ -29,7 +29,7 @@ async function getServices(request: Request, response: Response, next: NextFunct
 
         // No need to decrement query (query.start - 1).
         // It is taken care of by getRequestSchema
-        const services = await getServicesDB(query.orderBy, query.reverse, query.start, query.rows);
+        const services = await getServicesDB(query.orderBy, query.sortOrder, query.start, query.rows);
       const total = await getTotalRowsDB("Service");
         response.json(await generateGetResponse(query, services, total));
     }

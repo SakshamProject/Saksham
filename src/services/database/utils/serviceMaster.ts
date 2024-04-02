@@ -1,6 +1,5 @@
 // Map Column Names to OrderBy Queries
-function serviceMasterColumnNameMapper(orderByColumn: string, reverse: "asc" | "desc") {
-    const sortOrder = reverse ? "desc" : "asc";
+function serviceMasterColumnNameMapper(orderByColumn: string, sortOrder: "asc" | "desc") {
     const serviceMasterColumnNameMap: Map<string, any> = new Map();
 
     serviceMasterColumnNameMap.set("serviceName", {

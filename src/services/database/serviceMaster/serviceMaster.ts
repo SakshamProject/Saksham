@@ -9,13 +9,12 @@ import {StatusCodes} from "http-status-codes";
 
 async function getServicesDB(
   orderByColumn: string = "serviceName",
-  reverse: "asc" | "desc" = "asc",
+  sortOrder: "asc" | "desc" = "asc",
   skip = defaults.skip,
   take = defaults.take
 ) {
 
   try {
-    // TODO: Interfaces
 
     const query = {
       take: take,
@@ -23,7 +22,7 @@ async function getServicesDB(
       include: {
         serviceType: true,
       },
-      orderBy: serviceMasterColumnNameMapper(orderByColumn, reverse),
+      orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
     };
 
     const services = await prisma.service.findMany(query);
