@@ -141,12 +141,14 @@ async function searchServiceDB(
               {
                 name: {
                   contains: searchText,
+                  mode: 'insensitive'
                 },
               },
               {
                 serviceType: {
                   name: {
                     contains: searchText,
+                    mode: "insensitive"
                   } 
                 }
               },
