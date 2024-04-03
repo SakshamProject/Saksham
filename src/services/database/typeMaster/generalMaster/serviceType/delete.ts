@@ -1,4 +1,3 @@
-import { getServiceTypeWithServiceSchema } from "../../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 

@@ -1,18 +1,19 @@
 import { Prisma } from "@prisma/client";
-import { z } from "zod";
 import inputFieldSchema from "../../inputField.js";
-import { postRequestSchema } from "./serviceTypeSchema.js";
+import { z } from "zod";
 
-type getEducationalQualificationSchema = Prisma.EducationQualificationGetPayload<{}>;
+type getEducationalQualificationTypeSchema = Prisma.EducationQualificationTypeGetPayload<{}>;
 
-type getEducationalQualificationWithTypeSchema = Prisma.EducationQualificationTypeGetPayload<{}>;
-
-const educationalQualificationSchema = z.object ({
+const postRequestEducationQualification = z.object({
     id: inputFieldSchema.optional(),
-    type: inputFieldSchema.transform((value) => value.toUpperCase()),
-    subType:z.array(inputFieldSchema).transform((value) => value.map((subType) => subType.toUpperCase())),
+    educationQualificationTypeName: inputFieldSchema.transform((value) => value.toUpperCase()),
+    educationQualificationName: z.array(inputFieldSchema).transform((value) => value.map((serviceName) => serviceName.toUpperCase()))
 })
 
-type postRequestSchemaType = z.infer<typeof postRequestSchema>;
+type postEducationalQualificationBodyType = z.infer<typeof postRequestEducationQualification>
 
-export {getEducationalQualificationWithTypeSchema}
+type postEducationalQualificationType = Prisma.EducationQualificationTypeCreateInput;
+
+type postEducationQualification = Prisma.EducationQualificationCreateInput;
+
+export {getEducationalQualificationTypeSchema, postRequestEducationQualification, postEducationQualification, postEducationalQualificationBodyType, postEducationalQualificationType}

@@ -4,7 +4,7 @@ import serviceTypeRouter from "./serviceType.js";
 
 const generalMasterRouter = express.Router();
 
-generalMasterRouter.use("/educationalQualification", educationalQualificationRouter)
+generalMasterRouter.use("/education-qualification", educationalQualificationRouter)
 generalMasterRouter.use("/servicetype",serviceTypeRouter)
 
 
