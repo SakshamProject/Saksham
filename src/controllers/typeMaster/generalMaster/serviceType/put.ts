@@ -11,28 +11,39 @@ import { getServiceByServiceTypeIdDB } from "../../../../services/database/typeM
 
  function retrieveServicesId(services:getSelectedServiceSchema[]|undefined){
 
-    const servicesId:string[] = [];
+   try{
+     const servicesId:string[] = [];
    if(services){
     for(let service of services){
         servicesId.push(service.id);
     }
    }
-    return servicesId;    
+    return servicesId; 
+} catch(err){
+    throw(err);
+}  
 
 }
 
 async function deleteUncheckedServices(exisitingServicesId:string[],updatedServicesId:string[]){
     
-    for(let exisitingId of exisitingServicesId){
+    try{
+        for(let exisitingId of exisitingServicesId){
 
         if(!updatedServicesId.includes(exisitingId)){
             const deletedService = await deleteServiceTypeDB(exisitingId);
         }
     }
+}catch(err){
+
+    throw(err);
+}
 }
 
 async function createCheckedServices(services:serviceNameSchemaType[],updatedServiceTypeId:string|undefined){
-    const checkedServicesId:string[]|undefined =[];
+
+   try{
+     const checkedServicesId:string[]|undefined =[];
     
     for(let service of services){
 
@@ -55,7 +66,10 @@ async function createCheckedServices(services:serviceNameSchemaType[],updatedSer
             }
         }
     }
-    return checkedServicesId;
+    return checkedServicesId;   
+}catch(err){
+    throw err;
+}
 }
 
 
