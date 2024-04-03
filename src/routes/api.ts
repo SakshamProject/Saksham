@@ -3,7 +3,7 @@ import { pingDB } from "../services/database/database.js";
 import serviceMasterRouter from "./serviceMaster/serviceMaster.js";
 import APIError from "../services/errors/APIError.js";
 import {StatusCodes} from "http-status-codes";
-import errorHandler from "../middlewares/errorHandler.js";
+import errorHandler from "../middlewares/errorHandler/errorHandler.js";
 
 const apiRouter = Router();
 
