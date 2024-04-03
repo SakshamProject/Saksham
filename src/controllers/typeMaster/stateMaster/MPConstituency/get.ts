@@ -1,11 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  getMPConstituencyByDistrictIdDB,
-  getMPConstituencyByIdDB,
-  getMPConstituencyDB,
-} from "../../../../services/database/typeMaster/stateMaster/MPConstituency/read.js";
+import { getMPConstituencyByIdDB } from "../../../../services/database/typeMaster/stateMaster/MPConstituency/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { MPConstituency } from "../../../../types/typeMaster/stateMaster/MPConstituencySchema.js";
+import {
+  getMPConstituencyByDistrictIdDBTransaction,
+  getMPConstituencyDBTransaction,
+} from "../../../../services/database/typeMaster/stateMaster/MPConstituency/transaction/read.js";
+import {
+  createResponseOnlyData,
+  createResponseWithQuery,
+} from "../../../../types/createResponseSchema.js";
 
 const getMPConstituency = async (
   request: Request,
@@ -14,13 +18,21 @@ const getMPConstituency = async (
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result: MPConstituency[] | undefined = await getMPConstituencyDB(
+    const result = await getMPConstituencyDBTransaction(
       query.sortOrder,
       query.start,
       query.rows,
       query.searchText || ""
     );
-    response.send(result);
+    const count: number = result?.MPConstituency?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result?.MPConstituency || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -41,7 +53,8 @@ const getMPConstituencyById = async (
         query.start,
         query.rows
       );
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -54,14 +67,21 @@ const getMPConstituencyByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const query = getRequestSchema.parse(request.query);
-    const result: MPConstituency[] | undefined =
-      await getMPConstituencyByDistrictIdDB(
-        districtId,
-        query.sortOrder,
-        query.start,
-        query.rows
-      );
-    response.send(result);
+    const result = await getMPConstituencyByDistrictIdDBTransaction(
+      districtId,
+      query.sortOrder,
+      query.start,
+      query.rows
+    );
+    const count: number = result?.MPConstituency?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result?.MPConstituency || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

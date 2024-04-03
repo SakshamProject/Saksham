@@ -2,10 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import {
   getPanchayatUnionByDistrictIdDB,
   getPanchayatUnionByIdDB,
-  getPanchayatUnionDB,
 } from "../../../../services/database/typeMaster/stateMaster/panchayatUnion/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
-import { PanchayatUnion } from "../../../../types/typeMaster/stateMaster/panchayatUnionSchema.js";
+import {
+  createResponseOnlyData,
+  createResponseWithQuery,
+} from "../../../../types/createResponseSchema.js";
+import {
+  getPanchayatUnionByDistrictIdDBTransaction,
+  getPanchayatUnionDBTransaction,
+} from "../../../../services/database/typeMaster/stateMaster/panchayatUnion/transaction/read.js";
 
 const getPanchayatUnion = async (
   request: Request,
@@ -14,13 +20,21 @@ const getPanchayatUnion = async (
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result: PanchayatUnion[] | undefined = await getPanchayatUnionDB(
+    const result = await getPanchayatUnionDBTransaction(
       query.sortOrder,
       query.start,
       query.rows,
       query.searchText || ""
     );
-    response.send(result);
+    const count: number = result?.panchayatUnion?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result?.panchayatUnion || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -34,14 +48,14 @@ const getPanchayatUnionById = async (
   try {
     const id = request.params.id;
     const query = getRequestSchema.parse(request.query);
-    const result: PanchayatUnion | undefined | null =
-      await getPanchayatUnionByIdDB(
-        id,
-        query.sortOrder,
-        query.start,
-        query.rows
-      );
-    response.send(result);
+    const result = await getPanchayatUnionByIdDB(
+      id,
+      query.sortOrder,
+      query.start,
+      query.rows
+    );
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -54,14 +68,21 @@ const getPanchayatUnionByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const query = getRequestSchema.parse(request.query);
-    const result: PanchayatUnion[] | undefined =
-      await getPanchayatUnionByDistrictIdDB(
-        districtId,
-        query.sortOrder,
-        query.start,
-        query.rows
-      );
-    response.send(result);
+    const result = await getPanchayatUnionByDistrictIdDBTransaction(
+      districtId,
+      query.sortOrder,
+      query.start,
+      query.rows
+    );
+    const count: number = result?.panchayatUnion?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

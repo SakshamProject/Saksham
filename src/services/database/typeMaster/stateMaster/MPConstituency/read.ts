@@ -5,6 +5,7 @@ import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getMPConstituencyDB = async (
+  prismaTransaction: any,
   sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take,
@@ -12,7 +13,7 @@ const getMPConstituencyDB = async (
 ): Promise<MPConstituency[] | undefined> => {
   try {
     const MPConstituencies: MPConstituency[] =
-      await prisma.mPConstituency.findMany({
+      await prismaTransaction.mPConstituency.findMany({
         where: {
           name: {
             contains: searchText,
@@ -31,7 +32,26 @@ const getMPConstituencyDB = async (
   }
 };
 
+const getMPConstituencyDBTotal = async (
+  prismaTransaction: any,
+  searchText: string
+) => {
+  try {
+    const MPConstituenciesTotal = await prismaTransaction.mPConstituency.count({
+      where: {
+        name: {
+          contains: searchText,
+          mode: "insensitive",
+        },
+      },
+    });
+    return MPConstituenciesTotal;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 const getMPConstituencyByDistrictIdDB = async (
+  prismaTransaction: any,
   districtId: string,
   sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
@@ -39,7 +59,7 @@ const getMPConstituencyByDistrictIdDB = async (
 ): Promise<MPConstituency[] | undefined> => {
   try {
     const MPConstituencies: MPConstituency[] =
-      await prisma.mPConstituency.findMany({
+      await prismaTransaction.mPConstituency.findMany({
         where: {
           districtId: districtId,
         },
@@ -54,7 +74,21 @@ const getMPConstituencyByDistrictIdDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-
+const getMPConstituencyByDistrictIdDBTotal = async (
+  prismaTransaction: any,
+  districtId: string
+) => {
+  try {
+    const MPConstituenciesTotal = await prismaTransaction.mPConstituency.count({
+      where: {
+        districtId: districtId,
+      },
+    });
+    return MPConstituenciesTotal;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 const getMPConstituencyByIdDB = async (
   id: string,
   sortOrder: sortOrderEnum = defaults.sortOrder,
@@ -83,6 +117,8 @@ const getMPConstituencyByIdDB = async (
 
 export {
   getMPConstituencyDB,
+  getMPConstituencyDBTotal,
   getMPConstituencyByDistrictIdDB,
+  getMPConstituencyByDistrictIdDBTotal,
   getMPConstituencyByIdDB,
 };

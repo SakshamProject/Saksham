@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import defaults from "../../../../../../defaults.js";
 import { sortOrderEnum } from "../../../../../../types/getRequestSchema.js";
 import prisma from "../../../../database.js";
@@ -15,24 +16,31 @@ const getMLAConstituencyDBTransaction = async (
   rows: number = defaults.take,
   searchText: string
 ) => {
-  const transaction = await prisma.$transaction(async (prismaTransaction) => {
-    try {
-      const MLAConstituency = await getMLAConstituencyDB(
-        prismaTransaction,
-        sortOrder,
-        start,
-        rows,
-        searchText
-      );
-      const total = await getMLAConstituencyDBTotal(
-        prismaTransaction,
-        searchText
-      );
-      return { MLAConstituency, total };
-    } catch (error) {
-      if (error instanceof Error) throwDatabaseError(error);
+  const transaction = await prisma.$transaction(
+    async (prismaTransaction) => {
+      try {
+        const MLAConstituency = await getMLAConstituencyDB(
+          prismaTransaction,
+          sortOrder,
+          start,
+          rows,
+          searchText
+        );
+        const total = await getMLAConstituencyDBTotal(
+          prismaTransaction,
+          searchText
+        );
+        return { MLAConstituency, total };
+      } catch (error) {
+        if (error instanceof Error) throwDatabaseError(error);
+      }
+    },
+    {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration
+      maxWait: 5000, // default: 2000
+      timeout: 10000, // default: 5000
     }
-  });
+  );
   return transaction;
 };
 const getMLAConstituencyByDistrictIdDBTransaction = async (
@@ -41,24 +49,31 @@ const getMLAConstituencyByDistrictIdDBTransaction = async (
   start: number = defaults.skip,
   rows: number = defaults.take
 ) => {
-  const transaction = prisma.$transaction(async (prismaTransaction) => {
-    try {
-      const MLAConstituency = await getMLAConstituencyByDistrictIdDB(
-        prismaTransaction,
-        districtId,
-        sortOrder,
-        start,
-        rows
-      );
-      const total = await getMLAConstituencyByDistrictIdDBTotal(
-        prismaTransaction,
-        districtId
-      );
-      return { MLAConstituency, total };
-    } catch (error) {
-      if (error instanceof Error) throwDatabaseError(error);
+  const transaction = prisma.$transaction(
+    async (prismaTransaction) => {
+      try {
+        const MLAConstituency = await getMLAConstituencyByDistrictIdDB(
+          prismaTransaction,
+          districtId,
+          sortOrder,
+          start,
+          rows
+        );
+        const total = await getMLAConstituencyByDistrictIdDBTotal(
+          prismaTransaction,
+          districtId
+        );
+        return { MLAConstituency, total };
+      } catch (error) {
+        if (error instanceof Error) throwDatabaseError(error);
+      }
+    },
+    {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration
+      maxWait: 5000, // default: 2000
+      timeout: 10000, // default: 5000
     }
-  });
+  );
   return transaction;
 };
 

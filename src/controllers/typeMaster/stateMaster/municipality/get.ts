@@ -2,10 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import {
   getMunicipalityByDistrictIdDB,
   getMunicipalityByIdDB,
-  getMunicipalityDB,
 } from "../../../../services/database/typeMaster/stateMaster/municipality/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
-import { Municipality } from "../../../../types/typeMaster/stateMaster/municipalitySchema.js";
+import {
+  createResponseOnlyData,
+  createResponseWithQuery,
+} from "../../../../types/createResponseSchema.js";
+import {
+  getMunicipalityByDistrictIdDBTransaction,
+  getMunicipalityDBTransaction,
+} from "../../../../services/database/typeMaster/stateMaster/municipality/transaction/read.js";
 
 const getMunicipality = async (
   request: Request,
@@ -14,13 +20,21 @@ const getMunicipality = async (
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result: Municipality[] | undefined = await getMunicipalityDB(
+    const result = await getMunicipalityDBTransaction(
       query.sortOrder,
       query.start,
       query.rows,
       query.searchText || ""
     );
-    response.send(result);
+    const count: number = result?.municipality?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result?.municipality || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -34,13 +48,14 @@ const getMunicipalityById = async (
   try {
     const id = request.params.id;
     const query = getRequestSchema.parse(request.query);
-    const result: Municipality | undefined | null = await getMunicipalityByIdDB(
+    const result = await getMunicipalityByIdDB(
       id,
       query.sortOrder,
       query.start,
       query.rows
     );
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -53,14 +68,21 @@ const getMunicipalityByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const query = getRequestSchema.parse(request.query);
-    const result: Municipality[] | undefined =
-      await getMunicipalityByDistrictIdDB(
-        districtId,
-        query.sortOrder,
-        query.start,
-        query.rows
-      );
-    response.send(result);
+    const result = await getMunicipalityByDistrictIdDBTransaction(
+      districtId,
+      query.sortOrder,
+      query.start,
+      query.rows
+    );
+    const count: number = result?.municipality?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

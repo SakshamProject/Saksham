@@ -13,7 +13,7 @@ const getMLAConstituencyDB = async (
 ): Promise<MLAConstituency[] | undefined> => {
   try {
     const MLAConstituency: MLAConstituency[] =
-      await prisma.mLAConstituency.findMany({
+      await prismaTransaction.mLAConstituency.findMany({
         where: {
           name: {
             contains: searchText,
@@ -58,7 +58,7 @@ const getMLAConstituencyByDistrictIdDB = async (
 ): Promise<MLAConstituency[] | undefined> => {
   try {
     const MLAConstituency: MLAConstituency[] =
-      await prisma.mLAConstituency.findMany({
+      await prismaTransaction.mLAConstituency.findMany({
         where: {
           districtId: districtId,
         },

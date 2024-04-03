@@ -1,8 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  getMLAConstituencyByDistrictIdDB,
-  getMLAConstituencyByIdDB,
-} from "../../../../services/database/typeMaster/stateMaster/MLAConstituency/read.js";
+import { getMLAConstituencyByIdDB } from "../../../../services/database/typeMaster/stateMaster/MLAConstituency/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { MLAConstituency } from "../../../../types/typeMaster/stateMaster/MLAConstituencySchema.js";
 import {

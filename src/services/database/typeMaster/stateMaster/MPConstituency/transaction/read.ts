@@ -4,13 +4,13 @@ import { sortOrderEnum } from "../../../../../../types/getRequestSchema.js";
 import prisma from "../../../../database.js";
 import throwDatabaseError from "../../../../utils/errorHandler.js";
 import {
-  getCorporationByDistrictIdDB,
-  getCorporationByDistrictIdDBTotal,
-  getCorporationDB,
-  getCorporationDBTotal,
+  getMPConstituencyByDistrictIdDB,
+  getMPConstituencyByDistrictIdDBTotal,
+  getMPConstituencyDB,
+  getMPConstituencyDBTotal,
 } from "../read.js";
 
-const getCorporationDBTransaction = async (
+const getMPConstituencyDBTransaction = async (
   sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take,
@@ -19,18 +19,18 @@ const getCorporationDBTransaction = async (
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
       try {
-        const corporation = await getCorporationDB(
+        const MPConstituency = await getMPConstituencyDB(
           prismaTransaction,
           sortOrder,
           start,
           rows,
           searchText
         );
-        const total = await getCorporationDBTotal(
+        const total = await getMPConstituencyDBTotal(
           prismaTransaction,
           searchText
         );
-        return { corporation, total };
+        return { MPConstituency, total };
       } catch (error) {
         if (error instanceof Error) throwDatabaseError(error);
       }
@@ -43,7 +43,7 @@ const getCorporationDBTransaction = async (
   );
   return transaction;
 };
-const getCorporationByDistrictIdDBTransaction = async (
+const getMPConstituencyByDistrictIdDBTransaction = async (
   districtId: string,
   sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
@@ -52,18 +52,18 @@ const getCorporationByDistrictIdDBTransaction = async (
   const transaction = prisma.$transaction(
     async (prismaTransaction) => {
       try {
-        const corporation = await getCorporationByDistrictIdDB(
+        const MPConstituency = await getMPConstituencyByDistrictIdDB(
           prismaTransaction,
           districtId,
           sortOrder,
           start,
           rows
         );
-        const total = await getCorporationByDistrictIdDBTotal(
+        const total = await getMPConstituencyByDistrictIdDBTotal(
           prismaTransaction,
           districtId
         );
-        return { corporation, total };
+        return { MPConstituency, total };
       } catch (error) {
         if (error instanceof Error) throwDatabaseError(error);
       }
@@ -77,4 +77,7 @@ const getCorporationByDistrictIdDBTransaction = async (
   return transaction;
 };
 
-export { getCorporationDBTransaction, getCorporationByDistrictIdDBTransaction };
+export {
+  getMPConstituencyDBTransaction,
+  getMPConstituencyByDistrictIdDBTransaction,
+};

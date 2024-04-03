@@ -5,6 +5,7 @@ import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getPanchayatUnionDB = async (
+  prismaTransaction: any,
   sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take,
@@ -12,7 +13,7 @@ const getPanchayatUnionDB = async (
 ): Promise<PanchayatUnion[] | undefined> => {
   try {
     const panchayatUnions: PanchayatUnion[] =
-      await prisma.panchayatUnion.findMany({
+      await prismaTransaction.panchayatUnion.findMany({
         where: {
           name: {
             contains: searchText,
@@ -30,8 +31,27 @@ const getPanchayatUnionDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+const getPanchayatUnionDBTotal = async (
+  prismaTransaction: any,
+  searchText: string
+) => {
+  try {
+    const panchayatUnionsTotal = await prismaTransaction.panchayatUnion.count({
+      where: {
+        name: {
+          contains: searchText,
+          mode: "insensitive",
+        },
+      },
+    });
+    return panchayatUnionsTotal;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 
 const getPanchayatUnionByDistrictIdDB = async (
+  prismaTransaction: any,
   districtId: string,
   sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
@@ -39,7 +59,7 @@ const getPanchayatUnionByDistrictIdDB = async (
 ): Promise<PanchayatUnion[] | undefined> => {
   try {
     const panchayatUnions: PanchayatUnion[] =
-      await prisma.panchayatUnion.findMany({
+      await prismaTransaction.panchayatUnion.findMany({
         where: {
           districtId: districtId,
         },
@@ -54,7 +74,21 @@ const getPanchayatUnionByDistrictIdDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-
+const getPanchayatUnionByDistrictIdDBTotal = async (
+  prismaTransaction: any,
+  districtId: string
+) => {
+  try {
+    const panchayatUnionsTotal = await prismaTransaction.panchayatUnion.count({
+      where: {
+        districtId: districtId,
+      },
+    });
+    return panchayatUnionsTotal;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 const getPanchayatUnionByIdDB = async (
   id: string,
   sortOrder: sortOrderEnum = defaults.sortOrder,
@@ -83,6 +117,8 @@ const getPanchayatUnionByIdDB = async (
 
 export {
   getPanchayatUnionDB,
+  getPanchayatUnionDBTotal,
   getPanchayatUnionByDistrictIdDB,
+  getPanchayatUnionByDistrictIdDBTotal,
   getPanchayatUnionByIdDB,
 };
