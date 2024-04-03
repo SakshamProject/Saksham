@@ -299,7 +299,7 @@ model DisabilitySubType {
   disabilityTypeId String
 
   divyang    DisabilityOfDivyang[]
-  disability DisabilityType        @relation(fields: [disabilityTypeId], references: [id])
+  disability DisabilityType        @relation(fields: [disabilityTypeId], references: [id],onDelete: Cascade)
 }
 
 model DisabilityType {
@@ -418,4 +418,9 @@ model Taluk {
   name     String
   districtId String
   district   District @relation(fields: [districtId],references: [id])
+}
+
+model generalMasters{
+  id      String @id @default(uuid())
+  name    String
 }
