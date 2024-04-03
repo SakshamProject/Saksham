@@ -1,7 +1,7 @@
 import defaults from "../../defaults.js";
 
 // TODO: Convert data:any to appropriate type
-function generateGetResponse(query: any, data:any, total: number) {
+function generateGetResponse(query: any, data: any, total: number) {
 
     const start: number = query.start || defaults.skip;
     // const rows: number = query.rows || defaults.take;
@@ -9,11 +9,14 @@ function generateGetResponse(query: any, data:any, total: number) {
 
     return ({
         data: data,
+        request: {
+            sortOrder: query.sortOrder,
+            orderBy: query.orderBy,
+            start: start + 1,
+            searchText: query.searchText,
+        },
         total: total,
-        rows: (data || []).length,
-        sortOrder: query.sortOrder,
-        orderBy: query.orderBy,
-        start: start + 1
+        count: (data || []).length,
     });
 }
 

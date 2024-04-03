@@ -1,20 +1,22 @@
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
-import { serviceMasterColumnNameMapper } from "../utils/serviceMaster.js";
+import { serviceMasterColumnNameMapper } from "./serviceMasterColumnNameMapper.js";
 
 import throwDatabaseError from "../utils/errorHandler.js";
 import {Prisma} from "@prisma/client";
+import searchTextMapper from "../utils/searchTextMapper.js";
 
 async function getServicesDB(
   orderByColumn: string = "createdAt",
   sortOrder: "asc" | "desc" = "asc",
   skip = defaults.skip,
-  take = defaults.take
+  take = defaults.take,
+  searchText = ""
 ) {
 
   try {
 
-    const query = {
+    const query: Prisma.ServiceFindManyArgs = {
       select: {
         id: true,
         name: true,
@@ -27,7 +29,12 @@ async function getServicesDB(
       take: take,
       skip: skip,
       orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
-    };
+    }
+
+    if (searchText !== "") {
+      query.where = searchTextMapper("Service", searchText);
+    }
+
     const services = await prisma.service.findMany(query);
     return services;
   
@@ -108,7 +115,6 @@ async function updateServiceByIdDB(
   }
 }
 
-
 async function deleteServiceByIdDB(serviceId: string) {
   try {
     const result = await prisma.service.delete({
@@ -126,54 +132,10 @@ async function deleteServiceByIdDB(serviceId: string) {
   }
 }
 
-async function searchServiceDB(
-  orderByColumn: string = "createdAt",
-  sortOrder: "asc" | "desc" = "asc",
-  skip = defaults.skip,
-  take = defaults.take,
-  searchText: string,
-) {
-
-      try {
-        const query = {
-          where: {
-            OR: [
-              {
-                name: {
-                  contains: searchText,
-                  mode: 'insensitive'
-                },
-              },
-              {
-                serviceType: {
-                  name: {
-                    contains: searchText,
-                    mode: "insensitive"
-                  } 
-                }
-              },
-          ]
-          },
-          orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
-        };
-        
-        const result = await prisma.service.findMany(query);
-        
-        return result;
-      }
-      catch(error) {
-        console.log(error);
-        if (error instanceof Error) {
-          throwDatabaseError(error);
-        }
-      }
-}
-
 export {
   getServicesDB,
   getServiceByIdDB,
   createServiceByIdDB,
   deleteServiceByIdDB,
-  updateServiceByIdDB,
-  searchServiceDB
+  updateServiceByIdDB
 };
