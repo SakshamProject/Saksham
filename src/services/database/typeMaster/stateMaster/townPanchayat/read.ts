@@ -5,7 +5,7 @@ import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getTownPanchayatDB = async (
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take,
   searchText: string
@@ -16,6 +16,7 @@ const getTownPanchayatDB = async (
         where: {
           name: {
             contains: searchText,
+            mode: "insensitive",
           },
         },
         orderBy: {
@@ -33,7 +34,7 @@ const getTownPanchayatDB = async (
 
 const getTownPanchayatByDistrictIdDB = async (
   districtId: string,
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<TownPanchayat[] | undefined> => {
@@ -58,7 +59,7 @@ const getTownPanchayatByDistrictIdDB = async (
 
 const getTownPanchayatByIdDB = async (
   id: string,
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<TownPanchayat | undefined | null> => {

@@ -28,13 +28,13 @@ const getCorporation = async (
     );
     const count: number = result?.corporation.length || 0;
     const total: number = result?.total || 0;
-    const resultWithRequest = createResponseWithQuery(
+    const responseData = createResponseWithQuery(
       result?.corporation || {},
       query,
       total,
       count
     );
-    response.send(resultWithRequest);
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -54,8 +54,8 @@ const getCorporationById = async (
       query.start,
       query.rows
     );
-    const resultWithRequest = createResponseOnlyData(result || {});
-    response.send(resultWithRequest);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -76,13 +76,13 @@ const getCorporationByDistrictId = async (
     );
     const count: number = result?.corporation?.length || 0;
     const total: number = result?.total || 0;
-    const resultWithRequest = createResponseWithQuery(
+    const responseData = createResponseWithQuery(
       result || {},
       query,
       total,
       count
     );
-    response.send(resultWithRequest);
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

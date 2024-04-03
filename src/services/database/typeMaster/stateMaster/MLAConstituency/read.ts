@@ -5,7 +5,8 @@ import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getMLAConstituencyDB = async (
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  prismaTransaction: any,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take,
   searchText: string
@@ -16,6 +17,7 @@ const getMLAConstituencyDB = async (
         where: {
           name: {
             contains: searchText,
+            mode: "insensitive",
           },
         },
         orderBy: {
@@ -29,10 +31,28 @@ const getMLAConstituencyDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-
+const getMLAConstituencyDBTotal = async (
+  prismaTransaction: any,
+  searchText: string
+): Promise<number | undefined> => {
+  try {
+    const MLAConstituencyTotal = await prismaTransaction.mLAConstituency.count({
+      where: {
+        name: {
+          contains: searchText,
+          mode: "insensitive",
+        },
+      },
+    });
+    return MLAConstituencyTotal;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 const getMLAConstituencyByDistrictIdDB = async (
+  prismaTransaction: any,
   districtId: string,
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<MLAConstituency[] | undefined> => {
@@ -53,10 +73,24 @@ const getMLAConstituencyByDistrictIdDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-
+const getMLAConstituencyByDistrictIdDBTotal = async (
+  prismaTransaction: any,
+  districtId: string
+): Promise<number | undefined> => {
+  try {
+    const MLAConstituencyTotal = await prismaTransaction.mLAConstituency.count({
+      where: {
+        districtId: districtId,
+      },
+    });
+    return MLAConstituencyTotal;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 const getMLAConstituencyByIdDB = async (
   id: string,
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<MLAConstituency | undefined | null> => {
@@ -82,6 +116,8 @@ const getMLAConstituencyByIdDB = async (
 
 export {
   getMLAConstituencyDB,
+  getMLAConstituencyDBTotal,
   getMLAConstituencyByDistrictIdDB,
+  getMLAConstituencyByDistrictIdDBTotal,
   getMLAConstituencyByIdDB,
 };

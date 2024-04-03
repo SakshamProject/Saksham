@@ -5,7 +5,7 @@ import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getMunicipalityDB = async (
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take,
   searchText: string
@@ -15,6 +15,7 @@ const getMunicipalityDB = async (
       where: {
         name: {
           contains: searchText,
+          mode: "insensitive",
         },
       },
       orderBy: {
@@ -31,7 +32,7 @@ const getMunicipalityDB = async (
 
 const getMunicipalityByDistrictIdDB = async (
   districtId: string,
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<Municipality[] | undefined> => {
@@ -54,7 +55,7 @@ const getMunicipalityByDistrictIdDB = async (
 
 const getMunicipalityByIdDB = async (
   id: string,
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<Municipality | undefined | null> => {

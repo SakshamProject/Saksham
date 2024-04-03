@@ -5,7 +5,7 @@ import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getMPConstituencyDB = async (
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take,
   searchText: string
@@ -16,6 +16,7 @@ const getMPConstituencyDB = async (
         where: {
           name: {
             contains: searchText,
+            mode: "insensitive",
           },
         },
         orderBy: {
@@ -32,7 +33,7 @@ const getMPConstituencyDB = async (
 
 const getMPConstituencyByDistrictIdDB = async (
   districtId: string,
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<MPConstituency[] | undefined> => {
@@ -56,7 +57,7 @@ const getMPConstituencyByDistrictIdDB = async (
 
 const getMPConstituencyByIdDB = async (
   id: string,
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<MPConstituency | undefined | null> => {

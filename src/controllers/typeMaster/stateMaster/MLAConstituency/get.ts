@@ -2,10 +2,17 @@ import { NextFunction, Request, Response } from "express";
 import {
   getMLAConstituencyByDistrictIdDB,
   getMLAConstituencyByIdDB,
-  getMLAConstituencyDB,
 } from "../../../../services/database/typeMaster/stateMaster/MLAConstituency/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { MLAConstituency } from "../../../../types/typeMaster/stateMaster/MLAConstituencySchema.js";
+import {
+  getMLAConstituencyByDistrictIdDBTransaction,
+  getMLAConstituencyDBTransaction,
+} from "../../../../services/database/typeMaster/stateMaster/MLAConstituency/transaction/read.js";
+import {
+  createResponseOnlyData,
+  createResponseWithQuery,
+} from "../../../../types/createResponseSchema.js";
 
 const getMLAConstituency = async (
   request: Request,
@@ -14,13 +21,21 @@ const getMLAConstituency = async (
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result: MLAConstituency[] | undefined = await getMLAConstituencyDB(
+    const result = await getMLAConstituencyDBTransaction(
       query.sortOrder,
       query.start,
       query.rows,
       query.searchText || ""
     );
-    response.send(result);
+    const count: number = result?.MLAConstituency?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result?.MLAConstituency || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -41,7 +56,8 @@ const getMLAConstituencyById = async (
         query.start,
         query.rows
       );
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -54,14 +70,21 @@ const getMLAConstituencyByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const query = getRequestSchema.parse(request.query);
-    const result: MLAConstituency[] | undefined =
-      await getMLAConstituencyByDistrictIdDB(
-        districtId,
-        query.sortOrder,
-        query.start,
-        query.rows
-      );
-    response.send(result);
+    const result = await getMLAConstituencyByDistrictIdDBTransaction(
+      districtId,
+      query.sortOrder,
+      query.start,
+      query.rows
+    );
+    const count: number = result?.MLAConstituency?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result?.MLAConstituency || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
