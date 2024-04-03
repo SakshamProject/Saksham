@@ -1,17 +1,34 @@
-import { getEducationalQualificationSchema } from "../../../../../types/typeMaster/generalMaster/educationalQualificationSchema.js";
-import prisma from "../../../database.js"
+import { getEducationalQualificationTypeSchema } from "../../../../../types/typeMaster/generalMaster/educationalQualificationSchema.js";
+import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
-const getEducationalQualificationDB = async (): Promise<getEducationalQualificationSchema | undefined> => {
-    try {
-        const educationalQualifications = await prisma.educationQualification.findMany({});
-        return educationalQualifications;
+async function getEducationalQualificationByIdDB(id: string | undefined) {
+
+  try {
+    const educationalQualification: getEducationalQualificationTypeSchema | null =
+      await prisma.educationQualificationType.findFirst({
+        where: {
+          id: id,
+        },
+        include: {
+          educationQualification: true,
+        } 
+      });
+    return educationalQualification;
+  } catch (err) {
+    if (err instanceof Error) {
+      throwDatabaseError(err);
     }
-    catch(error) {
-        if(error instanceof Error) {
-            throwDatabaseError(error);
-        }
-    }
+  }
 }
 
-export {getEducationalQualificationDB}
+async function getEducationalQualificationDB() {
+  try {
+    const results = await prisma.educationQualificationType.findMany({})
+    return results
+   } catch (err) {
+    return err;
+  }
+}
+
+export { getEducationalQualificationByIdDB, getEducationalQualificationDB };

@@ -71,7 +71,7 @@ model Service {
   serviceTypeId String 
   createdAt DateTime @default(now())
 
-  serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id])
+  serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id],onDelete: Cascade)
   sevaKendras ServicesOnSevaKendras[]
   divyang     DivyangServiceMapping[]
 }
