@@ -24,17 +24,12 @@ async function getServiceTypeByIdDB(id: string | undefined) {
   }
 }
 
-async function getServiceTypeCount() {
-  const count: number = await prisma.serviceType.count();
-  return count;
-}
 
 async function getServiceTypeDB(
-  skip: number = defaults.skip,
-  take: number = defaults.take,
-  orderByColumn: string = "",
-  sortOrder: sortOrderEnum= sortOrderEnum.ascending,
-  searchText: string = ""
+  prismaTransaction: any,
+  sortOrder: sortOrderEnum= defaults.sortOrder,
+  searchText: string = "",
+ 
 ) {
   try {
     const results = await prisma.serviceType.findMany({
@@ -51,6 +46,7 @@ async function getServiceTypeDB(
       where: {
         name: {
           contains: searchText,
+          mode: "insensitive" 
         },
       },
     });
@@ -61,6 +57,24 @@ async function getServiceTypeDB(
       throwDatabaseError(err);
     }
   }
+}
+
+async function getServiceTypeTotal( prismaTransaction: any,searchText:string|undefined){
+  try{
+    const serviceTypeTotal:number = await prismaTransaction.serviceType.count(
+      {
+        where: {
+          name: { contains: searchText, mode: "insensitive" },
+        },
+      }
+    )
+    return serviceTypeTotal;
+  }catch(err){
+    if (err instanceof Error) {
+      throwDatabaseError(err);
+    }
+  }
+
 }
 
 async function getServiceByServiceTypeIdDB(id: string | undefined) {
@@ -82,6 +96,6 @@ async function getServiceByServiceTypeIdDB(id: string | undefined) {
 export {
   getServiceTypeByIdDB,
   getServiceTypeDB,
-  getServiceTypeCount,
   getServiceByServiceTypeIdDB,
+  getServiceTypeTotal
 };

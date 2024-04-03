@@ -3,11 +3,12 @@ import { getServiceTypeWithServiceSchema } from "../../../../types/typeMaster/ge
 import {
   getServiceByServiceTypeIdDB,
   getServiceTypeByIdDB,
-  getServiceTypeCount,
   getServiceTypeDB,
 } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { Service, ServiceType } from "@prisma/client";
+import { createResponseWithQuery } from "../../../../types/createResponseSchema.js";
+import { getServiceTypeDBTransaction } from "../../../../services/database/typeMaster/generalMaster/serviceType/transaction/read.js";
 
 async function getServiceTypeById(
   request: Request,
@@ -31,24 +32,23 @@ async function getServiceType(
 ) {
   const query = getRequestSchema.parse(request.query);
 
-  const results = await getServiceTypeDB(
+  const result = await getServiceTypeDBTransaction(
     query.start,
     query.rows,
-    query.orderByColumn,
     query.sortOrder,
     query.searchText
   );
 
-  const count: number = await getServiceTypeCount();
+  const count: number = result?.serviceType?.length || 0;
+    const total: number = result?.total || 0;
+    const resultWithRequest = createResponseWithQuery(
+      result?.serviceType|| {},
+      query,
+      total,
+      count
+    );
 
-  response.send({
-    result: results,
-    count: count,
-    start: query.start,
-    rows: query.rows,
-    orderByColumn: query.orderByColumn,
-    orderByDirection: query.sortOrder,
-  });
+  response.send(resultWithRequest);
 }
 
 async function getServiceByServiceTypeId(
