@@ -5,7 +5,7 @@ import { getServiceTypeWithServiceSchema } from "../../../../../types/typeMaster
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
-async function getServiceTypeByIdDB(id: string | undefined) {
+async function getServiceTypeByIdDB(prismaTransaction:any, id: string | undefined) {
   try {
     const serviceType: getServiceTypeWithServiceSchema | null =
       await prisma.serviceType.findUnique({
@@ -16,6 +16,7 @@ async function getServiceTypeByIdDB(id: string | undefined) {
           service: true,
         },
       });
+      console.log(serviceType);
     return serviceType;
   } catch (err) {
     if (err instanceof Error) {
@@ -77,11 +78,14 @@ async function getServiceTypeTotal( prismaTransaction: any,searchText:string|und
 
 }
 
-async function getServiceByServiceTypeIdDB(id: string | undefined) {
+async function getServiceByServiceTypeIdDB(prismaTransaction: any,id: string | undefined,sortOrder:sortOrderEnum=defaults.sortOrder) {
   try {
-    const services: Service[] = await prisma.service.findMany({
+    const services: Service[] = await prismaTransaction.service.findMany({
       where: {
         serviceTypeId: id,
+      },
+      orderBy: {
+        name: sortOrder,
       },
     });
 
@@ -93,9 +97,28 @@ async function getServiceByServiceTypeIdDB(id: string | undefined) {
   }
 }
 
+async function getServiceByServiceTypeIdDBTotal(prismaTransaction: any,id: string | undefined) {
+  try {
+    const total:number = await prismaTransaction.service.count({
+      where: {
+        serviceTypeId: id,
+      },
+   
+    });
+
+    return total;
+  } catch (err) {
+    if (err instanceof Error) {
+      throwDatabaseError(err);
+    }
+  }
+}
+
+
 export {
   getServiceTypeByIdDB,
   getServiceTypeDB,
   getServiceByServiceTypeIdDB,
-  getServiceTypeTotal
+  getServiceTypeTotal,
+  getServiceByServiceTypeIdDBTotal
 };

@@ -1,6 +1,6 @@
 import {  updateServiceTypeRequestSchemaType, updateServiceTypeType } from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
 
-function createUpdateServiceTypeObject(body:updateServiceTypeRequestSchemaType){
+function createUpdateServiceTypeObject(prismaTransaction:any, body:updateServiceTypeRequestSchemaType){
     const UpdateServiceTypeObject:updateServiceTypeType = {
         id:body.id,
         name:body.serviceType

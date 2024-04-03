@@ -1,14 +1,18 @@
 import { Request, Response, NextFunction } from "express";
 import { getServiceTypeWithServiceSchema } from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
+import { getServiceTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
+import getRequestSchema, {
+  getRequestType,
+} from "../../../../types/getRequestSchema.js";
 import {
-  getServiceByServiceTypeIdDB,
-  getServiceTypeByIdDB,
-  getServiceTypeDB,
-} from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
-import getRequestSchema from "../../../../types/getRequestSchema.js";
-import { Service, ServiceType } from "@prisma/client";
-import { createResponseWithQuery } from "../../../../types/createResponseSchema.js";
-import { getServiceTypeDBTransaction } from "../../../../services/database/typeMaster/generalMaster/serviceType/transaction/read.js";
+  createResponseOnlyData,
+  createResponseWithQuery,
+} from "../../../../types/createResponseSchema.js";
+import {
+  getServiceByServiceTypeIdDBTransaction,
+  getServiceTypeDBTransaction,
+} from "../../../../services/database/typeMaster/generalMaster/serviceType/transaction/read.js";
+import prisma from "../../../../services/database/database.js";
 
 async function getServiceTypeById(
   request: Request,
@@ -17,8 +21,9 @@ async function getServiceTypeById(
 ) {
   try {
     const id = request.params.id;
-    const result: getServiceTypeWithServiceSchema | undefined | null =
-      await getServiceTypeByIdDB(id);
+    const serviceType: getServiceTypeWithServiceSchema | undefined | null =
+      await getServiceTypeByIdDB(prisma, id);
+    const result = createResponseOnlyData(serviceType ||{});
     response.send(result);
   } catch (err) {
     next(err);
@@ -30,25 +35,29 @@ async function getServiceType(
   response: Response,
   next: NextFunction
 ) {
-  const query = getRequestSchema.parse(request.query);
+  try {
+    const query = getRequestSchema.parse(request.query);
 
-  const result = await getServiceTypeDBTransaction(
-    query.start,
-    query.rows,
-    query.sortOrder,
-    query.searchText
-  );
+    const result = await getServiceTypeDBTransaction(
+      query.start,
+      query.rows,
+      query.sortOrder,
+      query.searchText
+    );
 
-  const count: number = result?.serviceType?.length || 0;
+    const count: number = result?.serviceType?.length || 0;
     const total: number = result?.total || 0;
     const resultWithRequest = createResponseWithQuery(
-      result?.serviceType|| {},
+      result?.serviceType || {},
       query,
       total,
       count
     );
 
-  response.send(resultWithRequest);
+    response.send(resultWithRequest);
+  } catch (err) {
+    next(err);
+  }
 }
 
 async function getServiceByServiceTypeId(
@@ -56,14 +65,27 @@ async function getServiceByServiceTypeId(
   response: Response,
   next: NextFunction
 ) {
-  const id: string = request.params.serviceTypeId;
-  const result: ServiceType[] | undefined = await getServiceByServiceTypeIdDB(
-    id
-  );
+  try {
+    const query: getRequestType = getRequestSchema.parse(request.query);
+    const id = request.params.serviceTypeId;
+    const result = await getServiceByServiceTypeIdDBTransaction(
+      id,
+      query.sortOrder
+    );
 
-  response.send({
-    result: result,
-  });
+    const count: number = result?.serviceType?.length || 0;
+    const total: number = result?.total || 0;
+    const resultWithRequest = createResponseWithQuery(
+      result?.serviceType || {},
+      query,
+      total,
+      count
+    );
+
+    response.send(resultWithRequest);
+  } catch (err) {
+    next(err);
+  }
 }
 
 export { getServiceTypeById, getServiceType, getServiceByServiceTypeId };
