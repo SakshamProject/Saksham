@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { getServiceTypeWithServiceSchema } from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
-import { getServiceByServiceTypeIdDB, getServiceTypeByIdDB, getServiceTypeCount, getServiceTypeDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
-import getRequestSchema from "../../../getRequest.schema.js";
+import {
+  getServiceByServiceTypeIdDB,
+  getServiceTypeByIdDB,
+  getServiceTypeCount,
+  getServiceTypeDB,
+} from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { Service, ServiceType } from "@prisma/client";
 
 async function getServiceTypeById(
@@ -26,34 +31,39 @@ async function getServiceType(
 ) {
   const query = getRequestSchema.parse(request.query);
 
-    const results = await getServiceTypeDB(
-      query.start,
-      query.rows,
-      query.orderByColumn,
-      query.sortOrder,
-      query.searchText,
-    );
+  const results = await getServiceTypeDB(
+    query.start,
+    query.rows,
+    query.orderByColumn,
+    query.sortOrder,
+    query.searchText
+  );
 
-    const count:number  = await getServiceTypeCount();
+  const count: number = await getServiceTypeCount();
 
-    response.send({
-        result:results,
-        count:count,
-        start:query.start,
-        rows:query.rows,
-        orderByColumn:query.orderByColumn,
-        orderByDirection:query.sortOrder
-    });
+  response.send({
+    result: results,
+    count: count,
+    start: query.start,
+    rows: query.rows,
+    orderByColumn: query.orderByColumn,
+    orderByDirection: query.sortOrder,
+  });
 }
 
- async function getServiceByServiceTypeId(request:Request,response:Response,next:NextFunction){
-  const id :string = request.params.serviceTypeId;
-  const result :ServiceType[]|undefined = await getServiceByServiceTypeIdDB(id);
-  
+async function getServiceByServiceTypeId(
+  request: Request,
+  response: Response,
+  next: NextFunction
+) {
+  const id: string = request.params.serviceTypeId;
+  const result: ServiceType[] | undefined = await getServiceByServiceTypeIdDB(
+    id
+  );
+
   response.send({
-    result:result
+    result: result,
   });
+}
 
- }
-
-export { getServiceTypeById, getServiceType,getServiceByServiceTypeId };
+export { getServiceTypeById, getServiceType, getServiceByServiceTypeId };
