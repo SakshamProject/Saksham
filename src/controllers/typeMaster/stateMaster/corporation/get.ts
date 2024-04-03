@@ -18,13 +18,20 @@ const getCorporation = async (
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result: Corporation[] | undefined = await getCorporationDB(
+    const result = await getCorporationDB(
       query.sortOrder,
       query.start,
       query.rows,
       query.searchText || ""
     );
-    const resultWithRequest = createResponseWithQuery(result || {}, query, 10);
+    const count: number = result?.corporation.length || 0;
+    const total: number = result?.total || 0;
+    const resultWithRequest = createResponseWithQuery(
+      result?.corporation || {},
+      query,
+      count,
+      total
+    );
     response.send(resultWithRequest);
   } catch (error) {
     next(error);
@@ -66,8 +73,13 @@ const getCorporationByDistrictId = async (
         query.start,
         query.rows
       );
-    const resultWithRequest = createResponseWithQuery(result || {}, query, 10);
-    response.send(resultWithRequest);
+    const count: number = result?.length || 0;
+    // const resultWithRequest = createResponseWithQuery(
+    //   result || {},
+    //   query,
+    //   count
+    // );
+    // response.send(resultWithRequest);
   } catch (error) {
     next(error);
   }
