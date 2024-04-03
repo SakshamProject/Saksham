@@ -1,4 +1,4 @@
-import { Service, ServiceType } from "@prisma/client";
+import { Service } from "@prisma/client";
 import { orderByDirectionEnum } from "../../../../../controllers/getRequest.schema.js";
 import defaults from "../../../../../defaults.js";
 import { getServiceTypeWithServiceSchema } from "../../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
