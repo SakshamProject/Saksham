@@ -4,37 +4,36 @@ import { serviceMasterColumnNameMapper } from "../utils/serviceMaster.js";
 
 import throwDatabaseError from "../utils/errorHandler.js";
 import {Prisma} from "@prisma/client";
-import APIError from "../../errors/APIError.js";
-import {StatusCodes} from "http-status-codes";
 
 async function getServicesDB(
-  orderByColumn: string = "serviceName",
-  reverse: "asc" | "desc" = "asc",
+  orderByColumn: string = "createdAt",
+  sortOrder: "asc" | "desc" = "asc",
   skip = defaults.skip,
   take = defaults.take
 ) {
 
   try {
-    // TODO: Interfaces
 
     const query = {
+      select: {
+        id: true,
+        name: true,
+        serviceType: {
+          select: {
+            name: true,
+          }
+        }
+      },
       take: take,
       skip: skip,
-      include: {
-        subType: {
-          include: {
-            serviceType: true,
-          },
-        },
-      },
-      orderBy: serviceMasterColumnNameMapper(orderByColumn, reverse),
+      orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
     };
-
     const services = await prisma.service.findMany(query);
     return services;
   
   } catch (error) {
     if (error instanceof Error) {
+      console.log(error);
       throwDatabaseError(error);
     }
   }
@@ -44,18 +43,13 @@ async function getServiceByIdDB(
   id: string,
 ) {
   try {
-    // TODO: Interfaces
 
     const query = {
       where: {
         id: id
       },
       include: {
-        subType: {
-          include: {
-            serviceType: true,
-          },
-        },
+        serviceType: true,
       },
     };
 
@@ -71,16 +65,14 @@ async function getServiceByIdDB(
 
 async function createServiceByIdDB(
   serviceName: string,
-  serviceSubTypeID: string
+  serviceTypeID: string
 ) {
   try {
-    // When adding using ID, serviceSubType is enough
-    const service = await prisma.service.create({
-      data: {
+    const query: Prisma.ServiceUncheckedCreateInput = {
         name: serviceName,
-        subTypeId: serviceSubTypeID,
-      },
-    });
+        serviceTypeId: serviceTypeID,
+    }
+    const service  = await prisma.service.create({ data: query });
 
     return service;
   }
@@ -92,14 +84,13 @@ async function createServiceByIdDB(
 }
 async function updateServiceByIdDB(
   serviceId: string,
-  serviceSubTypeID:string,
+  serviceTypeID:string,
   serviceName: string
 ) {
-  // When adding using ID, serviceSubType is enough
   try {
 
     const updateData: Prisma.ServiceUncheckedCreateInput = {
-      subTypeId : serviceSubTypeID,
+      serviceTypeId : serviceTypeID,
       name: serviceName
     }
     const service = await prisma.service.update({
@@ -135,10 +126,52 @@ async function deleteServiceByIdDB(serviceId: string) {
   }
 }
 
+async function searchServiceDB(
+  orderByColumn: string = "createdAt",
+  sortOrder: "asc" | "desc" = "asc",
+  skip = defaults.skip,
+  take = defaults.take,
+  searchText: string,
+) {
+
+      try {
+        const query = {
+          where: {
+            OR: [
+              {
+                name: {
+                  contains: searchText,
+                },
+              },
+              {
+                serviceType: {
+                  name: {
+                    contains: searchText,
+                  } 
+                }
+              },
+          ]
+          },
+          orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
+        };
+        
+        const result = await prisma.service.findMany(query);
+        
+        return result;
+      }
+      catch(error) {
+        console.log(error);
+        if (error instanceof Error) {
+          throwDatabaseError(error);
+        }
+      }
+}
+
 export {
   getServicesDB,
   getServiceByIdDB,
   createServiceByIdDB,
   deleteServiceByIdDB,
-  updateServiceByIdDB
+  updateServiceByIdDB,
+  searchServiceDB
 };

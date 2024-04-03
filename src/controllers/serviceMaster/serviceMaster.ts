@@ -1,39 +1,49 @@
 import { NextFunction, Request, Response} from "express";
-import { ZodError } from "zod";
 import { getRequestSchema } from "../../types/zodSchemas.js";
 import { postServiceMasterSchema, putServiceMasterSchema } from "../../types/schemas/serviceMaster/serviceMaster.schema.js";
-import APIError from "../../services/errors/APIError.js";
 import {
   createServiceByIdDB,
   deleteServiceByIdDB,
   getServiceByIdDB,
   getServicesDB,
   updateServiceByIdDB,
+  searchServiceDB
 } from "../../services/database/serviceMaster/serviceMaster.js";
 import generateGetResponse from "../utils/generateGetResponse.js";
 import {getTotalRowsDB} from "../../services/database/database.js";
+import generateSearchResponse from "../utils/generateSearchResponse.js";
 
 async function postService(request: Request, response: Response, next: NextFunction) {
     try {
         const body = postServiceMasterSchema.parse(request.body);
-    const service = await createServiceByIdDB(body.name, body.subTypeId);
+    const service = await createServiceByIdDB(body.name, body.serviceTypeId);
     response.json(service);
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
 async function getServices(request: Request, response: Response, next: NextFunction) {
   try {
     const query = getRequestSchema.parse(request.query);
+    
+    // No need to decrement query (query.start - 1).
+    // It is taken care of by getRequestSchema
+    if (query.searchText) {
+      
+      const services = await searchServiceDB(query.orderBy, query.sortOrder, query.start, query.rows, query.searchText);
+      response.json(generateSearchResponse(query, services));
 
-        // No need to decrement query (query.start - 1).
-        // It is taken care of by getRequestSchema
-        const services = await getServicesDB(query.orderBy, query.reverse, query.start, query.rows);
+    } 
+    else {
+
+      const services = await getServicesDB(query.orderBy, query.sortOrder, query.start, query.rows);
       const total = await getTotalRowsDB("Service");
-        response.json(await generateGetResponse(query, services, total));
+      response.json(generateGetResponse(query, services, total));
+
     }
-    catch (error) {
+  }
+  catch (error) {
       next(error)
     }
   } 
@@ -42,7 +52,7 @@ async function putService(request: Request, response: Response, next: NextFuncti
   try {
     const body = putServiceMasterSchema.parse(request.body)
     console.log("reached controllers")
-    const service = await updateServiceByIdDB(request.params.serviceID,body.subTypeId,body.name);// updateService
+    const service = await updateServiceByIdDB(request.params.serviceID,body.serviceTypeId, body.name);// updateService
     response.json(service);
   } catch (error) {
     next(error)
@@ -72,4 +82,4 @@ async function deleteServiceById(request: Request, response: Response, next: Nex
   }
 }
 
-export { postService, getServices, getServiceByID, deleteServiceById, putService };
+export { postService, getServices, getServiceByID, deleteServiceById, putService};
