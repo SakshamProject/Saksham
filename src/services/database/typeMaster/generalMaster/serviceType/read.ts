@@ -1,16 +1,11 @@
+import { Service, ServiceType } from "@prisma/client";
 import { orderByDirectionEnum } from "../../../../../controllers/getRequest.schema.js";
 import defaults from "../../../../../defaults.js";
-import {
-  getSelectedServiceTypeWithServiceSchema,
-  getServiceTypeWithServiceSchema,
-} from "../../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
-import { serviceTypeColumnNameMapper } from "../../../../utils/typeMaster/generalMaster/serviceType/serviceType.js";
+import { getServiceTypeWithServiceSchema } from "../../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
-
 async function getServiceTypeByIdDB(id: string | undefined) {
-
   try {
     const serviceType: getServiceTypeWithServiceSchema | null =
       await prisma.serviceType.findUnique({
@@ -30,7 +25,6 @@ async function getServiceTypeByIdDB(id: string | undefined) {
 }
 
 async function getServiceTypeCount() {
-
   const count: number = await prisma.serviceType.count();
   return count;
 }
@@ -39,7 +33,7 @@ async function getServiceTypeDB(
   skip: number = defaults.skip,
   take: number = defaults.take,
   orderByColumn: string = "",
-  orderByDirection: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
   searchText: string = ""
 ) {
   try {
@@ -54,32 +48,43 @@ async function getServiceTypeDB(
         },
       },
       orderBy: {
-        name:orderByDirection
+        name: sortOrder,
       },
       where: {
-        OR: [
-          {
-            name: {
-              contains: searchText,
-            },
-          },
-          {
-            service: {
-              some: {
-                name: {
-                  contains: searchText,
-                },
-              },
-            },
-          },
-        ],
+        name: {
+          contains: searchText,
+        },
       },
     });
 
     return results;
   } catch (err) {
-    return err;
+    if (err instanceof Error) {
+      throwDatabaseError(err);
+    }
   }
 }
 
-export { getServiceTypeByIdDB, getServiceTypeDB, getServiceTypeCount };
+async function getServiceByServiceTypeIdDB(id: string | undefined) {
+  
+  try {
+    const services: Service[] = await prisma.service.findMany({
+      where: {
+        serviceTypeId: id,
+      },
+    });
+ 
+    return services;
+  } catch (err) {
+    if (err instanceof Error) {
+      throwDatabaseError(err);
+    }
+  }
+}
+
+export {
+  getServiceTypeByIdDB,
+  getServiceTypeDB,
+  getServiceTypeCount,
+  getServiceByServiceTypeIdDB,
+};

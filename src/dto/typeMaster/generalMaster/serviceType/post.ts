@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
-import { postRequestSchemaType } from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
+import { serviceTypeRequestSchemaType} from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
 
-function createPostServiceTypeDBObject(body:postRequestSchemaType){
+function createPostServiceTypeDBObject(body:serviceTypeRequestSchemaType){
 
     const postServiceTypeDBObject:Prisma.ServiceTypeCreateInput = {
         name:body.serviceType
