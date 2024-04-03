@@ -38,8 +38,6 @@ async function getServiceTypeDB(
 ) {
   try {
     const results = await prisma.serviceType.findMany({
-      skip: skip,
-      take: take,
       include: {
         service: {
           select: {
