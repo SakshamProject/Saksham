@@ -5,14 +5,15 @@ import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getTownPanchayatDB = async (
+  prismaTransaction: any,
   sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take,
   searchText: string
 ): Promise<TownPanchayat[] | undefined> => {
   try {
-    const townPanchayats: TownPanchayat[] = await prisma.townPanchayat.findMany(
-      {
+    const townPanchayats: TownPanchayat[] =
+      await prismaTransaction.townPanchayat.findMany({
         where: {
           name: {
             contains: searchText,
@@ -24,23 +25,41 @@ const getTownPanchayatDB = async (
         },
         skip: start,
         take: rows,
-      }
-    );
+      });
     return townPanchayats;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+const getTownPanchayatDBTotal = async (
+  prismaTransaction: any,
+  searchText: string
+) => {
+  try {
+    const townPanchayatsTotal = await prismaTransaction.townPanchayat.count({
+      where: {
+        name: {
+          contains: searchText,
+          mode: "insensitive",
+        },
+      },
+    });
+    return townPanchayatsTotal;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
 
 const getTownPanchayatByDistrictIdDB = async (
+  prismaTransaction: any,
   districtId: string,
   sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<TownPanchayat[] | undefined> => {
   try {
-    const townPanchayats: TownPanchayat[] = await prisma.townPanchayat.findMany(
-      {
+    const townPanchayats: TownPanchayat[] =
+      await prismaTransaction.townPanchayat.findMany({
         where: {
           districtId: districtId,
         },
@@ -49,14 +68,27 @@ const getTownPanchayatByDistrictIdDB = async (
         },
         skip: start,
         take: rows,
-      }
-    );
+      });
     return townPanchayats;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-
+const getTownPanchayatByDistrictIdDBTotal = async (
+  prismaTransaction: any,
+  districtId: string
+) => {
+  try {
+    const townPanchayatsTotal = await prismaTransaction.townPanchayat.count({
+      where: {
+        districtId: districtId,
+      },
+    });
+    return townPanchayatsTotal;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 const getTownPanchayatByIdDB = async (
   id: string,
   sortOrder: sortOrderEnum = defaults.sortOrder,
@@ -85,6 +117,8 @@ const getTownPanchayatByIdDB = async (
 
 export {
   getTownPanchayatDB,
+  getTownPanchayatDBTotal,
   getTownPanchayatByDistrictIdDB,
+  getTownPanchayatByDistrictIdDBTotal,
   getTownPanchayatByIdDB,
 };

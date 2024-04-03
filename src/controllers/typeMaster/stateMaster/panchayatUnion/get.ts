@@ -1,8 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  getPanchayatUnionByDistrictIdDB,
-  getPanchayatUnionByIdDB,
-} from "../../../../services/database/typeMaster/stateMaster/panchayatUnion/read.js";
+import { getPanchayatUnionByIdDB } from "../../../../services/database/typeMaster/stateMaster/panchayatUnion/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
 import {
   createResponseOnlyData,

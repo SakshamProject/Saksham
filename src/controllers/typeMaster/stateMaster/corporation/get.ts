@@ -1,8 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  getCorporationByDistrictIdDB,
-  getCorporationByIdDB,
-} from "../../../../services/database/typeMaster/stateMaster/corporation/read.js";
+import { getCorporationByIdDB } from "../../../../services/database/typeMaster/stateMaster/corporation/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
 import {
   createResponseOnlyData,

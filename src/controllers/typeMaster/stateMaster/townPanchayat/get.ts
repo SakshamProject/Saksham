@@ -1,11 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  getTownPanchayatByDistrictIdDB,
-  getTownPanchayatByIdDB,
-  getTownPanchayatDB,
-} from "../../../../services/database/typeMaster/stateMaster/townPanchayat/read.js";
+import { getTownPanchayatByIdDB } from "../../../../services/database/typeMaster/stateMaster/townPanchayat/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
-import { TownPanchayat } from "../../../../types/typeMaster/stateMaster/townPanchayatSchema.js";
+import {
+  createResponseOnlyData,
+  createResponseWithQuery,
+} from "../../../../types/createResponseSchema.js";
+import {
+  getTownPanchayatByDistrictIdDBTransaction,
+  getTownPanchayatDBTransaction,
+} from "../../../../services/database/typeMaster/stateMaster/townPanchayat/transaction/read.js";
 
 const getTownPanchayat = async (
   request: Request,
@@ -14,13 +17,21 @@ const getTownPanchayat = async (
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result: TownPanchayat[] | undefined = await getTownPanchayatDB(
+    const result = await getTownPanchayatDBTransaction(
       query.sortOrder,
       query.start,
       query.rows,
       query.searchText || ""
     );
-    response.send(result);
+    const count: number = result?.townPanchayat?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result?.townPanchayat || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -34,14 +45,14 @@ const getTownPanchayatById = async (
   try {
     const id = request.params.id;
     const query = getRequestSchema.parse(request.query);
-    const result: TownPanchayat | undefined | null =
-      await getTownPanchayatByIdDB(
-        id,
-        query.sortOrder,
-        query.start,
-        query.rows
-      );
-    response.send(result);
+    const result = await getTownPanchayatByIdDB(
+      id,
+      query.sortOrder,
+      query.start,
+      query.rows
+    );
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -54,14 +65,21 @@ const getTownPanchayatByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const query = getRequestSchema.parse(request.query);
-    const result: TownPanchayat[] | undefined =
-      await getTownPanchayatByDistrictIdDB(
-        districtId,
-        query.sortOrder,
-        query.start,
-        query.rows
-      );
-    response.send(result);
+    const result = await getTownPanchayatByDistrictIdDBTransaction(
+      districtId,
+      query.sortOrder,
+      query.start,
+      query.rows
+    );
+    const count: number = result?.townPanchayat?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

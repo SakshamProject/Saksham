@@ -1,11 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  getTalukByDistrictIdDB,
-  getTalukByIdDB,
-  getTalukDB,
-} from "../../../../services/database/typeMaster/stateMaster/taluk/read.js";
+import { getTalukByIdDB } from "../../../../services/database/typeMaster/stateMaster/taluk/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
-import { Taluk } from "../../../../types/typeMaster/stateMaster/talukSchema.js";
+import {
+  createResponseOnlyData,
+  createResponseWithQuery,
+} from "../../../../types/createResponseSchema.js";
+import {
+  getTalukByDistrictIdDBTransaction,
+  getTalukDBTransaction,
+} from "../../../../services/database/typeMaster/stateMaster/taluk/transaction/read.js";
 
 const getTaluk = async (
   request: Request,
@@ -14,13 +17,21 @@ const getTaluk = async (
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result: Taluk[] | undefined = await getTalukDB(
+    const result = await getTalukDBTransaction(
       query.sortOrder,
       query.start,
       query.rows,
       query.searchText || ""
     );
-    response.send(result);
+    const count: number = result?.taluk?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result?.taluk || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -34,13 +45,14 @@ const getTalukById = async (
   try {
     const id = request.params.id;
     const query = getRequestSchema.parse(request.query);
-    const result: Taluk | undefined | null = await getTalukByIdDB(
+    const result = await getTalukByIdDB(
       id,
       query.sortOrder,
       query.start,
       query.rows
     );
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -53,13 +65,21 @@ const getTalukByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const query = getRequestSchema.parse(request.query);
-    const result: Taluk[] | undefined = await getTalukByDistrictIdDB(
+    const result = await getTalukByDistrictIdDBTransaction(
       districtId,
       query.sortOrder,
       query.start,
       query.rows
     );
-    response.send(result);
+    const count: number = result?.taluk?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
