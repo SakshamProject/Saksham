@@ -22,17 +22,51 @@ type getServiceTypeWithServiceSchema = Prisma.ServiceTypeGetPayload<{
       }
 }>
 
-const postRequestSchema= z.object({
+type getSelectedServiceSchema = Prisma.ServiceGetPayload<{
+    select:{
+        id:true,
+        name:true
+    }
+}>
+
+const serviceTypeRequestSchema= z.object({
     id: inputFieldSchema.optional(),
     serviceType: inputFieldSchema.transform((value) => value.toUpperCase()),
     serviceName:z.array(inputFieldSchema).transform((value) => value.map((serviceName) => serviceName.toUpperCase())),
 
 })
 
-type postRequestSchemaType = z.infer<typeof postRequestSchema>;
+const serviceNameSchema = z.object({
+    id: inputFieldSchema.optional(),
+    name: inputFieldSchema.transform((value) => value.toUpperCase()),
+});
+
+const updateServiceTypeRequestSchema = z.object({
+    id: inputFieldSchema.optional(),
+    serviceType: inputFieldSchema.transform((value) => value.toUpperCase()),
+    serviceName: z.array(serviceNameSchema)
+});
+
+type updateServiceTypeRequestSchemaType= z.infer<typeof updateServiceTypeRequestSchema>;
+
+type serviceNameSchemaType  = z.infer<typeof serviceNameSchema>;
+
+type serviceTypeRequestSchemaType= z.infer<typeof serviceTypeRequestSchema>;
 
 type postServiceTypeType = Prisma.ServiceTypeCreateInput;
 
 type postServiceType = Prisma.ServiceCreateInput;
 
-  export{getServiceTypeWithServiceSchema, postRequestSchema, postRequestSchemaType,postServiceTypeType ,postServiceType,getSelectedServiceTypeWithServiceSchema};
+type updateServiceTypeType = Prisma.ServiceTypeUpdateInput;
+
+
+  export{getServiceTypeWithServiceSchema,
+     serviceTypeRequestSchema,
+      serviceTypeRequestSchemaType,
+      postServiceTypeType ,
+      postServiceType,
+      getSelectedServiceTypeWithServiceSchema,
+      updateServiceTypeType,getSelectedServiceSchema,
+      updateServiceTypeRequestSchema,
+      updateServiceTypeRequestSchemaType,
+      serviceNameSchemaType};

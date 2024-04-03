@@ -1,10 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import {
-    getServiceTypeWithServiceSchema,
-  postRequestSchema,
-  postRequestSchemaType,
+    serviceTypeRequestSchema,
+  serviceTypeRequestSchemaType,
   postServiceType,
-  postServiceTypeType,
 } from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
 import { Prisma, Service, ServiceType } from "@prisma/client";
 import {
@@ -15,7 +13,6 @@ import {
   createServiceDB,
   createServiceTypeDB,
 } from "../../../../services/database/typeMaster/generalMaster/serviceType/create.js";
-import { getServiceTypeById } from "./get.js";
 import { getServiceTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
 
 
@@ -24,7 +21,7 @@ async function postServiceType(
   response: Response,
   next: NextFunction
 ) {
-  try{const body: postRequestSchemaType = postRequestSchema.parse(request.body);
+  try{const body: serviceTypeRequestSchemaType= serviceTypeRequestSchema.parse(request.body);
 
   const postServiceTypeDBObject = createPostServiceTypeDBObject(body);
 

@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { getServiceTypeWithServiceSchema } from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
-import { getServiceTypeByIdDB, getServiceTypeCount, getServiceTypeDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
+import { getServiceByServiceTypeIdDB, getServiceTypeByIdDB, getServiceTypeCount, getServiceTypeDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
 import getRequestSchema from "../../../getRequest.schema.js";
+import { Service, ServiceType } from "@prisma/client";
 
 async function getServiceTypeById(
   request: Request,
@@ -10,7 +11,6 @@ async function getServiceTypeById(
 ) {
   try {
     const id = request.params.id;
-    console.log(id);
     const result: getServiceTypeWithServiceSchema | undefined | null =
       await getServiceTypeByIdDB(id);
     response.send(result);
@@ -30,7 +30,7 @@ async function getServiceType(
       query.start,
       query.rows,
       query.orderByColumn,
-      query.orderByDirection,
+      query.sortOrder,
       query.searchText,
     );
 
@@ -42,8 +42,18 @@ async function getServiceType(
         start:query.start,
         rows:query.rows,
         orderByColumn:query.orderByColumn,
-        orderByDirection:query.orderByDirection
+        orderByDirection:query.sortOrder
     });
 }
 
-export { getServiceTypeById, getServiceType };
+ async function getServiceByServiceTypeId(request:Request,response:Response,next:NextFunction){
+  const id :string = request.params.serviceTypeId;
+  const result :ServiceType[]|undefined = await getServiceByServiceTypeIdDB(id);
+  
+  response.send({
+    result:result
+  });
+
+ }
+
+export { getServiceTypeById, getServiceType,getServiceByServiceTypeId };
