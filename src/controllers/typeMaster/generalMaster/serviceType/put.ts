@@ -25,13 +25,13 @@ import { getServiceByServiceTypeIdDB } from "../../../../services/database/typeM
 
 }
 
-async function deleteUncheckedServices(exisitingServicesId:string[],updatedServicesId:string[]){
+async function deleteUncheckedServices(existingServicesId:string[],updatedServicesId:string[]){
     
     try{
-        for(let exisitingId of exisitingServicesId){
+        for(let existingId of existingServicesId){
 
-        if(!updatedServicesId.includes(exisitingId)){
-            const deletedService = await deleteServiceTypeDB(exisitingId);
+        if(!updatedServicesId.includes(existingId)){
+            const deletedService = await deleteServiceTypeDB(existingId);
         }
     }
 }catch(err){

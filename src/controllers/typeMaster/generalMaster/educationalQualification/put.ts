@@ -75,10 +75,11 @@ async function createCheckedEducationQualifications(educationQualifications:educ
 async function putEducationQualificationType(request:Request, response:Response,next:NextFunction){
 
     try{
-        const body:updateEducationQualificationTypeRequestSchemaType= updateEducationQualificationTypeRequestSchema.parse(request.body);
+        console.log("enters");
+        const body:updateEducationQualificationTypeRequestSchemaType = updateEducationQualificationTypeRequestSchema.parse(request.body);
 
         const updateEducationQualificationTypeObject = createUpdateEducationQualificationTypeObject(body);
-    
+        console.log(updateEducationQualificationTypeObject)
         const updatedEducationQualificationType:getEducationQualificationTypeWithEducationQualificationSchema|undefined = await updateEducationQualificationTypeDB(updateEducationQualificationTypeObject,body.id);
 
         const existingEducationQualifications = await getEducationQualificationByEducationQualificationTypeIdDB(body.id);
