@@ -3,14 +3,14 @@ import throwDatabaseError from "../../../utils/errorHandler.js";
 
 async function deleteEducationQualificationTypeDB(id:string){
     try
- {   const deletedService = prisma.serviceType.delete(
+ {   const deletedEducationQualification = await prisma.educationQualificationType.delete(
         {
             where:{
                 id:id
             }
         }
     )
-    return deletedService;
+    return deletedEducationQualification;
 }catch(err){
     
     if (err instanceof Error) {
