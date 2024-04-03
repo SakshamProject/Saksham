@@ -2,14 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import {
   getCorporationByDistrictIdDB,
   getCorporationByIdDB,
-  getCorporationDB,
 } from "../../../../services/database/typeMaster/stateMaster/corporation/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
-import { Corporation } from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
 import {
   createResponseOnlyData,
   createResponseWithQuery,
 } from "../../../../types/createResponseSchema.js";
+import {
+  getCorporationByDistrictIdDBTransaction,
+  getCorporationDBTransaction,
+} from "../../../../services/database/typeMaster/stateMaster/corporation/transaction/read.js";
 
 const getCorporation = async (
   request: Request,
@@ -18,7 +20,7 @@ const getCorporation = async (
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result = await getCorporationDB(
+    const result = await getCorporationDBTransaction(
       query.sortOrder,
       query.start,
       query.rows,
@@ -29,8 +31,8 @@ const getCorporation = async (
     const resultWithRequest = createResponseWithQuery(
       result?.corporation || {},
       query,
-      count,
-      total
+      total,
+      count
     );
     response.send(resultWithRequest);
   } catch (error) {
@@ -46,7 +48,7 @@ const getCorporationById = async (
   try {
     const id = request.params.id;
     const query = getRequestSchema.parse(request.query);
-    const result: Corporation | undefined | null = await getCorporationByIdDB(
+    const result = await getCorporationByIdDB(
       id,
       query.sortOrder,
       query.start,
@@ -66,20 +68,21 @@ const getCorporationByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const query = getRequestSchema.parse(request.query);
-    const result: Corporation[] | undefined =
-      await getCorporationByDistrictIdDB(
-        districtId,
-        query.sortOrder,
-        query.start,
-        query.rows
-      );
-    const count: number = result?.length || 0;
-    // const resultWithRequest = createResponseWithQuery(
-    //   result || {},
-    //   query,
-    //   count
-    // );
-    // response.send(resultWithRequest);
+    const result = await getCorporationByDistrictIdDBTransaction(
+      districtId,
+      query.sortOrder,
+      query.start,
+      query.rows
+    );
+    const count: number = result?.corporation?.length || 0;
+    const total: number = result?.total || 0;
+    const resultWithRequest = createResponseWithQuery(
+      result || {},
+      query,
+      total,
+      count
+    );
+    response.send(resultWithRequest);
   } catch (error) {
     next(error);
   }

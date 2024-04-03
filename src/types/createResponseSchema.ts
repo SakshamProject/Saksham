@@ -9,8 +9,8 @@ const createResponseOnlyData = (result: Object) => {
 const createResponseWithQuery = (
   result: Object,
   requestQuery: getRequestType,
-  count: number,
-  total: number
+  total: number,
+  count: number
 ) => {
   const createdResponse = {
     data: result,
@@ -25,8 +25,8 @@ const createResponseForFilter = (
   result: Object,
   requestQuery: getRequestType,
   total: number,
-  filters: Object,
-  count: number
+  count: number,
+  filters: Object
 ) => {
   const createdResponse = {
     data: result,

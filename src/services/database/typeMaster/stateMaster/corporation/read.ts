@@ -3,61 +3,21 @@ import defaults from "../../../../../defaults.js";
 import { Corporation } from "../../../../../types/typeMaster/stateMaster/corporationSchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
-import { Prisma } from "@prisma/client";
 
 const getCorporationDB = async (
+  prismaTransaction: any,
   sortOrder: sortOrderEnum = defaults.sortOrder,
   start: number = defaults.skip,
   rows: number = defaults.take,
   searchText: string
 ) => {
-  const corporationTransaction = await prisma.$transaction(
-    async (prismaTransaction) => {
-      try {
-        const corporation = await prismaTransaction.corporation.findMany({
-          where: {
-            name: {
-              contains: searchText,
-              mode: "insensitive",
-            },
-          },
-          orderBy: {
-            name: sortOrder,
-          },
-          skip: start,
-          take: rows,
-        });
-        const total = await prisma.corporation.count({
-          where: {
-            name: { contains: searchText, mode: "insensitive" },
-          },
-        });
-        return { corporation, total };
-      } catch (error) {
-        await prismaTransaction.$executeRaw;
-        if (error instanceof Error) throwDatabaseError(error);
-      }
-    },
-    {
-      maxWait: 5000, // default: 2000
-      timeout: 10000, // default: 5000
-      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
-    }
-  );
-
-  return corporationTransaction;
-};
-
-const getCorporationByDistrictIdDB = async (
-  districtId: string,
-  sortOrder: sortOrderEnum = defaults.sortOrder,
-  start: number = defaults.skip,
-  rows: number = defaults.take
-): Promise<Corporation[] | undefined> => {
   try {
-    const corporations: Corporation[] = await prisma.corporation.findMany({
+    const corporation = await prismaTransaction.corporation.findMany({
       where: {
-        districtId: districtId,
+        name: {
+          contains: searchText,
+          mode: "insensitive",
+        },
       },
       orderBy: {
         name: sortOrder,
@@ -65,17 +25,62 @@ const getCorporationByDistrictIdDB = async (
       skip: start,
       take: rows,
     });
+    return corporation;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+const getCorporationDBTotal = async (
+  prismaTransaction: any,
+  searchText: string
+) => {
+  try {
+    const corporationsTotal: number = await prismaTransaction.corporation.count(
+      {
+        where: {
+          name: { contains: searchText, mode: "insensitive" },
+        },
+      }
+    );
+    return corporationsTotal;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+const getCorporationByDistrictIdDB = async (
+  prismaTransaction: any,
+  districtId: string,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
+  start: number = defaults.skip,
+  rows: number = defaults.take
+): Promise<Corporation[] | undefined> => {
+  try {
+    const corporations: Corporation[] =
+      await prismaTransaction.corporation.findMany({
+        where: {
+          districtId: districtId,
+        },
+        orderBy: {
+          name: sortOrder,
+        },
+        skip: start,
+        take: rows,
+      });
     return corporations;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-const getCorporationByDistrictIdDBTotal = async (districtId: string) => {
-  const corporationsTotal: number = await prisma.corporation.count({
+const getCorporationByDistrictIdDBTotal = async (
+  prismaTransaction: any,
+  districtId: string
+) => {
+  const corporationsTotal: number = await prismaTransaction.corporation.count({
     where: {
       districtId: districtId,
     },
   });
+  return corporationsTotal;
 };
 const getCorporationByIdDB = async (
   id: string,
@@ -103,16 +108,10 @@ const getCorporationByIdDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-const getCorporationByIdDBTotal = async (id: string) => {
-  const corporationTotal = await prisma.corporation.count({
-    where: {
-      id: id,
-    },
-  });
-};
-
 export {
   getCorporationDB,
+  getCorporationDBTotal,
   getCorporationByDistrictIdDB,
+  getCorporationByDistrictIdDBTotal,
   getCorporationByIdDB,
 };
