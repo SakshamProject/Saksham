@@ -1,8 +1,7 @@
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
-async function deleteServiceTypeDB(id:string){
-
+async function deleteEducationQualificationTypeDB(id:string){
     try
  {   const deletedService = prisma.serviceType.delete(
         {
@@ -19,4 +18,4 @@ async function deleteServiceTypeDB(id:string){
       }
 }
 }
-export{deleteServiceTypeDB}
+export{ deleteEducationQualificationTypeDB }
