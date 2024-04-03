@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -61,14 +62,14 @@ model ServicesOnSevaKendras {
 model ServiceType {
   id       String           @id @default(uuid())
   name     String           @unique
- service  Service[]
+  service  Service[]
 }
 
 model Service {
   id        String   @id @default(uuid())
   name      String   @unique
   updatedAt DateTime @updatedAt
-  serviceTypeId String 
+  serviceTypeId String
   createdAt DateTime @default(now())
 
   serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id],onDelete: Cascade)
@@ -196,13 +197,13 @@ model DivyangDetails {
   districtId      String?
   isRural Boolean?
   villageName     String?
-  panchayatUnion  String?
-  taluk           String?
-  townPanchayat   String?
-  municipality    String?
-  corporation     String?
-  MLAConstituency String?
-  MPConstituancy  String?
+  panchayatUnionId  String?
+  talukId          String?
+  townPanchayatId   String?
+  municipalityId    String?
+  corporationId     String?
+  MLAConstituencyId String?
+  MPConstituancyId  String?
   pincode         Int?
 
   isDisabilitySinceBirth    Boolean?
@@ -230,7 +231,13 @@ model DivyangDetails {
   spouseIncome     Int?
 
   communityCategory CommunityCategory @relation(fields: [communityCategoryId], references: [id])
-
+  corporation Corporation? @relation(fields: [corporationId],references: [id])
+  mlaconstituency MLAConstituency? @relation(fields: [MLAConstituencyId],references: [id])
+  mpconstituency MPConstituency? @relation(fields: [MPConstituancyId],references: [id])
+  municipality Municipality? @relation(fields: [municipalityId],references: [id])
+  townPanchayat TownPanchayat? @relation(fields: [townPanchayatId],references: [id])
+  taluk Taluk? @relation(fields: [talukId],references: [id])
+  panchayatUnion PanchayatUnion? @relation(fields: [panchayatUnionId],references: [id])
   district District? @relation(fields: [districtId], references: [id])
   disabilities          DisabilityOfDivyang[]
   eductionQualification DivyangEducationalQualification[]
@@ -295,64 +302,78 @@ model DisabilityOfDivyang {
 
 model DisabilitySubType {
   id               String @id @default(uuid())
-  name             String
+  name             String @unique
   disabilityTypeId String
 
   divyang    DisabilityOfDivyang[]
-  disability DisabilityType        @relation(fields: [disabilityTypeId], references: [id])
+  disability DisabilityType        @relation(fields: [disabilityTypeId], references: [id],onDelete: Cascade)
 }
 
 model DisabilityType {
   id         String              @id @default(uuid())
-  name       String
+  name       String              @unique
   disability DisabilitySubType[]
 }
 
 model MPConstituency {
   id         String   @id @default(uuid())
-  name       String
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model MLAConstituency {
-  Id         String   @id @default(uuid())
-  name       String
+  id         String   @id @default(uuid())
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model PanchayatUnion {
   id         String   @id @default(uuid())
-  name       String
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  divyangDetails DivyangDetails[]
 }
 
 model TownPanchayat {
   id         String   @id @default(uuid())
-  name       String
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model Municipality {
   id         String   @id @default(uuid())
-  name       String
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model Corporation {
   id         String   @id @default(uuid())
-  name       String
+  name       String   @unique
   districtId String
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
+}
+
+model Taluk {
+  id       String @id @default(uuid())
+  name     String @unique
+  districtId String
+  district   District @relation(fields: [districtId],references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model CommunityCategory {
   id      String                   @id @default(uuid())
-  name    String
+  name    String                   @unique
   divyang DivyangDetails[]
 }
 
@@ -369,15 +390,15 @@ model DivyangEducationalQualification {
 // e.g. 1 - b.tech (IT)
 model EducationQualification {
   id      String                            @id @default(uuid())
-  name    String
+  name    String                            @unique
   educationQualificationTypeId String
   educationQualificationType EducationQualificationType @relation(fields: [educationQualificationTypeId],references: [id])
   divyang DivyangEducationalQualification[]
 }
 
 model EducationQualificationType {
-  id String @id @default(uuid())
-  name String
+  id String                             @id @default(uuid())
+  name String                           @unique
   educationQualification EducationQualification[]
 }
 
@@ -393,6 +414,7 @@ enum BloodGroup {
   O_POSITIVE
   O_NEGATIVE
   B_POSITIVE
+  B_NEGATIVE
   A_POSITIVE
   A_NEGATIVE
   AB_POSITIVE
@@ -412,9 +434,8 @@ enum CertificateIssueAuthority {
   PRIVATE_DOCTOR
 }
 
-model Taluk {
-  id       String @id @default(uuid())
-  name     String
-  districtId String
-  district   District @relation(fields: [districtId],references: [id])
+
+model generalMasters{
+  id      String @id @default(uuid())
+  name    String
 }
