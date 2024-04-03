@@ -11,11 +11,11 @@ async function deleteEducationQualificationTypeDB(id:string){
         }
     )
     return deletedEducationQualification;
-}catch(err){
     
+}catch(err){
     if (err instanceof Error) {
         throwDatabaseError(err);
       }
-}
+    }
 }
 export{ deleteEducationQualificationTypeDB }
