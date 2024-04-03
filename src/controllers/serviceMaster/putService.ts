@@ -1,15 +1,16 @@
 import {NextFunction, Request, Response} from "express";
 import {putServiceMasterSchema} from "../../types/schemas/serviceMaster/serviceMaster.schema.js";
-import {updateServiceByIdDB} from "../../services/database/serviceMaster/serviceMaster.js";
+import {updateServiceDB} from "../../services/database/serviceMaster/serviceMaster.js";
+import {createServiceDBInputObject} from "../../dto/serviceMaster/postService.js";
 
 async function putService(request: Request, response: Response, next: NextFunction) {
     try {
-        const body = putServiceMasterSchema.parse(request.body)
-        console.log("reached controllers")
-        const service = await updateServiceByIdDB(request.params.serviceID, body.serviceTypeId, body.name);// updateService
+        const body = putServiceMasterSchema.parse(request.body);
+        const serviceUpdate = createServiceDBInputObject(body);
+        const service = await updateServiceDB(serviceUpdate, request.params.serviceID);
         response.json(service);
     } catch (error) {
-        next(error)
+        next(error);
     }
 }
 

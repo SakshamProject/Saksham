@@ -70,17 +70,9 @@ async function getServiceByIdDB(
   }
 }
 
-async function createServiceByIdDB(
-  serviceName: string,
-  serviceTypeID: string
-) {
+async function createServiceDB(query: Prisma.ServiceUncheckedCreateInput) {
   try {
-    const query: Prisma.ServiceUncheckedCreateInput = {
-        name: serviceName,
-        serviceTypeId: serviceTypeID,
-    }
     const service  = await prisma.service.create({ data: query });
-
     return service;
   }
   catch (error) {
@@ -89,22 +81,14 @@ async function createServiceByIdDB(
     }
   }
 }
-async function updateServiceByIdDB(
-  serviceId: string,
-  serviceTypeID:string,
-  serviceName: string
-) {
-  try {
 
-    const updateData: Prisma.ServiceUncheckedCreateInput = {
-      serviceTypeId : serviceTypeID,
-      name: serviceName
-    }
+async function updateServiceDB(serviceUpdate: Prisma.ServiceUncheckedUpdateInput, serviceId: string) {
+  try {
     const service = await prisma.service.update({
       where: {
         id: serviceId
       },
-      data: updateData,
+      data: serviceUpdate,
     });
     return service;
   }
@@ -135,7 +119,7 @@ async function deleteServiceByIdDB(serviceId: string) {
 export {
   getServicesDB,
   getServiceByIdDB,
-  createServiceByIdDB,
+  createServiceDB,
   deleteServiceByIdDB,
-  updateServiceByIdDB
+  updateServiceDB
 };
