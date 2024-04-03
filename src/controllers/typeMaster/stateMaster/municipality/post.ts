@@ -4,6 +4,7 @@ import {
   municipalitySchema,
 } from "../../../../types/typeMaster/stateMaster/municipalitySchema.js";
 import { createMunicipalityDB } from "../../../../services/database/typeMaster/stateMaster/municipality/create.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const postMunicipality = async (
   request: Request,
@@ -15,7 +16,8 @@ const postMunicipality = async (
     const result: Municipality | undefined = await createMunicipalityDB(
       municipality
     );
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

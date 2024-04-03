@@ -4,6 +4,7 @@ import {
   MPConstituencySchema,
 } from "../../../../types/typeMaster/stateMaster/MPConstituencySchema.js";
 import { createMPConstituencyDB } from "../../../../services/database/typeMaster/stateMaster/MPConstituency/create.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const postMPConstituency = async (
   request: Request,
@@ -17,7 +18,8 @@ const postMPConstituency = async (
     const result: MPConstituency | undefined = await createMPConstituencyDB(
       MPConstituency
     );
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

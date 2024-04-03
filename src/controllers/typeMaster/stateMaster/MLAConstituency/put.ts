@@ -4,6 +4,7 @@ import {
   MLAConstituencySchema,
 } from "../../../../types/typeMaster/stateMaster/MLAConstituencySchema.js";
 import { updateMLAConstituencyDB } from "../../../../services/database/typeMaster/stateMaster/MLAConstituency/update.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const putMLAConstituency = async (
   request: Request,
@@ -18,7 +19,8 @@ const putMLAConstituency = async (
       MLAConstituency
     );
 
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

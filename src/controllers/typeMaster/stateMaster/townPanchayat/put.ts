@@ -4,6 +4,7 @@ import {
   townPanchayatSchema,
 } from "../../../../types/typeMaster/stateMaster/townPanchayatSchema.js";
 import { updateTownPanchayatDB } from "../../../../services/database/typeMaster/stateMaster/townPanchayat/update.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const putTownPanchayat = async (
   request: Request,
@@ -18,7 +19,8 @@ const putTownPanchayat = async (
       townPanchayat
     );
 
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

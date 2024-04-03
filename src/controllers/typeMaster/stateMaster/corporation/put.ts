@@ -4,6 +4,7 @@ import {
   corporationSchema,
 } from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
 import { updateCorporationDB } from "../../../../services/database/typeMaster/stateMaster/corporation/update.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const putCorporation = async (
   request: Request,
@@ -18,7 +19,8 @@ const putCorporation = async (
       corporation
     );
 
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

@@ -4,6 +4,7 @@ import {
   corporationSchema,
 } from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
 import { createCorporationDB } from "../../../../services/database/typeMaster/stateMaster/corporation/create.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const postCorporation = async (
   request: Request,
@@ -15,7 +16,8 @@ const postCorporation = async (
     const result: Corporation | undefined = await createCorporationDB(
       corporation
     );
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

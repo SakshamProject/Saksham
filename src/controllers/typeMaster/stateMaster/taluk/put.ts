@@ -4,6 +4,7 @@ import {
   talukSchema,
 } from "../../../../types/typeMaster/stateMaster/talukSchema.js";
 import { updateTalukDB } from "../../../../services/database/typeMaster/stateMaster/taluk/update.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const putTaluk = async (
   request: Request,
@@ -13,12 +14,10 @@ const putTaluk = async (
   try {
     const id = request.params.id;
     const taluk = talukSchema.parse(request.body);
-    const result: Taluk | undefined = await updateTalukDB(
-      id,
-      taluk
-    );
+    const result: Taluk | undefined = await updateTalukDB(id, taluk);
 
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

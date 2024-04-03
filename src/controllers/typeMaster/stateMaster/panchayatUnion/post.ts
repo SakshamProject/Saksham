@@ -4,6 +4,7 @@ import {
   panchayatUnionSchema,
 } from "../../../../types/typeMaster/stateMaster/panchayatUnionSchema.js";
 import { createPanchayatUnionDB } from "../../../../services/database/typeMaster/stateMaster/panchayatUnion/create.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const postPanchayatUnion = async (
   request: Request,
@@ -15,7 +16,8 @@ const postPanchayatUnion = async (
     const result: PanchayatUnion | undefined = await createPanchayatUnionDB(
       panchayatUnion
     );
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

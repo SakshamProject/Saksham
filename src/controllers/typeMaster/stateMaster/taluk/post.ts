@@ -4,6 +4,7 @@ import {
   talukSchema,
 } from "../../../../types/typeMaster/stateMaster/talukSchema.js";
 import { createTalukDB } from "../../../../services/database/typeMaster/stateMaster/taluk/create.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const postTaluk = async (
   request: Request,
@@ -15,7 +16,8 @@ const postTaluk = async (
     const result: Taluk | undefined = await createTalukDB(
       taluk
     );
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { deleteMPConstituencyDB } from "../../../../services/database/typeMaster/stateMaster/MPConstituency/delete.js";
 import { MPConstituency } from "../../../../types/typeMaster/stateMaster/MPConstituencySchema.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const deleteMPConstituency = async (
   request: Request,
@@ -10,7 +11,8 @@ const deleteMPConstituency = async (
   try {
     const id: string = request.params.id;
     const result: MPConstituency | undefined = await deleteMPConstituencyDB(id);
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
