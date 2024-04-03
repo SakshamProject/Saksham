@@ -7,9 +7,11 @@ import {
   getServiceByIdDB,
   getServicesDB,
   updateServiceByIdDB,
+  searchServiceDB
 } from "../../services/database/serviceMaster/serviceMaster.js";
 import generateGetResponse from "../utils/generateGetResponse.js";
 import {getTotalRowsDB} from "../../services/database/database.js";
+import generateSearchResponse from "../utils/generateSearchResponse.js";
 
 async function postService(request: Request, response: Response, next: NextFunction) {
     try {
@@ -24,14 +26,25 @@ async function postService(request: Request, response: Response, next: NextFunct
 async function getServices(request: Request, response: Response, next: NextFunction) {
   try {
     const query = getRequestSchema.parse(request.query);
+    console.log(query, "query");
+    
+    // No need to decrement query (query.start - 1).
+    // It is taken care of by getRequestSchema
+    if (query.searchText) {
+      
+      const services = await searchServiceDB(query.orderBy, query.sortOrder, query.start, query.rows, query.searchText);
+      response.json(generateSearchResponse(query, services));
 
-        // No need to decrement query (query.start - 1).
-        // It is taken care of by getRequestSchema
-        const services = await getServicesDB(query.orderBy, query.sortOrder, query.start, query.rows);
+    } 
+    else {
+
+      const services = await getServicesDB(query.orderBy, query.sortOrder, query.start, query.rows);
       const total = await getTotalRowsDB("Service");
-        response.json(await generateGetResponse(query, services, total));
+      response.json(generateGetResponse(query, services, total));
+
     }
-    catch (error) {
+  }
+  catch (error) {
       next(error)
     }
   } 
@@ -70,4 +83,4 @@ async function deleteServiceById(request: Request, response: Response, next: Nex
   }
 }
 
-export { postService, getServices, getServiceByID, deleteServiceById, putService };
+export { postService, getServices, getServiceByID, deleteServiceById, putService};

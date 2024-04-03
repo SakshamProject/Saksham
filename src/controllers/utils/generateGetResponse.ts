@@ -1,11 +1,11 @@
 import defaults from "../../defaults.js";
-import {Query} from "../../types/zodSchemas.js";
 
 // TODO: Convert data:any to appropriate type
-async function generateGetResponse(query: Query, data:any, total: number) {
+function generateGetResponse(query: any, data:any, total: number) {
 
     const start: number = query.start || defaults.skip;
     // const rows: number = query.rows || defaults.take;
+
 
     return ({
         data: data,

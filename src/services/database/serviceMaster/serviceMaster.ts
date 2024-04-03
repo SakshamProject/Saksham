@@ -28,7 +28,6 @@ async function getServicesDB(
       skip: skip,
       orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
     };
-
     const services = await prisma.service.findMany(query);
     return services;
   
@@ -127,10 +126,52 @@ async function deleteServiceByIdDB(serviceId: string) {
   }
 }
 
+async function searchServiceDB(
+  orderByColumn: string = "createdAt",
+  sortOrder: "asc" | "desc" = "asc",
+  skip = defaults.skip,
+  take = defaults.take,
+  searchText: string,
+) {
+
+      try {
+        const query = {
+          where: {
+            OR: [
+              {
+                name: {
+                  contains: searchText,
+                },
+              },
+              {
+                serviceType: {
+                  name: {
+                    contains: searchText,
+                  } 
+                }
+              },
+          ]
+          },
+          orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
+        };
+        
+        const result = await prisma.service.findMany(query);
+        
+        return result;
+      }
+      catch(error) {
+        console.log(error);
+        if (error instanceof Error) {
+          throwDatabaseError(error);
+        }
+      }
+}
+
 export {
   getServicesDB,
   getServiceByIdDB,
   createServiceByIdDB,
   deleteServiceByIdDB,
-  updateServiceByIdDB
+  updateServiceByIdDB,
+  searchServiceDB
 };
