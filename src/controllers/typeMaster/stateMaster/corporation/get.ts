@@ -66,7 +66,8 @@ const getCorporationByDistrictId = async (
         query.start,
         query.rows
       );
-    response.send(result);
+    const resultWithRequest = createResponseWithQuery(result || {}, query, 10);
+    response.send(resultWithRequest);
   } catch (error) {
     next(error);
   }
