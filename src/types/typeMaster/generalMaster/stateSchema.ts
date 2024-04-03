@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
-import inputFieldSchema from "../../inputField.js";
+import inputFieldSchema from "../../inputFieldSchema.js";
 
 type getStateSchema = Prisma.StateGetPayload<{}>;
 

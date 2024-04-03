@@ -15,4 +15,5 @@ const getRequestSchema = z.object({
   sortOrder: z.nativeEnum(sortOrderEnum).optional(),
   searchText:z.string().optional(),
 });
+export type getRequestType = z.infer<typeof getRequestSchema>;
 export default getRequestSchema;
