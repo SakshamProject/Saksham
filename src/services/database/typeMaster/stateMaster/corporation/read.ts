@@ -1,11 +1,11 @@
-import { orderByDirectionEnum } from "../../../../../controllers/getRequest.schema.js";
+import { sortOrderEnum } from "../../../../../types/getRequestSchema.js";
 import defaults from "../../../../../defaults.js";
 import { Corporation } from "../../../../../types/typeMaster/stateMaster/corporationSchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getCorporationDB = async (
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take,
   searchText: string
@@ -31,7 +31,7 @@ const getCorporationDB = async (
 
 const getCorporationByDistrictIdDB = async (
   districtId: string,
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrder = sortOrder.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<Corporation[] | undefined> => {
@@ -54,7 +54,7 @@ const getCorporationByDistrictIdDB = async (
 
 const getCorporationByIdDB = async (
   id: string,
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrder = sortOrder.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<Corporation | undefined | null> => {

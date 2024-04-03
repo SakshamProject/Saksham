@@ -4,7 +4,7 @@ import {
   getTalukByIdDB,
   getTalukDB,
 } from "../../../../services/database/typeMaster/stateMaster/taluk/read.js";
-import getRequestSchema from "../../../getRequest.schema.js";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { Taluk } from "../../../../types/typeMaster/stateMaster/talukSchema.js";
 
 const getTaluk = async (
@@ -53,13 +53,12 @@ const getTalukByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const query = getRequestSchema.parse(request.query);
-    const result: Taluk[] | undefined =
-      await getTalukByDistrictIdDB(
-        districtId,
-        query.sortOrder,
-        query.start,
-        query.rows
-      );
+    const result: Taluk[] | undefined = await getTalukByDistrictIdDB(
+      districtId,
+      query.sortOrder,
+      query.start,
+      query.rows
+    );
     response.send(result);
   } catch (error) {
     next(error);

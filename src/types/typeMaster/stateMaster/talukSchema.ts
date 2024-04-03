@@ -1,5 +1,5 @@
 import { z } from "zod";
-import inputFieldSchema from "../../inputField.js";
+import inputFieldSchema from "../../inputFieldSchema.js";
 
 const talukSchema = z.object({
   id: inputFieldSchema.optional(),

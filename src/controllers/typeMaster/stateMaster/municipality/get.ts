@@ -4,7 +4,7 @@ import {
   getMunicipalityByIdDB,
   getMunicipalityDB,
 } from "../../../../services/database/typeMaster/stateMaster/municipality/read.js";
-import getRequestSchema from "../../../getRequest.schema.js";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { Municipality } from "../../../../types/typeMaster/stateMaster/municipalitySchema.js";
 
 const getMunicipality = async (

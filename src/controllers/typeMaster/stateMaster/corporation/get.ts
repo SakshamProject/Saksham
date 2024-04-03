@@ -4,8 +4,12 @@ import {
   getCorporationByIdDB,
   getCorporationDB,
 } from "../../../../services/database/typeMaster/stateMaster/corporation/read.js";
-import getRequestSchema from "../../../getRequest.schema.js";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { Corporation } from "../../../../types/typeMaster/stateMaster/corporationSchema.js";
+import {
+  createResponseOnlyData,
+  createResponseWithQuery,
+} from "../../../../types/createResponseSchema.js";
 
 const getCorporation = async (
   request: Request,
@@ -20,7 +24,8 @@ const getCorporation = async (
       query.rows,
       query.searchText || ""
     );
-    response.send(result);
+    const resultWithRequest = createResponseWithQuery(result || {}, query, 10);
+    response.send(resultWithRequest);
   } catch (error) {
     next(error);
   }
@@ -40,7 +45,8 @@ const getCorporationById = async (
       query.start,
       query.rows
     );
-    response.send(result);
+    const resultWithRequest = createResponseOnlyData(result || {});
+    response.send(resultWithRequest);
   } catch (error) {
     next(error);
   }

@@ -1,11 +1,11 @@
-import { orderByDirectionEnum } from "../../../../../controllers/getRequest.schema.js";
+import { sortOrderEnum } from "../../../../../types/getRequestSchema.js";
 import defaults from "../../../../../defaults.js";
 import { MLAConstituency } from "../../../../../types/typeMaster/stateMaster/MLAConstituencySchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getMLAConstituencyDB = async (
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take,
   searchText: string
@@ -32,21 +32,22 @@ const getMLAConstituencyDB = async (
 
 const getMLAConstituencyByDistrictIdDB = async (
   districtId: string,
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<MLAConstituency[] | undefined> => {
   try {
-    const MLAConstituency: MLAConstituency[] = await prisma.mLAConstituency.findMany({
-      where: {
-        districtId: districtId,
-      },
-      orderBy: {
-        name: sortOrder,
-      },
-      skip: start,
-      take: rows,
-    });
+    const MLAConstituency: MLAConstituency[] =
+      await prisma.mLAConstituency.findMany({
+        where: {
+          districtId: districtId,
+        },
+        orderBy: {
+          name: sortOrder,
+        },
+        skip: start,
+        take: rows,
+      });
     return MLAConstituency;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
@@ -55,7 +56,7 @@ const getMLAConstituencyByDistrictIdDB = async (
 
 const getMLAConstituencyByIdDB = async (
   id: string,
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<MLAConstituency | undefined | null> => {

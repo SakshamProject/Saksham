@@ -1,11 +1,11 @@
-import { orderByDirectionEnum } from "../../../../../controllers/getRequest.schema.js";
+import { sortOrderEnum } from "../../../../../types/getRequestSchema.js";
 import defaults from "../../../../../defaults.js";
 import { Taluk } from "../../../../../types/typeMaster/stateMaster/talukSchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getTalukDB = async (
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take,
   searchText: string
@@ -31,7 +31,7 @@ const getTalukDB = async (
 
 const getTalukByDistrictIdDB = async (
   districtId: string,
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<Taluk[] | undefined> => {
@@ -54,25 +54,23 @@ const getTalukByDistrictIdDB = async (
 
 const getTalukByIdDB = async (
   id: string,
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<Taluk | undefined | null> => {
   try {
-    const taluks: Taluk | null = await prisma.taluk.findFirst(
-      {
-        where: {
-          id: {
-            equals: id,
-          },
+    const taluks: Taluk | null = await prisma.taluk.findFirst({
+      where: {
+        id: {
+          equals: id,
         },
-        orderBy: {
-          name: sortOrder,
-        },
-        skip: start,
-        take: rows,
-      }
-    );
+      },
+      orderBy: {
+        name: sortOrder,
+      },
+      skip: start,
+      take: rows,
+    });
     return taluks;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);

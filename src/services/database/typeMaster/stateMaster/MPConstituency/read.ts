@@ -1,11 +1,11 @@
-import { orderByDirectionEnum } from "../../../../../controllers/getRequest.schema.js";
+import { sortOrderEnum } from "../../../../../types/getRequestSchema.js";
 import defaults from "../../../../../defaults.js";
 import { MPConstituency } from "../../../../../types/typeMaster/stateMaster/MPConstituencySchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getMPConstituencyDB = async (
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take,
   searchText: string
@@ -32,7 +32,7 @@ const getMPConstituencyDB = async (
 
 const getMPConstituencyByDistrictIdDB = async (
   districtId: string,
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<MPConstituency[] | undefined> => {
@@ -56,7 +56,7 @@ const getMPConstituencyByDistrictIdDB = async (
 
 const getMPConstituencyByIdDB = async (
   id: string,
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<MPConstituency | undefined | null> => {

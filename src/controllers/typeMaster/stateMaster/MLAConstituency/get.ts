@@ -4,7 +4,7 @@ import {
   getMLAConstituencyByIdDB,
   getMLAConstituencyDB,
 } from "../../../../services/database/typeMaster/stateMaster/MLAConstituency/read.js";
-import getRequestSchema from "../../../getRequest.schema.js";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { MLAConstituency } from "../../../../types/typeMaster/stateMaster/MLAConstituencySchema.js";
 
 const getMLAConstituency = async (

@@ -1,11 +1,11 @@
-import { orderByDirectionEnum } from "../../../../../controllers/getRequest.schema.js";
+import { sortOrderEnum } from "../../../../../types/getRequestSchema.js";
 import defaults from "../../../../../defaults.js";
 import { Municipality } from "../../../../../types/typeMaster/stateMaster/municipalitySchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getMunicipalityDB = async (
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take,
   searchText: string
@@ -31,7 +31,7 @@ const getMunicipalityDB = async (
 
 const getMunicipalityByDistrictIdDB = async (
   districtId: string,
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<Municipality[] | undefined> => {
@@ -54,13 +54,13 @@ const getMunicipalityByDistrictIdDB = async (
 
 const getMunicipalityByIdDB = async (
   id: string,
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   start: number = defaults.skip,
   rows: number = defaults.take
 ): Promise<Municipality | undefined | null> => {
   try {
-    const municipalities: Municipality | null = await prisma.municipality.findFirst(
-      {
+    const municipalities: Municipality | null =
+      await prisma.municipality.findFirst({
         where: {
           id: {
             equals: id,
@@ -71,12 +71,15 @@ const getMunicipalityByIdDB = async (
         },
         skip: start,
         take: rows,
-      }
-    );
+      });
     return municipalities;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
 
-export { getMunicipalityDB, getMunicipalityByDistrictIdDB, getMunicipalityByIdDB };
+export {
+  getMunicipalityDB,
+  getMunicipalityByDistrictIdDB,
+  getMunicipalityByIdDB,
+};

@@ -4,7 +4,7 @@ import {
   getTownPanchayatByIdDB,
   getTownPanchayatDB,
 } from "../../../../services/database/typeMaster/stateMaster/townPanchayat/read.js";
-import getRequestSchema from "../../../getRequest.schema.js";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { TownPanchayat } from "../../../../types/typeMaster/stateMaster/townPanchayatSchema.js";
 
 const getTownPanchayat = async (
@@ -34,12 +34,13 @@ const getTownPanchayatById = async (
   try {
     const id = request.params.id;
     const query = getRequestSchema.parse(request.query);
-    const result: TownPanchayat | undefined | null = await getTownPanchayatByIdDB(
-      id,
-      query.sortOrder,
-      query.start,
-      query.rows
-    );
+    const result: TownPanchayat | undefined | null =
+      await getTownPanchayatByIdDB(
+        id,
+        query.sortOrder,
+        query.start,
+        query.rows
+      );
     response.send(result);
   } catch (error) {
     next(error);

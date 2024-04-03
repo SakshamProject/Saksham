@@ -1,4 +1,4 @@
-import { orderByDirectionEnum } from "../../../controllers/getRequest.schema.js";
+import { orderByDirectionEnum } from "../../../types/getRequestSchema.js";
 
 const sevaKendraColumnNameMapper = (
   orderByColumn: string = "name",

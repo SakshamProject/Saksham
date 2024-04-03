@@ -1,6 +1,5 @@
 import { z } from "zod";
 import defaults from "../defaults.js";
-import { orderByDirectionEnum } from "../controllers/getRequest.schema.js";
 
 const inputFieldSchema = z
   .string()

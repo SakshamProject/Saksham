@@ -4,7 +4,7 @@ import {
   getMPConstituencyByIdDB,
   getMPConstituencyDB,
 } from "../../../../services/database/typeMaster/stateMaster/MPConstituency/read.js";
-import getRequestSchema from "../../../getRequest.schema.js";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { MPConstituency } from "../../../../types/typeMaster/stateMaster/MPConstituencySchema.js";
 
 const getMPConstituency = async (

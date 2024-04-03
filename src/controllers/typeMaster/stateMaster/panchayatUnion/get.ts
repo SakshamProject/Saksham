@@ -4,7 +4,7 @@ import {
   getPanchayatUnionByIdDB,
   getPanchayatUnionDB,
 } from "../../../../services/database/typeMaster/stateMaster/panchayatUnion/read.js";
-import getRequestSchema from "../../../getRequest.schema.js";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { PanchayatUnion } from "../../../../types/typeMaster/stateMaster/panchayatUnionSchema.js";
 
 const getPanchayatUnion = async (
