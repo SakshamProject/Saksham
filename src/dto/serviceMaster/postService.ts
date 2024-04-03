@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import {postServiceMasterType} from "../../types/schemas/serviceMaster/serviceMaster.schema.js";
+import {postServiceMasterType} from "../../types/schemas/serviceMaster/serviceMasterSchema.js";
 
 function createServiceDBInputObject(body: postServiceMasterType): Prisma.ServiceUncheckedCreateInput {
     const serviceInput: Prisma.ServiceUncheckedCreateInput = {

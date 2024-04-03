@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import {
     postServiceMasterSchema,
     postServiceMasterType
-} from "../../types/schemas/serviceMaster/serviceMaster.schema.js";
+} from "../../types/schemas/serviceMaster/serviceMasterSchema.js";
 import {createServiceDB} from "../../services/database/serviceMaster/serviceMaster.js";
 import {createServiceDBInputObject} from "../../dto/serviceMaster/postService.js";
 
