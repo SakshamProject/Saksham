@@ -26,7 +26,6 @@ async function postService(request: Request, response: Response, next: NextFunct
 async function getServices(request: Request, response: Response, next: NextFunction) {
   try {
     const query = getRequestSchema.parse(request.query);
-    console.log(query, "query");
     
     // No need to decrement query (query.start - 1).
     // It is taken care of by getRequestSchema
