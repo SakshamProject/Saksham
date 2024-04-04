@@ -26,7 +26,7 @@ const getDisabilityTypeDBTransaction = async (
       }
     },{
             isolationLevel: Prisma.TransactionIsolationLevel.Serializable, 
-            maxWait: 5000, 
+            maxWait: 50000, 
             timeout: 10000, 
     });
     return transaction;
@@ -48,7 +48,7 @@ const getDisabilityTypeDBTransaction = async (
         }
       },{
               isolationLevel: Prisma.TransactionIsolationLevel.Serializable, 
-              maxWait: 5000, 
+              maxWait: 50000, 
               timeout: 10000, 
       });
       return transaction;

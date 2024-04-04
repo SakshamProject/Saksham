@@ -3,7 +3,10 @@ import { getStateSchema } from "../../../../types/typeMaster/generalMaster/state
 import { getStateByIdDB } from "../../../../services/database/typeMaster/generalMaster/state/read.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
 import { getStateDBTransaction } from "../../../../services/database/typeMaster/generalMaster/state/transaction/read.js";
-import { createResponseWithQuery } from "../../../../types/createResponseSchema.js";
+import {
+  createResponseOnlyData,
+  createResponseWithQuery,
+} from "../../../../types/createResponseSchema.js";
 
 const getState = async (
   request: Request,
@@ -35,7 +38,8 @@ const getStateById = async (
     const id: string = request.params.id;
     console.log(id);
     const result: getStateSchema | undefined = await getStateByIdDB(id);
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

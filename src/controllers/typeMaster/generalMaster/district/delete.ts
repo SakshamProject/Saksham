@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { District } from "../../../../types/typeMaster/generalMaster/districtSchema.js";
 import { deleteDistrictDB } from "../../../../services/database/typeMaster/generalMaster/district/delete.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const deleteDistrict = async (
   request: Request,
@@ -10,7 +11,8 @@ const deleteDistrict = async (
   try {
     const id: string = request.params.id;
     const result: District | undefined = await deleteDistrictDB(id);
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

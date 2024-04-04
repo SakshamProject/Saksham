@@ -5,10 +5,11 @@ import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getStateDB = async (
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending
+  prismaTransaction: any,
+  sortOrder: sortOrderEnum = defaults.sortOrder
 ): Promise<getStateSchema[] | undefined> => {
   try {
-    const states = await prisma.state.findMany({
+    const states = await prismaTransaction.state.findMany({
       orderBy: {
         name: sortOrder,
       },
@@ -20,9 +21,9 @@ const getStateDB = async (
     }
   }
 };
-const getStateDBTotal = async () => {
+const getStateDBTotal = async (prismaTransaction: any) => {
   try {
-    const states = await prisma.state.count({});
+    const states = await prismaTransaction.state.count({});
     return states;
   } catch (error) {
     if (error instanceof Error) {

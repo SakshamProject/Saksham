@@ -5,6 +5,7 @@ import {
 } from "../../../../types/typeMaster/generalMaster/districtSchema.js";
 import { State } from "../../../../types/typeMaster/generalMaster/stateSchema.js";
 import { updateDistrictDB } from "../../../../services/database/typeMaster/generalMaster/district/update.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const updateDistrict = async (
   request: Request,
@@ -15,7 +16,8 @@ const updateDistrict = async (
     const id: string = request.params.id;
     const district: District = districtSchema.parse(request.body);
     const result: State | undefined = await updateDistrictDB(id, district);
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

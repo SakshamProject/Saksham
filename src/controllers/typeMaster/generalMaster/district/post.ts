@@ -6,6 +6,7 @@ import {
 import { Prisma } from "@prisma/client";
 import { createDistrictDBObject } from "../../../../dto/typeMaster/generalMaster/state/post.js";
 import { createDistrictDB } from "../../../../services/database/typeMaster/generalMaster/district/create.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const postDistrict = async (
   request: Request,
@@ -19,7 +20,8 @@ const postDistrict = async (
     const result: District | undefined = await createDistrictDB(
       districtDBObject
     );
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

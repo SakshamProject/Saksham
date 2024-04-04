@@ -4,6 +4,12 @@ import {
   getDistrictByIdDB,
   getDistrictDB,
 } from "../../../../services/database/typeMaster/generalMaster/district/read.js";
+import { getDistrictDBTransaction } from "../../../../services/database/typeMaster/generalMaster/district/transaction/read.js";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
+import {
+  createResponseOnlyData,
+  createResponseWithQuery,
+} from "../../../../types/createResponseSchema.js";
 
 const getDistrict = async (
   request: Request,
@@ -11,9 +17,17 @@ const getDistrict = async (
   next: NextFunction
 ) => {
   try {
-    const result: getDistrictsWithStateSchema[] | undefined =
-      await getDistrictDB();
-    response.send(result);
+    const query = getRequestSchema.parse(request.query);
+    const result = await getDistrictDBTransaction(query.sortOrder);
+    const total = result?.total || 0;
+    const count = result?.districts?.length || 0;
+    const responseData = createResponseWithQuery(
+      result || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }
@@ -28,7 +42,8 @@ const getDistrictById = async (
     const id: string = request.params.id;
     const result: getDistrictsWithStateSchema | undefined =
       await getDistrictByIdDB(id);
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

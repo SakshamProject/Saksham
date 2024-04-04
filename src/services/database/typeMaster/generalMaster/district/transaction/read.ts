@@ -1,19 +1,19 @@
 import { Prisma } from "@prisma/client";
+import defaults from "../../../../../../defaults.js";
 import { sortOrderEnum } from "../../../../../../types/getRequestSchema.js";
 import prisma from "../../../../database.js";
 import throwDatabaseError from "../../../../utils/errorHandler.js";
-import { getStateDB, getStateDBTotal } from "../read.js";
-import defaults from "../../../../../../defaults.js";
+import { getDistrictDB, getDistrictDBTotal } from "../read.js";
 
-const getStateDBTransaction = (
+const getDistrictDBTransaction = async (
   sortOrder: sortOrderEnum = defaults.sortOrder
 ) => {
-  const transaction = prisma.$transaction(
+  const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
       try {
-        const states = await getStateDB(prismaTransaction, sortOrder);
-        const total = await getStateDBTotal(prismaTransaction);
-        return { states, total };
+        const districts = await getDistrictDB(prismaTransaction, sortOrder);
+        const total = await getDistrictDBTotal(prismaTransaction);
+        return { districts, total };
       } catch (error) {
         if (error instanceof Error) throwDatabaseError(error);
       }
@@ -27,4 +27,4 @@ const getStateDBTransaction = (
   return transaction;
 };
 
-export { getStateDBTransaction };
+export { getDistrictDBTransaction };
