@@ -56,4 +56,4 @@ async function getServiceType(
 
  }
 
-export { getServiceTypeById, getServiceType,getServiceByServiceTypeId };
+export { getServiceTypeById, getServiceType, getServiceByServiceTypeId };

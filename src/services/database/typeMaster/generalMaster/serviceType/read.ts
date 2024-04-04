@@ -1,9 +1,9 @@
 import { Service, ServiceType } from "@prisma/client";
-import { orderByDirectionEnum } from "../../../../../controllers/getRequest.schema.js";
 import defaults from "../../../../../defaults.js";
 import { getServiceTypeWithServiceSchema } from "../../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
+import { sortOrderEnum } from "../../../../../types/getRequestSchema.js";
 
 async function getServiceTypeByIdDB(id: string | undefined) {
   try {
@@ -33,7 +33,7 @@ async function getServiceTypeDB(
   skip: number = defaults.skip,
   take: number = defaults.take,
   orderByColumn: string = "",
-  sortOrder: orderByDirectionEnum = orderByDirectionEnum.ascending,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   searchText: string = ""
 ) {
   try {

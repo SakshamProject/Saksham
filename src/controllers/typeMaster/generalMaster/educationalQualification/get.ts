@@ -1,28 +1,41 @@
 import { NextFunction, Response, Request } from "express";
 import { getEducationalQualificationTypeSchema } from "../../../../types/typeMaster/generalMaster/educationalQualificationSchema.js";
-import { getEducationalQualificationByIdDB, getEducationalQualificationDB, getEducationQualificationByEducationQualificationTypeIdDB } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/read.js";
+import { getEducationQualificationTypeByIdDB, getEducationQualificationTypeDB, getEducationQualificationByEducationQualificationTypeIdDB, getEducationQualificationTypeCount } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/read.js";
 import { EducationQualificationType } from "@prisma/client";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
 
-async function getEducationalQualificationById(request:Request, response:Response, next:NextFunction){
+async function getEducationQualificationTypeById(request:Request, response:Response, next:NextFunction){
     try{
         const id = request.params.id;
         console.log(id)
-        const result: getEducationalQualificationTypeSchema|undefined|null = await getEducationalQualificationByIdDB(id);
+        const result: getEducationalQualificationTypeSchema|undefined|null = await getEducationQualificationTypeByIdDB(id);
         response.send(result);
     }catch(err){
         next(err);
     }
 }
 
-async function getEducationalQualification(request:Request, response:Response, next:NextFunction) {
-    try {
-        const result = await getEducationalQualificationDB()
-        response.send(result)
-    } catch (error) {
-        if (error instanceof Error) {
-            next(error)
-        }
-    }
+async function getEducationQualificationType(request:Request, response:Response, next:NextFunction) {
+
+    const query = getRequestSchema.parse(request.query)
+    const results = await getEducationQualificationTypeDB(
+        query.start,
+        query.rows,
+        query.orderByColumn,
+        query.sortOrder,
+        query.searchText,
+    )
+
+    const count:number  = await getEducationQualificationTypeCount();
+
+    response.send({
+        result:results,
+        count:count,
+        start:query.start,
+        rows:query.rows,
+        orderByColumn:query.orderByColumn,
+        orderByDirection:query.sortOrder
+    });
 }
 
 async function getEducationQualificationByEducationQualificationTypeId(request:Request,response:Response,next:NextFunction){
@@ -35,4 +48,4 @@ async function getEducationQualificationByEducationQualificationTypeId(request:R
 
 }
 
-export {getEducationalQualificationById,getEducationalQualification, getEducationQualificationByEducationQualificationTypeId};
+export {getEducationQualificationTypeById, getEducationQualificationType, getEducationQualificationByEducationQualificationTypeId};
