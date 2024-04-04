@@ -6,12 +6,13 @@ import getRequestSchema, { sortOrderEnum } from "../../../../types/getRequestSch
 import { getEducationQualificationByEducationQualificationTypeIdDBTransaction, getEducationQualificationTypeDBTransaction } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/transaction/read.js";
 import { createResponseOnlyData, createResponseWithQuery } from "../../../../types/createResponseSchema.js";
 import { skip } from "node:test";
+import prisma from "../../../../services/database/database.js";
 
 async function getEducationQualificationTypeById(request:Request, response:Response, next:NextFunction){
     try{
         const id = request.params.id;
         console.log(id)
-        const result: getEducationalQualificationTypeSchema|undefined|null = await getEducationQualificationTypeByIdDB(id);
+        const result: getEducationalQualificationTypeSchema|undefined|null = await getEducationQualificationTypeByIdDB(prisma, id);
         const responseData = createResponseOnlyData(result || {})
         response.send(responseData);
     }catch(err){

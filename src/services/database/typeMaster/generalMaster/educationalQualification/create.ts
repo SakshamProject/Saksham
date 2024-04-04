@@ -57,6 +57,7 @@ async function createCheckedEducationQualifications(
     for (let educationQualification of educationQualifications) {
       if (!educationQualification.id) {
         const postEducationQualificationDBObject: postEducationQualification = createPostEducationQualificationDBObject(
+          prismaTransaction,
           educationQualification.name,
           updatedEducationQualificationTypeId,
         )

@@ -12,6 +12,7 @@ function createPostEducationQualificationTypeDBObject(
 }
 
 function createPostEducationQualificationDBObject(
+  prismaTransaction: any,
   educationQualificationName: string,
   educationQualificationTypeNameId: string | undefined,
 ) {

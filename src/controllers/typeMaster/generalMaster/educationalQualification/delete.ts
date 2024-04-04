@@ -1,5 +1,6 @@
 import { NextFunction, Response, Request } from 'express'
 import { deleteEducationQualificationTypeDB } from '../../../../services/database/typeMaster/generalMaster/educationalQualification/delete.js'
+import { createResponseOnlyData } from '../../../../types/createResponseSchema.js'
 
 async function deleteEducationQualificationType(
   request: Request,
@@ -11,7 +12,8 @@ async function deleteEducationQualificationType(
     const deletedEducationQualification = await deleteEducationQualificationTypeDB(
       id,
     )
-    response.send(deletedEducationQualification)
+    const responseData = createResponseOnlyData(deletedEducationQualification || {})
+    response.send(responseData)
   } catch (err) {
     next(err)
   }
