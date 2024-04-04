@@ -3,7 +3,8 @@ import {
   State,
   stateSchema,
 } from "../../../../types/typeMaster/generalMaster/stateSchema.js";
-import { updateStateDB } from "../../../../services/database/typeMaster/stateMaster/district/update.js";
+import { updateStateDB } from "../../../../services/database/typeMaster/generalMaster/district/update.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const updateState = async (
   request: Request,
@@ -14,7 +15,8 @@ const updateState = async (
     const id: string = request.params.id;
     const state: State = stateSchema.parse(request.body);
     const result: State | undefined = await updateStateDB(state, id);
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

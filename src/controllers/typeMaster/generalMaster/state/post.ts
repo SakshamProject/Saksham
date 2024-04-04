@@ -5,7 +5,8 @@ import {
 } from "../../../../types/typeMaster/generalMaster/stateSchema.js";
 import { Prisma } from "@prisma/client";
 import { createStateDBObject } from "../../../../dto/typeMaster/generalMaster/state/post.js";
-import { createStateDB } from "../../../../services/database/typeMaster/stateMaster/state/create.js";
+import { createStateDB } from "../../../../services/database/typeMaster/generalMaster/state/create.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const postState = async (
   request: Request,
@@ -17,7 +18,8 @@ const postState = async (
     const stateDBObject: Prisma.StateUncheckedCreateInput =
       createStateDBObject(state);
     const result: State | undefined = await createStateDB(stateDBObject);
-    response.send(result);
+    const responseData = createResponseOnlyData(result || {});
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

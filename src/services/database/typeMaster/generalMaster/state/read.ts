@@ -1,10 +1,28 @@
+import defaults from "../../../../../defaults.js";
+import { sortOrderEnum } from "../../../../../types/getRequestSchema.js";
 import { getStateSchema } from "../../../../../types/typeMaster/generalMaster/stateSchema.js";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
-const getStateDB = async (): Promise<getStateSchema[] | undefined> => {
+const getStateDB = async (
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending
+): Promise<getStateSchema[] | undefined> => {
   try {
-    const states = await prisma.state.findMany();
+    const states = await prisma.state.findMany({
+      orderBy: {
+        name: sortOrder,
+      },
+    });
+    return states;
+  } catch (error) {
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
+  }
+};
+const getStateDBTotal = async () => {
+  try {
+    const states = await prisma.state.count({});
     return states;
   } catch (error) {
     if (error instanceof Error) {
@@ -29,4 +47,4 @@ const getStateByIdDB = async (
   }
 };
 
-export { getStateDB, getStateByIdDB };
+export { getStateDB, getStateByIdDB, getStateDBTotal };

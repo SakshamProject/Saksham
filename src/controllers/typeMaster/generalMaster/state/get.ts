@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response, response } from "express";
 import { getStateSchema } from "../../../../types/typeMaster/generalMaster/stateSchema.js";
-import {
-  getStateByIdDB,
-  getStateDB,
-} from "../../../../services/database/typeMaster/stateMaster/state/read.js";
+import { getStateByIdDB } from "../../../../services/database/typeMaster/generalMaster/state/read.js";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
+import { getStateDBTransaction } from "../../../../services/database/typeMaster/generalMaster/state/transaction/read.js";
+import { createResponseWithQuery } from "../../../../types/createResponseSchema.js";
 
 const getState = async (
   request: Request,
@@ -11,8 +11,17 @@ const getState = async (
   next: NextFunction
 ) => {
   try {
-    const result: getStateSchema[] | undefined = await getStateDB();
-    response.send(result);
+    const query = getRequestSchema.parse(request.query);
+    const result = await getStateDBTransaction(query.sortOrder);
+    const total: number = result?.total || 0;
+    const count: number = result?.states?.length || 0;
+    const responseData = createResponseWithQuery(
+      result || {},
+      query,
+      total,
+      count
+    );
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

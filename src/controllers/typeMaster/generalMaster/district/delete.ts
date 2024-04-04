@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { District } from "../../../../types/typeMaster/generalMaster/districtSchema.js";
-import { deleteDistrictDB } from "../../../../services/database/typeMaster/stateMaster/district/delete.js";
+import { deleteDistrictDB } from "../../../../services/database/typeMaster/generalMaster/district/delete.js";
 
 const deleteDistrict = async (
   request: Request,

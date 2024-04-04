@@ -3,7 +3,7 @@ import { getDistrictsWithStateSchema } from "../../../../types/typeMaster/genera
 import {
   getDistrictByIdDB,
   getDistrictDB,
-} from "../../../../services/database/typeMaster/stateMaster/district/read.js";
+} from "../../../../services/database/typeMaster/generalMaster/district/read.js";
 
 const getDistrict = async (
   request: Request,

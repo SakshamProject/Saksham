@@ -4,7 +4,7 @@ import {
   districtSchema,
 } from "../../../../types/typeMaster/generalMaster/districtSchema.js";
 import { State } from "../../../../types/typeMaster/generalMaster/stateSchema.js";
-import { updateDistrictDB } from "../../../../services/database/typeMaster/stateMaster/district/update.js";
+import { updateDistrictDB } from "../../../../services/database/typeMaster/generalMaster/district/update.js";
 
 const updateDistrict = async (
   request: Request,
