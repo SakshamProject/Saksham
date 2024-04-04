@@ -3,7 +3,7 @@ import defaults from "../../../defaults.js";
 import { serviceMasterColumnNameMapper } from "./serviceMasterColumnNameMapper.js";
 
 import throwDatabaseError from "../utils/errorHandler.js";
-import {Prisma} from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import searchTextMapper from "../utils/searchTextMapper.js";
 
 async function getServicesDB(
@@ -13,9 +13,7 @@ async function getServicesDB(
   take = defaults.take,
   searchText = ""
 ) {
-
   try {
-
     const query: Prisma.ServiceFindManyArgs = {
       select: {
         id: true,
@@ -23,13 +21,13 @@ async function getServicesDB(
         serviceType: {
           select: {
             name: true,
-          }
-        }
+          },
+        },
       },
       take: take,
       skip: skip,
       orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
-    }
+    };
 
     if (searchText !== "") {
       query.where = searchTextMapper("Service", searchText);
@@ -37,7 +35,6 @@ async function getServicesDB(
 
     const services = await prisma.service.findMany(query);
     return services;
-  
   } catch (error) {
     if (error instanceof Error) {
       console.log(error);
@@ -46,14 +43,24 @@ async function getServicesDB(
   }
 }
 
-async function getServiceByIdDB(
-  id: string,
-) {
+async function filterServiceDB(serviceWhereInput: Prisma.ServiceWhereInput) {
   try {
-
+    const query: Prisma.ServiceFindManyArgs = {
+      where: serviceWhereInput,
+    };
+    const results = await prisma.service.findMany(query);
+    return results;
+  } catch (error) {
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
+  }
+}
+async function getServiceByIdDB(id: string) {
+  try {
     const query = {
       where: {
-        id: id
+        id: id,
       },
       include: {
         serviceType: true,
@@ -72,27 +79,28 @@ async function getServiceByIdDB(
 
 async function createServiceDB(query: Prisma.ServiceUncheckedCreateInput) {
   try {
-    const service  = await prisma.service.create({ data: query });
+    const service = await prisma.service.create({ data: query });
     return service;
-  }
-  catch (error) {
+  } catch (error) {
     if (error instanceof Error) {
       throwDatabaseError(error);
     }
   }
 }
 
-async function updateServiceDB(serviceUpdate: Prisma.ServiceUncheckedUpdateInput, serviceId: string) {
+async function updateServiceDB(
+  serviceUpdate: Prisma.ServiceUncheckedUpdateInput,
+  serviceId: string
+) {
   try {
     const service = await prisma.service.update({
       where: {
-        id: serviceId
+        id: serviceId,
       },
       data: serviceUpdate,
     });
     return service;
-  }
-  catch (error) {
+  } catch (error) {
     if (error instanceof Error) {
       throwDatabaseError(error);
     }
@@ -108,8 +116,7 @@ async function deleteServiceByIdDB(serviceId: string) {
     });
 
     return result;
-  }
-  catch(error) {
+  } catch (error) {
     if (error instanceof Error) {
       throwDatabaseError(error);
     }
@@ -121,5 +128,6 @@ export {
   getServiceByIdDB,
   createServiceDB,
   deleteServiceByIdDB,
-  updateServiceDB
+  updateServiceDB,
+  filterServiceDB,
 };

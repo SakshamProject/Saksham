@@ -1,5 +1,5 @@
 
-import { z } from "zod";
+import { string, z } from "zod";
 import defaults from "../defaults.js";
 
 const getRequestSchema = z.object({
@@ -10,10 +10,19 @@ const getRequestSchema = z.object({
     sortOrder: z.enum(["asc", "desc"]).optional()
 });
 
+const filterOperations = z.enum(["equals", "notEquals", "startsWith", "endsWith"]);
+type filterOperationsEnum = z.infer<typeof filterOperations>;
+
+const filter = z.object({
+    operation: filterOperations,
+    value: z.string() 
+});
+
+
 // TODO: Allow Punctuation
 const inputFieldSchema = z.string()
         .min(defaults.minFieldLength)
         .trim()
         .regex(/^[\w\s.-]+$/gm, "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]");
         
-export { getRequestSchema, inputFieldSchema};
+export { getRequestSchema, inputFieldSchema, filter, filterOperations, filterOperationsEnum};

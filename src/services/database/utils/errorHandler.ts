@@ -14,6 +14,14 @@ function throwDatabaseError(error: Error) {
                 "S"
             );
         }
+        if (error.code === "P2003") {
+            throw new APIError(
+                `Foreign Key Error on ${error.meta?.field_name}`,
+                StatusCodes.INTERNAL_SERVER_ERROR,
+                "DatabaseForeignKeyError",
+                "E"
+            );
+        }
         if (error.code === "P2025") {
             throw new APIError(
                 "The specified record could not be found",
