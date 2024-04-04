@@ -1,13 +1,18 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../../../../database.js";
 import throwDatabaseError from "../../../../utils/errorHandler.js";
-import { createCheckedDisabilitySubTypes,  } from "../create.js";
-import { getDisabilitySubTypeByDisabilityTypeIdDB} from "../read.js";
-import { updateDisabilityTypeDB} from "../update.js";
-import { getDisabilityTypeWithdisabilitySubTypeSchema, updateDisabilityTypeRequestSchemaType } from "../../../../../../types/typeMaster/generalMaster/disabilityType.js";
+import { getDisabilitySubTypeByDisabilityTypeIdDB } from "../read.js";
+import { updateDisabilityTypeDB } from "../update.js";
+import {
+  getDisabilityTypeWithdisabilitySubTypeSchema,
+  updateDisabilityTypeRequestSchemaType,
+} from "../../../../../../types/typeMaster/generalMaster/disabilityType.js";
 import { createUpdateDisabilityTypeObject } from "../../../../../../dto/typeMaster/generalMaster/disabilityType/put.js";
-import { deleteUncheckedDisabilitySubTypes } from "../delete.js";
-import { retrievedisabilitySubTypesId } from "../../../../../../controllers/typeMaster/generalMaster/disabilityType/put.js";
+import {
+  createCheckedDisabilitySubTypes,
+  deleteUncheckedDisabilitySubTypes,
+  retrieveDisabilitySubTypesId,
+} from "../../../../../utils/typemaster/generalMaster/disabilityType.js";
 
 async function putDisabilityTypeDBTransaction(
   body: updateDisabilityTypeRequestSchemaType
@@ -20,29 +25,31 @@ async function putDisabilityTypeDBTransaction(
           body
         );
 
-        const updatedDisabilityType: getDisabilityTypeWithdisabilitySubTypeSchema | undefined =
-          await updateDisabilityTypeDB(
-            prismaTransaction,
-            updateDisabilityTypeObject,
-            body.id
-          );
-
-        const exisitingDisabilitySubTypes = await getDisabilitySubTypeByDisabilityTypeIdDB(
+        const updatedDisabilityType:
+          | getDisabilityTypeWithdisabilitySubTypeSchema
+          | undefined = await updateDisabilityTypeDB(
           prismaTransaction,
+          updateDisabilityTypeObject,
           body.id
         );
 
-        const exisitingDisabilitySubTypesId: string[] | undefined =
-          retrievedisabilitySubTypesId(exisitingDisabilitySubTypes);
+        const exisitingDisabilitySubTypes =
+          await getDisabilitySubTypeByDisabilityTypeIdDB(
+            prismaTransaction,
+            body.id
+          );
 
+        const exisitingDisabilitySubTypesId: string[] | undefined =
+          retrieveDisabilitySubTypesId(exisitingDisabilitySubTypes);
 
         const services = body.disabilitySubType;
 
-        const checkedDisabilitySubTypesId: string[] = await createCheckedDisabilitySubTypes(
-          prismaTransaction,
-          services,
-          updatedDisabilityType?.id
-        );
+        const checkedDisabilitySubTypesId: string[] =
+          await createCheckedDisabilitySubTypes(
+            prismaTransaction,
+            services,
+            updatedDisabilityType?.id
+          );
 
         await deleteUncheckedDisabilitySubTypes(
           prismaTransaction,
