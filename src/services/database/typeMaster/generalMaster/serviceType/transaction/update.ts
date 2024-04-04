@@ -20,15 +20,15 @@ async function putServiceTypeDBTransaction(body:updateServiceTypeRequestSchemaTy
 
         const updatedServiceType:getServiceTypeWithServiceSchema|undefined = await updateServiceTypeDB(prismaTransaction,updateServiceTypeObject,body.id);
 
-        const exisitingServices = await getServiceByServiceTypeIdDB(prismaTransaction,body.id);
+        const existingServices = await getServiceByServiceTypeIdDB(prismaTransaction,body.id);
 
-        const exisitingServicesId:string[]|undefined = retrieveServicesId(exisitingServices);
+        const existingServicesId:string[]|undefined = retrieveServicesId(existingServices);
 
         const services = body.serviceName;
 
         const checkedServicesId:string[] = await createCheckedServices(prismaTransaction,services,updatedServiceType?.id)
 
-       await deleteUncheckedServices(prismaTransaction,exisitingServicesId,checkedServicesId );
+       await deleteUncheckedServices(prismaTransaction,existingServicesId,checkedServicesId );
 
        const result = await getServiceTypeByIdDB(prismaTransaction,updatedServiceType?.id)
        return result;

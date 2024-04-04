@@ -7,6 +7,9 @@ import { updateEducationQualificationTypeDB } from "../../../../services/databas
 import { getEducationQualificationByEducationQualificationTypeIdDB } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/read.js";
 import { createPostEducationQualificationDBObject } from "../../../../dto/typeMaster/generalMaster/educationalQualification/post.js";
 import { createEducationQualificationDB } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/create.js";
+import { updateEducationQualificationTypeDBTransaction } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/transaction/update.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
+import prisma from "../../../../services/database/database.js";
 
 function retrieveEducationQualificationsId(educationQualifications:getSelectedEducationQualificationSchema[]|undefined){
 
@@ -53,7 +56,7 @@ async function createCheckedEducationQualifications(educationQualifications:educ
                 updatedEducationQualificationTypeId
               );
 
-              const createdEducationQualification:EducationQualification|undefined = await createEducationQualificationDB(postEducationQualificationDBObject);
+              const createdEducationQualification:EducationQualification|undefined = await createEducationQualificationDB(prisma, postEducationQualificationDBObject);
 
                 if(createdEducationQualification){
                     checkedEducationQualificationsId.push(createdEducationQualification.id)
@@ -75,28 +78,14 @@ async function createCheckedEducationQualifications(educationQualifications:educ
 async function putEducationQualificationType(request:Request, response:Response,next:NextFunction){
 
     try{
-        console.log("enters");
-        const body:updateEducationQualificationTypeRequestSchemaType = updateEducationQualificationTypeRequestSchema.parse(request.body);
+        const body: updateEducationQualificationTypeRequestSchemaType = updateEducationQualificationTypeRequestSchema.parse(request.body);
 
-        const updateEducationQualificationTypeObject = createUpdateEducationQualificationTypeObject(body);
-        console.log(updateEducationQualificationTypeObject)
-        const updatedEducationQualificationType:getEducationQualificationTypeWithEducationQualificationSchema|undefined = await updateEducationQualificationTypeDB(updateEducationQualificationTypeObject,body.id);
-
-        const existingEducationQualifications = await getEducationQualificationByEducationQualificationTypeIdDB(body.id);
-    
-        const existingEducationQualificationsId:string[]|undefined = retrieveEducationQualificationsId(existingEducationQualifications);
-    
-        const educationQualifications = body.educationQualification;
-
-        const checkedEducationQualificationsId:string[] = await createCheckedEducationQualifications(educationQualifications,updatedEducationQualificationType?.id)
-    
-       await deleteUncheckedEducationQualifications(existingEducationQualificationsId,checkedEducationQualificationsId );
-       
-        response.send( updatedEducationQualificationType)
-      
+        const result = await updateEducationQualificationTypeDBTransaction(body);
+        const responseData = createResponseOnlyData(result || {});
+        response.send(responseData)
     }catch(err){
         next(err)
     } 
 }
 
-export {putEducationQualificationType};
+export {putEducationQualificationType, retrieveEducationQualificationsId};

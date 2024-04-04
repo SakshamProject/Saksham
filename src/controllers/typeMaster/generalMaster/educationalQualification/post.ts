@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import { postEducationQualificationTypeDBTransaction } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/transaction/post.js";
+import { postEducationQualificationTypeDBTransaction } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/transaction/create.js";
 import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 import { postEducationalQualificationBodyType, postRequestEducationQualification } from "../../../../types/typeMaster/generalMaster/educationalQualificationSchema.js";
 

@@ -5,6 +5,7 @@ import { getSelectedServiceSchema, postServiceType, serviceNameSchemaType, updat
 import { createServiceDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/create.js";
 import { NextFunction, Request, Response } from "express";
 import { putServiceTypeDBTransaction } from "../../../../services/database/typeMaster/generalMaster/serviceType/transaction/update.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 
 function retrieveServicesId(services: getSelectedServiceSchema[] | undefined) {

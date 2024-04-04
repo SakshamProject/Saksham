@@ -37,7 +37,7 @@ async function postEducationQualificationTypeDBTransaction(
           postEducationQualificationTypeDBObject,
         )
 
-        for (let educationQualificationName of body.name) {
+        for (let educationQualificationName of body.educationQualification) {
           const postEducationQualificationDBObject: postEducationQualification = createPostEducationQualificationDBObject(
             prismaTransaction,
             educationQualificationName,

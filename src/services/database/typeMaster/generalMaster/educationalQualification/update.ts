@@ -2,10 +2,10 @@ import { updateEducationQualificationTypeType } from "../../../../../types/typeM
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
-async function updateEducationQualificationTypeDB(updateObject:updateEducationQualificationTypeType,id:string|undefined){
+async function updateEducationQualificationTypeDB(prismaTransaction: any, updateObject:updateEducationQualificationTypeType,id:string|undefined){
 
   try{
-    const updatedEducationQualificationType = await prisma.educationQualificationType.update({
+    const updatedEducationQualificationType = await prismaTransaction.educationQualificationType.update({
       where: {
         id: id,
       },

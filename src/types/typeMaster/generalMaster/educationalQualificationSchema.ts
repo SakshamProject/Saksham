@@ -34,6 +34,8 @@ const updateEducationQualificationTypeRequestSchema = z.object({
     educationQualification: z.array(educationQualificationNameSchema)
 });
 
+type updateEducationQualificationTypeRequestSchemaType = z.infer<typeof updateEducationQualificationTypeRequestSchema>;
+
 type educationQualificationNameSchemaType  = z.infer<typeof educationQualificationNameSchema>;
 
 type postEducationalQualificationBodyType = z.infer<
@@ -53,6 +55,7 @@ export {getEducationalQualificationTypeSchema,
     postEducationalQualificationBodyType, 
     postEducationalQualificationType,
     updateEducationQualificationTypeRequestSchema,
+    updateEducationQualificationTypeRequestSchemaType,
     updateEducationQualificationTypeType,
     educationQualificationNameSchemaType,
     getEducationQualificationTypeWithEducationQualificationSchema,

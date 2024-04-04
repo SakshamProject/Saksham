@@ -14,7 +14,7 @@ async function createEducationQualificationTypeDB(
   data: postEducationalQualificationType,
 ) {
   try {
-    const educationQualificationType = await prisma.educationQualificationType.create(
+    const educationQualificationType = await prismaTransaction.educationQualificationType.create(
       {
         data: data,
       },
@@ -33,7 +33,7 @@ async function createEducationQualificationDB(
   data: postEducationQualification,
 ) {
   try {
-    const educationQualification: EducationQualification = await prisma.educationQualification.create(
+    const educationQualification: EducationQualification = await prismaTransaction.educationQualification.create(
       {
         data: data,
       },

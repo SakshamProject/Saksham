@@ -9,7 +9,7 @@ async function getEducationQualificationTypeByIdDB(prismaTransaction: any, id: s
 
   try {
     const educationalQualification: getEducationalQualificationTypeSchema | null =
-      await prisma.educationQualificationType.findFirst({
+      await prismaTransaction.educationQualificationType.findFirst({
         where: {
           id: id,
         },
