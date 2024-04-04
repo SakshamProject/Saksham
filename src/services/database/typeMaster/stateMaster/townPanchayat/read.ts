@@ -23,8 +23,6 @@ const getTownPanchayatDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
       });
     return townPanchayats;
   } catch (error) {
@@ -66,8 +64,6 @@ const getTownPanchayatByDistrictIdDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
       });
     return townPanchayats;
   } catch (error) {
@@ -106,8 +102,6 @@ const getTownPanchayatByIdDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
       });
     return townPanchayats;
   } catch (error) {

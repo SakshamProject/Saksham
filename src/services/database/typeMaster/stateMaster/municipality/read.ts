@@ -22,8 +22,7 @@ const getMunicipalityDB = async (
       orderBy: {
         name: sortOrder,
       },
-      skip: start,
-      take: rows,
+       
     });
     return municipalities;
   } catch (error) {
@@ -64,8 +63,7 @@ const getMunicipalityByDistrictIdDB = async (
       orderBy: {
         name: sortOrder,
       },
-      skip: start,
-      take: rows,
+       
     });
     return municipalities;
   } catch (error) {
@@ -105,8 +103,7 @@ const getMunicipalityByIdDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
+         
       });
     return municipalities;
   } catch (error) {

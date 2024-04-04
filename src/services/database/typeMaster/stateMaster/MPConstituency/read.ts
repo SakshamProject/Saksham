@@ -23,8 +23,7 @@ const getMPConstituencyDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
+         
       });
     return MPConstituencies;
   } catch (error) {
@@ -66,8 +65,7 @@ const getMPConstituencyByDistrictIdDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
+         
       });
     return MPConstituencies;
   } catch (error) {
@@ -106,8 +104,7 @@ const getMPConstituencyByIdDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
+         
       });
     return MPConstituencies;
   } catch (error) {

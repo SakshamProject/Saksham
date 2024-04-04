@@ -23,8 +23,7 @@ const getPanchayatUnionDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
+         
       });
     return panchayatUnions;
   } catch (error) {
@@ -66,8 +65,7 @@ const getPanchayatUnionByDistrictIdDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
+         
       });
     return panchayatUnions;
   } catch (error) {
@@ -106,8 +104,7 @@ const getPanchayatUnionByIdDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
+         
       });
     return panchayatUnions;
   } catch (error) {

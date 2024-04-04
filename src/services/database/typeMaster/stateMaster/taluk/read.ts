@@ -22,8 +22,7 @@ const getTalukDB = async (
       orderBy: {
         name: sortOrder,
       },
-      skip: start,
-      take: rows,
+       
     });
     return taluks;
   } catch (error) {
@@ -61,8 +60,7 @@ const getTalukByDistrictIdDB = async (
       orderBy: {
         name: sortOrder,
       },
-      skip: start,
-      take: rows,
+       
     });
     return taluks;
   } catch (error) {
@@ -101,8 +99,7 @@ const getTalukByIdDB = async (
       orderBy: {
         name: sortOrder,
       },
-      skip: start,
-      take: rows,
+       
     });
     return taluks;
   } catch (error) {
