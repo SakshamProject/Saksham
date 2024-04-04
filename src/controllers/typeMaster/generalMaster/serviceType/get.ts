@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { getServiceTypeWithServiceSchema } from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
 import { getServiceByServiceTypeIdDB, getServiceTypeByIdDB, getServiceTypeCount, getServiceTypeDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
-import getRequestSchema from "../../../getRequest.schema.js";
 import { Service, ServiceType } from "@prisma/client";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
 
 async function getServiceTypeById(
   request: Request,

@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
-import inputFieldSchema from "../../inputField.js";
 import { z } from "zod";
+import inputFieldSchema from "../../inputFieldSchema.js";
 
 type getCommunityCategorySchema = Prisma.CommunityCategoryGetPayload<{}>;
 

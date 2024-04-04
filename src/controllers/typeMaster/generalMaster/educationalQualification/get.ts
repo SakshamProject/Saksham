@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request } from "express";
 import { getEducationalQualificationTypeSchema } from "../../../../types/typeMaster/generalMaster/educationalQualificationSchema.js";
-import { getEducationalQualificationByIdDB, getEducationalQualificationDB } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/read.js";
+import { getEducationalQualificationByIdDB, getEducationalQualificationDB, getEducationQualificationByEducationQualificationTypeIdDB } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/read.js";
+import { EducationQualificationType } from "@prisma/client";
 
 async function getEducationalQualificationById(request:Request, response:Response, next:NextFunction){
     try{
@@ -24,4 +25,14 @@ async function getEducationalQualification(request:Request, response:Response, n
     }
 }
 
-export {getEducationalQualificationById,getEducationalQualification};
+async function getEducationQualificationByEducationQualificationTypeId(request:Request,response:Response,next:NextFunction){
+    const id :string = request.params.serviceTypeId;
+    const result :EducationQualificationType[]|undefined = await getEducationQualificationByEducationQualificationTypeIdDB(id);
+
+    response.send({
+        result:result
+    });
+
+}
+
+export {getEducationalQualificationById,getEducationalQualification, getEducationQualificationByEducationQualificationTypeId};

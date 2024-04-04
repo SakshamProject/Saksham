@@ -1,7 +1,7 @@
 
 import { z } from "zod";
-import inputFieldSchema from "../../inputField.js";
 import { Prisma, PrismaClient } from "@prisma/client";
+import inputFieldSchema from "../../inputFieldSchema.js";
 
 
 type getSelectedServiceTypeWithServiceSchema = Prisma.ServiceTypeGetPayload<{
