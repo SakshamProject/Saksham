@@ -3,6 +3,8 @@ import { sortOrderEnum } from '../../../../../../types/getRequestSchema.js'
 import prisma from '../../../../database.js'
 import throwDatabaseError from '../../../../utils/errorHandler.js'
 import {
+    getEducationQualificationByEducationQualificationTypeIdDB,
+  getEducationQualificationByEducationQualificationTypeIdDBTotal,
   getEducationQualificationTypeDB,
   getEducationQualificationTypeDBTotal,
 } from '../read.js'
@@ -39,4 +41,36 @@ async function getEducationQualificationTypeDBTransaction(
   return transaction
 }
 
-export {getEducationQualificationTypeDBTransaction}
+async function getEducationQualificationByEducationQualificationTypeIdDBTransaction(
+    id: string | undefined,
+    skip: number = defaults.skip,
+    take: number = defaults.take,
+    sortOrder: sortOrderEnum = sortOrderEnum.ascending
+) {
+    const transaction = await prisma.$transaction(async (prismaTransaction) => {
+        try {
+            const educationQualificationByType = await getEducationQualificationByEducationQualificationTypeIdDB(
+                prismaTransaction,
+                id,
+                skip,
+                take,
+                sortOrder
+            )
+
+            const total = await getEducationQualificationByEducationQualificationTypeIdDBTotal(
+                prismaTransaction,
+                id
+            )
+
+            return {educationQualificationByType, total}
+        } catch(error) {
+            if (error instanceof Error) {
+                throwDatabaseError(error)
+            }
+        }
+    })
+
+    return transaction
+}
+
+export {getEducationQualificationTypeDBTransaction, getEducationQualificationByEducationQualificationTypeIdDBTransaction}

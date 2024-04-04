@@ -392,7 +392,7 @@ model EducationQualification {
   id      String                            @id @default(uuid())
   name    String                            @unique
   educationQualificationTypeId String
-  educationQualificationType EducationQualificationType @relation(fields: [educationQualificationTypeId],references: [id])
+  educationQualificationType EducationQualificationType @relation(fields: [educationQualificationTypeId],references: [id], onDelete: Cascade)
   divyang DivyangEducationalQualification[]
 }
 
