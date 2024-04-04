@@ -25,20 +25,33 @@ async function getEducationQualificationTypeByIdDB(id: string | undefined) {
   }
 }
 
-async function getEducationQualificationTypeCount() {
-  const count: number = await prisma.educationQualificationType.count();
-  return count;
+async function getEducationQualificationTypeDBTotal(prismaTransaction: any, searchText: string = "") {
+  try {
+    const count: number = await prismaTransaction.educationQualificationType.count({
+      where: {
+        name: {
+          contains: searchText,
+          mode: "insensitive"
+        },
+      }
+    });
+    return count;
+  } catch (err) {
+    if (err instanceof Error) {
+      throwDatabaseError(err)
+    }
+  }
 }
 
 async function getEducationQualificationTypeDB(
+  prismaTransaction: any,
   skip: number = defaults.skip,
   take: number = defaults.take,
-  orderByColumn: string = "",
   sortOrder: sortOrderEnum = sortOrderEnum.ascending,
   searchText: string = ""
 ) {
   try {
-    const results = await prisma.educationQualificationType.findMany({
+    const results = await prismaTransaction.educationQualificationType.findMany({
       skip: skip,
       take: take,
       include: {
@@ -54,6 +67,7 @@ async function getEducationQualificationTypeDB(
       where: {
         name: {
           contains: searchText,
+          mode: "insensitive"
         },
       },
     });
@@ -66,10 +80,21 @@ async function getEducationQualificationTypeDB(
   }
 }
 
-async function getEducationQualificationByEducationQualificationTypeIdDB(id: string | undefined) {
+async function getEducationQualificationByEducationQualificationTypeIdDB(
+  prismaTransaction: any,
+  id: string | undefined,
+  skip: number = defaults.skip,
+  take: number = defaults.take,
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  ) {
   
   try {
-    const educationQualifications: EducationQualification[] = await prisma.educationQualification.findMany({
+    const educationQualifications: EducationQualification[] = await prismaTransaction.educationQualification.findMany({
+      skip: skip,
+      take: take,
+      orderBy: {
+        name: sortOrder,
+      },
       where: {
         educationQualificationTypeId: id,
       },
@@ -83,5 +108,25 @@ async function getEducationQualificationByEducationQualificationTypeIdDB(id: str
   }
 }
 
+async function getEducationQualificationByEducationQualificationTypeIdDBTotal(
+  prismaTransaction: any, 
+  id: string | undefined) {
+  
+  try {
+    const educationQualificationsTotal = await prismaTransaction.educationQualification.count({
+      where: {
+        educationQualificationTypeId: id,
+      },
+    });
+ 
+    return educationQualificationsTotal;
+  } catch (err) {
+    if (err instanceof Error) {
+      throwDatabaseError(err);
+    }
+  }
+}
+
 export { getEducationQualificationTypeByIdDB, getEducationQualificationTypeDB, 
-  getEducationQualificationByEducationQualificationTypeIdDB, getEducationQualificationTypeCount };
+  getEducationQualificationByEducationQualificationTypeIdDB, getEducationQualificationTypeDBTotal,
+  getEducationQualificationByEducationQualificationTypeIdDBTotal };

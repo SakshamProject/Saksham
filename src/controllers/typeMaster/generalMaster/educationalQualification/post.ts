@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { postEducationalQualificationBodyType, postEducationQualification, postRequestEducationQualification } from "../../../../types/typeMaster/generalMaster/educationalQualificationSchema.js";
 import { EducationQualification, EducationQualificationType } from "@prisma/client";
-import { getEducationalQualificationByIdDB } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/read.js";
+import { getEducationQualificationTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/read.js";
 import { createPostEducationQualificationDBObject, createPostEducationQualificationTypeDBObject } from "../../../../dto/typeMaster/generalMaster/educationalQualification/post.js";
 import { createEducationQualificationDB, createEducationQualificationTypeDB } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/create.js";
 
@@ -31,7 +31,7 @@ async function postEducationQualificationType(
         );
       }
 
-      const result= await getEducationalQualificationByIdDB(educationQualificationType?.id);
+      const result= await getEducationQualificationTypeByIdDB(educationQualificationType?.id);
    
     
    
