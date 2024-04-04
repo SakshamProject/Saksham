@@ -26,7 +26,6 @@ async function postEducationQualificationTypeDBTransaction(
     async (prismaTransaction) => {
       try {
         const postEducationQualificationTypeDBObject = createPostEducationQualificationTypeDBObject(
-          prismaTransaction,
           body
         )
 
@@ -39,7 +38,6 @@ async function postEducationQualificationTypeDBTransaction(
 
         for (let educationQualificationName of body.educationQualification) {
           const postEducationQualificationDBObject: postEducationQualification = createPostEducationQualificationDBObject(
-            prismaTransaction,
             educationQualificationName,
             educationQualificationType?.id,
           )

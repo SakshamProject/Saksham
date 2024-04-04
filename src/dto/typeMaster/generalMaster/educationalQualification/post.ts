@@ -2,7 +2,6 @@ import { Prisma } from '@prisma/client'
 import { postEducationalQualificationBodyType } from '../../../../types/typeMaster/generalMaster/educationalQualificationSchema.js'
 
 function createPostEducationQualificationTypeDBObject(
-  prismaTransaction: any,
   body: postEducationalQualificationBodyType,
 ) {
   const postEducationQualificationTypeDBObject: Prisma.EducationQualificationTypeCreateInput = {
@@ -12,7 +11,6 @@ function createPostEducationQualificationTypeDBObject(
 }
 
 function createPostEducationQualificationDBObject(
-  prismaTransaction: any,
   educationQualificationName: string,
   educationQualificationTypeNameId: string | undefined,
 ) {
