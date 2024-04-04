@@ -1,57 +1,61 @@
-
 import { z } from "zod";
 import { Prisma, PrismaClient } from "@prisma/client";
 import inputFieldSchema from "../../inputFieldSchema.js";
 
 
 type getSelectedServiceTypeWithServiceSchema = Prisma.ServiceTypeGetPayload<{
-    select:{
-        id: true, 
-        name: true,
-        service: { 
-            select: {
-                name: true,
-            },
-        },
-    },
+  select: {
+    id: true;
+    name: true;
+    service: {
+      select: {
+        name: true;
+      };
+    };
+  };
 }>;
 
 type getServiceTypeWithServiceSchema = Prisma.ServiceTypeGetPayload<{
-    include: {
-        service: true 
-      }
-}>
+  include: {
+    service: true;
+  };
+}>;
 
 type getSelectedServiceSchema = Prisma.ServiceGetPayload<{
-    select:{
-        id:true,
-        name:true
-    }
-}>
+  select: {
+    id: true;
+    name: true;
+  };
+}>;
 
-const serviceTypeRequestSchema= z.object({
-    id: inputFieldSchema.optional(),
-    serviceType: inputFieldSchema.transform((value) => value.toUpperCase()),
-    serviceName:z.array(inputFieldSchema).transform((value) => value.map((serviceName) => serviceName.toUpperCase())),
-
-})
+const serviceTypeRequestSchema = z.object({
+  id: inputFieldSchema.optional(),
+  serviceType: inputFieldSchema.transform((value) => value.toUpperCase()),
+  serviceName: z
+    .array(inputFieldSchema)
+    .transform((value) =>
+      value.map((serviceName) => serviceName.toUpperCase())
+    ),
+});
 
 const serviceNameSchema = z.object({
-    id: inputFieldSchema.optional(),
-    name: inputFieldSchema.transform((value) => value.toUpperCase()),
+  id: inputFieldSchema.optional(),
+  name: inputFieldSchema.transform((value) => value.toUpperCase()),
 });
 
 const updateServiceTypeRequestSchema = z.object({
-    id: inputFieldSchema.optional(),
-    serviceType: inputFieldSchema.transform((value) => value.toUpperCase()),
-    serviceName: z.array(serviceNameSchema)
+  id: inputFieldSchema.optional(),
+  serviceType: inputFieldSchema.transform((value) => value.toUpperCase()),
+  serviceName: z.array(serviceNameSchema),
 });
 
-type updateServiceTypeRequestSchemaType= z.infer<typeof updateServiceTypeRequestSchema>;
+type updateServiceTypeRequestSchemaType = z.infer<
+  typeof updateServiceTypeRequestSchema
+>;
 
-type serviceNameSchemaType  = z.infer<typeof serviceNameSchema>;
+type serviceNameSchemaType = z.infer<typeof serviceNameSchema>;
 
-type serviceTypeRequestSchemaType= z.infer<typeof serviceTypeRequestSchema>;
+type serviceTypeRequestSchemaType = z.infer<typeof serviceTypeRequestSchema>;
 
 type postServiceTypeType = Prisma.ServiceTypeCreateInput;
 
@@ -59,14 +63,16 @@ type postServiceType = Prisma.ServiceCreateInput;
 
 type updateServiceTypeType = Prisma.ServiceTypeUpdateInput;
 
-
-  export{getServiceTypeWithServiceSchema,
-     serviceTypeRequestSchema,
-      serviceTypeRequestSchemaType,
-      postServiceTypeType ,
-      postServiceType,
-      getSelectedServiceTypeWithServiceSchema,
-      updateServiceTypeType,getSelectedServiceSchema,
-      updateServiceTypeRequestSchema,
-      updateServiceTypeRequestSchemaType,
-      serviceNameSchemaType};
+export {
+  getServiceTypeWithServiceSchema,
+  serviceTypeRequestSchema,
+  serviceTypeRequestSchemaType,
+  postServiceTypeType,
+  postServiceType,
+  getSelectedServiceTypeWithServiceSchema,
+  updateServiceTypeType,
+  getSelectedServiceSchema,
+  updateServiceTypeRequestSchema,
+  updateServiceTypeRequestSchemaType,
+  serviceNameSchemaType,
+};

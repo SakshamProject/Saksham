@@ -14,6 +14,8 @@ import {
   createServiceTypeDB,
 } from "../../../../services/database/typeMaster/generalMaster/serviceType/create.js";
 import { getServiceTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
+import { postServiceTypeDBTransaction } from "../../../../services/database/typeMaster/generalMaster/serviceType/transaction/post.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 
 async function postServiceType(
@@ -23,30 +25,14 @@ async function postServiceType(
 ) {
   try{const body: serviceTypeRequestSchemaType= serviceTypeRequestSchema.parse(request.body);
 
-  const postServiceTypeDBObject = createPostServiceTypeDBObject(body);
+    const result = await postServiceTypeDBTransaction(body);
 
-    const serviceType: ServiceType | undefined
-     = await createServiceTypeDB(
-        postServiceTypeDBObject
-      );
 
-      for(let serviceName of body.serviceName){
-
-        const postServiceDBObject: postServiceType = createPostServiceDBObject(
-          serviceName,
-          serviceType?.id
-        );
-      
-        const service: Service | undefined = await createServiceDB(
-          postServiceDBObject
-        );
-      }
-
-      const result= await getServiceTypeByIdDB(serviceType?.id);
-   
+    const responseResult = createResponseOnlyData(result ||{});
     
-   
-  response.send(result);}catch(err){
+  response.send(responseResult);
+
+ }catch(err){
     next(err)
   }
 }

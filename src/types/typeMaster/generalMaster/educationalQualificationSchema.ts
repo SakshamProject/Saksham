@@ -38,9 +38,12 @@ type updateEducationQualificationTypeRequestSchemaType= z.infer<typeof updateEdu
 
 type educationQualificationNameSchemaType  = z.infer<typeof educationQualificationNameSchema>;
 
-type postEducationalQualificationBodyType = z.infer<typeof postRequestEducationQualification>
+type postEducationalQualificationBodyType = z.infer<
+  typeof postRequestEducationQualification
+>;
 
-type postEducationalQualificationType = Prisma.EducationQualificationTypeCreateInput;
+type postEducationalQualificationType =
+  Prisma.EducationQualificationTypeCreateInput;
 
 type postEducationQualification = Prisma.EducationQualificationCreateInput;
 

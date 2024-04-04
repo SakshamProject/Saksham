@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { serviceTypeRequestSchemaType} from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
 
-function createPostServiceTypeDBObject(body:serviceTypeRequestSchemaType){
+function createPostServiceTypeDBObject(prismaTransaction:any,body:serviceTypeRequestSchemaType){
 
     const postServiceTypeDBObject:Prisma.ServiceTypeCreateInput = {
         name:body.serviceType
@@ -9,7 +9,7 @@ function createPostServiceTypeDBObject(body:serviceTypeRequestSchemaType){
     return postServiceTypeDBObject;
 }
 
-function createPostServiceDBObject(serviceName:string, serviceTypeId:string|undefined){
+function createPostServiceDBObject(prismaTransaction:any, serviceName:string, serviceTypeId:string|undefined){
 
     const postServiceDBObject:Prisma.ServiceCreateInput = {
         name:serviceName,

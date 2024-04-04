@@ -2,7 +2,7 @@ import { updateServiceTypeType } from "../../../../../types/typeMaster/generalMa
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
-async function updateServiceTypeDB(updateObject:updateServiceTypeType,id:string|undefined){
+async function updateServiceTypeDB(prismaTransaction:any, updateObject:updateServiceTypeType,id:string|undefined){
 
   try{
     const updatedServiceType = await prisma.serviceType.update({

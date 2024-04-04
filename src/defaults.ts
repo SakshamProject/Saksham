@@ -1,5 +1,7 @@
 import { sortOrderEnum } from "./types/getRequestSchema.js";
 
+import { sortOrderEnum } from "./types/getRequestSchema.js";
+
 const defaults = {
   skip: 0,
   take: 10,
