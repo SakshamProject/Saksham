@@ -14,6 +14,7 @@ async function deleteEducationQualificationTypeDB(id:string){
     
 }catch(err){
     if (err instanceof Error) {
+        console.log(err)
         throwDatabaseError(err);
       }
     }

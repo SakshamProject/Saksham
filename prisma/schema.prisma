@@ -72,7 +72,7 @@ model Service {
   serviceTypeId String
   createdAt DateTime @default(now())
 
-  serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id])
+  serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id],onDelete: Cascade)
   sevaKendras ServicesOnSevaKendras[]
   divyang     DivyangServiceMapping[]
 }
@@ -306,7 +306,7 @@ model DisabilitySubType {
   disabilityTypeId String
 
   divyang    DisabilityOfDivyang[]
-  disability DisabilityType        @relation(fields: [disabilityTypeId], references: [id])
+  disability DisabilityType        @relation(fields: [disabilityTypeId], references: [id],onDelete: Cascade)
 }
 
 model DisabilityType {
@@ -432,4 +432,10 @@ enum CertificateIssueAuthority {
   MEDICAL_BOARD
   GOVERNMENT_DOCTOR
   PRIVATE_DOCTOR
+}
+
+
+model generalMasters{
+  id      String @id @default(uuid())
+  name    String
 }
