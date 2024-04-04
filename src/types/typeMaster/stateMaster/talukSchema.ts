@@ -1,11 +1,11 @@
 import { z } from "zod";
 import inputFieldSchema from "../../inputFieldSchema.js";
 
-const municipalitySchema = z.object({
+const talukSchema = z.object({
   id: inputFieldSchema.optional(),
   name: inputFieldSchema.toUpperCase(),
   districtId: inputFieldSchema,
 });
-type Municipality = z.infer<typeof municipalitySchema>;
+type Taluk = z.infer<typeof talukSchema>;
 
-export { Municipality, municipalitySchema };
+export { talukSchema, Taluk };
