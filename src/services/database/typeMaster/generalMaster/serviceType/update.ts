@@ -5,7 +5,7 @@ import throwDatabaseError from "../../../utils/errorHandler.js";
 async function updateServiceTypeDB(prismaTransaction:any, updateObject:updateServiceTypeType,id:string|undefined){
 
   try{
-    const updatedServiceType = await prisma.serviceType.update({
+    const updatedServiceType = await prismaTransaction.serviceType.update({
       where: {
         id: id,
       },

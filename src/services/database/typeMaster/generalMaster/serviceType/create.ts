@@ -7,7 +7,7 @@ import { createPostServiceDBObject } from "../../../../../dto/typeMaster/general
 async function createServiceTypeDB(prismaTransaction:any, data:postServiceTypeType){
 try{
     
-    const serviceType = await prisma.serviceType.create({
+    const serviceType = await prismaTransaction.serviceType.create({
         data:data,
     })
  
@@ -21,10 +21,13 @@ try{
 
 async function createServiceDB(prismaTransaction:any, data:postServiceType){
     try{
-        const service:Service= await prisma.service.create({
+        const service:Service= await prismaTransaction.service.create({
             data:data
         })
+        console.log("create db layer")
+        console.log(service)
         return service;
+      
     }catch(err){
         if (err instanceof Error) {
             throwDatabaseError(err);

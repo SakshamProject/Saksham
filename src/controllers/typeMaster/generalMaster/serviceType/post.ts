@@ -16,6 +16,8 @@ import {
 import { getServiceTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
 import { postServiceTypeDBTransaction } from "../../../../services/database/typeMaster/generalMaster/serviceType/transaction/post.js";
 import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
+import prisma from "../../../../services/database/database.js";
+import { getDisabilityTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/disabilityType/read.js";
 
 
 async function postServiceType(
@@ -27,10 +29,10 @@ async function postServiceType(
 
     const result = await postServiceTypeDBTransaction(body);
 
-
-    const responseResult = createResponseOnlyData(result ||{});
+    const responseResult = await getServiceTypeByIdDB(prisma,result?.id);
+    const responseData = createResponseOnlyData(responseResult ||{});
     
-  response.send(responseResult);
+  response.send(responseData);
 
  }catch(err){
     next(err)

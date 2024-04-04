@@ -6,6 +6,8 @@ import {
 } from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
 import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 import { putServiceTypeDBTransaction } from "../../../../services/database/typeMaster/generalMaster/serviceType/transaction/update.js";
+import prisma from "../../../../services/database/database.js";
+import { getServiceTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
 
 function retrieveServicesId(services: getSelectedServiceSchema[] | undefined) {
   try {
@@ -31,7 +33,14 @@ async function putServiceType(
       updateServiceTypeRequestSchema.parse(request.body);
 
     const result = await putServiceTypeDBTransaction(body);
-    const responseData = createResponseOnlyData(result || {});
+   
+    const responseResult = await getServiceTypeByIdDB(
+      prisma,
+      result
+    );
+
+  
+    const responseData = createResponseOnlyData(responseResult || {});
     response.send(responseData);
   } catch (err) {
 

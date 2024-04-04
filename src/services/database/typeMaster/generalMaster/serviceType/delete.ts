@@ -7,6 +7,9 @@ async function deleteServiceTypeDB(id: string) {
       where: {
         id: id,
       },
+      include:{
+        service:true
+      }
     });
     return deletedService;
   } catch (err) {
@@ -23,6 +26,8 @@ async function deleteServiceDB(id: string) {
         id: id,
       },
     });
+    console.log("delete db layer")
+    console.log(deletedService)
     return deletedService;
   } catch (err) {
     if (err instanceof Error) {
@@ -39,7 +44,7 @@ async function deleteUncheckedServices(
   try {
     for (let exisitingId of exisitingServicesId) {
       if (!updatedServicesId.includes(exisitingId)) {
-        const deletedService = await deleteServiceTypeDB(exisitingId);
+        const deletedService = await deleteServiceDB(exisitingId);
       }
     }
   } catch (err) {
