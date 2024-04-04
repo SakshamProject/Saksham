@@ -1,11 +1,16 @@
 import { NextFunction, Response, Request } from "express";
 import { getCommunityCategoryByIdDB, getCommunityCategoryDB } from "../../../../services/database/typeMaster/generalMaster/communityCategory/read.js";
 import { getCommunityCategorySchema } from "../../../../types/typeMaster/generalMaster/communityCategorySchema.js";
+import getRequestSchema from "../../../../types/getRequestSchema.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
 const getCommunityCategory = async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const result = await getCommunityCategoryDB()
-        response.send(result)
+      const body = getRequestSchema.parse(request.query);
+      console.log("body\n",body);
+        const result = await getCommunityCategoryDB(body.searchText,body.sortOrder);
+        const responseData= createResponseOnlyData(result||{});
+        response.send(responseData);
     } catch (error) {
         next(error)
     }
@@ -20,7 +25,8 @@ const getCommunityCategoryById = async (
       const id: string = request.params.id;
       const result: getCommunityCategorySchema | undefined =
         await getCommunityCategoryByIdDB(id);
-      response.send(result);
+        const responseData = createResponseOnlyData(result||{})
+      response.send(responseData);
     } catch (error) {
       next(error);
     }
