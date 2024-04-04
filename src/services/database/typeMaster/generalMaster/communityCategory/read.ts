@@ -4,11 +4,12 @@ import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getCommunityCategoryDB = async (
+    prismaTransaction:any,
+    sortOrder: sortOrderEnum |undefined = defaults.sortOrder,
   searchText: string = "",
-  sortOrder: sortOrderEnum = defaults.sortOrder
 ) => {
   try {
-    const communityCategories = await prisma.communityCategory.findMany({
+    const communityCategories = await prismaTransaction.communityCategory.findMany({
     
       orderBy: {
         name: sortOrder,
@@ -43,5 +44,22 @@ const getCommunityCategoryByIdDB = async (id: string) => {
     }
   }
 };
+async function getCommunityCategoryTotal( prismaTransaction: any,searchText:string|undefined){
+    try{
+      const CommunityCategory:number = await prismaTransaction.CommunityCategory.count(
+        {
+          where: {
+            name: { contains: searchText, mode: "insensitive" },
+          },
+        }
+      )
+      return CommunityCategory;
+    }catch(err){
+      if (err instanceof Error) {
+        throwDatabaseError(err);
+      }
+    }
+  
+  }
 
-export { getCommunityCategoryDB, getCommunityCategoryByIdDB };
+export { getCommunityCategoryDB, getCommunityCategoryByIdDB,getCommunityCategoryTotal };

@@ -2,15 +2,25 @@ import { NextFunction, Response, Request } from "express";
 import { getCommunityCategoryByIdDB, getCommunityCategoryDB } from "../../../../services/database/typeMaster/generalMaster/communityCategory/read.js";
 import { getCommunityCategorySchema } from "../../../../types/typeMaster/generalMaster/communityCategorySchema.js";
 import getRequestSchema from "../../../../types/getRequestSchema.js";
-import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
+import { createResponseOnlyData, createResponseWithQuery } from "../../../../types/createResponseSchema.js";
+import { getCommunityCategoryDBTransaction } from "../../../../services/database/typeMaster/generalMaster/communityCategory/transaction/read.js";
 
 const getCommunityCategory = async (request: Request, response: Response, next: NextFunction) => {
     try {
-      const body = getRequestSchema.parse(request.query);
-      console.log("body\n",body);
-        const result = await getCommunityCategoryDB(body.searchText,body.sortOrder);
-        const responseData= createResponseOnlyData(result||{});
-        response.send(responseData);
+      const query = getRequestSchema.parse(request.query);
+      console.log("body\n",query);
+        const result = await getCommunityCategoryDBTransaction(query.start,query.rows,query.sortOrder,query.searchText);
+
+        const count: number = result?.communityCategory?.length || 0;
+        const total: number = result?.total || 0;
+        const resultWithRequest = createResponseWithQuery(
+          result?.communityCategory || {},
+          query,
+          total,
+          count
+        );
+    
+        response.send(resultWithRequest);    
     } catch (error) {
         next(error)
     }
