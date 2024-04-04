@@ -33,7 +33,6 @@ async function postServiceTypeDBTransaction(
           );
         }
 
-        //const result = await getServiceTypeByIdDB(prismaTransaction,serviceType?.id);
         return serviceType;
       } catch (error) {
         if (error instanceof Error) throwDatabaseError(error);

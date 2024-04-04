@@ -18,7 +18,6 @@ async function postDisabilityTypeDBTransaction(
           const disabilityType: DisabilityType | undefined = await createDisabilityTypeDB(prismaTransaction,
             postDisabilityTypeDBObject
           );
-          console.log(disabilityType)
   
           for (let disabilitySubTypeName of body.disabilitySubType) {
             const postDisabilitySubTypeDBObject=
@@ -31,8 +30,8 @@ async function postDisabilityTypeDBTransaction(
 
           }
   
-          const result = await getDisabilityTypeByIdDB(prismaTransaction,disabilityType?.id);
-          return result;
+          //const result = await getDisabilityTypeByIdDB(prismaTransaction,disabilityType?.id);
+          return disabilityType?.id;
         } catch (error) {
           if (error instanceof Error) throwDatabaseError(error);
         }

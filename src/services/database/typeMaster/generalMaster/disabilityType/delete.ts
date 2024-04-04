@@ -7,6 +7,9 @@ async function deleteDisabilityTypeDB(id: string) {
         where: {
           id: id,
         },
+        include:{
+          disability:true
+        }
       });
       return deleteddisabilityType;
     } catch (err) {
@@ -31,5 +34,21 @@ async function deleteDisabilityTypeDB(id: string) {
     }
   }
 
+  async function deleteUncheckedDisabilitySubTypes(
+    prismaTransaction: any,
+    exisitingDisabilitySubTypesId: string[],
+    updatedDisabilitySubTypesIdId: string[]
+  ) {
+    try {
+      for (let exisitingId of exisitingDisabilitySubTypesId) {
+        if (!updatedDisabilitySubTypesIdId.includes(exisitingId)) {
+          const deletedDisabilitySubTypesIdId = await deleteDisabilitySubTypeDB(exisitingId);
+        }
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
 
-  export {deleteDisabilityTypeDB,deleteDisabilitySubTypeDB};
+
+  export {deleteDisabilityTypeDB,deleteDisabilitySubTypeDB,deleteUncheckedDisabilitySubTypes};
