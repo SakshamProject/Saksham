@@ -19,8 +19,8 @@ type getSelectedEducationQualificationSchema = Prisma.EducationQualificationGetP
 
 const postRequestEducationQualification = z.object({
     id: inputFieldSchema.optional(),
-    educationQualificationTypeName: inputFieldSchema.transform((value) => value.toUpperCase()),
-    educationQualificationName: z.array(inputFieldSchema).transform((value) => value.map((educationQualificationName) => educationQualificationName.toUpperCase()))
+    name: inputFieldSchema.transform((value) => value.toUpperCase()),
+    educationQualification: z.array(inputFieldSchema).transform((value) => value.map((educationQualificationName) => educationQualificationName.toUpperCase()))
 })
 
 const educationQualificationNameSchema = z.object({
@@ -30,11 +30,9 @@ const educationQualificationNameSchema = z.object({
 
 const updateEducationQualificationTypeRequestSchema = z.object({
     id: inputFieldSchema.optional(),
-    educationQualificationTypeName: inputFieldSchema.transform((value) => value.toUpperCase()),
-    educationQualificationName: z.array(educationQualificationNameSchema)
+    name: inputFieldSchema.transform((value) => value.toUpperCase()),
+    educationQualification: z.array(educationQualificationNameSchema)
 });
-
-type updateEducationQualificationTypeRequestSchemaType= z.infer<typeof updateEducationQualificationTypeRequestSchema>;
 
 type educationQualificationNameSchemaType  = z.infer<typeof educationQualificationNameSchema>;
 
@@ -55,7 +53,6 @@ export {getEducationalQualificationTypeSchema,
     postEducationalQualificationBodyType, 
     postEducationalQualificationType,
     updateEducationQualificationTypeRequestSchema,
-    updateEducationQualificationTypeRequestSchemaType,
     updateEducationQualificationTypeType,
     educationQualificationNameSchemaType,
     getEducationQualificationTypeWithEducationQualificationSchema,

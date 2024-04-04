@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import {
     serviceTypeRequestSchema,
   serviceTypeRequestSchemaType,
-  postServiceType,
 } from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
 import { Prisma, Service, ServiceType } from "@prisma/client";
 import {
@@ -23,7 +22,7 @@ async function postServiceType(
   response: Response,
   next: NextFunction
 ) {
-  try{const body: serviceTypeRequestSchemaType= serviceTypeRequestSchema.parse(request.body);
+  try{const body: serviceTypeRequestSchemaType = serviceTypeRequestSchema.parse(request.body);
 
     const result = await postServiceTypeDBTransaction(body);
 

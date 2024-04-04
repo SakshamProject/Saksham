@@ -1,45 +1,26 @@
-import { NextFunction, Request, Response } from "express";
-import { postEducationalQualificationBodyType, postEducationQualification, postRequestEducationQualification } from "../../../../types/typeMaster/generalMaster/educationalQualificationSchema.js";
-import { EducationQualification, EducationQualificationType } from "@prisma/client";
-import { getEducationQualificationTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/read.js";
-import { createPostEducationQualificationDBObject, createPostEducationQualificationTypeDBObject } from "../../../../dto/typeMaster/generalMaster/educationalQualification/post.js";
-import { createEducationQualificationDB, createEducationQualificationTypeDB } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/create.js";
+import { NextFunction, Response, Request } from "express";
+import { postEducationQualificationTypeDBTransaction } from "../../../../services/database/typeMaster/generalMaster/educationalQualification/transaction/post.js";
+import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
+import { postEducationalQualificationBodyType, postRequestEducationQualification } from "../../../../types/typeMaster/generalMaster/educationalQualificationSchema.js";
+
 
 async function postEducationQualificationType(
   request: Request,
   response: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
-  try{const body: postEducationalQualificationBodyType = postRequestEducationQualification.parse(request.body);
+  try {
+    const body: postEducationalQualificationBodyType = postRequestEducationQualification.parse(request.body);
 
-    const postEducationalQualificationDBObject = createPostEducationQualificationTypeDBObject(body);
+    const result = await postEducationQualificationTypeDBTransaction(body);
 
-    const educationQualificationType: EducationQualificationType | undefined
-     = await createEducationQualificationTypeDB(
-        postEducationalQualificationDBObject
-      );
+    const responseData = createResponseOnlyData(result || {});
 
-      for(let educationQualificationName of body.educationQualificationName){
+    response.send(responseData)
 
-        const postEducationQualificationDBObject: postEducationQualification = createPostEducationQualificationDBObject(
-            educationQualificationName,
-            educationQualificationType?.id
-        );
-      
-        const educationQualification: EducationQualification | undefined = await createEducationQualificationDB(
-          postEducationQualificationDBObject
-        );
-      }
-
-      const result= await getEducationQualificationTypeByIdDB(educationQualificationType?.id);
-   
-    
-   
-  response.send(result);}catch(err){
+  } catch (err) {
     next(err)
   }
 }
 
-
-
-export { postEducationQualificationType };
+export { postEducationQualificationType }

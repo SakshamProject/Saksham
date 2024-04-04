@@ -5,7 +5,7 @@ import throwDatabaseError from "../../../utils/errorHandler.js";
 import defaults from "../../../../../defaults.js";
 import { sortOrderEnum } from "../../../../../types/getRequestSchema.js";
 
-async function getEducationQualificationTypeByIdDB(id: string | undefined) {
+async function getEducationQualificationTypeByIdDB(prismaTransaction: any, id: string | undefined) {
 
   try {
     const educationalQualification: getEducationalQualificationTypeSchema | null =

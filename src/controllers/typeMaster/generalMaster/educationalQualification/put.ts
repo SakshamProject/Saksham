@@ -86,7 +86,7 @@ async function putEducationQualificationType(request:Request, response:Response,
     
         const existingEducationQualificationsId:string[]|undefined = retrieveEducationQualificationsId(existingEducationQualifications);
     
-        const educationQualifications = body.educationQualificationName;
+        const educationQualifications = body.educationQualification;
 
         const checkedEducationQualificationsId:string[] = await createCheckedEducationQualifications(educationQualifications,updatedEducationQualificationType?.id)
     
