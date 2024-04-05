@@ -1,9 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
 import educationalQualificationRouter from "./educationalQualification.js";
-import serviceTypeRouter from "./serviceType.js";
 import disabilityTypeRouter from "./disabilityType.js";
 import prisma from "../../../services/database/database.js";
 import { createResponseOnlyData } from "../../../types/createResponseSchema.js";
+import serviceTypeRouter from "./serviceType.js";
 
 const generalMasterRouter = express.Router();
 

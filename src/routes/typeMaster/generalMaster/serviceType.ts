@@ -14,5 +14,4 @@ serviceTypeRouter.delete("/:id",deleteServiceType);
 serviceTypeRouter.get("/services/:serviceTypeId",getServiceByServiceTypeId);
 
 
-
 export default serviceTypeRouter;
