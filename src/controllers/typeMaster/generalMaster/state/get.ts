@@ -19,7 +19,7 @@ const getState = async (
     const total: number = result?.total || 0;
     const count: number = result?.states?.length || 0;
     const responseData = createResponseWithQuery(
-      result || {},
+      result?.states || {},
       query,
       total,
       count
