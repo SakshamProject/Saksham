@@ -9,6 +9,18 @@ const inputFieldSchema = z
     /^[\w\s.-]+$/gm,
     "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]"
   );
-export const queryParamsSchema = z.string().optional();
 
+const phoneNumberSchema = z.string().length(10);
+const emailSchema = z.string().email();
+const landLineNumberSchema = z.string().min(6);
+const uuidSchema = z.string().uuid();
+const queryParamsSchema = z.string().optional();
+
+export {
+  phoneNumberSchema,
+  emailSchema,
+  landLineNumberSchema,
+  uuidSchema,
+  queryParamsSchema,
+};
 export default inputFieldSchema;

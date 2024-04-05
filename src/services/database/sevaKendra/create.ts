@@ -1,24 +1,29 @@
-import prisma from "../database.js";
 import {
   ContactPerson,
   ServicesOnSevaKendras,
   SevaKendra,
   SevaKendraAuditLog,
-} from "@prisma/client";
+} from "../../../types/sevaKendra/sevaKendra.js";
+import prisma from "../database.js";
 
 const createContactPersonDB = async (contactPerson: ContactPerson) => {
   const createdContactPerson = await prisma.contactPerson.create({
     data: contactPerson,
   });
+  return createdContactPerson;
   console.log("\n contact created \n");
   console.log(createdContactPerson);
 };
-const createSevaKendraDB = async (sevaKendra: SevaKendra) => {
-  const createdSevaKendra = await prisma.sevaKendra.create({
+const createSevaKendraDB = async (
+  prismaTransaction: any,
+  sevaKendra: SevaKendra
+) => {
+  const createdSevaKendra = await prismaTransaction.sevaKendra.create({
     data: sevaKendra,
   });
   console.log("\n sevaKendra created \n");
   console.log(createdSevaKendra);
+  return createdSevaKendra;
 };
 
 const createServicesOnSevaKendraDB = async (
