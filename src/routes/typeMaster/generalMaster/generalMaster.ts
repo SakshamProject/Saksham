@@ -21,5 +21,6 @@ generalMasterRouter.get(
     response.send(responseData);
   }
 );
+generalMasterRouter.use("/communitycategory", communityCategoryRouter)
 
 export default generalMasterRouter;

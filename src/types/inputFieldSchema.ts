@@ -9,5 +9,6 @@ const inputFieldSchema = z
     /^[\w\s.-]+$/gm,
     "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]"
   );
+export const queryParamsSchema = z.string().optional();
 
 export default inputFieldSchema;

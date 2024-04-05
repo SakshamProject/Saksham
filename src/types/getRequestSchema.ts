@@ -1,5 +1,5 @@
 import { z } from "zod";
-export enum sortOrderEnum  {
+export enum sortOrderEnum {
   ascending = "asc",
   descending = "desc",
 }
@@ -13,7 +13,8 @@ const getRequestSchema = z.object({
     .optional(),
   orderByColumn: z.string().optional(),
   sortOrder: z.nativeEnum(sortOrderEnum).optional(),
-  searchText:z.string().optional(),
+  searchText: z.string().optional(),
 });
+
 export type getRequestType = z.infer<typeof getRequestSchema>;
 export default getRequestSchema;

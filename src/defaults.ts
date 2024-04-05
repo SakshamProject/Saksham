@@ -4,7 +4,7 @@ const defaults = {
   skip: 0,
   take: 10,
   minFieldLength: 3,
-  sortOrder:sortOrderEnum.ascending
+  sortOrder: sortOrderEnum.ascending,
 };
 
 export default defaults;
