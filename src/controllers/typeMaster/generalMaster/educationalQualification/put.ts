@@ -78,9 +78,10 @@ async function createCheckedEducationQualifications(educationQualifications:educ
 async function putEducationQualificationType(request:Request, response:Response,next:NextFunction){
 
     try{
+        const id = request.params.id
         const body: updateEducationQualificationTypeRequestSchemaType = updateEducationQualificationTypeRequestSchema.parse(request.body);
 
-        const result = await updateEducationQualificationTypeDBTransaction(body);
+        const result = await updateEducationQualificationTypeDBTransaction(id, body);
         const responseData = createResponseOnlyData(result || {});
         response.send(responseData)
     }catch(err){

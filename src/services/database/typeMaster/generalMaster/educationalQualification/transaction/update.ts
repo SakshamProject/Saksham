@@ -17,6 +17,7 @@ import { updateEducationQualificationTypeDB } from '../update.js'
 import { deleteUncheckedEducationQualifications } from '../delete.js'
 
 async function updateEducationQualificationTypeDBTransaction(
+  id: string,
   body: updateEducationQualificationTypeRequestSchemaType,
 ) {
   const transaction = await prisma.$transaction(async (prismaTransaction) => {
@@ -31,12 +32,12 @@ async function updateEducationQualificationTypeDBTransaction(
         | undefined = await updateEducationQualificationTypeDB(
         prismaTransaction,
         updateEducationQualificationTypeObject,
-        body.id,
+        id,
       )
 
       const existingEducationQualifications = await getEducationQualificationByEducationQualificationTypeIdDB(
         prismaTransaction,
-        body.id,
+        id,
       )
 
       const existingEducationQualificationsId:

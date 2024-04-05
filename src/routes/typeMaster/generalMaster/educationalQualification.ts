@@ -12,6 +12,6 @@ educationalQualificationRouter.get("/:id", getEducationQualificationTypeById);
 educationalQualificationRouter.post("/", postEducationQualificationType);
 educationalQualificationRouter.put("/:id", putEducationQualificationType);
 educationalQualificationRouter.delete("/:id", deleteEducationQualificationType);
-educationalQualificationRouter.get("/services/:educationQualificationTypeId",getEducationQualificationByEducationQualificationTypeId);
+// educationalQualificationRouter.get("/services/:educationQualificationTypeId",getEducationQualificationByEducationQualificationTypeId);
 
 export default educationalQualificationRouter;
