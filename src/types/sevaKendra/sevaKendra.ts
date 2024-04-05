@@ -6,6 +6,9 @@ import inputFieldSchema, {
   uuidSchema,
 } from "../inputFieldSchema.js";
 import { AuditLogStatusEnum, Prisma } from "@prisma/client";
+import { SevaKendraColumnNamesEnum } from "./sevaKendraDefaults.js";
+
+const SevaKendraColumnNameSchema = z.nativeEnum(SevaKendraColumnNamesEnum);
 
 const SevaKendraRequestSchema = z.object({
   name: inputFieldSchema.toUpperCase(),
@@ -40,6 +43,7 @@ type ServicesOnSevaKendras = Prisma.ServicesOnSevaKendrasCreateInput;
 type SevaKendraAuditLog = Prisma.SevaKendraAuditLogCreateInput;
 
 export {
+  SevaKendraColumnNameSchema,
   SevaKendraRequestSchemaType,
   SevaKendra,
   ContactPerson,

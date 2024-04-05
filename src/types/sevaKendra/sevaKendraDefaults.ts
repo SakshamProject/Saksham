@@ -1,3 +1,10 @@
 const sevaKendraDefaultDescription = "SevaKendra is started";
 
-export { sevaKendraDefaultDescription };
+enum SevaKendraColumnNamesEnum {
+  NAME = "name",
+  STATE = "state",
+  DISTRICT = "district",
+  CONTACTNAME = "contact-name",
+  CONTACTNUMBER = "contact-number",
+}
+export { sevaKendraDefaultDescription, SevaKendraColumnNamesEnum };
