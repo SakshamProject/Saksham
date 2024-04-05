@@ -16,5 +16,5 @@ const addressRequestSchema = z.object({
     corporationId: uuidSchema,
     MLAConstituencyId: uuidSchema,
     MPConstituancyId: uuidSchema,
-    pincode: z.string().length(6)
+    pincode: z.number().min(0).max(999999)
 })
