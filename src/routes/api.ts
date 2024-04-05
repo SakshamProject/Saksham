@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from "express";
 import { pingDB } from "../services/database/database.js";
 import typeMasterRouter from "./typeMaster/typeMaster.js";
 import errorHandler from "../middlewares/errorHandler.js";
+import sevaKendraRouter from "./sevaKendra/sevaKendra.js";
 
 const apiRouter = Router();
 
@@ -18,7 +19,7 @@ apiRouter.get(
     response.json({ message: "API is up and running!" });
   }
 );
-
+apiRouter.use("/sevakendras", sevaKendraRouter);
 apiRouter.use("/typemaster", typeMasterRouter);
 apiRouter.use(errorHandler);
 export default apiRouter;

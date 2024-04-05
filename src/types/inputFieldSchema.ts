@@ -10,7 +10,7 @@ const inputFieldSchema = z
     "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]"
   );
 
-const phoneNumberSchema = z.string().length(10);
+const phoneNumberSchema = z.string().length(15);
 const emailSchema = z.string().email();
 const landLineNumberSchema = z.string().min(6);
 const uuidSchema = z.string().uuid();

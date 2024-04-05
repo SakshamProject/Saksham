@@ -1,5 +1,6 @@
 import express from "express";
 import postSevaKendra from "../../controllers/sevaKendra/post.js";
+import getSevaKendra from "../../controllers/sevaKendra/get.js";
 // import {
 //   deleteSevaKendra,
 //   getSevaKendra,
@@ -9,7 +10,7 @@ import postSevaKendra from "../../controllers/sevaKendra/post.js";
 
 const sevaKendraRouter = express.Router();
 
-// sevaKendraRouter.get("/", getSevaKendra);
+sevaKendraRouter.get("/", getSevaKendra);
 // sevaKendraRouter.get("/:id", getSevaKendraById);
 sevaKendraRouter.post("/", postSevaKendra);
 // sevaKendraRouter.put("/", putSevaKendra);

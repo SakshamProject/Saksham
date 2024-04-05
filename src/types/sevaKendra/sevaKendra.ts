@@ -8,7 +8,9 @@ import inputFieldSchema, {
 import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import { SevaKendraColumnNamesEnum } from "./sevaKendraDefaults.js";
 
-const SevaKendraColumnNameSchema = z.nativeEnum(SevaKendraColumnNamesEnum);
+const SevaKendraColumnNameSchema = z
+  .nativeEnum(SevaKendraColumnNamesEnum)
+  .optional();
 
 const SevaKendraRequestSchema = z.object({
   name: inputFieldSchema.toUpperCase(),
@@ -16,7 +18,7 @@ const SevaKendraRequestSchema = z.object({
   address: z.string(),
   landLineNumber: landLineNumberSchema,
   mobileNumber: phoneNumberSchema,
-  startDate: z.date().optional(),
+  startDate: z.string().optional(),
   contactPerson: z.object({
     name: inputFieldSchema.toUpperCase(),
     email: emailSchema,

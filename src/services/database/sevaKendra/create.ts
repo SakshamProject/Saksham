@@ -20,6 +20,7 @@ const createSevaKendraDB = async (
   sevaKendra: SevaKendra
 ) => {
   try {
+    console.log(sevaKendra);
     const createdSevaKendra = await prismaTransaction.sevaKendra.create({
       data: sevaKendra,
     });

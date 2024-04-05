@@ -21,7 +21,7 @@ model SevaKendra {
   address         String
   mobileNumber    String
   landLineNumber  String
-  startDate       DateTime?
+  startDate       String?
   contactPersonId String
   createdAt       String?
   createdBy       String?

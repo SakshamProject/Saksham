@@ -5,10 +5,10 @@ import {
 import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import { sevaKendraDefaultDescription } from "../../types/sevaKendra/sevaKendraDefaults.js";
 
-const createSevaKendraDBObject = async (
+const createSevaKendraDBObject = (
   sevaKendra: SevaKendraRequestSchemaType,
   createdBy: string
-): Promise<SevaKendra> => {
+) => {
   const sevaKendraDBObject: SevaKendra = {
     name: sevaKendra.name,
     district: {
@@ -19,7 +19,7 @@ const createSevaKendraDBObject = async (
     address: sevaKendra.address,
     mobileNumber: sevaKendra.mobileNumber,
     landLineNumber: sevaKendra.landLineNumber,
-    startDate: sevaKendra.startDate,
+    startDate: Date.now().toString(),
     contactPerson: {
       create: {
         name: sevaKendra.contactPerson.name,

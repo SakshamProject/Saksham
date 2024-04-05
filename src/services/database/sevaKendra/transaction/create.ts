@@ -15,10 +15,11 @@ const createSevaKendraTransaction = async (
   const transaction = prisma.$transaction(
     async (prismaTransaction) => {
       try {
-        const sevaKendraDBObject: SevaKendra = await createSevaKendraDBObject(
+        const sevaKendraDBObject: SevaKendra = createSevaKendraDBObject(
           newSevaKendra,
           createdBy
         );
+        console.log(sevaKendraDBObject);
         const createdSevaKendra = await createSevaKendraDB(
           prismaTransaction,
           sevaKendraDBObject
