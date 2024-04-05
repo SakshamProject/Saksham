@@ -72,7 +72,7 @@ model Service {
   serviceTypeId String
   createdAt DateTime @default(now())
 
-  serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id])
+  serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id],onDelete: Cascade)
   sevaKendras ServicesOnSevaKendras[]
   divyang     DivyangServiceMapping[]
 }
@@ -392,7 +392,7 @@ model EducationQualification {
   id      String                            @id @default(uuid())
   name    String                            @unique
   educationQualificationTypeId String
-  educationQualificationType EducationQualificationType @relation(fields: [educationQualificationTypeId],references: [id])
+  educationQualificationType EducationQualificationType @relation(fields: [educationQualificationTypeId],references: [id], onDelete: Cascade)
   divyang DivyangEducationalQualification[]
 }
 
