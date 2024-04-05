@@ -4,6 +4,7 @@ import disabilityTypeRouter from "./disabilityType.js";
 import prisma from "../../../services/database/database.js";
 import { createResponseOnlyData } from "../../../types/createResponseSchema.js";
 import serviceTypeRouter from "./serviceType.js";
+import { communityCategoryRouter } from "./communityCategory.js";
 
 const generalMasterRouter = express.Router();
 
