@@ -1,20 +1,25 @@
 import { NextFunction, Request, Response } from "express";
-import { deleteTalukDB } from "../../../../services/database/typeMaster/stateMaster/taluk/delete.js";
-import { Taluk } from "../../../../types/typeMaster/stateMaster/talukSchema.js";
+import {
+  State,
+  stateSchema,
+} from "../../../../types/typeMaster/generalMaster/stateSchema.js";
+import { updateStateDB } from "../../../../services/database/typeMaster/generalMaster/district/update.js";
 import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 
-const deleteTaluk = async (
+const updateState = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
   try {
     const id: string = request.params.id;
-    const result: Taluk | undefined = await deleteTalukDB(id);
+    const state: State = stateSchema.parse(request.body);
+    const result: State | undefined = await updateStateDB(state, id);
     const responseData = createResponseOnlyData(result || {});
     response.send(responseData);
   } catch (error) {
     next(error);
   }
 };
-export { deleteTaluk };
+
+export { updateState };
