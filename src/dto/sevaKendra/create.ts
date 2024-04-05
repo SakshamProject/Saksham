@@ -19,7 +19,7 @@ const createSevaKendraDBObject = (
     address: sevaKendra.address,
     mobileNumber: sevaKendra.mobileNumber,
     landLineNumber: sevaKendra.landLineNumber,
-    startDate: Date.now().toString(),
+    startDate: sevaKendra.startDate,
     contactPerson: {
       create: {
         name: sevaKendra.contactPerson.name,
@@ -28,19 +28,19 @@ const createSevaKendraDBObject = (
         phoneNumber2: sevaKendra.contactPerson.phoneNumber2,
       },
     },
-    services: {
-      createMany: {
-        data: sevaKendra.servicesBySevaKendra,
-        skipDuplicates: true,
-      },
-    },
-    SevaKendraAuditLog: {
-      create: {
-        status: AuditLogStatusEnum.ACTIVE,
-        date: Date.now().toString(),
-        description: sevaKendraDefaultDescription,
-      },
-    },
+    // services: {
+    //   createMany: {
+    //     data: sevaKendra.servicesBySevaKendra,
+    //     skipDuplicates: true,
+    //   },
+    // },
+    // SevaKendraAuditLog: {
+    //   create: {
+    //     status: AuditLogStatusEnum.ACTIVE,
+    //     date: Date.now().toString(),
+    //     description: sevaKendraDefaultDescription,
+    //   },
+    // },
     createdBy: createdBy,
   };
   return sevaKendraDBObject;

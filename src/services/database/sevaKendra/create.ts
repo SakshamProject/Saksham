@@ -15,14 +15,18 @@ import throwDatabaseError from "../utils/errorHandler.js";
 //   console.log("\n contact created \n");
 //   console.log(createdContactPerson);
 // };
-const createSevaKendraDB = async (
-  prismaTransaction: any,
-  sevaKendra: SevaKendra
-) => {
+const createSevaKendraDB = async (sevaKendra: SevaKendra) => {
   try {
     console.log(sevaKendra);
-    const createdSevaKendra = await prismaTransaction.sevaKendra.create({
-      data: sevaKendra,
+    const createdSevaKendra = await prisma.sevaKendra.create({
+      data: {
+        name: sevaKendra.name,
+        district: sevaKendra.district,
+        address: sevaKendra.address,
+        mobileNumber: sevaKendra.mobileNumber,
+        landLineNumber: sevaKendra.landLineNumber,
+        contactPerson: sevaKendra.contactPerson,
+      },
     });
     console.log("\n sevaKendra created \n");
     console.log(createdSevaKendra);
