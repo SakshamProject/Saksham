@@ -1,4 +1,7 @@
-const sevaKendraDefaultDescription = "SevaKendra is started";
+const sevaKendraDefaults = {
+  description: "SevaKendra is started",
+  date: "2023-05-12",
+};
 
 enum SevaKendraColumnNamesEnum {
   NAME = "name",
@@ -7,4 +10,4 @@ enum SevaKendraColumnNamesEnum {
   CONTACTNAME = "contact-name",
   CONTACTNUMBER = "contact-number",
 }
-export { sevaKendraDefaultDescription, SevaKendraColumnNamesEnum };
+export { sevaKendraDefaults, SevaKendraColumnNamesEnum };

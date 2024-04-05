@@ -3,7 +3,7 @@ import {
   SevaKendraRequestSchemaType,
 } from "../../types/sevaKendra/sevaKendra.js";
 import { AuditLogStatusEnum, Prisma } from "@prisma/client";
-import { sevaKendraDefaultDescription } from "../../types/sevaKendra/sevaKendraDefaults.js";
+import { sevaKendraDefaults } from "../../types/sevaKendra/sevaKendraDefaults.js";
 
 const createSevaKendraDBObject = (
   sevaKendra: SevaKendraRequestSchemaType,
@@ -28,19 +28,19 @@ const createSevaKendraDBObject = (
         phoneNumber2: sevaKendra.contactPerson.phoneNumber2,
       },
     },
-    // services: {
-    //   createMany: {
-    //     data: sevaKendra.servicesBySevaKendra,
-    //     skipDuplicates: true,
-    //   },
-    // },
-    // SevaKendraAuditLog: {
-    //   create: {
-    //     status: AuditLogStatusEnum.ACTIVE,
-    //     date: Date.now().toString(),
-    //     description: sevaKendraDefaultDescription,
-    //   },
-    // },
+    services: {
+      createMany: {
+        data: sevaKendra.servicesBySevaKendra,
+        skipDuplicates: true,
+      },
+    },
+    SevaKendraAuditLog: {
+      create: {
+        status: AuditLogStatusEnum.ACTIVE,
+        date: sevaKendraDefaults.date,
+        description: sevaKendraDefaults.description,
+      },
+    },
     createdBy: createdBy,
   };
   return sevaKendraDBObject;

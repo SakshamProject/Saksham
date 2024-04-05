@@ -19,14 +19,15 @@ const createSevaKendraDB = async (sevaKendra: SevaKendra) => {
   try {
     console.log(sevaKendra);
     const createdSevaKendra = await prisma.sevaKendra.create({
-      data: {
-        name: sevaKendra.name,
-        district: sevaKendra.district,
-        address: sevaKendra.address,
-        mobileNumber: sevaKendra.mobileNumber,
-        landLineNumber: sevaKendra.landLineNumber,
-        contactPerson: sevaKendra.contactPerson,
-      },
+      data: sevaKendra,
+      // {
+      //   name: sevaKendra.name,
+      //   district: sevaKendra.district,
+      //   address: sevaKendra.address,
+      //   mobileNumber: sevaKendra.mobileNumber,
+      //   landLineNumber: sevaKendra.landLineNumber,
+      //   contactPerson: sevaKendra.contactPerson,
+      // },
     });
     console.log("\n sevaKendra created \n");
     console.log(createdSevaKendra);

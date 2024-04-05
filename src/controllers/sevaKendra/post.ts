@@ -21,7 +21,7 @@ const postSevaKendra = async (
       newSevaKendra,
       createdBy
     );
-    const result = createSevaKendraDB(sevaKendraDBObject);
+    const result = await createSevaKendraDB(sevaKendraDBObject);
     const responseData = createResponseOnlyData(result || {});
     response.send(responseData);
   } catch (error) {
