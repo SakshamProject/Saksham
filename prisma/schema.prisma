@@ -178,6 +178,7 @@ model DivyangDetails {
   spouseNumber            String?
   religion                String
   communityCategoryId     String
+  community               String
   extraCurricularActivity String?
 // all below here are in next page
   voterId                String?
