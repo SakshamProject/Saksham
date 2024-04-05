@@ -17,7 +17,7 @@ import {
   createServicesOnSevaKendraDBObject,
   createSevaKendraAuditLogDBObject,
   createSevaKendraDBObject,
-} from "../../DTO/sevaKendra/create.js";
+} from "../../dto/sevaKendra/create.js";
 import {
   getContactPersonIdBySevaKendraId,
   getSevaKendraDB,
@@ -32,7 +32,7 @@ import {
   updateServicesOnSevaKendraDBObject,
   updateSevaKendraAuditLogDBObject,
   updateSevaKendraDBObject,
-} from "../../DTO/sevaKendra/update.js";
+} from "../../dto/sevaKendra/update.js";
 import {
   updateContactPersonDB,
   updateServicesOnSevaKendraDB,
