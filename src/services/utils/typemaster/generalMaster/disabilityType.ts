@@ -37,13 +37,13 @@ async function createCheckedDisabilitySubTypes(
       if (!disability.id) {
         const postServiceDBObject: postDisabilitySubTypeType =
           createPostDisabilitySubTypeDBObject(
-            prisma,
+           
             disability.name,
             updatedDisabilitySubTypeId
           );
 
         const createdDisabilitySubType: DisabilitySubType | undefined =
-          await createDisabilitySubTypeDB(prisma, postServiceDBObject);
+          await createDisabilitySubTypeDB(prismaTransaction, postServiceDBObject);
 
         if (createdDisabilitySubType) {
           checkedServicesId.push(createdDisabilitySubType.id);
@@ -69,6 +69,7 @@ async function deleteUncheckedDisabilitySubTypes(
     for (let exisitingId of exisitingDisabilitySubTypesId) {
       if (!updatedDisabilitySubTypesIdId.includes(exisitingId)) {
         const deletedDisabilitySubTypesIdId = await deleteDisabilitySubTypeDB(
+          prismaTransaction,
           exisitingId
         );
       }

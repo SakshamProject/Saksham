@@ -19,9 +19,9 @@ async function deleteServiceTypeDB(id: string) {
   }
 }
 
-async function deleteServiceDB(id: string) {
+async function deleteServiceDB(prismaTransaction:any,id: string) {
   try {
-    const deletedService = await prisma.service.delete({
+    const deletedService = await prismaTransaction.service.delete({
       where: {
         id: id,
       },
@@ -44,7 +44,7 @@ async function deleteUncheckedServices(
   try {
     for (let exisitingId of exisitingServicesId) {
       if (!updatedServicesId.includes(exisitingId)) {
-        const deletedService = await deleteServiceDB(exisitingId);
+        const deletedService = await deleteServiceDB(prismaTransaction,exisitingId);
       }
     }
   } catch (err) {

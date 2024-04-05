@@ -13,7 +13,8 @@ function createPostDisabilityTypeDBObject(
 }
 
 function createPostDisabilitySubTypeDBObject(
-  prismaTransaction: any,
+  
+  
   disabilitySubTypeName: string,
   disabilityTypeId: string | undefined
 ) {

@@ -50,7 +50,7 @@ async function createCheckedServices(prismaTransaction:any,services:serviceNameS
                  updatedServiceTypeId
                );
  
-               const createdService:Service|undefined = await createServiceDB(prisma,postServiceDBObject);
+               const createdService:Service|undefined = await createServiceDB(prismaTransaction,postServiceDBObject);
  
                  if(createdService){
                      checkedServicesId.push(createdService.id)

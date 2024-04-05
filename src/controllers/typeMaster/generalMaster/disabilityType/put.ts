@@ -18,7 +18,9 @@ async function putDisabilityType(
     const body: updateDisabilityTypeRequestSchemaType =
       updateDisabilityTypeRequestSchema.parse(request.body);
 
-    const result = await putDisabilityTypeDBTransaction(body);
+    const id :string = request.params.id;
+
+    const result = await putDisabilityTypeDBTransaction(body,id);
 
     const responseResult = await getDisabilityTypeByIdDB(prisma, result);
 

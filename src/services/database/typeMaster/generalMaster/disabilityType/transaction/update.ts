@@ -15,14 +15,15 @@ import {
 } from "../../../../../utils/typemaster/generalMaster/disabilityType.js";
 
 async function putDisabilityTypeDBTransaction(
-  body: updateDisabilityTypeRequestSchemaType
+  body: updateDisabilityTypeRequestSchemaType,
+  id:string
 ) {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
       try {
         const updateDisabilityTypeObject = createUpdateDisabilityTypeObject(
           prismaTransaction,
-          body
+          body,id
         );
 
         const updatedDisabilityType:
@@ -30,13 +31,13 @@ async function putDisabilityTypeDBTransaction(
           | undefined = await updateDisabilityTypeDB(
           prismaTransaction,
           updateDisabilityTypeObject,
-          body.id
+          id
         );
 
         const exisitingDisabilitySubTypes =
           await getDisabilitySubTypeByDisabilityTypeIdDB(
             prismaTransaction,
-            body.id
+            id
           );
 
         const exisitingDisabilitySubTypesId: string[] | undefined =
@@ -48,7 +49,7 @@ async function putDisabilityTypeDBTransaction(
           await createCheckedDisabilitySubTypes(
             prismaTransaction,
             services,
-            updatedDisabilityType?.id
+            id
           );
 
         await deleteUncheckedDisabilitySubTypes(
@@ -57,7 +58,7 @@ async function putDisabilityTypeDBTransaction(
           checkedDisabilitySubTypesId
         );
 
-        return updatedDisabilityType?.id;
+        return id;
       } catch (error) {
         if (error instanceof Error) throwDatabaseError(error);
       }

@@ -31,13 +31,18 @@ async function putServiceType(
   try {
     const body: updateServiceTypeRequestSchemaType =
       updateServiceTypeRequestSchema.parse(request.body);
+      console.log("body\n",body)
 
-    const result = await putServiceTypeDBTransaction(body);
+      const id :string = request.params.id;
+      console.log("paramsID",id)
+
+    const result = await putServiceTypeDBTransaction(body,id);
    
     const responseResult = await getServiceTypeByIdDB(
       prisma,
-      result
+      id
     );
+    console.log("responseResult\n",responseResult)
 
   
     const responseData = createResponseOnlyData(responseResult || {});

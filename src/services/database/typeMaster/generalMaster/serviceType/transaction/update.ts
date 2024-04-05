@@ -14,47 +14,52 @@ import { getServiceByServiceTypeIdDB, getServiceTypeByIdDB } from "../read.js";
 import { updateServiceTypeDB } from "../update.js";
 
 async function putServiceTypeDBTransaction(
-  body: updateServiceTypeRequestSchemaType
+  body: updateServiceTypeRequestSchemaType,id:string
 ) {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
       try {
         const updateServiceTypeObject = createUpdateServiceTypeObject(
           prismaTransaction,
-          body
+          body,id
         );
+        console.log("updateServiceTypeObject\n",updateServiceTypeObject)
 
         const updatedServiceType: getServiceTypeWithServiceSchema | undefined =
           await updateServiceTypeDB(
             prismaTransaction,
             updateServiceTypeObject,
-            body.id
+            id
           );
+          console.log("updatedServiceType\n",updatedServiceType)
 
         const exisitingServices = await getServiceByServiceTypeIdDB(
           prismaTransaction,
-          body.id
+          id
         );
+        console.log("exisitingServices\n",exisitingServices)
 
         const exisitingServicesId: string[] | undefined =
           retrieveServicesId(exisitingServices);
+          console.log("exisitingServicesId\n",exisitingServicesId)
 
         const services = body.serviceName;
 
         const checkedServicesId: string[] = await createCheckedServices(
           prismaTransaction,
           services,
-          updatedServiceType?.id
+          id
         );
+        console.log("checkedServicesId\n",checkedServicesId)
 
         const deletedUncheckedServices = await deleteUncheckedServices(
           prismaTransaction,
           exisitingServicesId,
           checkedServicesId
         );
-
+          console.log("deleted\n");
    
-        return updatedServiceType?.id;
+        return id;
       } catch (error) {
         if (error instanceof Error) throwDatabaseError(error);
       }

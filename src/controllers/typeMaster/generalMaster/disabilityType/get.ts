@@ -65,7 +65,7 @@ async function getDisabilitySubTypeByDisabilityTypeId(
 ) {
   try {
     const query: getRequestType = getRequestSchema.parse(request.query);
-    const id = request.params.serviceTypeId;
+    const id = request.params.disabilityTypeId;
     const result = await getDisabilitySubTypeByDisabilityTypeIdDBTransaction(
       id,
       query.sortOrder

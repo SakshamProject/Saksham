@@ -19,9 +19,9 @@ async function deleteDisabilityTypeDB(id: string) {
   }
 }
 
-async function deleteDisabilitySubTypeDB(id: string) {
+async function deleteDisabilitySubTypeDB(prismaTransaction:any,id: string) {
   try {
-    const deletedDisabilitySubType = await prisma.disabilitySubType.delete({
+    const deletedDisabilitySubType = await prismaTransaction.disabilitySubType.delete({
       where: {
         id: id,
       },
