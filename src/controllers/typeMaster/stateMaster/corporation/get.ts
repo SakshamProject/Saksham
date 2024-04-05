@@ -74,7 +74,7 @@ const getCorporationByDistrictId = async (
     const count: number = result?.corporation?.length || 0;
     const total: number = result?.total || 0;
     const responseData = createResponseWithQuery(
-      result || {},
+      result?.corporation || {},
       query,
       total,
       count
