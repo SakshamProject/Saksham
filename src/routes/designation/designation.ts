@@ -1,10 +1,7 @@
 import  { Router} from "express";
-import { deleteDesignation, getDesignation, getDesignationById, getDesignationByName, postDesignation } from "../../controllers/designation/designation.js";
+import { postDesignation } from "../../controllers/designation/post.js";
 
 const designationRouter = Router();
-
-console.log("designatiorouter")
-
 
 designationRouter.get('/',getDesignation);
 designationRouter.get('/search/:name',getDesignationByName);

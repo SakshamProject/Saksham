@@ -2,11 +2,11 @@ import express, { Request, Response, Router } from "express";
 import { pingDB } from "../services/database/database.js";
 import typeMasterRouter from "./typeMaster/typeMaster.js";
 import errorHandler from "../middlewares/errorHandler.js";
+import designationRouter from "./designation/designation.js";
 
 const apiRouter = Router();
 
 apiRouter.use(express.json());
-
 
 apiRouter.get(
   "/check",
@@ -21,6 +21,7 @@ apiRouter.get(
 );
 
 apiRouter.use("/typemaster", typeMasterRouter);
+apiRouter.use("/designation", designationRouter);
 
 apiRouter.use(errorHandler);
 export default apiRouter;
