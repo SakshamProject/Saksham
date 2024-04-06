@@ -12,4 +12,4 @@ const employmentDetailsRequestSchema = z.object({
     motherIncome: z.number(),
     spouseOccupation: inputFieldSchema.optional(),
     spouseIncome: z.number().optional()
-})
+});
