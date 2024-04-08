@@ -18,10 +18,15 @@ model SevaKendra {
   id              String   @id @default(uuid())
   name            String   @unique
   districtId      String
+  address         String
   mobileNumber    String
   landLineNumber  String
   startDate       DateTime?
   contactPersonId String
+  createdAt       String?
+  createdBy       String?
+  updatedAt       String?
+  updatedBy       String?
 
   services           ServicesOnSevaKendras[]
   district           District                @relation(fields: [districtId], references: [id])
@@ -33,7 +38,7 @@ model SevaKendra {
 model SevaKendraAuditLog {
   id           String @id @default(uuid())
   sevaKendraId String
-  status       String
+  status       AuditLogStatusEnum
   date         String
   description  String
 
@@ -67,10 +72,11 @@ model ServiceType {
 
 model Service {
   id        String   @id @default(uuid())
-  name      String   @unique
+  name      String   
   updatedAt DateTime @updatedAt
   serviceTypeId String
   createdAt DateTime @default(now())
+  @@unique([serviceTypeId,name])
 
   serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id],onDelete: Cascade)
   sevaKendras ServicesOnSevaKendras[]
@@ -105,7 +111,7 @@ model User {
   userId           String                   @unique // check datatype
   firstName        String
   lastName         String
-  gender           Gender?
+  gender           GenderEnum?
   dateOfBirth      DateTime?
   contactNumber    String
   whatsappNumber   String?
@@ -141,6 +147,7 @@ model Designation {
 
   sevaKendraId String
   sevaKendra   SevaKendra @relation(fields: [sevaKendraId], references: [id])
+  @@unique([sevaKendraId,name])
 
   users    User[]
   features FeaturesOnDesignations[]
@@ -165,8 +172,8 @@ model DivyangDetails {
   lastName                String
   divyangId               String
   picture                 String? // url
-  gender                  Gender?
-  bloodGroup              BloodGroup
+  gender                  GenderEnum?
+  bloodGroup              BloodGroupEnum
   dateOfBirth             DateTime
   age                     Int?
   mailId                  String
@@ -211,7 +218,7 @@ model DivyangDetails {
   disabilityArea            String?
   disabilityPercentage      String?
   disabilityDueTo           String?
-  certificateIssueAuthority CertificateIssueAuthority?
+  certificateIssueAuthority CertificateIssueAuthorityEnum?
   disabilityCardUrl         String? // url
   disabilityDistrictId      String?
   identityCardNumber        String?
@@ -254,7 +261,7 @@ model DivyangServiceMapping {
   dateOfService      DateTime
   dueDate            DateTime
   isFollowUpRequired Boolean?
-  isCompleted        Boolean
+  isCompleted        StatusEnum
   completedDate      DateTime?
   donorId            String?               @unique
   donor              Donor?                @relation(fields: [donorId],references: [id]) 
@@ -293,7 +300,7 @@ model NonSevaKendraFollowUp {
 model DisabilityOfDivyang {
   id                         String @id @default(uuid())
   divyangId                  String
-  disabilitySubTypeId        String @unique
+  disabilitySubTypeId        String 
   divyangDisabilityDetailsId String
 
   DivyangDetails DivyangDetails @relation(fields: [divyangId], references: [id])
@@ -302,8 +309,9 @@ model DisabilityOfDivyang {
 
 model DisabilitySubType {
   id               String @id @default(uuid())
-  name             String @unique
+  name             String 
   disabilityTypeId String
+  @@unique([disabilityTypeId,name])
 
   divyang    DisabilityOfDivyang[]
   disability DisabilityType        @relation(fields: [disabilityTypeId], references: [id],onDelete: Cascade)
@@ -390,8 +398,10 @@ model DivyangEducationalQualification {
 // e.g. 1 - b.tech (IT)
 model EducationQualification {
   id      String                            @id @default(uuid())
-  name    String                            @unique
+  name    String                           
   educationQualificationTypeId String
+@@unique([educationQualificationTypeId,name])
+
   educationQualificationType EducationQualificationType @relation(fields: [educationQualificationTypeId],references: [id], onDelete: Cascade)
   divyang DivyangEducationalQualification[]
 }
@@ -402,15 +412,19 @@ model EducationQualificationType {
   educationQualification EducationQualification[]
 }
 
+model generalMasters{
+  id      String @id @default(uuid())
+  name    String
+}
 
-enum Gender {
+enum GenderEnum {
   MALE
   FEMALE
   TRANSGENDER
   OTHERS
 }
 
-enum BloodGroup {
+enum BloodGroupEnum {
   O_POSITIVE
   O_NEGATIVE
   B_POSITIVE
@@ -423,19 +437,20 @@ enum BloodGroup {
   others
 }
 
-enum Status {
+enum StatusEnum {
   PENDING
   COMPLETED
 }
 
-enum CertificateIssueAuthority {
+enum CertificateIssueAuthorityEnum {
   MEDICAL_BOARD
   GOVERNMENT_DOCTOR
   PRIVATE_DOCTOR
 }
 
-
-model generalMasters{
-  id      String @id @default(uuid())
-  name    String
+enum AuditLogStatusEnum {
+  ACTIVE
+  DEACTIVE
 }
+
+
