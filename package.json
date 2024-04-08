@@ -4,7 +4,8 @@
     "start": "pnpm dotenvx run -- tsx watch server.ts",
     "build": "pnpm dotenvx run -- tsc --build",
     "check": "pnpm dotenvx run -- tsc --build --noEmit",
-    "test": "jest"
+    "test": "jest",
+    "migrate":"pnpx prisma migrate dev"
   },
   "dependencies": {
     "express": "^4.19.2",
