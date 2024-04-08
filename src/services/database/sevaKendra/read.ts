@@ -83,6 +83,7 @@ import throwDatabaseError from "../utils/errorHandler.js";
 
 const getSevaKendraDB = async (
   prismaTransaction: any,
+  searchText: string,
   orderByColumnAndSortOrder: Object = { name: sortOrderEnum.ascending },
   skip = defaults.skip,
   take = defaults.take
@@ -124,27 +125,23 @@ const getSevaKendraDBTotal = async (prismaTransaction: any) => {
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-// const getContactPersonIdBySevaKendraId = async (
-//   sevaKendraId: string
-// ): Promise<any> => {
-//   const contactPersonId = await prisma.sevaKendra.findFirst({
-//     where: {
-//       id: sevaKendraId,
-//     },
-//     select: {
-//       contactPerson: {
-//         select: {
-//           id: true,
-//         },
-//       },
-//     },
-//   });
-//   return contactPersonId?.contactPerson?.id;
-// };
+const getSevaKendraByIdDB = async (sevaKendraId: string): Promise<any> => {
+  const sevaKendra = await prisma.sevaKendra.findFirst({
+    where: {
+      id: sevaKendraId,
+    },
+    include: {
+      contactPerson: true,
+      services: true,
+      SevaKendraAuditLog: true,
+    },
+  });
+  return sevaKendra;
+};
 
 export {
   getSevaKendraDB,
   getSevaKendraDBTotal,
-  //   getSevaKendrabyIdDB,
+  getSevaKendraByIdDB,
   //   getContactPersonIdBySevaKendraId,
 };

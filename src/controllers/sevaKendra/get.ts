@@ -2,8 +2,12 @@ import { NextFunction, Request, Response } from "express";
 import getRequestSchema from "../../types/getRequestSchema.js";
 import { sevaKendraColumnNameMapper } from "../../services/utils/sevaKendra/sevaKendra.js";
 import { SevaKendraColumnNameSchema } from "../../types/sevaKendra/sevaKendra.js";
-import { createResponseWithQuery } from "../../types/createResponseSchema.js";
+import {
+  createResponseOnlyData,
+  createResponseWithQuery,
+} from "../../types/createResponseSchema.js";
 import { getSevaKendraDBTransaction } from "../../services/database/sevaKendra/transaction/read.js";
+import { getSevaKendraByIdDB } from "../../services/database/sevaKendra/read.js";
 
 const getSevaKendra = async (
   request: Request,
@@ -36,4 +40,19 @@ const getSevaKendra = async (
   }
 };
 
-export default getSevaKendra;
+const getSevaKendraById = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = request.params.id;
+    const result = await getSevaKendraByIdDB(id);
+    const responseData = createResponseOnlyData(result);
+    response.send(responseData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { getSevaKendra, getSevaKendraById };

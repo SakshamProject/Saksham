@@ -19,7 +19,7 @@ const createSevaKendraDBObject = (
     address: sevaKendra.address,
     mobileNumber: sevaKendra.mobileNumber,
     landLineNumber: sevaKendra.landLineNumber,
-    startDate: sevaKendra.startDate,
+    startDate: sevaKendra.startDate || new Date().toISOString(),
     contactPerson: {
       create: {
         name: sevaKendra.contactPerson.name,
@@ -36,12 +36,13 @@ const createSevaKendraDBObject = (
     },
     SevaKendraAuditLog: {
       create: {
-        status: AuditLogStatusEnum.ACTIVE,
         date: sevaKendraDefaults.date,
         description: sevaKendraDefaults.description,
+        status: AuditLogStatusEnum.ACTIVE,
       },
     },
     createdBy: createdBy,
+    createdAt: new Date().toISOString(),
   };
   return sevaKendraDBObject;
 };
