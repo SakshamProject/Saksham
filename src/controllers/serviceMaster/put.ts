@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { putServiceMasterSchema } from "../../types/schemas/serviceMaster/serviceMasterSchema.js";
-import { updateServiceDB } from "../../services/database/serviceMaster/serviceMaster.js";
 import { createServiceDBInputObject } from "../../dto/serviceMaster/postService.js";
+import {updateServiceDB} from "../../services/database/serviceMaster/update.js";
 
 async function putService(
   request: Request,

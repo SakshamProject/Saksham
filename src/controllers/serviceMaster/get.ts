@@ -1,11 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import {
-  getServiceByIdDB,
-  getServicesDB,
-} from "../../services/database/serviceMaster/serviceMaster.js";
 import { getTotalRowsWithOrWithoutFilterDB } from "../../services/database/database.js";
 import getRequestSchema from "../../types/getRequestSchema.js";
 import { createResponseWithQuery } from "../../types/createResponseSchema.js";
+import {getServiceByIdDB, getServicesDB} from "../../services/database/serviceMaster/read.js";
 
 async function getServices(
   request: Request,

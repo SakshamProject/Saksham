@@ -5,13 +5,11 @@ import {
   postServiceMasterType,
 } from "../../types/schemas/serviceMaster/serviceMasterSchema.js";
 import {
-  createServiceDB,
-  filterServiceDB,
-} from "../../services/database/serviceMaster/serviceMaster.js";
-import {
   createServiceDBInputObject,
   createServiceFilterInputObject,
 } from "../../dto/serviceMaster/postService.js";
+import {filterServiceDB} from "../../services/database/serviceMaster/filter.js";
+import {createServiceDB} from "../../services/database/serviceMaster/create.js";
 
 async function postService(
   request: Request,

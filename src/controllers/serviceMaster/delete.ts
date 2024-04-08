@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { deleteServiceByIdDB } from "../../services/database/serviceMaster/serviceMaster.js";
+
+import {deleteServiceByIdDB} from "../../services/database/serviceMaster/delete.js";
 
 async function deleteService(
   request: Request,
