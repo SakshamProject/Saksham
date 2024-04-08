@@ -3,20 +3,12 @@ import {
   serviceTypeRequestSchema,
   serviceTypeRequestSchemaType,
 } from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
-<<<<<<< HEAD
-
-=======
 import { Prisma, Service, ServiceType } from "@prisma/client";
 import { createPostServiceTypeDBObject } from "../../../../dto/typeMaster/generalMaster/serviceType/post.js";
 import { createServiceTypeDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/create.js";
->>>>>>> dev
 import { getServiceTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
 import { createResponseOnlyData } from "../../../../types/createResponseSchema.js";
 import prisma from "../../../../services/database/database.js";
-<<<<<<< HEAD
-
-=======
->>>>>>> dev
 
 async function postServiceType(
   request: Request,

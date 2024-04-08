@@ -1,12 +1,19 @@
-async function deleteDesignation(request:Request, response:Response){
+import { Designation } from "@prisma/client";
+import { NextFunction, Request, Response } from "express";
+import { deleteDesignationDB } from "../../services/database/designation/delete.js";
+import { createResponseOnlyData } from "../../types/createResponseSchema.js";
 
-    const id: string = request.params.id;
-    const deletedDesignation:Designation = await deleteDesignationDB(id);
-    response.send(deletedDesignation);
-  }
+async function deleteDesignation(request:Request, response:Response,next:NextFunction){
+
+    try{
+      const id: string = request.params.id;
+    const deletedDesignation:Designation |undefined= await deleteDesignationDB(id);
+    const responseData = createResponseOnlyData(deletedDesignation ||{});
+    response.send(responseData);}
+    catch(err){
+      next(err)
+    }}
+    
   
-  async function putDesignation(request:Request, response:Response){
-    const id:string = request.params.id;
-    const body = getRequestSchema.parse(request.body);
-   
-  }
+ 
+  export {deleteDesignation}
