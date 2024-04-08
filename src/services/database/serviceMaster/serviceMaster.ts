@@ -1,6 +1,6 @@
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
-import { serviceMasterColumnNameMapper } from "./serviceMasterColumnNameMapper.js";
+import { serviceMasterColumnNameMapper } from "../utils/serviceMasterColumnNameMapper.js";
 
 import throwDatabaseError from "../utils/errorHandler.js";
 import { Prisma } from "@prisma/client";
