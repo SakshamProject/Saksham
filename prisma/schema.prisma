@@ -374,56 +374,63 @@ model DisabilityType {
 
 model MPConstituency {
   id         String   @id @default(uuid())
-  name       String   @unique
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
   DivyangDetails DivyangDetails[]
 }
 
 model MLAConstituency {
   id         String   @id @default(uuid())
-  name       String   @unique
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
   DivyangDetails DivyangDetails[]
 }
 
 model PanchayatUnion {
   id         String   @id @default(uuid())
-  name       String   @unique
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
   divyangDetails DivyangDetails[]
 }
 
 model TownPanchayat {
   id         String   @id @default(uuid())
-  name       String   @unique
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
   DivyangDetails DivyangDetails[]
 }
 
 model Municipality {
   id         String   @id @default(uuid())
-  name       String   @unique
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
   DivyangDetails DivyangDetails[]
 }
 
 model Corporation {
   id         String   @id @default(uuid())
-  name       String   @unique
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
   DivyangDetails DivyangDetails[]
 }
 
 model Taluk {
   id       String @id @default(uuid())
-  name     String @unique
+  name     String 
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId],references: [id])
   DivyangDetails DivyangDetails[]
 }

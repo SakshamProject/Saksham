@@ -19,7 +19,7 @@ generalMasterRouter.use("/servicetype", serviceTypeRouter);
 generalMasterRouter.use("/disabilitytype", disabilityTypeRouter);
 generalMasterRouter.get(
   "/generalmasterseed",
-getGeneralMaster
+  getGeneralMaster
 );
 generalMasterRouter.use("/communitycategory", communityCategoryRouter);
 generalMasterRouter.use("/states", stateRouter);
