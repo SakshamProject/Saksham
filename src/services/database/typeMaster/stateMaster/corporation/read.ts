@@ -22,8 +22,6 @@ const getCorporationDB = async (
       orderBy: {
         name: sortOrder,
       },
-      skip: start,
-      take: rows,
     });
     return corporation;
   } catch (error) {
@@ -63,8 +61,6 @@ const getCorporationByDistrictIdDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
       });
     return corporations;
   } catch (error) {
@@ -99,8 +95,6 @@ const getCorporationByIdDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
       }
     );
     return corporations;

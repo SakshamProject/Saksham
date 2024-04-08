@@ -74,7 +74,7 @@ const getTownPanchayatByDistrictId = async (
     const count: number = result?.townPanchayat?.length || 0;
     const total: number = result?.total || 0;
     const responseData = createResponseWithQuery(
-      result || {},
+      result?.townPanchayat || {},
       query,
       total,
       count

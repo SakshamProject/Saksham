@@ -1,6 +1,9 @@
-import { string, z } from 'zod'
-import inputFieldSchema, { phoneNumberSchema, uuidSchema } from '../../inputFieldSchema.js'
-import { BloodGroup, Gender, Prisma } from '@prisma/client'
+import { z } from 'zod'
+import inputFieldSchema, {
+  phoneNumberSchema,
+  uuidSchema,
+} from '../inputFieldSchema.js'
+import { BloodGroup, Gender } from '@prisma/client'
 
 const personalDetailsRequestSchema = z.object({
   firstName: inputFieldSchema,
@@ -21,5 +24,7 @@ const personalDetailsRequestSchema = z.object({
   religion: inputFieldSchema,
   communityCategoryId: uuidSchema,
   community: inputFieldSchema,
-  extraCurricularActivity: inputFieldSchema.optional()
-});
+  extraCurricularActivity: inputFieldSchema.optional(),
+})
+
+export {personalDetailsRequestSchema}

@@ -23,8 +23,7 @@ const getMLAConstituencyDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
+         
       });
     return MLAConstituency;
   } catch (error) {
@@ -65,8 +64,7 @@ const getMLAConstituencyByDistrictIdDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
+         
       });
     return MLAConstituency;
   } catch (error) {
@@ -105,8 +103,7 @@ const getMLAConstituencyByIdDB = async (
         orderBy: {
           name: sortOrder,
         },
-        skip: start,
-        take: rows,
+         
       });
     return MLAConstituency;
   } catch (error) {

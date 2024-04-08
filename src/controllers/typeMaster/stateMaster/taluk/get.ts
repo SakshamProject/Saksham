@@ -74,7 +74,7 @@ const getTalukByDistrictId = async (
     const count: number = result?.taluk?.length || 0;
     const total: number = result?.total || 0;
     const responseData = createResponseWithQuery(
-      result || {},
+      result?.taluk || {},
       query,
       total,
       count
