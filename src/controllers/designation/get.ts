@@ -1,22 +1,22 @@
 import { NextFunction, Request, Response } from "express";
-import { getDesignationByIDDB } from "../../services/database/designation/read.js";
+import { getDesignationByIDDB, getDesignationDB } from "../../services/database/designation/read.js";
 import { createResponseOnlyData } from "../../types/createResponseSchema.js";
 
-// async function getDesignation(request: Request, response: Response) {
-//     const { start, rows, orderBy, orderByDirection } = getRequestSchema.parse(
-//       request.query
-//     );
-//     const orderByColumn: string | undefined = orderBy;
+async function getDesignation(request: Request, response: Response) {
+    const { start, rows, orderBy, orderByDirection } = getRequestSchema.parse(
+      request.query
+    );
+    const orderByColumn: string | undefined = orderBy;
   
-//     const results = await getDesignationDB(
-//       start,
-//       rows,
-//       orderByColumn,
-//       orderByDirection
-//     );
+    const results = await getDesignationDB(
+      start,
+      rows,
+      orderByColumn,
+      orderByDirection
+    );
   
-//     response.send(results);
-//   }
+    response.send(results);
+  }
   
   async function getDesignationById(request: Request, response: Response,next:NextFunction) {
     try{
@@ -38,4 +38,4 @@ import { createResponseOnlyData } from "../../types/createResponseSchema.js";
   //     "data":designation
   //   })
   // }
-  export {getDesignationById}
+  export {getDesignationById,getDesignation}
