@@ -5,6 +5,8 @@ import prisma from "../../../services/database/database.js";
 import { createResponseOnlyData } from "../../../types/createResponseSchema.js";
 import serviceTypeRouter from "./serviceType.js";
 import { communityCategoryRouter } from "./communityCategory.js";
+import districtRouter from "./district.js";
+import stateRouter from "./state.js";
 
 const generalMasterRouter = express.Router();
 
@@ -22,6 +24,7 @@ generalMasterRouter.get(
     response.send(responseData);
   }
 );
-generalMasterRouter.use("/communitycategory", communityCategoryRouter)
-
+generalMasterRouter.use("/communitycategory", communityCategoryRouter);
+generalMasterRouter.use("/states", stateRouter);
+generalMasterRouter.use("/districts", districtRouter);
 export default generalMasterRouter;

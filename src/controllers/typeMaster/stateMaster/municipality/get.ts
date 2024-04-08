@@ -74,7 +74,7 @@ const getMunicipalityByDistrictId = async (
     const count: number = result?.municipality?.length || 0;
     const total: number = result?.total || 0;
     const responseData = createResponseWithQuery(
-      result || {},
+      result?.municipality || {},
       query,
       total,
       count

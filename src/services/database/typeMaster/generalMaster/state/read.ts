@@ -39,6 +39,9 @@ const getStateByIdDB = async (
       where: {
         id: id,
       },
+      include: {
+        districts: true,
+      },
     });
     return state;
   } catch (error) {

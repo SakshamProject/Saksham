@@ -21,8 +21,9 @@ const getDistrict = async (
     const result = await getDistrictDBTransaction(query.sortOrder);
     const total = result?.total || 0;
     const count = result?.districts?.length || 0;
+    console.log(result);
     const responseData = createResponseWithQuery(
-      result || {},
+      result?.districts || {},
       query,
       total,
       count

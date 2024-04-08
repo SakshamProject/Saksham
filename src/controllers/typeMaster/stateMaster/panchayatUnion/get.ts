@@ -74,7 +74,7 @@ const getPanchayatUnionByDistrictId = async (
     const count: number = result?.panchayatUnion?.length || 0;
     const total: number = result?.total || 0;
     const responseData = createResponseWithQuery(
-      result || {},
+      result?.panchayatUnion || {},
       query,
       total,
       count
