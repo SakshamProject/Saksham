@@ -30,11 +30,7 @@ type getSelectedServiceSchema = Prisma.ServiceGetPayload<{
 const serviceTypeRequestSchema = z.object({
   id: inputFieldSchema.optional(),
   serviceType: inputFieldSchema.transform((value) => value.toUpperCase()),
-  serviceName: z
-    .array(inputFieldSchema)
-    .transform((value) =>
-      value.map((serviceName) => serviceName.toUpperCase())
-    ),
+ 
 });
 
 const serviceNameSchema = z.object({
