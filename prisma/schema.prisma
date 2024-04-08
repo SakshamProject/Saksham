@@ -72,10 +72,11 @@ model ServiceType {
 
 model Service {
   id        String   @id @default(uuid())
-  name      String   @unique
+  name      String   
   updatedAt DateTime @updatedAt
   serviceTypeId String
   createdAt DateTime @default(now())
+  @@unique([serviceTypeId,name])
 
   serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id],onDelete: Cascade)
   sevaKendras ServicesOnSevaKendras[]
@@ -123,6 +124,17 @@ model User {
   designation      Designation              @relation(fields: [designationId], references: [id])
   featuresAssigned FeaturesOnDesignations[]
   sevaKendraFollowUp SevaKendraFollowUp[]
+  userAuditLog UserAuditLog[]
+}
+
+model UserAuditLog {
+  id           String @id @default(uuid())
+  userId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model UserPassword {
@@ -146,9 +158,21 @@ model Designation {
 
   sevaKendraId String
   sevaKendra   SevaKendra @relation(fields: [sevaKendraId], references: [id])
+  @@unique([sevaKendraId,name])
 
   users    User[]
   features FeaturesOnDesignations[]
+  designationAuditLog DesignationAuditLog[]
+}
+
+model DesignationAuditLog {
+  id           String @id @default(uuid())
+  designationId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  designation Designation @relation(fields: [designationId], references: [id])
 }
 
 // mapping sidebar/feature to certain designation e.g. users side bar to coordinator
@@ -247,6 +271,18 @@ model DivyangDetails {
   disabilities          DisabilityOfDivyang[]
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
+  divyangDetailsAuditLog DivyangDetailsAuditLog[]
+}
+
+
+model DivyangDetailsAuditLog {
+  id           String @id @default(uuid())
+  divyangDetailsId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  divyangDetails DivyangDetails @relation(fields: [divyangDetailsId], references: [id])
 }
 
 model DivyangServiceMapping {
@@ -265,7 +301,20 @@ model DivyangServiceMapping {
   donor              Donor?                @relation(fields: [donorId],references: [id]) 
   nonSevaKendraFollowUp NonSevaKendraFollowUp[]
   sevaKendraFollowUp SevaKendraFollowUp[]
+  divyangServiceMappingAuditLog DivyangServiceMappingAuditLog[]
 }
+
+model DivyangServiceMappingAuditLog {
+  id           String @id @default(uuid())
+  DivyangServiceMappingId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  divyangServiceMapping DivyangServiceMapping @relation(fields: [DivyangServiceMappingId], references: [id])
+}
+
+
 model Donor {
   id             String @id @default(uuid())
   name           String
@@ -298,7 +347,7 @@ model NonSevaKendraFollowUp {
 model DisabilityOfDivyang {
   id                         String @id @default(uuid())
   divyangId                  String
-  disabilitySubTypeId        String @unique
+  disabilitySubTypeId        String 
   divyangDisabilityDetailsId String
 
   DivyangDetails DivyangDetails @relation(fields: [divyangId], references: [id])
@@ -307,8 +356,9 @@ model DisabilityOfDivyang {
 
 model DisabilitySubType {
   id               String @id @default(uuid())
-  name             String @unique
+  name             String 
   disabilityTypeId String
+  @@unique([disabilityTypeId,name])
 
   divyang    DisabilityOfDivyang[]
   disability DisabilityType        @relation(fields: [disabilityTypeId], references: [id],onDelete: Cascade)
@@ -395,8 +445,10 @@ model DivyangEducationalQualification {
 // e.g. 1 - b.tech (IT)
 model EducationQualification {
   id      String                            @id @default(uuid())
-  name    String                            @unique
+  name    String                           
   educationQualificationTypeId String
+@@unique([educationQualificationTypeId,name])
+
   educationQualificationType EducationQualificationType @relation(fields: [educationQualificationTypeId],references: [id], onDelete: Cascade)
   divyang DivyangEducationalQualification[]
 }
@@ -443,8 +495,9 @@ enum CertificateIssueAuthorityEnum {
   PRIVATE_DOCTOR
 }
 
-
 enum AuditLogStatusEnum {
   ACTIVE
   DEACTIVE
 }
+
+

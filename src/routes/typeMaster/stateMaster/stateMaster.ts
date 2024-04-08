@@ -18,3 +18,4 @@ stateMasterRouter.use("/taluks", TalukRouter);
 stateMasterRouter.use("/town-panchayats", TownPanchayatRouter);
 
 export default stateMasterRouter;
+    
