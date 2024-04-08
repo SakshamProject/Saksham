@@ -1,5 +1,6 @@
 import defaults from "../../../defaults.js";
 import { sortOrderEnum } from "../../../types/getRequestSchema.js";
+import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 
 const getDivyangDetailsDB = async (
@@ -29,7 +30,20 @@ const getDivyangDetailsDB = async (
     }
 }
 
-//add get divyangDetails by ID
+const getDivyangDetailsByIdDB = async (id: string) => {
+    try {
+        const divyangDetails = await prisma.divyangDetails.findFirstOrThrow({
+            where: {
+                id: id,
+            },
+        });
+        return divyangDetails
+    } catch (error) {
+        if (error instanceof Error) {
+            throwDatabaseError(error)
+        }
+    }
+}
 
 async function getDivyangDetailsTotal(prismaTransaction: any, searchText: string | undefined) {
     try {
@@ -46,4 +60,4 @@ async function getDivyangDetailsTotal(prismaTransaction: any, searchText: string
     }
 }
 
-export { getDivyangDetailsDB, getDivyangDetailsTotal }
+export { getDivyangDetailsDB, getDivyangDetailsTotal, getDivyangDetailsByIdDB }

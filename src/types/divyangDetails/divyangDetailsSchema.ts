@@ -4,6 +4,9 @@ import { IdProofUploadsRequestSchema } from './IdProofUploadsSchema.js'
 import { addressRequestSchema } from './addressSchema.js'
 import { disabiltyDetailsRequestSchema } from './disabilityDetailsSchema.js'
 import { employmentDetailsRequestSchema } from './employmentDetailsSchema.js'
+import { Prisma } from '@prisma/client'
+
+type getDivyangDetailsSchema = Prisma.DivyangDetailsGetPayload<{}>
 
 const divyangDetailsRequestSchema = z
   .object({
@@ -19,4 +22,4 @@ const divyangDetailsRequestSchema = z
 
 type DivyangDetailsRequest = z.infer<typeof divyangDetailsRequestSchema>
 
-export { divyangDetailsRequestSchema, DivyangDetailsRequest }
+export { divyangDetailsRequestSchema, DivyangDetailsRequest, getDivyangDetailsSchema }

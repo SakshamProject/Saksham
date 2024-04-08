@@ -1,7 +1,9 @@
 import { NextFunction, Response, Request } from "express";
 import getRequestSchema from "../../types/getRequestSchema.js";
-import { createResponseWithQuery } from "../../types/createResponseSchema.js";
+import { createResponseOnlyData, createResponseWithQuery } from "../../types/createResponseSchema.js";
 import { getDivyangDetailsDBTransaction } from "../../services/database/divyangDetails/transaction/read.js";
+import { getDivyangDetailsSchema } from "../../types/divyangDetails/divyangDetailsSchema.js";
+import { getDivyangDetailsByIdDB } from "../../services/database/divyangDetails/read.js";
 
 const getDivyangDetails = async (request: Request, response: Response, next: NextFunction) => {
     try {
@@ -22,4 +24,15 @@ const getDivyangDetails = async (request: Request, response: Response, next: Nex
     }
 }
 
-export { getDivyangDetails }
+const getDivyangDetailsbyId = async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        const id: string = request.params.id
+        const result: getDivyangDetailsSchema | undefined = await getDivyangDetailsByIdDB(id);
+        const responseData = createResponseOnlyData(result || {})
+        response.send(responseData)
+    } catch (error) {
+        next(error)
+    }
+}
+
+export { getDivyangDetails, getDivyangDetailsbyId }
