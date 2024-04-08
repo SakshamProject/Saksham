@@ -13,7 +13,6 @@ async function getServiceTypeByIdDB(prismaTransaction:any, id: string | undefine
           id: id,
         },
       });
-      console.log(serviceType);
     return serviceType;
   } catch (err) {
     if (err instanceof Error) {

@@ -33,22 +33,18 @@ const serviceTypeRequestSchema = z.object({
  
 });
 
-const serviceNameSchema = z.object({
-  id: inputFieldSchema.optional(),
-  name: inputFieldSchema.transform((value) => value.toUpperCase()),
-});
+
 
 const updateServiceTypeRequestSchema = z.object({
   id: inputFieldSchema.optional(),
-  serviceType: inputFieldSchema.transform((value) => value.toUpperCase()),
-  serviceName: z.array(serviceNameSchema),
+  serviceType:inputFieldSchema
+
 });
 
 type updateServiceTypeRequestSchemaType = z.infer<
   typeof updateServiceTypeRequestSchema
 >;
 
-type serviceNameSchemaType = z.infer<typeof serviceNameSchema>;
 
 type serviceTypeRequestSchemaType = z.infer<typeof serviceTypeRequestSchema>;
 
@@ -69,5 +65,5 @@ export {
   getSelectedServiceSchema,
   updateServiceTypeRequestSchema,
   updateServiceTypeRequestSchemaType,
-  serviceNameSchemaType,
+  
 };
