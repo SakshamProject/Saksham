@@ -30,7 +30,7 @@ const getSevaKendra = async (
     const total = result?.total || 0;
     const count = result?.sevaKendra.length || 0;
     const responseData = createResponseWithQuery(
-      result || {},
+      result?.sevaKendra || {},
       query,
       total,
       count

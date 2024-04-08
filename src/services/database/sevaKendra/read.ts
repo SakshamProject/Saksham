@@ -59,17 +59,20 @@ const getSevaKendraDB = async (
         ],
       },
       select: {
+        id: true,
         name: true,
         district: {
           select: {
+            id: true,
             name: true,
             state: {
-              select: { name: true },
+              select: { id: true, name: true },
             },
           },
         },
         contactPerson: {
           select: {
+            id: true,
             name: true,
             phoneNumber1: true,
           },

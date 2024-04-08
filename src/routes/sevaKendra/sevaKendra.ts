@@ -3,7 +3,7 @@ import postSevaKendra from "../../controllers/sevaKendra/post.js";
 import {
   getSevaKendra,
   getSevaKendraById,
-} from "../../controllers/sevaKendra/get.js";   
+} from "../../controllers/sevaKendra/get.js";
 
 const sevaKendraRouter = express.Router();
 
