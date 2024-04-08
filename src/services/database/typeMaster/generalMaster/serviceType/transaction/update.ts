@@ -23,7 +23,6 @@ async function putServiceTypeDBTransaction(
           prismaTransaction,
           body,id
         );
-        console.log("updateServiceTypeObject\n",updateServiceTypeObject)
 
         const updatedServiceType: getServiceTypeWithServiceSchema | undefined =
           await updateServiceTypeDB(
@@ -31,7 +30,6 @@ async function putServiceTypeDBTransaction(
             updateServiceTypeObject,
             id
           );
-          console.log("updatedServiceType\n",updatedServiceType)
 
         const exisitingServices = await getServiceByServiceTypeIdDB(
           prismaTransaction,
