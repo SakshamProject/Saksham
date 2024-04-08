@@ -22,6 +22,7 @@ const getSevaKendra = async (
       query.sortOrder
     );
     const result = await getSevaKendraDBTransaction(
+      query.searchText,
       orderByColumnAndSortOrder,
       query.start,
       query.rows
