@@ -1,10 +1,10 @@
 import prisma from "../database.js";
 import defaults from "../../../defaults.js";
-import { serviceMasterColumnNameMapper } from "../utils/serviceMasterColumnNameMapper.js";
+import { serviceMasterColumnNameMapper } from "../utils/serviceMaster/serviceMasterColumnNameMapper.js";
 
 import throwDatabaseError from "../utils/errorHandler.js";
 import { Prisma } from "@prisma/client";
-import searchTextMapper from "../utils/searchTextMapper.js";
+import searchTextMapper from "../utils/serviceMaster/searchTextMapper.js";
 
 async function getServicesDB(
   orderByColumn: string = "createdAt",

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { filterServiceMasterType } from "../../../../../types/schemas/serviceMaster/serviceMasterSchema.js";
+import { filterServiceMasterType } from "../../../../types/schemas/serviceMaster/serviceMasterSchema.js";
 
 function filterServiceMasterMapper(
   columnName: string,

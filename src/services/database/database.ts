@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import throwDatabaseError from "./utils/errorHandler.js";
-import searchTextMapper from "./utils/searchTextMapper.js";
+import searchTextMapper from "./utils/serviceMaster/searchTextMapper.js";
 
 const prisma = new PrismaClient();
 
