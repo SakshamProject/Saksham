@@ -1,8 +1,5 @@
 import { Prisma, Service, ServiceType } from "@prisma/client";
-import {
-  createPostServiceDBObject,
-  createPostServiceTypeDBObject,
-} from "../../../../../../dto/typeMaster/generalMaster/serviceType/post.js";
+
 import {
   postServiceType,
   serviceTypeRequestSchemaType,
@@ -11,6 +8,10 @@ import prisma from "../../../../database.js";
 import { createServiceDB, createServiceTypeDB } from "../create.js";
 import { getServiceTypeByIdDB } from "../read.js";
 import throwDatabaseError from "../../../../utils/errorHandler.js";
+import {
+  createPostServiceDBObject,
+  createPostServiceTypeDBObject,
+} from "../../../../../../dto/typeMaster/generalMaster/serviceType/post.js";
 
 async function postServiceTypeDBTransaction(
   body: serviceTypeRequestSchemaType
@@ -18,17 +19,26 @@ async function postServiceTypeDBTransaction(
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
       try {
-        const postServiceTypeDBObject = createPostServiceTypeDBObject(prismaTransaction,body);
+        const postServiceTypeDBObject = createPostServiceTypeDBObject(
+          prismaTransaction,
+          body
+        );
 
-        const serviceType: ServiceType | undefined = await createServiceTypeDB(prismaTransaction,
+        const serviceType: ServiceType | undefined = await createServiceTypeDB(
+          prismaTransaction,
           postServiceTypeDBObject
         );
 
         for (let serviceName of body.serviceName) {
           const postServiceDBObject: postServiceType =
-            createPostServiceDBObject(prismaTransaction,serviceName, serviceType?.id);
+            createPostServiceDBObject(
+              prismaTransaction,
+              serviceName,
+              serviceType?.id
+            );
 
-          const service: Service | undefined = await createServiceDB(prismaTransaction,
+          const service: Service | undefined = await createServiceDB(
+            prismaTransaction,
             postServiceDBObject
           );
         }

@@ -1,36 +1,43 @@
 import { Designation, FeaturesOnDesignations } from "@prisma/client";
-import { postRequestType } from "../../controllers/designation/designation.schema.js";
 import { randomUUID } from "crypto";
+import { postDesignationRequestSchemaType, postFeaturesOnDesignationsType } from "../../types/designation/designationSchema.js";
 
-const createDesignationDBObject = async (request:postRequestType):Promise<Designation>=>{
+const createPostDesignationDBObject = (request:postDesignationRequestSchemaType)=>{
     const createDesignationDBObject = {
-        id: randomUUID(),
         name: request.designation,
-        sevaKendraId: request.sevaKendraId
+        sevaKendra:{
+          connect:{id: request.sevaKendraId}
+        }
     }
     return createDesignationDBObject;
 }
 
-const createFeaturesOnDesignationDBObject = (
-    designationId: string,
-    request: postRequestType
-  ): FeaturesOnDesignations[] => {
-    let FeaturesOnDesignations: FeaturesOnDesignations[] = [];
-    console.log("*************");
-    console.log(request.featuresId);
-  
-    for (let featureId of request.featuresId) {
-        console.log(featureId);
-      const FeaturesOnDesignationsDBObject: FeaturesOnDesignations= {
-        id: randomUUID(),
-        designationId: designationId,
-        featureId: featureId,
-        assignedById:request.assignedById,
-        assignedOn:new Date()
+const createPostFeaturesOnDesignationsDBObject = (
+    designationId: string|undefined,
+    featureId: string,
+    assignedById:string
+  ) => {
+
+          const featuresOnDesignationsDBObject: postFeaturesOnDesignationsType= {
+        designation: {
+          connect:{
+            id:designationId
+          }
+        },
+        feature:{
+          connect:{
+            id:featureId
+          }
+        } ,
+        assignedBy:{
+          connect:{
+            id:assignedById
+          }
+        },
+         assignedOn:new Date()
       };
-      FeaturesOnDesignations.push(FeaturesOnDesignationsDBObject);
-    }
-    return FeaturesOnDesignations;
+      
+      return featuresOnDesignationsDBObject;
   };
 
-export {createDesignationDBObject, createFeaturesOnDesignationDBObject};
+export {createPostDesignationDBObject, createPostFeaturesOnDesignationsDBObject};

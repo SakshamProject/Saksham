@@ -24,8 +24,6 @@ async function createServiceDB(prismaTransaction:any, data:postServiceType){
         const service:Service= await prismaTransaction.service.create({
             data:data
         })
-        console.log("create db layer")
-        console.log(service)
         return service;
       
     }catch(err){
