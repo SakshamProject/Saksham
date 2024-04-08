@@ -17,4 +17,6 @@ const divyangDetailsRequestSchema = z
     return Object.values(data).some((value) => value !== undefined)
   }, 'At least one of the five schemas must be provided.')
 
-export type DivyangDetailsRequest = z.infer<typeof divyangDetailsRequestSchema>
+type DivyangDetailsRequest = z.infer<typeof divyangDetailsRequestSchema>
+
+export { divyangDetailsRequestSchema, DivyangDetailsRequest }

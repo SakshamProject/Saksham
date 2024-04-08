@@ -1,4 +1,6 @@
-import express from "express";
+import express from 'express'
+import { getDivyangDetails } from '../../controllers/divyangDetails/get.js'
 
-const divyangDetailsRouter = express.Router();
+const divyangDetailsRouter = express.Router()
 
+divyangDetailsRouter.get("/", getDivyangDetails)
