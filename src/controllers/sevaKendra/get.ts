@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import getRequestSchema from "../../types/getRequestSchema.js";
-import { sevaKendraColumnNameMapper } from "../../services/utils/sevaKendra/sevaKendra.js";
+import { sevaKendraColumnNameMapper } from "../../services/utils/sevaKendra/sevaKendraMapper.js";
 import { SevaKendraColumnNameSchema } from "../../types/sevaKendra/sevaKendra.js";
 import {
   createResponseOnlyData,

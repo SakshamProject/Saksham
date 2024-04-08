@@ -20,6 +20,7 @@ const SevaKendraRequestSchema = z.object({
   mobileNumber: phoneNumberSchema,
   startDate: z.string().optional(),
   contactPerson: z.object({
+    id: uuidSchema.optional(),
     name: inputFieldSchema.toUpperCase(),
     email: emailSchema,
     phoneNumber1: phoneNumberSchema,
@@ -32,6 +33,7 @@ const SevaKendraRequestSchema = z.object({
     .array(),
   auditLog: z
     .object({
+      id: uuidSchema.optional(),
       status: z.nativeEnum(AuditLogStatusEnum),
       date: z.date(),
       description: inputFieldSchema,
@@ -40,7 +42,8 @@ const SevaKendraRequestSchema = z.object({
 });
 type SevaKendraRequestSchemaType = z.infer<typeof SevaKendraRequestSchema>;
 type SevaKendra = Prisma.SevaKendraCreateInput;
-type ContactPerson = Prisma.ContactPersonCreateInput;
+type SevaKendraUpdate = Prisma.SevaKendraUpdateInput;
+type ContactPerson = Prisma.ContactPersonUpdateInput;
 type ServicesOnSevaKendras = Prisma.ServicesOnSevaKendrasCreateInput;
 type SevaKendraAuditLog = Prisma.SevaKendraAuditLogCreateInput;
 
@@ -51,5 +54,6 @@ export {
   ContactPerson,
   ServicesOnSevaKendras,
   SevaKendraAuditLog,
+  SevaKendraUpdate,
 };
 export default SevaKendraRequestSchema;
