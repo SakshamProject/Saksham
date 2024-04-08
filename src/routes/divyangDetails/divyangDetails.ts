@@ -3,4 +3,6 @@ import { getDivyangDetails } from '../../controllers/divyangDetails/get.js'
 
 const divyangDetailsRouter = express.Router()
 
-divyangDetailsRouter.get('/divyang-details', getDivyangDetails)
+divyangDetailsRouter.get("/", getDivyangDetails)
+
+export { divyangDetailsRouter }

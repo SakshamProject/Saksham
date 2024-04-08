@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from "express";
 import { pingDB } from "../services/database/database.js";
 import typeMasterRouter from "./typeMaster/typeMaster.js";
 import errorHandler from "../middlewares/errorHandler.js";
+import { divyangDetailsRouter } from "./divyangDetails/divyangDetails.js";
 
 const apiRouter = Router();
 
@@ -20,6 +21,7 @@ apiRouter.get(
 );
 
 apiRouter.use("/typemaster", typeMasterRouter);
+apiRouter.use("/divyang-details", divyangDetailsRouter)
 
 apiRouter.use(errorHandler);
 export default apiRouter;
