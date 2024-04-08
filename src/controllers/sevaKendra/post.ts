@@ -3,7 +3,6 @@ import SevaKendraRequestSchema, {
   SevaKendra,
   SevaKendraRequestSchemaType,
 } from "../../types/sevaKendra/sevaKendra.js";
-import createSevaKendraTransaction from "../../services/database/sevaKendra/transaction/create.js";
 import { createResponseOnlyData } from "../../types/createResponseSchema.js";
 import { createSevaKendraDBObject } from "../../dto/sevaKendra/create.js";
 import { createSevaKendraDB } from "../../services/database/sevaKendra/create.js";

@@ -1,85 +1,7 @@
-// import prisma from "../database.js";
-// import defaults from "../../../defaults.js";
-// import { ContactPerson } from "@prisma/client";
-// const getSevaKendrabyIdDB = async (id: string) => {
-//   const sevaKendra = await prisma.sevaKendra.findUnique({
-//     where: { id: id },
-
 import defaults from "../../../defaults.js";
 import { sortOrderEnum } from "../../../types/getRequestSchema.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
-
-//     // select: {
-//     //   name: true,
-//     //   address: true,
-//     //   landLineNumber: true,
-//     //   mobileNumber: true,
-//     //   startDate: true,
-
-//     //   contactPerson: {
-//     //     select: {
-//     //       name: true,
-//     //       email: true,
-//     //       phoneNumber1: true,
-//     //       phoneNumber2: true,
-//     //     },
-//     //   },
-
-//     //   createdAt: true,
-//     //   createdBy: true,
-//     //   updatedAt: true,
-//     //   updatedBy: true,
-//     //   isActive: true,
-
-//     //   _count: {
-//     //     select: {
-//     //       auditLogs: true,
-//     //       services: true,
-//     //     },
-//     //   },
-
-//     //   auditLogs: {
-//     //     select: {
-//     //       status: true,
-//     //       date: true,
-//     //       description: true,
-//     //     },
-//     //   },
-
-//     //   services: {
-//     //     select: {
-//     //       id: true,
-//     //       serviceId: true,
-//     //     },
-//     //   },
-
-//     //   district: {
-//     //     select: {
-//     //       name: true,
-//     //       state: {
-//     //         select: {
-//     //           name: true,
-//     //         },
-//     //       },
-//     //     },
-//     //   },
-//     // },
-//     include: {
-//       contactPerson: true,
-//       _count: true,
-//       auditLogs: true,
-//       services: true,
-//       district: {
-//         include: {
-//           state: true,
-//         },
-//       },
-//     },
-//   });
-//   console.log(sevaKendra);
-//   return sevaKendra;
-// };
 
 const getSevaKendraDB = async (
   prismaTransaction: any,
@@ -183,9 +105,4 @@ const getSevaKendraByIdDB = async (sevaKendraId: string): Promise<any> => {
   return sevaKendra;
 };
 
-export {
-  getSevaKendraDB,
-  getSevaKendraDBTotal,
-  getSevaKendraByIdDB,
-  //   getContactPersonIdBySevaKendraId,
-};
+export { getSevaKendraDB, getSevaKendraDBTotal, getSevaKendraByIdDB };
