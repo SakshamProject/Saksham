@@ -124,6 +124,17 @@ model User {
   designation      Designation              @relation(fields: [designationId], references: [id])
   featuresAssigned FeaturesOnDesignations[]
   sevaKendraFollowUp SevaKendraFollowUp[]
+  userAuditLog UserAuditLog[]
+}
+
+model UserAuditLog {
+  id           String @id @default(uuid())
+  userId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model UserPassword {
@@ -151,6 +162,17 @@ model Designation {
 
   users    User[]
   features FeaturesOnDesignations[]
+  designationAuditLog DesignationAuditLog[]
+}
+
+model DesignationAuditLog {
+  id           String @id @default(uuid())
+  designationId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  designation Designation @relation(fields: [designationId], references: [id])
 }
 
 // mapping sidebar/feature to certain designation e.g. users side bar to coordinator
@@ -249,6 +271,18 @@ model DivyangDetails {
   disabilities          DisabilityOfDivyang[]
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
+  divyangDetailsAuditLog DivyangDetailsAuditLog[]
+}
+
+
+model DivyangDetailsAuditLog {
+  id           String @id @default(uuid())
+  divyangDetailsId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  divyangDetails DivyangDetails @relation(fields: [divyangDetailsId], references: [id])
 }
 
 model DivyangServiceMapping {
@@ -267,7 +301,20 @@ model DivyangServiceMapping {
   donor              Donor?                @relation(fields: [donorId],references: [id]) 
   nonSevaKendraFollowUp NonSevaKendraFollowUp[]
   sevaKendraFollowUp SevaKendraFollowUp[]
+  divyangServiceMappingAuditLog DivyangServiceMappingAuditLog[]
 }
+
+model DivyangServiceMappingAuditLog {
+  id           String @id @default(uuid())
+  DivyangServiceMappingId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  divyangServiceMapping DivyangServiceMapping @relation(fields: [DivyangServiceMappingId], references: [id])
+}
+
+
 model Donor {
   id             String @id @default(uuid())
   name           String
