@@ -3,7 +3,7 @@ import { getTotalRowsWithOrWithoutFilterDB } from "../../services/database/datab
 import getRequestSchema from "../../types/getRequestSchema.js";
 import { createResponseWithQuery } from "../../types/createResponseSchema.js";
 import {getServiceByIdDB} from "../../services/database/serviceMaster/read.js";
-import {getServiceDBTransaction} from "../../services/database/serviceMaster/transactions/read.js";
+import {getServicesDBTransaction} from "../../services/database/serviceMaster/transactions/read.js";
 
 async function getServices(
   request: Request,
@@ -15,7 +15,7 @@ async function getServices(
 
     // No need to decrement query (query.start - 1).
     // It is taken care of by getRequestSchema
-    const result = await getServiceDBTransaction(
+    const result = await getServicesDBTransaction(
         query.start,
         query.rows,
         query.orderBy,

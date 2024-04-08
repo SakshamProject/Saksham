@@ -4,7 +4,7 @@ import {getServicesDB, getServiceTotalDBTransaction} from "../read.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import {Prisma} from "@prisma/client";
 
-async function getServiceDBTransaction(start = defaults.skip, rows = defaults.take, orderBy = "serviceName", sortOrder: "asc" | "desc" = defaults.sortOrder, searchText = "") {
+async function getServicesDBTransaction(start = defaults.skip, rows = defaults.take, orderBy = "serviceName", sortOrder: "asc" | "desc" = defaults.sortOrder, searchText = "") {
     const transaction = await prisma.$transaction(
         async (prismaTransaction) => {
             try {
@@ -28,4 +28,4 @@ async function getServiceDBTransaction(start = defaults.skip, rows = defaults.ta
     return transaction;
 }
 
-export { getServiceDBTransaction }
+export { getServicesDBTransaction }
