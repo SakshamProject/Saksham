@@ -32,22 +32,4 @@ const updateSevaKendraDB = async (sevaKendra: SevaKendraUpdate, id: string) => {
   return updatedSevaKendra;
 };
 
-const updateSevaKendraAuditLogDB = async (auditLog: SevaKendraAuditLog[]) => {
-  for (const log of auditLog) {
-    const updatedAuditLog = await prisma.sevaKendraAuditLog.upsert({
-      where: {
-        id: log.id,
-      },
-      create: log,
-      update: log,
-    });
-    console.log(updatedAuditLog);
-  }
-  console.log("\n sevaKendra auditlog updated \n");
-};
-
-export {
-  updateContactPersonDB,
-  updateSevaKendraDB,
-  updateSevaKendraAuditLogDB,
-};
+export { updateContactPersonDB, updateSevaKendraDB };
