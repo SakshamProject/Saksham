@@ -7,9 +7,11 @@ import {
 import {
   createServiceDBInputObject,
   createServiceFilterInputObject,
-} from "../../dto/serviceMaster/postService.js";
-import {filterServiceDB} from "../../services/database/serviceMaster/filter.js";
+} from "../../dto/serviceMaster/post.js";
 import {createServiceDB} from "../../services/database/serviceMaster/create.js";
+import {getFilterServicesDBTransaction} from "../../services/database/serviceMaster/transactions/filter.js";
+import {createResponseForFilter, createResponseOnlyData} from "../../types/createResponseSchema.js";
+import filterRequestSchema from "../../types/filterRequestSchema.js";
 
 async function postService(
   request: Request,
@@ -22,7 +24,8 @@ async function postService(
     );
     const serviceInput = createServiceDBInputObject(body);
     const service = await createServiceDB(serviceInput);
-    response.json(service);
+    const responseData = createResponseOnlyData(service);
+    response.json(responseData);
   } catch (error) {
     next(error);
   }
@@ -35,9 +38,12 @@ async function filterService(
 ) {
   try {
     const body = filterServiceMasterSchema.parse(request.body);
+    const query = filterRequestSchema.parse(request.query);
     const serviceWhereInput = createServiceFilterInputObject(body);
-    const results = await filterServiceDB(serviceWhereInput);
-    response.json(results);
+    const results = await getFilterServicesDBTransaction(query.start, query.rows, query.orderBy, query.sortOrder, serviceWhereInput);
+    const count = results?.services?.length || 0;
+    const responseData = createResponseForFilter(results?.services, query, results?.total, count, body);
+    response.json(responseData);
   } catch (error) {
     next(error);
   }

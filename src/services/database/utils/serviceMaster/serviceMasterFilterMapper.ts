@@ -15,6 +15,7 @@ function filterServiceMasterMapper(
   filterServiceMasterMap.set("serviceName", {
     name: {
       [operation]: value,
+      mode: "insensitive"
     },
   });
 
@@ -22,6 +23,7 @@ function filterServiceMasterMapper(
     serviceType: {
       name: {
         [operation]: value,
+        mode: "insensitive"
       },
     },
   });

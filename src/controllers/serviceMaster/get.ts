@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { getTotalRowsWithOrWithoutFilterDB } from "../../services/database/database.js";
 import getRequestSchema from "../../types/getRequestSchema.js";
-import { createResponseWithQuery } from "../../types/createResponseSchema.js";
+import {createResponseOnlyData, createResponseWithQuery} from "../../types/createResponseSchema.js";
 import {getServiceByIdDB} from "../../services/database/serviceMaster/read.js";
 import {getServicesDBTransaction} from "../../services/database/serviceMaster/transactions/read.js";
 
@@ -25,14 +24,14 @@ async function getServices(
 
     const count = result?.services?.length || 0;
     const total = result?.total || 0;
-    const responseWithRequest = createResponseWithQuery(
-        result?.services || {},
+    const responseData = createResponseWithQuery(
+        result?.services,
         query,
         total,
         count
     );
 
-    response.json(responseWithRequest);
+    response.json(responseData);
 
   } catch (error) {
     next(error);
@@ -46,10 +45,9 @@ async function getServiceByID(
 ) {
   try {
     const serviceId = request.params.serviceID;
-    const query = getRequestSchema.parse(request.query);
     const service = await getServiceByIdDB(serviceId);
-
-    response.json(service);
+    const responseData = createResponseOnlyData(service);
+    response.json(responseData);
   } catch (error) {
     next(error);
   }

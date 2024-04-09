@@ -4,6 +4,7 @@ import {Prisma} from "@prisma/client";
 import {serviceMasterColumnNameMapper} from "../utils/serviceMaster/serviceMasterColumnNameMapper.js";
 import searchTextMapper from "../utils/serviceMaster/searchTextMapper.js";
 import defaults from "../../../defaults.js";
+import serviceMasterDefaults from "./defaults/defaults.js";
 
 async function getServicesDB(
     prismaTransaction: Prisma.TransactionClient,
@@ -15,15 +16,7 @@ async function getServicesDB(
 ) {
     try {
         const query: Prisma.ServiceFindManyArgs = {
-            select: {
-                id: true,
-                name: true,
-                serviceType: {
-                    select: {
-                        name: true,
-                    },
-                },
-            },
+            select: serviceMasterDefaults.select,
             take: take,
             skip: skip,
             orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
@@ -42,7 +35,8 @@ async function getServicesDB(
         }
     }
 }
-async function getServiceTotalDBTransaction(prismaTransaction: Prisma.TransactionClient, searchText = "") {
+
+async function getServiceTotalDB(prismaTransaction: Prisma.TransactionClient, searchText = "") {
         try {
             const total = prismaTransaction.service.count({
                 where: searchTextMapper("Service", searchText),
@@ -79,4 +73,4 @@ async function getServiceByIdDB(id: string) {
 
 export {getServiceByIdDB};
 export {getServicesDB};
-export {getServiceTotalDBTransaction}
+export {getServiceTotalDB}

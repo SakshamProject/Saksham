@@ -3,7 +3,7 @@ import inputFieldSchema, { filter } from "../../inputFieldSchema.js";
 
 const postServiceMasterSchema = z.object({
   serviceTypeId: z.string().uuid(),
-  name: inputFieldSchema,
+  name: inputFieldSchema.toUpperCase(),
 });
 
 type postServiceMasterType = z.infer<typeof postServiceMasterSchema>;
@@ -17,7 +17,7 @@ type filterServiceMasterType = z.infer<typeof filterServiceMasterSchema>;
 
 const putServiceMasterSchema = z.object({
   serviceTypeId: z.string().uuid(),
-  name: inputFieldSchema,
+  name: inputFieldSchema.toUpperCase(),
 });
 type putServiceMasterType = z.infer<typeof putServiceMasterSchema>;
 

@@ -3,7 +3,7 @@ import {
   filterServiceMasterType,
   postServiceMasterType,
 } from "../../types/schemas/serviceMaster/serviceMasterSchema.js";
-import { generateServiceFilter } from "../../services/database/utils/serviceMaster/serviceMasterFilter.js";
+import { generateServiceFilter } from "../../services/database/utils/serviceMaster/serviceMasterFilterMapper.js";
 
 function createServiceDBInputObject(
   body: postServiceMasterType
