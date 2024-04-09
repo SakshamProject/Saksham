@@ -1,48 +1,147 @@
 import defaults from "../../../defaults.js";
 import { DesignationResponse } from "../../../models/designation/designation.js";
-import { designationColumnNameMapper } from "../../utils/designation/designation.js";
+import { sortOrderEnum } from "../../../types/getRequestSchema.js";
+import { DesignationsearchCondition, designationColumnNameMapper } from "../utils/designation/designation.js";
 import prisma from "../database.js";
+import throwDatabaseError from "../utils/errorHandler.js";
+import { Prisma } from "@prisma/client";
 
 async function getDesignationDB(
+  prismaTransaction:Prisma.TransactionClient,
   skip: number = defaults.skip,
   take: number = defaults.take,
   orderByColumn: string = "",
-  orderByDirection: "asc" | "desc" = "asc"
-): Promise<any> {
-  const query = {
-    skip: skip,
-    take: take,
-    include: {
-      sevaKendra: {
-        include: {
-          district: {
-            include: {
-              state: true,
-            },
-          },
-          contactPerson: true,
-        },
-      },
-    },
-    orderBy: designationColumnNameMapper(orderByColumn, orderByDirection),
-  };
-
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  searchText:string = ""
+){
+ 
   try {
-    const results = await prisma.designation.findMany(query);
-    const count: number = await prisma.designation.count();
-
-    const responseObject: DesignationResponse = {
-      results: results,
-      count: count,
-      start: skip + 1,
-      rows: results.length,
-      orderBy: orderByColumn,
-      orderByDirection: orderByDirection,
-    };
-    return responseObject;
+    const results = await prismaTransaction.designation.findMany({  
+      skip: skip,
+     take: take,
+      select:{
+        id:true,
+        name:true,
+        sevaKendra:{
+          select:{
+            name:true,
+            district:{
+              select:{
+                name:true,
+                state:{
+                  select:{
+                    name:true
+                  }
+                }
+              }
+            }}
+          
+        }
+     },
+      where:{
+        OR:[{
+          name:{
+            contains:searchText,
+            mode:"insensitive"
+          }
+        },{
+          sevaKendra:{
+            name:{
+              contains:searchText,
+              mode:"insensitive"
+            }
+          }
+        },
+        {
+          sevaKendra:{
+            district:{
+              name:{
+                contains:searchText,
+                mode:"insensitive"
+              }
+            }
+          }        },
+        {
+          sevaKendra:{
+            district:{
+              state:{
+                name:{
+                  contains:searchText,
+                  mode:"insensitive"
+                }
+              }
+            }
+          }
+        }
+        ]
+    },
+  
+      orderBy: designationColumnNameMapper(orderByColumn, sortOrder),
+    });
+    return results;
   } catch (err) {
-    return err;
+    if(err instanceof Error){
+      throwDatabaseError(err);    }
   }
+}
+
+async function getDesignationDBTotal( 
+  prismaTransaction:Prisma.TransactionClient,
+  skip: number = defaults.skip,
+  take: number = defaults.take,
+  orderByColumn: string = "",
+  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
+  searchText:string = ""){
+    try {
+      const total:number = await prismaTransaction.designation.count({  
+      
+        where:{
+          OR:[{
+            name:{
+              contains:searchText,
+              mode:"insensitive"
+            }
+          },{
+            sevaKendra:{
+              name:{
+                contains:searchText,
+                mode:"insensitive"
+              }
+            }
+          },
+          {
+            sevaKendra:{
+              district:{
+                name:{
+                  contains:searchText,
+                  mode:"insensitive"
+                }
+              }
+            }
+          },
+          {
+            sevaKendra:{
+              district:{
+                state:{
+                  name:{
+                    contains:searchText,
+                    mode:"insensitive"
+                  }
+                }
+              }
+            }
+          }
+          ]
+      },
+    
+        orderBy: designationColumnNameMapper(orderByColumn, sortOrder),
+      });
+      return total;
+    } catch (err) {
+      if(err instanceof Error){
+        throwDatabaseError(err);    }
+    }
+
 }
 
 async function getDesignationByIDDB(id: string | undefined) {
@@ -103,8 +202,10 @@ async function getDesignationByNameDB(name: string) {
     console.log(designation);
     return designation;
   } catch (err) {
-    return err;
+    if(err instanceof Error){
+      throwDatabaseError(err);
+    }
   }
 }
 
-export { getDesignationDB, getDesignationByIDDB, getDesignationByNameDB };
+export { getDesignationDB, getDesignationByIDDB, getDesignationByNameDB,getDesignationDBTotal };

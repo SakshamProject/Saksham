@@ -5,7 +5,6 @@ import {
   getSelectedDisabilitySubTypeSchema,
   postDisabilitySubTypeType,
 } from "../../../../types/typeMaster/generalMaster/disabilityType.js";
-import prisma from "../../../database/database.js";
 import { createDisabilitySubTypeDB } from "../../../database/typeMaster/generalMaster/disabilityType/create.js";
 import { deleteDisabilitySubTypeDB } from "../../../database/typeMaster/generalMaster/disabilityType/delete.js";
 

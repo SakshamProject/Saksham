@@ -1,12 +1,11 @@
 import { z } from "zod";
-import prisma from "../../services/database/database.js";
 import { Prisma } from "@prisma/client";
 
 const postDesignationRequestSchema = z.object({
   stateId: z.string(),
   districtId: z.string(),
   sevaKendraId: z.string(),
-  designation: z.string(),
+  designation: z.string().toUpperCase(),
   featuresId: z.array(z.string()),
 });
 

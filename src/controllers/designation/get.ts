@@ -1,21 +1,31 @@
 import { NextFunction, Request, Response } from "express";
 import { getDesignationByIDDB, getDesignationDB } from "../../services/database/designation/read.js";
-import { createResponseOnlyData } from "../../types/createResponseSchema.js";
+import { createResponseOnlyData, createResponseWithQuery } from "../../types/createResponseSchema.js";
+import getRequestSchema from "../../types/getRequestSchema.js";
+import { getDesignationDBTransaction } from "../../services/database/designation/transaction/read.js";
 
 async function getDesignation(request: Request, response: Response) {
-    const { start, rows, orderBy, orderByDirection } = getRequestSchema.parse(
+    const query = getRequestSchema.parse(
       request.query
     );
-    const orderByColumn: string | undefined = orderBy;
-  
-    const results = await getDesignationDB(
-      start,
-      rows,
-      orderByColumn,
-      orderByDirection
+    const result = await getDesignationDBTransaction(
+      query.start,
+      query.rows,
+      query.orderByColumn,
+      query.sortOrder,
+      query.searchText
     );
+    const count: number = result?.designations?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseWithQuery(
+      result?.designations ||{},
+      query,
+      total,
+      count
+    );
+
+    response.send(responseData);
   
-    response.send(results);
   }
   
   async function getDesignationById(request: Request, response: Response,next:NextFunction) {
@@ -30,12 +40,4 @@ async function getDesignation(request: Request, response: Response) {
   }
   }
 
-  // async function getDesignationByName(request: Request, response: Response) {
-  //   const name: string = request.params.name;
-  //   const designation = await getDesignationByNameDB(name);
-   
-  //   response.send({
-  //     "data":designation
-  //   })
-  // }
   export {getDesignationById,getDesignation}
