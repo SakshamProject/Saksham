@@ -4,7 +4,7 @@ import { sortOrderEnum } from "../../../types/getRequestSchema.js";
 import { DesignationsearchCondition, designationColumnNameMapper } from "../utils/designation/designation.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
-import { Prisma } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 async function getDesignationDB(
   prismaTransaction:Prisma.TransactionClient,
@@ -192,20 +192,21 @@ async function getDesignationByIDDB(id: string | undefined) {
   }
 }
 
-async function getDesignationByNameDB(name: string) {
-  try {
-    const designation = await prisma.designation.findMany({
-      where: {
-        name: name,
+async function getFeaturesIdByDesignationIdDB(prismaTransaction:Prisma.TransactionClient,id:string){
+  try{
+    const FeaturesOnDesignation = prismaTransaction.featuresOnDesignations.findMany({
+      where:{
+        designationId:id
       },
-    });
-    console.log(designation);
-    return designation;
-  } catch (err) {
+      
+    })
+    return FeaturesOnDesignation
+  }catch(err){
     if(err instanceof Error){
       throwDatabaseError(err);
     }
   }
+
 }
 
-export { getDesignationDB, getDesignationByIDDB, getDesignationByNameDB,getDesignationDBTotal };
+export { getDesignationDB, getDesignationByIDDB, getDesignationDBTotal ,getFeaturesIdByDesignationIdDB};
