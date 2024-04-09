@@ -1,6 +1,7 @@
 import express from 'express'
 import { getDivyangDetails, getDivyangDetailsbyId } from '../../controllers/divyangDetails/get.js'
 import { postDivyangDetails } from '../../controllers/divyangDetails/post.js'
+import { deleteDivyangDetails } from '../../controllers/divyangDetails/delete.js'
 
 const divyangDetailsRouter = express.Router()
 
