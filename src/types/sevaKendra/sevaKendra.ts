@@ -1,6 +1,7 @@
 import { z } from "zod";
 import inputFieldSchema, {
   emailSchema,
+  filter,
   landLineNumberSchema,
   phoneNumberSchema,
   uuidSchema,
@@ -73,6 +74,17 @@ const SevaKendraUpdateRequestSchema = z.object({
 type SevaKendraUpdateRequestSchemaType = z.infer<
   typeof SevaKendraUpdateRequestSchema
 >;
+const filterSevaKendraSchema = z.object({
+  sevaKendraName: filter.optional(),
+  state: filter.optional(),
+  district: filter.optional(),
+  contactPersonName: filter.optional(),
+  contactPersonNumber: filter.optional(),
+});
+
+
+type filterSevaKendraSchemaType = z.infer<typeof filterSevaKendraSchema>;
+
 type SevaKendraRequestSchemaType = z.infer<typeof SevaKendraRequestSchema>;
 type SevaKendra = Prisma.SevaKendraCreateInput;
 type SevaKendraUpdate = Prisma.SevaKendraUpdateInput;
@@ -96,6 +108,8 @@ type ServicesIds = { serviceId: string };
 export {
   SevaKendraColumnNameSchema,
   SevaKendraUpdateRequestSchema,
+  filterSevaKendraSchema,
+  filterSevaKendraSchemaType,
   ServicesIds,
   SevaKendraUpdateRequestSchemaType,
   SevaKendraServices,

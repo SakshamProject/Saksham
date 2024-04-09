@@ -16,24 +16,25 @@ const landLineNumberSchema = z.string().min(6);
 const uuidSchema = z.string().uuid();
 const queryParamsSchema = z.string().optional();
 
-const filterOperations = z.enum([
-  "equals",
-  "notEquals",
-  "startsWith",
-  "endsWith",
-]);
-type filterOperationsEnum = z.infer<typeof filterOperations>;
+enum filterOperationsEnum {
+  EQUALS = "equals",
+  NOTEQUALS = "notEquals",
+  STARTSWITH = "startsWith",
+  BEGINSWITH = "endsWith",
+}
 const filter = z.object({
-  operation: filterOperations,
+  operation: z.nativeEnum(filterOperationsEnum),
   value: z.string(),
 });
 
-export { queryParamsSchema, filter, filterOperations, filterOperationsEnum, inputFieldSchema };
 export {
+  queryParamsSchema,
+  filter,
+  filterOperationsEnum,
+  inputFieldSchema,
   phoneNumberSchema,
   emailSchema,
   landLineNumberSchema,
   uuidSchema,
-  queryParamsSchema,
 };
 export default inputFieldSchema;

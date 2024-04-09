@@ -1,9 +1,11 @@
 import {
   SevaKendra,
   SevaKendraRequestSchemaType,
+  filterSevaKendraSchemaType,
 } from "../../types/sevaKendra/sevaKendra.js";
 import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import { sevaKendraDefaults } from "../../types/sevaKendra/sevaKendraDefaults.js";
+import { generateSevaKendraFilter } from "../../services/database/utils/sevaKendra/filterMapper.js";
 
 const createSevaKendraDBObject = (
   sevaKendra: SevaKendraRequestSchemaType,
@@ -47,4 +49,11 @@ const createSevaKendraDBObject = (
   return sevaKendraDBObject;
 };
 
-export { createSevaKendraDBObject };
+const createSevaKendraFilterInputObject = (
+  sevaKendraFilter: filterSevaKendraSchemaType
+): Prisma.SevaKendraWhereInput => {
+  const sevaKendraWhereInput = generateSevaKendraFilter(sevaKendraFilter);
+  return sevaKendraWhereInput;
+};
+
+export { createSevaKendraDBObject, createSevaKendraFilterInputObject };

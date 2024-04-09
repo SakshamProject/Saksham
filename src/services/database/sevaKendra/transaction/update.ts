@@ -15,6 +15,7 @@ import {
   updateContactPersonDBObject,
   updateSevaKendraDBObject,
 } from "../../../../dto/sevaKendra/update.js";
+import throwDatabaseError from "../../utils/errorHandler.js";
 
 const updateSevaKendraDBTransaction = async (
   id: string,
@@ -23,36 +24,39 @@ const updateSevaKendraDBTransaction = async (
 ) => {
   const transaction = prisma.$transaction(
     async (prismaTransaction) => {
-      await createAuditLogIfExists(
-        prismaTransaction,
-        updateRequestSevaKendra,
-        id
-      );
+      try {
+        await createAuditLogIfExists(
+          prismaTransaction,
+          updateRequestSevaKendra,
+          id
+        );
 
-      const contactPersonDBObject: ContactPerson = updateContactPersonDBObject(
-        updateRequestSevaKendra
-      );
-      const updatedContactPerson = await updateContactPersonDB(
-        contactPersonDBObject,
-        updateRequestSevaKendra.contactPerson.id
-      );
+        const contactPersonDBObject: ContactPerson =
+          updateContactPersonDBObject(updateRequestSevaKendra);
+        const updatedContactPerson = await updateContactPersonDB(
+          contactPersonDBObject,
+          updateRequestSevaKendra.contactPerson.id
+        );
 
-      const existingServices: SevaKendraServices | undefined | null =
-        await getSevaKendraServicesById(prismaTransaction, id);
-      const services = updateServicesOnSevaKendras(
-        existingServices,
-        updateRequestSevaKendra
-      );
-      const sevaKendraDBObject = await updateSevaKendraDBObject(
-        updateRequestSevaKendra,
-        updatedBy,
-        services
-      );
-      const updatedSevaKendra = await updateSevaKendraDB(
-        sevaKendraDBObject,
-        id
-      );
-      return updatedSevaKendra;
+        const existingServices: SevaKendraServices | undefined | null =
+          await getSevaKendraServicesById(prismaTransaction, id);
+        const services = updateServicesOnSevaKendras(
+          existingServices,
+          updateRequestSevaKendra
+        );
+        const sevaKendraDBObject = await updateSevaKendraDBObject(
+          updateRequestSevaKendra,
+          updatedBy,
+          services
+        );
+        const updatedSevaKendra = await updateSevaKendraDB(
+          sevaKendraDBObject,
+          id
+        );
+        return updatedSevaKendra;
+      } catch (error) {
+        if (error instanceof Error) throwDatabaseError(error);
+      }
     },
     {
       isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration

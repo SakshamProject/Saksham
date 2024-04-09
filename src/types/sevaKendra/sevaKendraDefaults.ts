@@ -5,10 +5,10 @@ const sevaKendraDefaults = {
 };
 
 enum SevaKendraColumnNamesEnum {
-  NAME = "name",
+  NAME = "sevaKendraName",
   STATE = "state",
   DISTRICT = "district",
-  CONTACTNAME = "contact-name",
-  CONTACTNUMBER = "contact-number",
+  CONTACTNAME = "contactPersonName",
+  CONTACTNUMBER = "contactPersonNumber",
 }
 export { sevaKendraDefaults, SevaKendraColumnNamesEnum };
