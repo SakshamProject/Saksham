@@ -1,9 +1,13 @@
 import express from 'express'
 import { getDivyangDetails, getDivyangDetailsbyId } from '../../controllers/divyangDetails/get.js'
+import { postDivyangDetails } from '../../controllers/divyangDetails/post.js'
 
 const divyangDetailsRouter = express.Router()
 
 divyangDetailsRouter.get("/", getDivyangDetails)
-divyangDetailsRouter.get("/", getDivyangDetailsbyId)
+divyangDetailsRouter.get("/:id", getDivyangDetailsbyId)
+divyangDetailsRouter.post("/", postDivyangDetails)
+divyangDetailsRouter.put("/:id", putDivyangDetails)
+divyangDetailsRouter.delete("/:id", deleteDivyangDetails)
 
 export { divyangDetailsRouter }

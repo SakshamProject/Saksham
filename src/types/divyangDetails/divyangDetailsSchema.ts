@@ -22,4 +22,6 @@ const divyangDetailsRequestSchema = z
 
 type DivyangDetailsRequest = z.infer<typeof divyangDetailsRequestSchema>
 
-export { divyangDetailsRequestSchema, DivyangDetailsRequest, getDivyangDetailsSchema }
+export { divyangDetailsRequestSchema, 
+  DivyangDetailsRequest, 
+  getDivyangDetailsSchema }
