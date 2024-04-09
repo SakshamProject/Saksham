@@ -15,7 +15,7 @@ async function getServicesDB(
     searchText = ""
 ) {
     try {
-        const query: Prisma.ServiceFindManyArgs = {
+        const query: Prisma.ServiceTypeFindManyArgs = {
             select: serviceMasterDefaults.select,
             take: take,
             skip: skip,
@@ -26,7 +26,7 @@ async function getServicesDB(
             query.where = searchTextMapper("Service", searchText);
         }
 
-        const services = await prismaTransaction.service.findMany(query);
+        const services = await prismaTransaction.serviceType.findMany(query);
         return services;
     } catch (error) {
         if (error instanceof Error) {
@@ -38,7 +38,7 @@ async function getServicesDB(
 
 async function getServiceTotalDB(prismaTransaction: Prisma.TransactionClient, searchText = "") {
         try {
-            const total = prismaTransaction.service.count({
+            const total = prismaTransaction.serviceType.count({
                 where: searchTextMapper("Service", searchText),
             });
             return total;
