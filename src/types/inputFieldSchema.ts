@@ -16,6 +16,19 @@ const landLineNumberSchema = z.string().min(6);
 const uuidSchema = z.string().uuid();
 const queryParamsSchema = z.string().optional();
 
+const filterOperations = z.enum([
+  "equals",
+  "notEquals",
+  "startsWith",
+  "endsWith",
+]);
+type filterOperationsEnum = z.infer<typeof filterOperations>;
+const filter = z.object({
+  operation: filterOperations,
+  value: z.string(),
+});
+
+export { queryParamsSchema, filter, filterOperations, filterOperationsEnum, inputFieldSchema };
 export {
   phoneNumberSchema,
   emailSchema,

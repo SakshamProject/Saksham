@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json.schemastore.org/mocharc.json",
+  "extension": ["ts"],
+  "require": ["chai/register-expect.js","tsx"],
+  "spec": "tests/**/*.test.ts",
+  "port": 3030
+}

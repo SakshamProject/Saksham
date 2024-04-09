@@ -15,11 +15,14 @@ const getState = async (
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result = await getStateDBTransaction(query.sortOrder);
+    const result = await getStateDBTransaction(
+      query.sortOrder,
+      query.searchText
+    );
     const total: number = result?.total || 0;
     const count: number = result?.states?.length || 0;
     const responseData = createResponseWithQuery(
-      result?.states || {},
+      result?.states,
       query,
       total,
       count
@@ -38,7 +41,7 @@ const getStateById = async (
     const id: string = request.params.id;
     console.log(id);
     const result: getStateSchema | undefined = await getStateByIdDB(id);
-    const responseData = createResponseOnlyData(result || {});
+    const responseData = createResponseOnlyData(result);
     response.send(responseData);
   } catch (error) {
     next(error);
