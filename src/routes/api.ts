@@ -20,6 +20,6 @@ apiRouter.get(
   }
 );
 apiRouter.use("/typemaster", typeMasterRouter);
-apiRouter.use("/users", userRouter)
+apiRouter.use("/users", userRouter);
 apiRouter.use(errorHandler);
 export default apiRouter;
