@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { putServiceMasterSchema } from "../../types/schemas/serviceMaster/serviceMasterSchema.js";
+import { putServiceMasterSchema } from "../../types/serviceMaster/serviceMasterSchema.js";
 import { createServiceDBInputObject } from "../../dto/serviceMaster/post.js";
 import {updateServiceDB} from "../../services/database/serviceMaster/update.js";
 import {createResponseOnlyData} from "../../types/createResponseSchema.js";

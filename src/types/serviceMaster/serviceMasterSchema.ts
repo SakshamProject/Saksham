@@ -1,5 +1,5 @@
 import { z } from "zod";
-import inputFieldSchema, { filter } from "../../inputFieldSchema.js";
+import inputFieldSchema, { filter } from "./../inputFieldSchema.js";
 
 const postServiceMasterSchema = z.object({
   serviceTypeId: z.string().uuid(),
