@@ -2,6 +2,7 @@ import {Prisma} from "@prisma/client";
 import throwDatabaseError from "../utils/errorHandler.js";
 import defaults from "../../../defaults.js";
 import {serviceMasterColumnNameMapper} from "../utils/serviceMaster/serviceMasterColumnNameMapper.js";
+import serviceMasterDefaults from "./defaults/defaults.js";
 
 async function filterServiceDB( prismaTransaction: Prisma.TransactionClient,
                                 orderBy = "createdAt",
@@ -11,6 +12,7 @@ async function filterServiceDB( prismaTransaction: Prisma.TransactionClient,
                                serviceWhereInput: Prisma.ServiceWhereInput) {
     try {
         const query: Prisma.ServiceFindManyArgs = {
+            select: serviceMasterDefaults.select,
             where: serviceWhereInput,
             skip: skip,
             take: take,
