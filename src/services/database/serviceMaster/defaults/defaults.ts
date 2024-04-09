@@ -4,9 +4,10 @@ const serviceMasterDefaults = {
     select: {
         id: true,
         name: true,
-        serviceType: {
+        service: {
             select: {
                 name: true,
+                id: true
             },
         },
     }

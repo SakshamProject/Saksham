@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 
 function searchTextMapper(tableName: Prisma.ModelName, searchText: string) {
-    const searchTextMap: Map<string, Prisma.ServiceWhereInput> = new Map();
+    const searchTextMap: Map<string, Prisma.ServiceTypeWhereInput> = new Map();
 
     searchTextMap.set("Service", {
             OR: [
@@ -12,10 +12,12 @@ function searchTextMapper(tableName: Prisma.ModelName, searchText: string) {
                     },
                 },
                 {
-                    serviceType: {
-                        name: {
-                            contains: searchText,
-                            mode: "insensitive"
+                    service: {
+                        some: {
+                            name: {
+                                contains: searchText,
+                                mode: "insensitive"
+                            }
                         }
                     }
                 },

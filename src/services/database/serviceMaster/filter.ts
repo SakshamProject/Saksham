@@ -9,16 +9,16 @@ async function filterServiceDB( prismaTransaction: Prisma.TransactionClient,
                                sortOrder: "asc" | "desc" = defaults.sortOrder,
                                skip = defaults.skip,
                                take = defaults.take,
-                               serviceWhereInput: Prisma.ServiceWhereInput) {
+                               serviceTypeWhereInput: Prisma.ServiceTypeWhereInput) {
     try {
-        const query: Prisma.ServiceFindManyArgs = {
+        const query: Prisma.ServiceTypeFindManyArgs = {
             select: serviceMasterDefaults.select,
-            where: serviceWhereInput,
+            where: serviceTypeWhereInput,
             skip: skip,
             take: take,
             orderBy: serviceMasterColumnNameMapper(orderBy, sortOrder),
         };
-        const results = await prismaTransaction.service.findMany(query);
+        const results = await prismaTransaction.serviceType.findMany(query);
         return results;
     } catch (error) {
         if (error instanceof Error) {
@@ -27,10 +27,10 @@ async function filterServiceDB( prismaTransaction: Prisma.TransactionClient,
     }
 }
 
-async function filterServiceTotalDB(prismaTransaction: Prisma.TransactionClient, serviceWhereInput: Prisma.ServiceWhereInput) {
+async function filterServiceTotalDB(prismaTransaction: Prisma.TransactionClient, serviceTypeWhereInput: Prisma.ServiceTypeWhereInput) {
     try {
-        const count = await prismaTransaction.service.count({
-            where: serviceWhereInput,
+        const count = await prismaTransaction.serviceType.count({
+            where: serviceTypeWhereInput,
         });
         return count;
     }

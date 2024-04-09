@@ -6,25 +6,27 @@ function filterServiceMasterMapper(
   filterOperation: string,
   value: string
 ) {
-  const filterServiceMasterMap: Map<string, Prisma.ServiceWhereInput> =
+  const filterServiceMasterMap: Map<string, Prisma.ServiceTypeWhereInput> =
     new Map();
 
   const operation =
     filterOperation === "notEquals" ? "equals" : filterOperation;
 
-  filterServiceMasterMap.set("serviceName", {
+  filterServiceMasterMap.set("serviceTypeName", {
     name: {
       [operation]: value,
       mode: "insensitive"
     },
   });
 
-  filterServiceMasterMap.set("serviceTypeName", {
-    serviceType: {
-      name: {
-        [operation]: value,
-        mode: "insensitive"
-      },
+  filterServiceMasterMap.set("serviceName", {
+    service: {
+      some: {
+        name: {
+          [operation]: value,
+          mode: "insensitive"
+        },
+      }
     },
   });
 
