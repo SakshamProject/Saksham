@@ -97,7 +97,7 @@ model District {
   Corporations      Corporation[]
   PanchayatUnion    PanchayatUnion[]
   sevaKendraFollowUp SevaKendraFollowUp[]
-  taluk Taluk[]
+  Taluk Taluk[]
 }
 
 model State {

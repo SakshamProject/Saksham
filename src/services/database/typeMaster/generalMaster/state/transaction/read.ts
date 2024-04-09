@@ -6,13 +6,18 @@ import { getStateDB, getStateDBTotal } from "../read.js";
 import defaults from "../../../../../../defaults.js";
 
 const getStateDBTransaction = (
-  sortOrder: sortOrderEnum = defaults.sortOrder
+  sortOrder: sortOrderEnum = defaults.sortOrder,
+  searchText: string = ""
 ) => {
   const transaction = prisma.$transaction(
     async (prismaTransaction) => {
       try {
-        const states = await getStateDB(prismaTransaction, sortOrder);
-        const total = await getStateDBTotal(prismaTransaction);
+        const states = await getStateDB(
+          prismaTransaction,
+          sortOrder,
+          searchText
+        );
+        const total = await getStateDBTotal(prismaTransaction, searchText);
         return { states, total };
       } catch (error) {
         if (error instanceof Error) throwDatabaseError(error);
