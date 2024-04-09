@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import SevaKendraRequestSchema from "../../types/sevaKendra/sevaKendra.js";
-import { getSevaKendraServicesById } from "../../services/database/sevaKendra/read.js";
+import SevaKendraRequestSchema, {
+  ContactPerson,
+  SevaKendraUpdate,
+  SevaKendraUpdateRequestSchema,
+  SevaKendraUpdateRequestSchemaType,
+} from "../../types/sevaKendra/sevaKendra.js";
 import { createResponseOnlyData } from "../../types/createResponseSchema.js";
+import updateSevaKendraDBTransaction from "../../services/database/sevaKendra/transaction/update.js";
 
 const putSevaKendra = async (
   request: Request,
@@ -9,11 +14,18 @@ const putSevaKendra = async (
   next: NextFunction
 ) => {
   try {
-    const updateRequestSevaKendra = SevaKendraRequestSchema.parse(request.body);
+    const updateRequestSevaKendra: SevaKendraUpdateRequestSchemaType =
+      SevaKendraUpdateRequestSchema.parse(request.body);
     const id = request.params.id;
-    const currentServices = await getSevaKendraServicesById(id);
-    const result = currentServices;
-    const responseData = createResponseOnlyData(result || {});
+    const updatedBy = "";
+
+    const result = await updateSevaKendraDBTransaction(
+      id,
+      updateRequestSevaKendra,
+      updatedBy
+    );
+
+    const responseData = createResponseOnlyData({});
     response.send(responseData);
   } catch (error) {
     next(error);

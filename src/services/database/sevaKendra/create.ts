@@ -1,6 +1,7 @@
+import { Prisma } from "@prisma/client";
 import {
   SevaKendra,
-  SevaKendraRequestSchemaType,
+  SevaKendraAuditLog,
 } from "../../../types/sevaKendra/sevaKendra.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
@@ -17,19 +18,17 @@ const createSevaKendraDB = async (sevaKendra: SevaKendra) => {
 };
 
 const createSevaKendraAuditLogDB = async (
-  sevakendra: SevaKendraRequestSchemaType
+  prismaTransaction: Prisma.TransactionClient,
+  auditLog: SevaKendraAuditLog
 ) => {
   try {
-    const createdAuditLogs: Prisma.CreateCon = await prisma.create({
-      data: {
-        date: sevakendra.auditLog?.date,
-        description: sevakendra.auditLog?.description,
-        status: sevakendra.auditLog?.status,
-      },
+    const createdAuditLogs = await prismaTransaction.sevaKendraAuditLog.create({
+      data: auditLog,
     });
+    return createdAuditLogs;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
 
-export { createSevaKendraDB };
+export { createSevaKendraDB, createSevaKendraAuditLogDB };

@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import defaults from "../../../defaults.js";
 import { sortOrderEnum } from "../../../types/getRequestSchema.js";
 import prisma from "../database.js";
@@ -74,9 +75,9 @@ const getSevaKendraByIdDB = async (sevaKendraId: string): Promise<any> => {
   }
 };
 
-const getSevaKendraServicesById = async (sevaKendraId: string) => {
+const getSevaKendraServicesById = async (prismaTransaction:Prisma.TransactionClient,sevaKendraId: string) => {
   try {
-    const services = await prisma.sevaKendra.findFirst({
+    const services = await prismaTransaction.sevaKendra.findFirst({
       where: {
         id: sevaKendraId,
       },

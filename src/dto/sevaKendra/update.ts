@@ -1,13 +1,17 @@
+import { Prisma } from "@prisma/client";
 import {
   ContactPerson,
-  SevaKendraRequestSchemaType,
+  SevaKendraAuditLog,
+  SevaKendraServicesList,
   SevaKendraUpdate,
+  SevaKendraUpdateRequestSchemaType,
 } from "../../types/sevaKendra/sevaKendra.js";
 
 const updateSevaKendraDBObject = (
-  sevaKendra: SevaKendraRequestSchemaType,
-  updatedBy: string
-) => {
+  sevaKendra: SevaKendraUpdateRequestSchemaType,
+  updatedBy: string,
+  services: SevaKendraServicesList
+): SevaKendraUpdate => {
   const sevaKendraDBObject: SevaKendraUpdate = {
     name: sevaKendra.name,
     district: {
@@ -19,12 +23,22 @@ const updateSevaKendraDBObject = (
     startDate: sevaKendra.startDate,
     updatedBy: updatedBy,
     updatedAt: new Date().toISOString(),
+    services: {
+      createMany: {
+        data: services.servicesToCreate,
+      },
+      deleteMany: {
+        serviceId: {
+          in: services.servicesToDelete,
+        },
+      },
+    },
   };
   return sevaKendraDBObject;
 };
 
 const updateContactPersonDBObject = (
-  sevaKendra: SevaKendraRequestSchemaType
+  sevaKendra: SevaKendraUpdateRequestSchemaType
 ) => {
   const contactPersonDBObject: ContactPerson = {
     name: sevaKendra.contactPerson.name,
@@ -35,4 +49,30 @@ const updateContactPersonDBObject = (
   return contactPersonDBObject;
 };
 
-export { updateSevaKendraDBObject, updateContactPersonDBObject };
+const createSevaKendraAuditLogDBObject = (
+  sevakendra: SevaKendraUpdateRequestSchemaType,
+  sevaKendraId: string
+): SevaKendraAuditLog | null => {
+  for (let auditLog of sevakendra.auditLog) {
+    if (auditLog.id) {
+      const auditLogDBObject = {
+        sevakendra: {
+          connect: {
+            id: sevaKendraId,
+          },
+        },
+        date: auditLog.date,
+        description: auditLog.description,
+        status: auditLog.status,
+      };
+      return auditLogDBObject;
+    }
+  }
+  return null;
+};
+
+export {
+  updateSevaKendraDBObject,
+  updateContactPersonDBObject,
+  createSevaKendraAuditLogDBObject,
+};

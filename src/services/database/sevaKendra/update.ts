@@ -1,48 +1,36 @@
-import prisma from "../database.js";
 import {
   ContactPerson,
-  ServicesOnSevaKendras,
-  SevaKendra,
   SevaKendraAuditLog,
-} from "@prisma/client";
+  SevaKendraUpdate,
+} from "../../../types/sevaKendra/sevaKendra.js";
+import prisma from "../database.js";
 
-const updateContactPersonDB = async (contactPerson: ContactPerson) => {
+const updateContactPersonDB = async (
+  contactPerson: ContactPerson,
+  id: string
+) => {
   const updatedContactPerson = await prisma.contactPerson.update({
     where: {
-      id: contactPerson.id,
+      id: id,
     },
     data: contactPerson,
   });
-  console.log("\n contact updated \n");
-  console.log(updatedContactPerson);
 };
-const updateSevaKendraDB = async (sevaKendra: SevaKendra) => {
+const updateSevaKendraDB = async (sevaKendra: SevaKendraUpdate, id: string) => {
   const updatedSevaKendra = await prisma.sevaKendra.update({
     where: {
-      id: sevaKendra.id,
+      id: id,
     },
     data: sevaKendra,
+    include: {
+      contactPerson: true,
+      SevaKendraAuditLog: true,
+      services: true,
+    },
   });
-  console.log("\n sevaKendra updated \n");
-  console.log(updatedSevaKendra);
+  return updatedSevaKendra;
 };
 
-const updateServicesOnSevaKendraDB = async (
-  sevaKendraServices: ServicesOnSevaKendras[]
-) => {
-  for (const service of sevaKendraServices) {
-    const updatedServicesOnSevaKendra =
-      await prisma.servicesOnSevaKendras.upsert({
-        where: {
-          id: service.id,
-        },
-        update: service,
-        create: service,
-      });
-    console.log(updatedServicesOnSevaKendra);
-  }
-  console.log("\n services on sevaKendra updated \n");
-};
 const updateSevaKendraAuditLogDB = async (auditLog: SevaKendraAuditLog[]) => {
   for (const log of auditLog) {
     const updatedAuditLog = await prisma.sevaKendraAuditLog.upsert({
@@ -60,6 +48,5 @@ const updateSevaKendraAuditLogDB = async (auditLog: SevaKendraAuditLog[]) => {
 export {
   updateContactPersonDB,
   updateSevaKendraDB,
-  updateServicesOnSevaKendraDB,
   updateSevaKendraAuditLogDB,
 };
