@@ -4,9 +4,7 @@ import { getSevaKendraServicesById } from "../read.js";
 import {
   ContactPerson,
   SevaKendraAuditLog,
-  SevaKendraRequestSchemaType,
   SevaKendraServices,
-  SevaKendraUpdate,
   SevaKendraUpdateRequestSchemaType,
 } from "../../../../types/sevaKendra/sevaKendra.js";
 import { updateServicesOnSevaKendras } from "../../../utils/sevaKendra/UpdateHandler.js";
@@ -17,7 +15,6 @@ import {
   updateContactPersonDBObject,
   updateSevaKendraDBObject,
 } from "../../../../dto/sevaKendra/update.js";
-import { createSevaKendraDBObject } from "../../../../dto/sevaKendra/create.js";
 
 const updateSevaKendraDBTransaction = async (
   id: string,
@@ -51,7 +48,11 @@ const updateSevaKendraDBTransaction = async (
         updatedBy,
         services
       );
-      const updateSevaKendra = await updateSevaKendraDB(sevaKendraDBObject, id);
+      const updatedSevaKendra = await updateSevaKendraDB(
+        sevaKendraDBObject,
+        id
+      );
+      return updatedSevaKendra;
     },
     {
       isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration

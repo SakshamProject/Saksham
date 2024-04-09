@@ -18,7 +18,7 @@ const SevaKendraRequestSchema = z.object({
   address: z.string(),
   landLineNumber: landLineNumberSchema,
   mobileNumber: phoneNumberSchema,
-  startDate: z.date().optional(),
+  startDate: z.string().datetime().optional(),
   contactPerson: z.object({
     id: uuidSchema.optional(),
     name: inputFieldSchema.toUpperCase(),
@@ -35,7 +35,7 @@ const SevaKendraRequestSchema = z.object({
     .object({
       id: uuidSchema.optional(),
       status: z.nativeEnum(AuditLogStatusEnum),
-      date: z.date(),
+      date: z.string().datetime(),
       description: inputFieldSchema,
     })
     .optional(),
@@ -48,7 +48,7 @@ const SevaKendraUpdateRequestSchema = z.object({
   address: z.string(),
   landLineNumber: landLineNumberSchema,
   mobileNumber: phoneNumberSchema,
-  startDate: z.string().optional(),
+  startDate: z.string().datetime().optional(),
   contactPerson: z.object({
     id: uuidSchema,
     name: inputFieldSchema.toUpperCase(),
@@ -65,7 +65,7 @@ const SevaKendraUpdateRequestSchema = z.object({
     .object({
       id: uuidSchema.optional(),
       status: z.nativeEnum(AuditLogStatusEnum),
-      date: z.date(),
+      date: z.string().datetime(),
       description: inputFieldSchema,
     })
     .array(),

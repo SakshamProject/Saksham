@@ -15,6 +15,7 @@ const updateContactPersonDB = async (
     },
     data: contactPerson,
   });
+  return updatedContactPerson;
 };
 const updateSevaKendraDB = async (sevaKendra: SevaKendraUpdate, id: string) => {
   const updatedSevaKendra = await prisma.sevaKendra.update({

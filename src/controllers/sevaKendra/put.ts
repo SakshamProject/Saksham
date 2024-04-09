@@ -25,7 +25,7 @@ const putSevaKendra = async (
       updatedBy
     );
 
-    const responseData = createResponseOnlyData({});
+    const responseData = createResponseOnlyData(result);
     response.send(responseData);
   } catch (error) {
     next(error);
