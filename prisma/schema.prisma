@@ -18,10 +18,15 @@ model SevaKendra {
   id              String   @id @default(uuid())
   name            String   @unique
   districtId      String
+  address         String
   mobileNumber    String
   landLineNumber  String
   startDate       DateTime?
   contactPersonId String
+  createdAt       String?
+  createdBy       String?
+  updatedAt       String?
+  updatedBy       String?
 
   services           ServicesOnSevaKendras[]
   district           District                @relation(fields: [districtId], references: [id])
@@ -33,7 +38,7 @@ model SevaKendra {
 model SevaKendraAuditLog {
   id           String @id @default(uuid())
   sevaKendraId String
-  status       String
+  status       AuditLogStatusEnum
   date         String
   description  String
 
@@ -62,17 +67,18 @@ model ServicesOnSevaKendras {
 model ServiceType {
   id       String           @id @default(uuid())
   name     String           @unique
- service  Service[]
+  service  Service[]
 }
 
 model Service {
   id        String   @id @default(uuid())
-  name      String   @unique
+  name      String   
   updatedAt DateTime @updatedAt
-  serviceTypeId String 
+  serviceTypeId String
   createdAt DateTime @default(now())
+  @@unique([serviceTypeId,name])
 
-  serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id])
+  serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id],onDelete: Cascade)
   sevaKendras ServicesOnSevaKendras[]
   divyang     DivyangServiceMapping[]
 }
@@ -105,7 +111,7 @@ model User {
   userId           String                   @unique // check datatype
   firstName        String
   lastName         String
-  gender           Gender?
+  gender           GenderEnum?
   dateOfBirth      DateTime?
   contactNumber    String
   whatsappNumber   String?
@@ -118,6 +124,17 @@ model User {
   designation      Designation              @relation(fields: [designationId], references: [id])
   featuresAssigned FeaturesOnDesignations[]
   sevaKendraFollowUp SevaKendraFollowUp[]
+  userAuditLog UserAuditLog[]
+}
+
+model UserAuditLog {
+  id           String @id @default(uuid())
+  userId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model UserPassword {
@@ -141,9 +158,21 @@ model Designation {
 
   sevaKendraId String
   sevaKendra   SevaKendra @relation(fields: [sevaKendraId], references: [id])
+  @@unique([sevaKendraId,name])
 
   users    User[]
   features FeaturesOnDesignations[]
+  designationAuditLog DesignationAuditLog[]
+}
+
+model DesignationAuditLog {
+  id           String @id @default(uuid())
+  designationId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  designation Designation @relation(fields: [designationId], references: [id])
 }
 
 // mapping sidebar/feature to certain designation e.g. users side bar to coordinator
@@ -165,8 +194,8 @@ model DivyangDetails {
   lastName                String
   divyangId               String
   picture                 String? // url
-  gender                  Gender?
-  bloodGroup              BloodGroup
+  gender                  GenderEnum?
+  bloodGroup              BloodGroupEnum
   dateOfBirth             DateTime
   age                     Int?
   mailId                  String
@@ -197,13 +226,13 @@ model DivyangDetails {
   districtId      String?
   isRural Boolean?
   villageName     String?
-  panchayatUnion  String?
-  taluk           String?
-  townPanchayat   String?
-  municipality    String?
-  corporation     String?
-  MLAConstituency String?
-  MPConstituancy  String?
+  panchayatUnionId  String?
+  talukId          String?
+  townPanchayatId   String?
+  municipalityId    String?
+  corporationId     String?
+  MLAConstituencyId String?
+  MPConstituancyId  String?
   pincode         Int?
 
   isDisabilitySinceBirth    Boolean?
@@ -211,7 +240,7 @@ model DivyangDetails {
   disabilityArea            String?
   disabilityPercentage      String?
   disabilityDueTo           String?
-  certificateIssueAuthority CertificateIssueAuthority?
+  certificateIssueAuthority CertificateIssueAuthorityEnum?
   disabilityCardUrl         String? // url
   disabilityDistrictId      String?
   identityCardNumber        String?
@@ -231,11 +260,29 @@ model DivyangDetails {
   spouseIncome     Int?
 
   communityCategory CommunityCategory @relation(fields: [communityCategoryId], references: [id])
-
+  corporation Corporation? @relation(fields: [corporationId],references: [id])
+  mlaconstituency MLAConstituency? @relation(fields: [MLAConstituencyId],references: [id])
+  mpconstituency MPConstituency? @relation(fields: [MPConstituancyId],references: [id])
+  municipality Municipality? @relation(fields: [municipalityId],references: [id])
+  townPanchayat TownPanchayat? @relation(fields: [townPanchayatId],references: [id])
+  taluk Taluk? @relation(fields: [talukId],references: [id])
+  panchayatUnion PanchayatUnion? @relation(fields: [panchayatUnionId],references: [id])
   district District? @relation(fields: [districtId], references: [id])
   disabilities          DisabilityOfDivyang[]
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
+  divyangDetailsAuditLog DivyangDetailsAuditLog[]
+}
+
+
+model DivyangDetailsAuditLog {
+  id           String @id @default(uuid())
+  divyangDetailsId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  divyangDetails DivyangDetails @relation(fields: [divyangDetailsId], references: [id])
 }
 
 model DivyangServiceMapping {
@@ -248,13 +295,26 @@ model DivyangServiceMapping {
   dateOfService      DateTime
   dueDate            DateTime
   isFollowUpRequired Boolean?
-  isCompleted        Boolean
+  isCompleted        StatusEnum
   completedDate      DateTime?
   donorId            String?               @unique
   donor              Donor?                @relation(fields: [donorId],references: [id]) 
   nonSevaKendraFollowUp NonSevaKendraFollowUp[]
   sevaKendraFollowUp SevaKendraFollowUp[]
+  divyangServiceMappingAuditLog DivyangServiceMappingAuditLog[]
 }
+
+model DivyangServiceMappingAuditLog {
+  id           String @id @default(uuid())
+  DivyangServiceMappingId String
+  status       AuditLogStatusEnum
+  date         String
+  description  String
+
+  divyangServiceMapping DivyangServiceMapping @relation(fields: [DivyangServiceMappingId], references: [id])
+}
+
+
 model Donor {
   id             String @id @default(uuid())
   name           String
@@ -287,7 +347,7 @@ model NonSevaKendraFollowUp {
 model DisabilityOfDivyang {
   id                         String @id @default(uuid())
   divyangId                  String
-  disabilitySubTypeId        String @unique
+  disabilitySubTypeId        String 
   divyangDisabilityDetailsId String
 
   DivyangDetails DivyangDetails @relation(fields: [divyangId], references: [id])
@@ -296,64 +356,86 @@ model DisabilityOfDivyang {
 
 model DisabilitySubType {
   id               String @id @default(uuid())
-  name             String
+  name             String 
   disabilityTypeId String
+  @@unique([disabilityTypeId,name])
 
   divyang    DisabilityOfDivyang[]
-  disability DisabilityType        @relation(fields: [disabilityTypeId], references: [id])
+  disability DisabilityType        @relation(fields: [disabilityTypeId], references: [id],onDelete: Cascade)
 }
 
 model DisabilityType {
   id         String              @id @default(uuid())
-  name       String
+  name       String              @unique
   disability DisabilitySubType[]
 }
 
 model MPConstituency {
   id         String   @id @default(uuid())
-  name       String
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model MLAConstituency {
-  Id         String   @id @default(uuid())
-  name       String
+  id         String   @id @default(uuid())
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model PanchayatUnion {
   id         String   @id @default(uuid())
-  name       String
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
+  divyangDetails DivyangDetails[]
 }
 
 model TownPanchayat {
   id         String   @id @default(uuid())
-  name       String
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model Municipality {
   id         String   @id @default(uuid())
-  name       String
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model Corporation {
   id         String   @id @default(uuid())
-  name       String
+  name       String   
   districtId String
+  @@unique([name,districtId])
   district   District @relation(fields: [districtId], references: [id])
+  DivyangDetails DivyangDetails[]
+}
+
+model Taluk {
+  id       String @id @default(uuid())
+  name     String 
+  districtId String
+  @@unique([name,districtId])
+  district   District @relation(fields: [districtId],references: [id])
+  DivyangDetails DivyangDetails[]
 }
 
 model CommunityCategory {
   id      String                   @id @default(uuid())
-  name    String
+  name    String                   @unique
   divyang DivyangDetails[]
 }
 
@@ -370,27 +452,33 @@ model DivyangEducationalQualification {
 // e.g. 1 - b.tech (IT)
 model EducationQualification {
   id      String                            @id @default(uuid())
-  name    String
+  name    String                           
   educationQualificationTypeId String
-  educationQualificationType EducationQualificationType @relation(fields: [educationQualificationTypeId],references: [id])
+@@unique([educationQualificationTypeId,name])
+
+  educationQualificationType EducationQualificationType @relation(fields: [educationQualificationTypeId],references: [id], onDelete: Cascade)
   divyang DivyangEducationalQualification[]
 }
 
 model EducationQualificationType {
-  id String @id @default(uuid())
-  name String
+  id String                             @id @default(uuid())
+  name String                           @unique
   educationQualification EducationQualification[]
 }
 
+model generalMasters{
+  id      String @id @default(uuid())
+  name    String
+}
 
-enum Gender {
+enum GenderEnum {
   MALE
   FEMALE
   TRANSGENDER
   OTHERS
 }
 
-enum BloodGroup {
+enum BloodGroupEnum {
   O_POSITIVE
   O_NEGATIVE
   B_POSITIVE
@@ -403,20 +491,20 @@ enum BloodGroup {
   others
 }
 
-enum Status {
+enum StatusEnum {
   PENDING
   COMPLETED
 }
 
-enum CertificateIssueAuthority {
+enum CertificateIssueAuthorityEnum {
   MEDICAL_BOARD
   GOVERNMENT_DOCTOR
   PRIVATE_DOCTOR
 }
 
-model Taluk {
-  id       String @id @default(uuid())
-  name     String
-  districtId String
-  district   District @relation(fields: [districtId],references: [id])
+enum AuditLogStatusEnum {
+  ACTIVE
+  DEACTIVE
 }
+
+

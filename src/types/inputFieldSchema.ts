@@ -9,7 +9,7 @@ const inputFieldSchema = z
     /^[\w\s.-]+$/gm,
     "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]"
   );
-export const queryParamsSchema = z.string().optional();
+const queryParamsSchema = z.string().optional();
 
 const filterOperations = z.enum([
   "equals",
@@ -23,5 +23,5 @@ const filter = z.object({
   value: z.string(),
 });
 
-export { filter, filterOperations, filterOperationsEnum, inputFieldSchema };
+export { queryParamsSchema, filter, filterOperations, filterOperationsEnum, inputFieldSchema };
 export default inputFieldSchema;

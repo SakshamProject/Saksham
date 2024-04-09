@@ -1,43 +1,60 @@
-import {Prisma} from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import APIError from "../../errors/APIError.js";
-import {StatusCodes} from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 
-const DatabaseConnectivityError = "P1001";
+const PrismaKnownErrors = {
+    DatabaseConnectivityError : "P1001",
+    RecordNotFound : "P2025",
+    UniqueConstraintViolation: "P2002",
+    ForeignKeyError: "P2003"
+};
 
 function throwDatabaseError(error: Error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === DatabaseConnectivityError) {
-            throw new APIError(
-                "Could not connect to the database",
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                "DatabaseConnectivityError",
-                "S"
-            );
-        }
-        if (error.code === "P2003") {
-            throw new APIError(
-                `Foreign Key Error on ${error.meta?.field_name}`,
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                "DatabaseForeignKeyError",
-                "E"
-            );
-        }
-        if (error.code === "P2025") {
-            throw new APIError(
-                "The specified record could not be found",
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                "DatabaseDeletionError",
-                "E"
-            );
-        }
-        if (error.code === "P2002") {
-            throw new APIError(
-                `Unique constraint failed on: ${error.meta?.name}`,
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                "DatabaseUniqueConstraintError",
-                "E"
-            );
-        }
+        throw prismaErrors(error);
+    }
+    throw new APIError(
+        "Some database error occurred",
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        "DatabaseError",
+        "E"
+    );
+}
+
+function prismaErrors(error: Prisma.PrismaClientKnownRequestError) {
+    if (error.code === PrismaKnownErrors.RecordNotFound) {
+        throw new APIError(
+          "The specified record could not be found",
+          StatusCodes.INTERNAL_SERVER_ERROR,
+          "Database record not found",
+          "E"
+        );
+    }
+
+    if (error.code === PrismaKnownErrors.UniqueConstraintViolation) {
+        throw new APIError(
+          `Unique contraint violated in column -> ${error.meta?.target}`,
+          StatusCodes.BAD_REQUEST,
+          "Unique constraint violation",
+          "E"
+        );
+    }
+
+    if (error.code === PrismaKnownErrors.DatabaseConnectivityError) {
+        throw new APIError(
+            "Could not connect to the database",
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "DatabaseConnectivityError",
+            "S"
+        );
+    }
+    if (error.code === PrismaKnownErrors.ForeignKeyError) {
+        throw new APIError(
+            `Foreign Key Error on ${error.meta?.field_name}`,
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "DatabaseForeignKeyError",
+            "E"
+        );
     }
     throw new APIError(
         "Some database error occurred",

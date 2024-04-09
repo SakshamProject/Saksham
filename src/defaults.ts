@@ -1,10 +1,11 @@
 import {Prisma} from "@prisma/client";
+import {sortOrderEnum} from "./types/getRequestSchema.js";
 
 type Defaults = {
     skip: number,
     take: number,
     minFieldLength: number,
-    sortOrder: "asc" | "desc"
+    sortOrder: sortOrderEnum,
     transactionOptions: {
         isolationLevel: Prisma.TransactionIsolationLevel,
         maxWait: number,
@@ -15,7 +16,7 @@ const defaults: Defaults = {
     skip : 0,
     take : 10,
     minFieldLength: 3,
-    sortOrder: "asc",
+    sortOrder: sortOrderEnum.ascending,
     transactionOptions: {
         isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
         maxWait: 50000,

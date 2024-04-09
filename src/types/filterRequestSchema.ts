@@ -1,8 +1,5 @@
 import { z } from "zod";
-export enum sortOrderEnum {
-    ascending = "asc",
-    descending = "desc",
-}
+import {sortOrderEnum} from "./getRequestSchema.js";
 
 const filterRequestSchema = z.object({
     rows: z.coerce.number().positive().optional(),
