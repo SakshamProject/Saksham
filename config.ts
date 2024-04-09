@@ -26,12 +26,14 @@ type Config = {
     PORT: number,
     ENV : string,
     __dirname: string
+    base_url: string
 }
 
 const config: Config = {
     PORT: 3000,
     ENV: getEnvOrDefault("NODE_ENV", "development"),
-    __dirname: path.dirname(fileURLToPath(import.meta.url))
+    __dirname: path.dirname(fileURLToPath(import.meta.url)),
+    base_url: "http://localhost:3000/api"
 }
 
 export default config;
