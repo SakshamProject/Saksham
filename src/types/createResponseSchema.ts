@@ -1,5 +1,5 @@
 import { getRequestType } from "./getRequestSchema.js";
-import {filterRequestType} from "./filterRequestSchema.js";
+import { filterRequestType } from "./filterRequestSchema.js";
 
 const createResponseOnlyData = (result: Object = {}) => {
   const createdResponse = {
@@ -11,8 +11,8 @@ const createResponseOnlyData = (result: Object = {}) => {
 const createResponseWithQuery = (
   result: Object = {},
   request: getRequestType,
-  total: number,
-  count: number
+  total: number = 0,
+  count: number = 0
 ) => {
   const createdResponse = {
     data: result,
@@ -21,7 +21,7 @@ const createResponseWithQuery = (
       rows: request.rows,
       orderBy: request.orderBy,
       sortOrder: request.sortOrder,
-      searchText: request.searchText
+      searchText: request.searchText,
     },
     total: total,
     count: count,
@@ -42,7 +42,7 @@ const createResponseForFilter = (
       start: (request.start || 0) + 1,
       rows: request.rows,
       orderBy: request.orderBy,
-      sortOrder: request.sortOrder
+      sortOrder: request.sortOrder,
     },
     total: total,
     count: count,
