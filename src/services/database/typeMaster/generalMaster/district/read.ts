@@ -9,7 +9,6 @@ const getDistrictDB = async (
   sortOrder: sortOrderEnum = defaults.sortOrder
 ): Promise<getDistrictsWithStateSchema[] | undefined> => {
   try {
-    console.log("entry");
     const districts = await prismaTransaction.district.findMany({
       include: { state: true },
       orderBy: {

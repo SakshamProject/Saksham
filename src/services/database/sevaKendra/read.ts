@@ -5,7 +5,7 @@ import throwDatabaseError from "../utils/errorHandler.js";
 
 const getSevaKendraDB = async (
   prismaTransaction: any,
-  searchText: string,
+  searchConditions: Object,
   orderByColumnAndSortOrder: Object = { name: sortOrderEnum.ascending },
   skip = defaults.skip,
   take = defaults.take
@@ -14,50 +14,7 @@ const getSevaKendraDB = async (
     const sevaKendras = await prismaTransaction.sevaKendra.findMany({
       take: take,
       skip: skip,
-      where: {
-        OR: [
-          {
-            name: {
-              contains: searchText,
-              mode: "insensitive",
-            },
-          },
-          {
-            district: {
-              state: {
-                name: {
-                  contains: searchText,
-                  mode: "insensitive",
-                },
-              },
-            },
-          },
-          {
-            district: {
-              name: {
-                contains: searchText,
-                mode: "insensitive",
-              },
-            },
-          },
-          {
-            contactPerson: {
-              name: {
-                contains: searchText,
-                mode: "insensitive",
-              },
-            },
-          },
-          {
-            contactPerson: {
-              phoneNumber1: {
-                mode: "insensitive",
-                contains: searchText,
-              },
-            },
-          },
-        ],
-      },
+      where: searchConditions,
       select: {
         id: true,
         name: true,
@@ -86,26 +43,59 @@ const getSevaKendraDB = async (
   }
 };
 
-const getSevaKendraDBTotal = async (prismaTransaction: any) => {
+const getSevaKendraDBTotal = async (
+  prismaTransaction: any,
+  searchConditions: Object
+) => {
   try {
-    const sevaKendras = await prismaTransaction.sevaKendra.count();
+    const sevaKendras = await prismaTransaction.sevaKendra.count({
+      where: searchConditions,
+    });
     return sevaKendras;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
 const getSevaKendraByIdDB = async (sevaKendraId: string): Promise<any> => {
-  const sevaKendra = await prisma.sevaKendra.findFirst({
-    where: {
-      id: sevaKendraId,
-    },
-    include: {
-      contactPerson: true,
-      services: true,
-      SevaKendraAuditLog: true,
-    },
-  });
-  return sevaKendra;
+  try {
+    const sevaKendra = await prisma.sevaKendra.findFirst({
+      where: {
+        id: sevaKendraId,
+      },
+      include: {
+        contactPerson: true,
+        services: true,
+        SevaKendraAuditLog: true,
+      },
+    });
+    return sevaKendra;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
 };
 
-export { getSevaKendraDB, getSevaKendraDBTotal, getSevaKendraByIdDB };
+const getSevaKendraServicesById = async (sevaKendraId: string) => {
+  try {
+    const services = await prisma.sevaKendra.findFirst({
+      where: {
+        id: sevaKendraId,
+      },
+      select: {
+        services: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    return services;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+export {
+  getSevaKendraDB,
+  getSevaKendraDBTotal,
+  getSevaKendraByIdDB,
+  getSevaKendraServicesById,
+};

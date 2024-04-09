@@ -4,7 +4,7 @@ import throwDatabaseError from "../../utils/errorHandler.js";
 import { getSevaKendraDB, getSevaKendraDBTotal } from "../read.js";
 
 const getSevaKendraDBTransaction = async (
-  searchText: string = "",
+  searchConditions: object,
   orderByColumnAndSortOrder: Object = {},
   skip: number = defaults.skip,
   take: number = defaults.take
@@ -13,12 +13,15 @@ const getSevaKendraDBTransaction = async (
     try {
       const sevaKendra = await getSevaKendraDB(
         prismaTransaction,
-        searchText,
+        searchConditions,
         orderByColumnAndSortOrder,
         skip,
         take
       );
-      const total = await getSevaKendraDBTotal(prismaTransaction);
+      const total = await getSevaKendraDBTotal(
+        prismaTransaction,
+        searchConditions
+      );
       return { sevaKendra, total };
     } catch (error) {
       if (error instanceof Error) throwDatabaseError(error);

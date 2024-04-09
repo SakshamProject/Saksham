@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import getRequestSchema from "../../types/getRequestSchema.js";
-import { sevaKendraColumnNameMapper } from "../../services/utils/sevaKendra/sevaKendraMapper.js";
+import { sevaKendraColumnNameMapper } from "../../services/database/utils/sevaKendra/sevaKendraMapper.js";
 import { SevaKendraColumnNameSchema } from "../../types/sevaKendra/sevaKendra.js";
 import {
   createResponseOnlyData,
@@ -8,6 +8,7 @@ import {
 } from "../../types/createResponseSchema.js";
 import { getSevaKendraDBTransaction } from "../../services/database/sevaKendra/transaction/read.js";
 import { getSevaKendraByIdDB } from "../../services/database/sevaKendra/read.js";
+import SevaKendraSearchConditions from "../../services/database/utils/sevaKendra/searchConditions.js";
 
 const getSevaKendra = async (
   request: Request,
@@ -21,8 +22,9 @@ const getSevaKendra = async (
       orderByColumn,
       query.sortOrder
     );
+    const searchConditions = SevaKendraSearchConditions(query.searchText);
     const result = await getSevaKendraDBTransaction(
-      query.searchText,
+      searchConditions,
       orderByColumnAndSortOrder,
       query.start,
       query.rows

@@ -1,5 +1,5 @@
-import { sortOrderEnum } from "../../../types/getRequestSchema.js";
-import { SevaKendraColumnNamesEnum } from "../../../types/sevaKendra/sevaKendraDefaults.js";
+import { sortOrderEnum } from "../../../../types/getRequestSchema.js";
+import { SevaKendraColumnNamesEnum } from "../../../../types/sevaKendra/sevaKendraDefaults.js";
 
 const sevaKendraColumnNameMapper = (
   orderByColumn: SevaKendraColumnNamesEnum = SevaKendraColumnNamesEnum.NAME,

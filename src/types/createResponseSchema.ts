@@ -1,13 +1,13 @@
 import { getRequestType } from "./getRequestSchema.js";
 
-const createResponseOnlyData = (result: Object) => {
+const createResponseOnlyData = (result: Object = {}) => {
   const createdResponse = {
     data: result,
   };
   return createdResponse;
 };
 const createResponseWithQuery = (
-  result: Object,
+  result: Object = {},
   requestQuery: getRequestType,
   total: number,
   count: number
@@ -22,7 +22,7 @@ const createResponseWithQuery = (
 };
 
 const createResponseForFilter = (
-  result: Object,
+  result: Object = {},
   requestQuery: getRequestType,
   total: number,
   count: number,
