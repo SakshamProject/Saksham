@@ -31,7 +31,7 @@ const getStateDB = async (
 };
 const getStateDBTotal = async (
   prismaTransaction: Prisma.TransactionClient,
-  searchText: string
+  searchText: string = ""
 ) => {
   try {
     const states = await prismaTransaction.state.count({
