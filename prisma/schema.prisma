@@ -156,6 +156,7 @@ model Designation {
   id   String @id @default(uuid())
   name String 
 
+
   sevaKendraId String
   sevaKendra   SevaKendra @relation(fields: [sevaKendraId], references: [id])
   @@unique([sevaKendraId,name])
@@ -181,8 +182,7 @@ model FeaturesOnDesignations {
   featureId     String
   designationId String
   assignedOn    DateTime @default(now())
-  assignedById  String
-  assignedBy    User     @relation(fields: [assignedById], references: [id])
+
 
   feature     Feature     @relation(fields: [featureId], references: [id])
   designation Designation @relation(fields: [designationId], references: [id])
