@@ -47,6 +47,8 @@ type postDivyangDetailsRequest = z.infer<typeof postDivyangDetailsRequestSchema>
 
 type updateDivyangDetails = Prisma.DivyangDetailsUpdateInput
 
+type createDivyangDetails = Prisma.DivyangDetailsCreateInput
+
 export {
   divyangDetailsRequestSchema,
   DivyangDetailsRequest,
@@ -56,4 +58,5 @@ export {
   updateDivyangDetailsRequest,
   postDivyangDetailsRequest,
   postDivyangDetailsRequestSchema,
+  createDivyangDetails
 }

@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { string, z } from 'zod'
 import inputFieldSchema, {
   emailSchema,
   phoneNumberSchema,
@@ -9,7 +9,7 @@ import { BloodGroup, Gender } from '@prisma/client'
 const personalDetailsRequestSchema = z.object({
   firstName: inputFieldSchema,
   lastName: inputFieldSchema,
-  divyangId: /*uuidSchema*/inputFieldSchema,
+  divyangId: /*uuidSchema*/ inputFieldSchema,
   picture: inputFieldSchema.optional(),
   bloodGroup: z.nativeEnum(BloodGroup),
   gender: z.nativeEnum(Gender),
@@ -23,9 +23,9 @@ const personalDetailsRequestSchema = z.object({
   spouseName: inputFieldSchema.optional(),
   spouseNumber: phoneNumberSchema.optional(),
   religion: inputFieldSchema,
-  communityCategoryId: /*uuidSchema*/inputFieldSchema,
+  communityCategoryId: /*uuidSchema*/ inputFieldSchema,
   community: inputFieldSchema,
   extraCurricularActivity: inputFieldSchema.optional(),
 })
 
-export {personalDetailsRequestSchema}
+export { personalDetailsRequestSchema }
