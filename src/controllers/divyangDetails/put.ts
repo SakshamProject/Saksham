@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import { DivyangDetailsRequest, divyangDetailsRequestSchema, updateDivyangDetails } from "../../types/divyangDetails/divyangDetailsSchema.js";
+import { DivyangDetailsRequest, divyangDetailsRequestSchema } from "../../types/divyangDetails/divyangDetailsSchema.js";
 import { createResponseOnlyData } from "../../types/createResponseSchema.js";
 import { createUpdateDTOObject } from "../../dto/divyangDetails/put.js";
 import { updateDivyangDetailsDB } from "../../services/database/divyangDetails/update.js";
