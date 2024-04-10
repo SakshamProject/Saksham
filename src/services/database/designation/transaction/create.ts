@@ -3,7 +3,7 @@ import { postDesignationRequestSchemaType, postDesignationType, postFeaturesOnDe
 import prisma from "../../database.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import { createDesignationAuditLog, createPostDesignationDBObject, createPostFeaturesOnDesignationsDBObject } from "../../../../dto/designation/designation.js";
-import { createDesignationDB ,createFeaturesOnDesignationDB} from "../create.js";
+import { createDesignationAuditLogDB, createDesignationDB ,createFeaturesOnDesignationDB} from "../create.js";
 
 async function postDesignationDBTransaction(
   body: postDesignationRequestSchemaType,
@@ -31,7 +31,8 @@ async function postDesignationDBTransaction(
             PostFeaturesOnDesignationDBObject
           );
 
-          const DesignationAuditLog = createDesignationAuditLog(designation?.id,body.description)
+          const designationAuditLogObject = createDesignationAuditLog(designation?.id);
+          const designationAuditLog = createDesignationAuditLogDB(prismaTransaction,designationAuditLogObject)
         }
 
         return designation;

@@ -65,12 +65,16 @@ const createPostFeaturesOnDesignationsDBObject = (
   return UpdateDesignationObject;
 }
 
-function createDesignationAuditLog(designationId:string="",description:string=""){
+function createDesignationAuditLog(designationId:string="",){
 const designationAuditLog ={
- designationId:designationId,
+ designation:{
+  connect:{
+    id:designationId
+  }
+ },
  status:AuditLogStatusEnum.ACTIVE,
  date:new Date(),
- description:description
+ description:"NEW DESIGNATION CREATED"
 }
 return designationAuditLog;
 }

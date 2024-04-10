@@ -1,5 +1,5 @@
-import { Designation } from "@prisma/client";
-import { postDesignationType, postFeaturesOnDesignationsType } from "../../../types/designation/designationSchema.js";
+import { Designation, Prisma } from "@prisma/client";
+import { postAuditLogObjectType, postDesignationType, postFeaturesOnDesignationsType } from "../../../types/designation/designationSchema.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 
 async function createDesignationDB(
@@ -33,4 +33,9 @@ async function createDesignationDB(
   }
    
   }
-  export {createDesignationDB,createFeaturesOnDesignationDB}
+
+  async function createDesignationAuditLogDB(prismaTransaction:Prisma.TransactionClient,DesignationAuditLog:postAuditLogObjectType){
+
+  }
+
+  export {createDesignationDB,createFeaturesOnDesignationDB,createDesignationAuditLogDB}

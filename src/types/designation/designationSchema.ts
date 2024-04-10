@@ -7,8 +7,7 @@ const postDesignationRequestSchema = z.object({
   districtId: z.string(),
   sevaKendraId: z.string(),
   designation: inputFieldSchema.toUpperCase(),
-  featuresId: z.array(z.string()).min(1),
-  description : inputFieldSchema.optional()
+  featuresId: z.array(z.string()).min(1)
 });
 
 type postDesignationRequestSchemaType = z.infer<
@@ -18,6 +17,8 @@ type postDesignationRequestSchemaType = z.infer<
 type postDesignationType = Prisma.DesignationCreateInput;
 
 type postFeaturesOnDesignationsType = Prisma.FeaturesOnDesignationsCreateInput;
+
+type postAuditLogObjectType = Prisma.DesignationAuditLogCreateInput;
 
 const featuresSchema = z.object({
   id: inputFieldSchema,
@@ -49,5 +50,6 @@ export {
   updateDesignationRequestSchema,
   updateDesignationRequestSchemaType,
   updateDesignationObjectType,
-  featuresSchemaType
+  featuresSchemaType,
+  postAuditLogObjectType
 };
