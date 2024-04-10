@@ -21,26 +21,27 @@ model SevaKendra {
   address         String
   mobileNumber    String
   landLineNumber  String
-  startDate       DateTime?
+  startDate       DateTime? 
   contactPersonId String
-  createdAt       String?
-  createdBy       String?
-  updatedAt       String?
-  updatedBy       String?
+  createdAt       DateTime @default(now())
+  createdBy       String
+  updatedAt       DateTime @updatedAt
+  updatedBy       String 
+  currentStatus   AuditLogStatusEnum?
 
   services           ServicesOnSevaKendras[]
   district           District                @relation(fields: [districtId], references: [id])
   contactPerson      ContactPerson           @relation(fields: [contactPersonId], references: [id])
   designations       Designation[]
-  SevaKendraAuditLog SevaKendraAuditLog[]
+  auditLog SevaKendraAuditLog[]
 }
 
 model SevaKendraAuditLog {
   id           String @id @default(uuid())
   sevaKendraId String
   status       AuditLogStatusEnum
-  date         DateTime
-  description  String
+  date         DateTime 
+  description  String?
 
   sevakendra SevaKendra @relation(fields: [sevaKendraId], references: [id])
 }
@@ -125,6 +126,7 @@ model User {
   mail             String
   loginid          String                   @unique
   passwordId       String                   @unique
+  currentStatus     AuditLogStatusEnum?
 
   createdAt DateTime ?@default(now())
   updatedAt DateTime ?@updatedAt
@@ -150,7 +152,7 @@ model UserAuditLog {
   userId String
   status       AuditLogStatusEnum
   date         DateTime
-  description  String
+  description  String?
 
   user User @relation(fields: [userId], references: [id])
 }
@@ -174,10 +176,13 @@ model Designation {
   id   String @id @default(uuid())
   name String 
   sevaKendraId String
+  currentStatus AuditLogStatusEnum?
+
   createdAt DateTime? @default(now())
   createdById String?
   updatedAt DateTime? @updatedAt
   updatedById String?
+
   createdBy User? @relation("createdBy", fields:[createdById],references: [id])
   updatedBy  User? @relation("updatedBy", fields: [updatedById], references: [id])
   sevaKendra   SevaKendra @relation(fields: [sevaKendraId], references: [id])
@@ -193,7 +198,7 @@ model DesignationAuditLog {
   designationId String
   status       AuditLogStatusEnum
   date         DateTime
-  description  String
+  description  String?
 
   designation Designation @relation(fields: [designationId], references: [id])
 }
@@ -279,6 +284,9 @@ model DivyangDetails {
   spouseOccupation String?
   spouseIncome     Int?
 
+
+
+
   communityCategory CommunityCategory @relation(fields: [communityCategoryId], references: [id])
   corporation Corporation? @relation(fields: [corporationId],references: [id])
   mlaconstituency MLAConstituency? @relation(fields: [MLAConstituencyId],references: [id])
@@ -291,19 +299,19 @@ model DivyangDetails {
   disabilities          DisabilityOfDivyang[]
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
-  divyangDetailsAuditLog DivyangDetailsAuditLog[]
+ // divyangDetailsAuditLog DivyangDetailsAuditLog[]
 }
 
 
-model DivyangDetailsAuditLog {
-  id           String @id @default(uuid())
-  divyangDetailsId String
-  status       AuditLogStatusEnum
-  date         DateTime
-  description  String
+// model DivyangDetailsAuditLog {
+//   id           String @id @default(uuid())
+//   divyangDetailsId String
+//   status       AuditLogStatusEnum
+//   date         DateTime
+//   description  String?
 
-  divyangDetails DivyangDetails @relation(fields: [divyangDetailsId], references: [id])
-}
+//   divyangDetails DivyangDetails @relation(fields: [divyangDetailsId], references: [id])
+// }
 
 model DivyangServiceMapping {
   id                 String                 @id @default(uuid())
