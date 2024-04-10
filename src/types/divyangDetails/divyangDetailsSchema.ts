@@ -14,18 +14,34 @@ const divyangDetailsRequestSchema = z
     IdProofUploads: IdProofUploadsRequestSchema,
     addressRequest: addressRequestSchema,
     disabiltyDetails: disabiltyDetailsRequestSchema,
-    employmentDetails: employmentDetailsRequestSchema,
-    pageNumber: z.number().min(1).max(5)
+    employmentDetails: employmentDetailsRequestSchema
   })
   .refine((data) => {
     return Object.values(data).some((value) => value !== undefined)
   }, 'At least one of the five schemas must be provided.')
 
+const updateDivyangDetailsRequestSchema = z
+.object({
+  personalDetails: personalDetailsRequestSchema,
+  IdProofUploads: IdProofUploadsRequestSchema,
+  addressRequest: addressRequestSchema,
+  disabiltyDetails: disabiltyDetailsRequestSchema,
+  employmentDetails: employmentDetailsRequestSchema,
+  pageNumber: z.number().min(1).max(5)
+})
+.refine((data) => {
+  return Object.values(data).some((value) => value !== undefined)
+}, 'At least one of the five schemas must be provided.')
+
 type DivyangDetailsRequest = z.infer<typeof divyangDetailsRequestSchema>
+
+type updateDivyangDetailsRequest = z.infer<typeof updateDivyangDetailsRequestSchema>
 
 type updateDivyangDetails = Prisma.DivyangDetailsUpdateInput;
 
 export { divyangDetailsRequestSchema, 
   DivyangDetailsRequest, 
   getDivyangDetailsSchema,
-  updateDivyangDetails }
+  updateDivyangDetails,
+  updateDivyangDetailsRequestSchema,
+  updateDivyangDetailsRequest }
