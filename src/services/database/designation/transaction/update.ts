@@ -16,7 +16,8 @@ async function putDesignationDBTransaction(
       async (prismaTransaction) => {
         try {
           const updateDesignationObject = createUpdateDesignationObject(
-            body,id
+            body,
+            updatedById
           );
           console.log("[+]updateDesignationObject",updateDesignationObject)
   

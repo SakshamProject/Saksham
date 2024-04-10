@@ -1,5 +1,4 @@
 import defaults from "../../../defaults.js";
-import { DesignationResponse } from "../../../models/designation/designation.js";
 // import { DesignationResponse } from "../../../models/designation/designation.js";
 import { sortOrderEnum } from "../../../types/getRequestSchema.js";
 import { DesignationsearchCondition, designationColumnNameMapper } from "../utils/designation/designation.js";
@@ -151,24 +150,61 @@ async function getDesignationByIDDB(id: string | undefined) {
       where: {
         id: id,
       },
-      include:{
+      select:{
+        id:true,
+        name:true,
         sevaKendra:{
-          include:{
+          select:{
+            id:true,
+            name:true,
             district:{
-              include:{
-                state:true
+              select:{
+                id:true,
+                name:true,
+                state:{
+                  select:{
+                    id:true,
+                    name:true
+                  }
+                }
               }
             }
           }
         },
         features:{
-          include:{
-            feature:true
+          select:{
+            feature:{
+              select:{
+                id:true,
+                name:true
+              }
+            }
           }
         },
-        createdBy:true,
-        updatedBy:true,
-        designationAuditLog:true
+        createdAt:true,
+        createdBy:{
+          select:{
+            id:true,
+            firstName:true,
+            lastName:true,
+          }
+        },
+        updatedAt:true,
+        updatedBy:{
+          select:{
+            id:true,
+            firstName:true,
+            lastName:true
+          }
+        },
+        designationAuditLog:{
+          select:{
+            status:true,
+            date:true,
+            description:true
+
+          }
+        }
       }
     });
 

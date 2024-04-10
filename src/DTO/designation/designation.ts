@@ -53,7 +53,8 @@ const createPostFeaturesOnDesignationsDBObject = (
 };
  function createUpdateDesignationObject(
   body: updateDesignationRequestSchemaType,
-  id: string
+  id: string,
+  
 ) {
   const UpdateDesignationObject = {
     name:body.designation,
