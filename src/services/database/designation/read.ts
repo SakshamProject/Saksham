@@ -1,5 +1,9 @@
 import defaults from "../../../defaults.js";
+<<<<<<< HEAD
 import { DesignationResponse } from "../../../models/designation/designation.js";
+=======
+// import { DesignationResponse } from "../../../models/designation/designation.js";
+>>>>>>> 85de385 (madhu&sam | modified designation and user schema to add created and updated history)
 import { sortOrderEnum } from "../../../types/getRequestSchema.js";
 import { DesignationsearchCondition, designationColumnNameMapper } from "../utils/designation/designation.js";
 import prisma from "../database.js";
