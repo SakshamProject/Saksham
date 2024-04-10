@@ -1,13 +1,17 @@
 import { z } from "zod";
 import inputFieldSchema, {
+  auditLogSchema,
   emailSchema,
   filter,
+  filterOperationsEnum,
   landLineNumberSchema,
   phoneNumberSchema,
   uuidSchema,
 } from "../inputFieldSchema.js";
 import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import { SevaKendraColumnNamesEnum } from "./sevaKendraDefaults.js";
+import { sevaKendraColumnNameMapper } from "../../services/database/utils/sevaKendra/sevaKendraMapper.js";
+import { sortOrderEnum } from "../getRequestSchema.js";
 
 const SevaKendraColumnNameSchema = z
   .nativeEnum(SevaKendraColumnNamesEnum)
@@ -32,14 +36,6 @@ const SevaKendraRequestSchema = z.object({
       serviceId: uuidSchema,
     })
     .array(),
-  auditLog: z
-    .object({
-      id: uuidSchema.optional(),
-      status: z.nativeEnum(AuditLogStatusEnum),
-      date: z.string().datetime(),
-      description: inputFieldSchema,
-    })
-    .optional(),
 });
 
 const SevaKendraUpdateRequestSchema = z.object({
@@ -62,34 +58,41 @@ const SevaKendraUpdateRequestSchema = z.object({
       serviceId: uuidSchema,
     })
     .array(),
-  auditLog: z
-    .object({
-      id: uuidSchema.optional(),
-      status: z.nativeEnum(AuditLogStatusEnum),
-      date: z.string().datetime(),
-      description: inputFieldSchema,
-    })
-    .array(),
+  auditLog: auditLogSchema,
 });
 type SevaKendraUpdateRequestSchemaType = z.infer<
   typeof SevaKendraUpdateRequestSchema
 >;
-const filterSevaKendraSchema = z.object({
-  sevaKendraName: filter.optional(),
-  state: filter.optional(),
-  district: filter.optional(),
-  contactPersonName: filter.optional(),
-  contactPersonNumber: filter.optional(),
+
+const sevaKendraFilter = z
+  .object({
+    operation: z.nativeEnum(filterOperationsEnum),
+    field: z.nativeEnum(SevaKendraColumnNamesEnum),
+    value: z.string(),
+  })
+  .array();
+
+const getSevaKendraSchema = z.object({
+  filters: sevaKendraFilter.optional(),
+  pagination: z.object({
+    rows: z.number(),
+    start: z.number(),
+  }),
+  searchText: z.string(),
+  sorting: z.object({
+    orderByColumn: z.nativeEnum(SevaKendraColumnNamesEnum),
+    sortOrder: z.nativeEnum(sortOrderEnum),
+  }),
 });
-
-type filterSevaKendraSchemaType = z.infer<typeof filterSevaKendraSchema>;
-
+type SevaKendraFilterType = z.infer<typeof sevaKendraFilter>;
+type GetSevaKendraSchemaType = z.infer<typeof getSevaKendraSchema>;
 type SevaKendraRequestSchemaType = z.infer<typeof SevaKendraRequestSchema>;
 type SevaKendra = Prisma.SevaKendraCreateInput;
 type SevaKendraUpdate = Prisma.SevaKendraUpdateInput;
 type ContactPerson = Prisma.ContactPersonUpdateInput;
 type ServicesOnSevaKendras = Prisma.ServicesOnSevaKendrasCreateInput;
 type SevaKendraAuditLog = Prisma.SevaKendraAuditLogCreateInput;
+type SevaKendraWhere = Prisma.SevaKendraWhereInput;
 type SevaKendraServices = Prisma.SevaKendraGetPayload<{
   select: {
     services: {
@@ -107,8 +110,10 @@ type ServicesIds = { serviceId: string };
 export {
   SevaKendraColumnNameSchema,
   SevaKendraUpdateRequestSchema,
-  filterSevaKendraSchema,
-  filterSevaKendraSchemaType,
+  getSevaKendraSchema,
+  SevaKendraWhere,
+  SevaKendraFilterType,
+  GetSevaKendraSchemaType,
   ServicesIds,
   SevaKendraUpdateRequestSchemaType,
   SevaKendraServices,

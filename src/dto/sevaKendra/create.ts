@@ -1,7 +1,8 @@
 import {
   SevaKendra,
+  SevaKendraFilterType,
   SevaKendraRequestSchemaType,
-  filterSevaKendraSchemaType,
+  SevaKendraWhere,
 } from "../../types/sevaKendra/sevaKendra.js";
 import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import { sevaKendraDefaults } from "../../types/sevaKendra/sevaKendraDefaults.js";
@@ -50,9 +51,13 @@ const createSevaKendraDBObject = (
 };
 
 const createSevaKendraFilterInputObject = (
-  sevaKendraFilter: filterSevaKendraSchemaType
-): Prisma.SevaKendraWhereInput => {
-  const sevaKendraWhereInput = generateSevaKendraFilter(sevaKendraFilter);
+  sevaKendraFilter: SevaKendraFilterType | undefined,
+  globalSearchConditions: SevaKendraWhere
+): SevaKendraWhere => {
+  const sevaKendraWhereInput = generateSevaKendraFilter(
+    sevaKendraFilter,
+    globalSearchConditions
+  );
   return sevaKendraWhereInput;
 };
 

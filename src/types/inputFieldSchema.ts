@@ -1,5 +1,6 @@
 import { z } from "zod";
 import defaults from "../defaults.js";
+import { AuditLogStatusEnum } from "@prisma/client";
 
 const inputFieldSchema = z
   .string()
@@ -27,7 +28,14 @@ const filter = z.object({
   value: z.string(),
 });
 
+const auditLogSchema = z.object({
+  id: uuidSchema.optional(),
+  status: z.nativeEnum(AuditLogStatusEnum),
+  date: z.string().datetime(),
+  description: inputFieldSchema,
+});
 export {
+  auditLogSchema,
   queryParamsSchema,
   filter,
   filterOperationsEnum,

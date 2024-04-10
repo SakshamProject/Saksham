@@ -1,5 +1,8 @@
 import { Prisma } from "@prisma/client";
-import { filterSevaKendraSchemaType } from "../../../../types/sevaKendra/sevaKendra.js";
+import {
+  SevaKendraFilterType,
+  SevaKendraWhere,
+} from "../../../../types/sevaKendra/sevaKendra.js";
 import { SevaKendraColumnNamesEnum } from "../../../../types/sevaKendra/sevaKendraDefaults.js";
 import { filterOperationsEnum } from "../../../../types/inputFieldSchema.js";
 
@@ -66,17 +69,20 @@ const filterSevaKendraMapper = (
 };
 
 const generateSevaKendraFilter = (
-  sevaKendrafilter: filterSevaKendraSchemaType
+  sevaKendrafilter: SevaKendraFilterType | undefined,
+  globalSearchConditions: SevaKendraWhere
 ) => {
   const SevaKendraWhereInput: any = {
     AND: [],
   };
-  for (const [columnName, filter] of Object.entries(sevaKendrafilter)) {
-    SevaKendraWhereInput.AND.push(
-      filterSevaKendraMapper(columnName, filter.operation, filter.value)
-    );
+  if (sevaKendrafilter) {
+    for (const { operation, value, field } of sevaKendrafilter) {
+      SevaKendraWhereInput.AND.push(
+        filterSevaKendraMapper(field, operation, value)
+      );
+    }
   }
-
+  SevaKendraWhereInput.ANd.push(globalSearchConditions);
   return SevaKendraWhereInput;
 };
 

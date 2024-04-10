@@ -1,7 +1,10 @@
-import { SevaKendraColumnNameSchema } from "../../../../types/sevaKendra/sevaKendra.js";
+import {
+  SevaKendraColumnNameSchema,
+  SevaKendraWhere,
+} from "../../../../types/sevaKendra/sevaKendra.js";
 
-const SevaKendraSearchConditions = (searchText: string = "") => {
-  const searchConditions = {
+const SevaKendraGlobalSearchConditions = (searchText: string = "") => {
+  const searchConditions: SevaKendraWhere = {
     OR: [
       {
         name: {
@@ -48,4 +51,4 @@ const SevaKendraSearchConditions = (searchText: string = "") => {
   return searchConditions;
 };
 
-export default SevaKendraSearchConditions;
+export default SevaKendraGlobalSearchConditions;

@@ -1,14 +1,18 @@
 import { NextFunction, Request, Response } from "express";
 import getRequestSchema from "../../types/getRequestSchema.js";
 import { sevaKendraColumnNameMapper } from "../../services/database/utils/sevaKendra/sevaKendraMapper.js";
-import { SevaKendraColumnNameSchema } from "../../types/sevaKendra/sevaKendra.js";
+import {
+  SevaKendraWhere,
+  getSevaKendraSchema,
+} from "../../types/sevaKendra/sevaKendra.js";
 import {
   createResponseOnlyData,
   createResponseWithQuery,
 } from "../../types/createResponseSchema.js";
 import { getSevaKendraDBTransaction } from "../../services/database/sevaKendra/transaction/read.js";
 import { getSevaKendraByIdDB } from "../../services/database/sevaKendra/read.js";
-import SevaKendraSearchConditions from "../../services/database/utils/sevaKendra/searchConditions.js";
+import { createSevaKendraFilterInputObject } from "../../dto/sevaKendra/create.js";
+import SevaKendraGlobalSearchConditions from "../../services/database/utils/sevaKendra/searchConditions.js";
 
 const getSevaKendra = async (
   request: Request,
@@ -16,18 +20,22 @@ const getSevaKendra = async (
   next: NextFunction
 ) => {
   try {
-    const query = getRequestSchema.parse(request.query);
-    const orderByColumn = SevaKendraColumnNameSchema.parse(query.orderByColumn);
+    const query = getSevaKendraSchema.parse(request.query);
     const orderByColumnAndSortOrder = sevaKendraColumnNameMapper(
-      orderByColumn,
-      query.sortOrder
+      query.sorting.orderByColumn,
+      query.sorting.sortOrder
     );
-    const searchConditions = SevaKendraSearchConditions(query.searchText);
+    const globalSearchConditions: SevaKendraWhere =
+      SevaKendraGlobalSearchConditions(query.searchText);
+    const sevaKendraWhereInput = createSevaKendraFilterInputObject(
+      query.filters,
+      globalSearchConditions
+    );
     const result = await getSevaKendraDBTransaction(
-      searchConditions,
+      sevaKendraWhereInput,
       orderByColumnAndSortOrder,
-      query.start,
-      query.rows
+      query.pagination.start,
+      query.pagination.rows
     );
     const total = result?.total || 0;
     const count = result?.sevaKendra.length || 0;
