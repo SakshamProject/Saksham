@@ -27,17 +27,7 @@ const updateSevaKendraDB = async (
     where: {
       id: id,
     },
-    data: {
-      name: sevaKendra.name,
-      address: sevaKendra.address,
-      district: sevaKendra.district,
-      landLineNumber: sevaKendra.landLineNumber,
-      mobileNumber: sevaKendra.mobileNumber,
-      services: sevaKendra.services,
-      startDate: sevaKendra.startDate,
-      updatedAt: sevaKendra.updatedAt,
-      updatedBy: sevaKendra.updatedBy,
-    },
+    data: sevaKendra,
     include: {
       contactPerson: true,
       SevaKendraAuditLog: true,
