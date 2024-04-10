@@ -8,19 +8,27 @@ const updatePersonalDetailsDBObject = (
     divyangId: divyangDetails.personalDetails.divyangId,
     firstName: divyangDetails.personalDetails.firstName,
     lastName: divyangDetails.personalDetails.lastName,
+    picture: divyangDetails.personalDetails.picture,
     bloodGroup: divyangDetails.personalDetails.bloodGroup,
     gender: divyangDetails.personalDetails.gender,
     dateOfBirth: divyangDetails.personalDetails.dateOfBirth,
+    age: divyangDetails.personalDetails.age,
     mailId: divyangDetails.personalDetails.mailId,
     mobileNumber: divyangDetails.personalDetails.mobileNumber,
     fatherName: divyangDetails.personalDetails.fatherName,
     motherName: divyangDetails.personalDetails.motherName,
+    isMarried: divyangDetails.personalDetails.isMarried,
+    spouseName: divyangDetails.personalDetails.spouseName,
+    spouseNumber: divyangDetails.personalDetails.spouseNumber,
     religion: divyangDetails.personalDetails.religion,
     communityCategory: {
       connect: {
-        id: divyangDetails.personalDetails.communityCategoryId,
-      },
+        id: divyangDetails.personalDetails.communityCategoryId
+      }
     },
+    community: divyangDetails.personalDetails.community,
+    extraCurricularActivity:
+      divyangDetails.personalDetails.extraCurricularActivity,
   }
   return updatePersonalDetails
 }
@@ -145,21 +153,16 @@ function createUpdateDTOObject(
 ) {
   if (pageNumber === 1) {
     return updatePersonalDetailsDBObject(DivyangDetailsRequest)
-  }
-  else if (pageNumber === 2) {
+  } else if (pageNumber === 2) {
     return updateAddressDBObject(DivyangDetailsRequest)
-  }
-  else if (pageNumber === 3) {
+  } else if (pageNumber === 3) {
     return updateEmploymentDetailsDBObject(DivyangDetailsRequest)
-  }
-  else if (pageNumber === 4) {
+  } else if (pageNumber === 4) {
     return updateDisabilityDetailsDBObject(DivyangDetailsRequest)
-  }
-  else if (pageNumber === 5) {
+  } else if (pageNumber === 5) {
     return updateIdProofUploadsDBObject(DivyangDetailsRequest)
-  }
-  else {
-    console.log("Error - Enter a valid page number")
+  } else {
+    console.log('Error - Enter a valid page number')
   }
 }
 
@@ -169,5 +172,5 @@ export {
   updateEmploymentDetailsDBObject,
   updateIdProofUploadsDBObject,
   updatePersonalDetailsDBObject,
-  createUpdateDTOObject
+  createUpdateDTOObject,
 }

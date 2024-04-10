@@ -14,34 +14,46 @@ const divyangDetailsRequestSchema = z
     IdProofUploads: IdProofUploadsRequestSchema,
     addressRequest: addressRequestSchema,
     disabiltyDetails: disabiltyDetailsRequestSchema,
-    employmentDetails: employmentDetailsRequestSchema
+    employmentDetails: employmentDetailsRequestSchema,
   })
   .refine((data) => {
     return Object.values(data).some((value) => value !== undefined)
   }, 'At least one of the five schemas must be provided.')
 
 const updateDivyangDetailsRequestSchema = z
-.object({
+  .object({
+    personalDetails: personalDetailsRequestSchema,
+    IdProofUploads: IdProofUploadsRequestSchema,
+    addressRequest: addressRequestSchema,
+    disabiltyDetails: disabiltyDetailsRequestSchema,
+    employmentDetails: employmentDetailsRequestSchema,
+    pageNumber: z.number().min(1).max(5),
+  })
+  .refine((data) => {
+    return Object.values(data).some((value) => value !== undefined)
+  }, 'At least one of the five schemas must be provided.')
+
+const postDivyangDetailsRequestSchema = z.object({
   personalDetails: personalDetailsRequestSchema,
-  IdProofUploads: IdProofUploadsRequestSchema,
-  addressRequest: addressRequestSchema,
-  disabiltyDetails: disabiltyDetailsRequestSchema,
-  employmentDetails: employmentDetailsRequestSchema,
-  pageNumber: z.number().min(1).max(5)
 })
-.refine((data) => {
-  return Object.values(data).some((value) => value !== undefined)
-}, 'At least one of the five schemas must be provided.')
 
 type DivyangDetailsRequest = z.infer<typeof divyangDetailsRequestSchema>
 
-type updateDivyangDetailsRequest = z.infer<typeof updateDivyangDetailsRequestSchema>
+type updateDivyangDetailsRequest = z.infer<
+  typeof updateDivyangDetailsRequestSchema
+>
 
-type updateDivyangDetails = Prisma.DivyangDetailsUpdateInput;
+type postDivyangDetailsRequest = z.infer<typeof postDivyangDetailsRequestSchema>
 
-export { divyangDetailsRequestSchema, 
-  DivyangDetailsRequest, 
+type updateDivyangDetails = Prisma.DivyangDetailsUpdateInput
+
+export {
+  divyangDetailsRequestSchema,
+  DivyangDetailsRequest,
   getDivyangDetailsSchema,
   updateDivyangDetails,
   updateDivyangDetailsRequestSchema,
-  updateDivyangDetailsRequest }
+  updateDivyangDetailsRequest,
+  postDivyangDetailsRequest,
+  postDivyangDetailsRequestSchema,
+}

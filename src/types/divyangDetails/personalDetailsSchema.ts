@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import inputFieldSchema, {
+  emailSchema,
   phoneNumberSchema,
   uuidSchema,
 } from '../inputFieldSchema.js'
@@ -8,13 +9,13 @@ import { BloodGroup, Gender } from '@prisma/client'
 const personalDetailsRequestSchema = z.object({
   firstName: inputFieldSchema,
   lastName: inputFieldSchema,
-  divyangId: uuidSchema,
+  divyangId: /*uuidSchema*/inputFieldSchema,
   picture: inputFieldSchema.optional(),
   bloodGroup: z.nativeEnum(BloodGroup),
   gender: z.nativeEnum(Gender),
-  dateOfBirth: z.date(),
+  dateOfBirth: z.string().datetime(),
   age: z.number().optional(),
-  mailId: uuidSchema,
+  mailId: emailSchema,
   mobileNumber: phoneNumberSchema,
   fatherName: inputFieldSchema,
   motherName: inputFieldSchema,
@@ -22,7 +23,7 @@ const personalDetailsRequestSchema = z.object({
   spouseName: inputFieldSchema.optional(),
   spouseNumber: phoneNumberSchema.optional(),
   religion: inputFieldSchema,
-  communityCategoryId: uuidSchema,
+  communityCategoryId: /*uuidSchema*/inputFieldSchema,
   community: inputFieldSchema,
   extraCurricularActivity: inputFieldSchema.optional(),
 })
