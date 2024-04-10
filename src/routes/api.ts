@@ -19,6 +19,7 @@ apiRouter.get(
     response.json({ message: "API is up and running!" });
   }
 );
+
 apiRouter.use("/typemaster", typeMasterRouter);
 apiRouter.use("/users", userRouter);
 apiRouter.use(errorHandler);
