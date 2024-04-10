@@ -49,6 +49,7 @@ const getSevaKendraById = async (
   next: NextFunction
 ) => {
   try {
+    console.log("wrong function");
     const id = request.params.id;
     const result = await getSevaKendraByIdDB(id);
     const responseData = createResponseOnlyData(result);

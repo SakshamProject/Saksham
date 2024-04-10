@@ -75,7 +75,10 @@ const getSevaKendraByIdDB = async (sevaKendraId: string): Promise<any> => {
   }
 };
 
-const getSevaKendraServicesById = async (prismaTransaction:Prisma.TransactionClient,sevaKendraId: string) => {
+const getSevaKendraServicesById = async (
+  prismaTransaction: Prisma.TransactionClient,
+  sevaKendraId: string
+) => {
   try {
     const services = await prismaTransaction.sevaKendra.findFirst({
       where: {
@@ -84,7 +87,7 @@ const getSevaKendraServicesById = async (prismaTransaction:Prisma.TransactionCli
       select: {
         services: {
           select: {
-            id: true,
+            serviceId: true,
           },
         },
       },

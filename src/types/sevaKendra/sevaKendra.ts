@@ -82,7 +82,6 @@ const filterSevaKendraSchema = z.object({
   contactPersonNumber: filter.optional(),
 });
 
-
 type filterSevaKendraSchemaType = z.infer<typeof filterSevaKendraSchema>;
 
 type SevaKendraRequestSchemaType = z.infer<typeof SevaKendraRequestSchema>;
@@ -95,7 +94,7 @@ type SevaKendraServices = Prisma.SevaKendraGetPayload<{
   select: {
     services: {
       select: {
-        id: true;
+        serviceId: true;
       };
     };
   };

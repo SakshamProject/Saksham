@@ -5,6 +5,7 @@ import {
   ContactPerson,
   SevaKendraAuditLog,
   SevaKendraServices,
+  SevaKendraServicesList,
   SevaKendraUpdateRequestSchemaType,
 } from "../../../../types/sevaKendra/sevaKendra.js";
 import { updateServicesOnSevaKendras } from "../../../utils/sevaKendra/UpdateHandler.js";
@@ -23,7 +24,8 @@ const updateSevaKendraDBTransaction = async (
   updatedBy: string
 ) => {
   try {
-    const transaction = prisma.$transaction(
+    console.log();
+    const transaction = await prisma.$transaction(
       async (prismaTransaction) => {
         await createAuditLogIfExists(
           prismaTransaction,
@@ -34,13 +36,14 @@ const updateSevaKendraDBTransaction = async (
         const contactPersonDBObject: ContactPerson =
           updateContactPersonDBObject(updateRequestSevaKendra);
         const updatedContactPerson = await updateContactPersonDB(
+          prismaTransaction,
           contactPersonDBObject,
           updateRequestSevaKendra.contactPerson.id
         );
 
         const existingServices: SevaKendraServices | undefined | null =
           await getSevaKendraServicesById(prismaTransaction, id);
-        const services = updateServicesOnSevaKendras(
+        const services: SevaKendraServicesList = updateServicesOnSevaKendras(
           existingServices,
           updateRequestSevaKendra
         );
@@ -50,6 +53,7 @@ const updateSevaKendraDBTransaction = async (
           services
         );
         const updatedSevaKendra = await updateSevaKendraDB(
+          prismaTransaction,
           sevaKendraDBObject,
           id
         );
@@ -57,8 +61,8 @@ const updateSevaKendraDBTransaction = async (
       },
       {
         isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration
-        maxWait: 5000, // default: 2000
-        timeout: 10000, // default: 5000
+        maxWait: 500000, // default: 2000
+        timeout: 100000, // default: 5000
       }
     );
     return transaction;
@@ -66,8 +70,6 @@ const updateSevaKendraDBTransaction = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-
-export default updateSevaKendraDBTransaction;
 
 async function createAuditLogIfExists(
   prismaTransaction: Prisma.TransactionClient,
@@ -77,13 +79,17 @@ async function createAuditLogIfExists(
   if (updateRequestSevaKendra.auditLog) {
     const auditLogDBObject: SevaKendraAuditLog | null =
       createSevaKendraAuditLogDBObject(updateRequestSevaKendra, id);
+    console.log(auditLogDBObject);
     if (auditLogDBObject) {
       const createAuditLog = await createSevaKendraAuditLogDB(
         prismaTransaction,
         auditLogDBObject
       );
+      console.log("created", createAuditLog);
     } else {
       throw new Error("auditlog object is null");
     }
   }
 }
+
+export default updateSevaKendraDBTransaction;

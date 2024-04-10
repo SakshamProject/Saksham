@@ -60,6 +60,8 @@ model ServicesOnSevaKendras {
   sevakendraId String
   serviceId    String
 
+  @@unique([sevakendraId,serviceId])
+  
   sevakendra SevaKendra @relation(fields: [sevakendraId], references: [id])
   service    Service    @relation(fields: [serviceId], references: [id])
 }

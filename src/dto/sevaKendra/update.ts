@@ -10,7 +10,10 @@ import {
 const updateSevaKendraDBObject = (
   sevaKendra: SevaKendraUpdateRequestSchemaType,
   updatedBy: string,
-  services: SevaKendraServicesList
+  services: SevaKendraServicesList = {
+    servicesToCreate: [],
+    servicesToDelete: [],
+  }
 ): SevaKendraUpdate => {
   const sevaKendraDBObject: SevaKendraUpdate = {
     name: sevaKendra.name,
@@ -54,7 +57,7 @@ const createSevaKendraAuditLogDBObject = (
   sevaKendraId: string
 ): SevaKendraAuditLog | null => {
   for (let auditLog of sevakendra.auditLog) {
-    if (auditLog.id) {
+    if (!auditLog.id) {
       const auditLogDBObject = {
         sevakendra: {
           connect: {

@@ -18,7 +18,6 @@ const putSevaKendra = async (
       SevaKendraUpdateRequestSchema.parse(request.body);
     const id = request.params.id;
     const updatedBy = "";
-
     const result = await updateSevaKendraDBTransaction(
       id,
       updateRequestSevaKendra,
@@ -28,6 +27,7 @@ const putSevaKendra = async (
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

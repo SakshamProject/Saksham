@@ -10,10 +10,11 @@ const updateServicesOnSevaKendras = (
   updateRequestSevaKendra: SevaKendraUpdateRequestSchemaType
 ) => {
   const existingServicesId =
-    existingServices?.services.map((service) => service.id) || [];
+    existingServices?.services.map((service) => service.serviceId) || [];
   const currentServicesId = updateRequestSevaKendra.servicesBySevaKendra.map(
     (service) => service.serviceId
   );
+  // console.log({ existingServices, existingServicesId, currentServicesId });
   const servicesToCreate = currentServicesId
     .filter((serviceId) => !existingServicesId.includes(serviceId))
     .map<ServicesIds>((id) => {

@@ -7,6 +7,7 @@ import {
   getSevaKendraById,
 } from "../../controllers/sevaKendra/get.js";
 import putSevaKendra from "../../controllers/sevaKendra/put.js";
+import errorHandler from "../../middlewares/errorHandler.js";
 
 const sevaKendraRouter = express.Router();
 
