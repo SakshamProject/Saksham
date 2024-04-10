@@ -1,20 +1,28 @@
 import { getRequestType } from "./getRequestSchema.js";
+import { filterRequestType } from "./filterRequestSchema.js";
 
-const createResponseOnlyData = (result: Object) => {
+const createResponseOnlyData = (result: Object = {}) => {
   const createdResponse = {
     data: result,
   };
   return createdResponse;
 };
+
 const createResponseWithQuery = (
-  result: Object,
-  requestQuery: getRequestType,
-  total: number,
-  count: number
+  result: Object = {},
+  request: getRequestType,
+  total: number = 0,
+  count: number = 0
 ) => {
   const createdResponse = {
     data: result,
-    request: requestQuery,
+    request: {
+      start: (request.start || 0) + 1,
+      rows: request.rows,
+      orderBy: request.orderBy,
+      sortOrder: request.sortOrder,
+      searchText: request.searchText,
+    },
     total: total,
     count: count,
   };
@@ -22,15 +30,20 @@ const createResponseWithQuery = (
 };
 
 const createResponseForFilter = (
-  result: Object,
-  requestQuery: getRequestType,
-  total: number,
+  result: Object[] = [],
+  request: filterRequestType,
+  total: number = 0,
   count: number,
   filters: Object
 ) => {
   const createdResponse = {
     data: result,
-    request: requestQuery,
+    request: {
+      start: (request.start || 0) + 1,
+      rows: request.rows,
+      orderBy: request.orderBy,
+      sortOrder: request.sortOrder,
+    },
     total: total,
     count: count,
     filters: filters,
