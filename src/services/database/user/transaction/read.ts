@@ -8,22 +8,24 @@ const getUsersDBTransaction = async (
     start: number = defaults.skip,
     rows: number = defaults.take,
     sortOrder: sortOrderEnum = defaults.sortOrder,
+    orderBy: string,
     searchText: string | undefined
 ) => {
     const transaction = await prisma.$transaction(
       async (prismaTransaction) => {
-        try {
+            try {
+            console.log("reached transaction")
           const users = await getUserDB(
             prismaTransaction,
             sortOrder,
+            orderBy,
             searchText
           );
-          const total = await getUserTotal(
-            // prismaTransaction,
-            // searchText
-          );
-  
-          return { users, total };
+          const total =await getUserTotal(
+             prismaTransaction,
+             searchText
+            );
+              return { users, total };
         } catch (error) {
           if (error instanceof Error) throwDatabaseError(error);
         }

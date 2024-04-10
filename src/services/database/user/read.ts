@@ -5,38 +5,172 @@ import throwDatabaseError from "../utils/errorHandler.js";
 import { Prisma } from "@prisma/client";
 
 async function getUserDB(
-    prismaTransaction: any,
+    prismaTransaction:Prisma.TransactionClient,
     sortOrder: sortOrderEnum = defaults.sortOrder,
+    orderBy:string,
     searchText: string = ""
     ) {
-        try {
-          const results = await prismaTransaction.users.findMany({
+    try {
+          const results = await prismaTransaction.user.findMany({
             include: {
-              disability: {
-                select: {
-                  name: true,
-                },
+              designation : {
+                include: {
+                        sevaKendra: {
+                        include: {
+                                district: {
+                                include: {
+                                        state:true
+                                    }
+                            }
+                        }
+                    }
+                }
               },
             },
             orderBy: {
-              name: sortOrder,
+              firstName: sortOrder,
             },
             where: {
-              name: {
-                contains: searchText,
-                mode: "insensitive",
-              },
+              OR: [
+                {
+                    firstName: {
+                        contains: searchText,
+                        mode: "insensitive",
+                    },
+                },
+                {
+                  designation: {
+                    name: {
+                      contains: searchText,
+                      mode: "insensitive",
+                    },
+                    sevaKendra: {
+                      OR: [
+                        {
+                          name: {
+                            contains: searchText,
+                            mode: "insensitive",
+                          },
+                          district: {
+                            OR: [
+                              {
+                                name: {
+                                  contains: searchText,
+                                  mode: "insensitive",
+                                },
+                                state: {
+                                  OR: [
+                                    {
+                                      name: {
+                                        contains: searchText,
+                                        mode: "insensitive",
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
             },
           });
-      
           return results;
         } catch (err) {
-          if (err instanceof Error) {
+      if (err instanceof Error) {
             throwDatabaseError(err);
           }
         }
       }
-async function getUserTotal() {
-    
+async function getUserTotal(
+    prismaTransaction: Prisma.TransactionClient,
+    searchText: string = ""
+) {
+    try {
+      const userTotal: number =
+        await prismaTransaction.user.count({
+          where: {
+            OR: [
+              {
+                firstName: {
+                  contains: searchText,
+                  mode: "insensitive",
+                },
+                OR: [
+                  {
+                    designation: {
+                      name: {
+                        contains: searchText,
+                        mode: "insensitive",
+                      },
+                      OR: [{
+                        sevaKendra: {
+                          name: {
+                            contains: searchText,
+                            mode: "insensitive",
+                          },
+                          OR: [{
+                            district: {
+                              name: {
+                                contains: searchText,
+                                mode: "insensitive",
+                              },
+                              OR: [{
+                                state: {
+                                  name: {
+                                    contains: searchText,
+                                    mode: "insensitive",
+                                  }
+                                }
+                              }]
+                            }
+                          }]
+                        }
+                      }]
+                    }
+                  }]
+              }]
+          },
+        });
+        return userTotal;
+      } catch (err) {
+        if (err instanceof Error) {
+          throwDatabaseError(err);
+        }
+      }
 }
-export {getUserDB,getUserTotal}
+const getUserByIdDB = async (id: string) => {
+  try {
+    const user = await prisma.user.findFirstOrThrow({
+      include: {
+        designation: {
+          include: {
+            sevaKendra: {
+              include: {
+                district: {
+                  include: {
+                    state: true
+                  }
+                }
+              }
+            }
+          }
+        },
+      },
+      where: {
+        id: id,
+        },
+      });
+      return user;
+    } catch (error) {
+      if (error instanceof Error) {
+        throwDatabaseError(error);
+      }
+    }
+  };
+ 
+export {getUserDB,getUserTotal,getUserByIdDB}
