@@ -1,5 +1,5 @@
 import {NextFunction, Response, Request} from "express";
-import {usersPostSchema} from "../../types/users/usersSchema.js";
+import {usersPostSchema} from "../../types/user/usersSchema.js";
 import logger from "../../services/logger/logger.js";
 
 async function postUser(request: Request, response: Response, next: NextFunction) {

@@ -19,9 +19,7 @@ const usersPostSchema = z.object({
     // audit log
     status: z.nativeEnum(AuditLogStatusEnum),
     date: dateSchema, // effective date
-    description: inputFieldSchema,
-    createdBy: uuidSchema,
-    updatedBy: uuidSchema,
+    description: inputFieldSchema
 });
 
 // const userPostRequestType = z.infer<typeof usersPostSchema>;
@@ -42,8 +40,7 @@ const usersPutSchema = z.object({
     // audit log
     status: z.nativeEnum(AuditLogStatusEnum),
     date: dateSchema, // effective date
-    description: inputFieldSchema,
-    updatedBy: uuidSchema,
+    description: inputFieldSchema
 });
 
 // const userPutRequestType = z.infer<typeof usersPutSchema>;
