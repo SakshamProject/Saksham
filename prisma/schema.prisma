@@ -68,6 +68,8 @@ model ServiceType {
   id       String           @id @default(uuid())
   name     String           @unique
   service  Service[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Service {
@@ -120,9 +122,22 @@ model User {
   mail             String
   loginid          String                   @unique
   passwordId       String                   @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdById String
+  createdBy User @relation("createdBy", fields: [createdById], references: [id])
+  usersCreated User[] @relation("createdBy")
+
+  updatedById String @unique
+  updatedBy User @relation("updatedBy", fields: [updatedById], references: [id])
+  usersUpdated User[] @relation("updatedBy")
+
   password         UserPassword             @relation(fields: [passwordId], references: [id])
-  designation      Designation              @relation(fields: [designationId], references: [id])
-  featuresAssigned FeaturesOnDesignations[]
+  designation      Designation              @relation("Designation-Users", fields: [designationId], references: [id])
+  designationsCreated          Designation[] @relation("createdBy")
+  designationsUpdated          Designation[] @relation("updatedBy")
   sevaKendraFollowUp SevaKendraFollowUp[]
   userAuditLog UserAuditLog[]
 }
@@ -155,13 +170,17 @@ model Feature {
 model Designation {
   id   String @id @default(uuid())
   name String 
-
-
   sevaKendraId String
+  createdAt DateTime @default(now())
+  createdById String
+  updatedAt DateTime @default(now())
+  updatedById String
+  createdBy User @relation("createdBy", fields:[createdById],references: [id])
+  updatedBy  User @relation("updatedBy", fields: [updatedById], references: [id])
   sevaKendra   SevaKendra @relation(fields: [sevaKendraId], references: [id])
   @@unique([sevaKendraId,name])
 
-  users    User[]
+  users    User[] @relation("Designation-Users")
   features FeaturesOnDesignations[]
   designationAuditLog DesignationAuditLog[]
 }
