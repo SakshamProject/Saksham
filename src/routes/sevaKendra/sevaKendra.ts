@@ -1,13 +1,11 @@
 import express from "express";
-import postSevaKendra, {
-  postSevaKendraFilter,
-} from "../../controllers/sevaKendra/post.js";
+
 import {
   getSevaKendra,
   getSevaKendraById,
 } from "../../controllers/sevaKendra/get.js";
 import putSevaKendra from "../../controllers/sevaKendra/put.js";
-import errorHandler from "../../middlewares/errorHandler.js";
+import postSevaKendra from "../../controllers/sevaKendra/post.js";
 
 const sevaKendraRouter = express.Router();
 

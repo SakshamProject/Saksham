@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import {
   ContactPerson,
   SevaKendraAuditLog,
@@ -53,24 +52,23 @@ const updateContactPersonDBObject = (
 };
 
 const createSevaKendraAuditLogDBObject = (
-  sevakendra: SevaKendraUpdateRequestSchemaType,
+  sevaKendra: SevaKendraUpdateRequestSchemaType,
   sevaKendraId: string
 ): SevaKendraAuditLog | null => {
-  for (let auditLog of sevakendra.auditLog) {
-    if (!auditLog.id) {
-      const auditLogDBObject = {
-        sevakendra: {
-          connect: {
-            id: sevaKendraId,
-          },
+  if (!sevaKendra.auditLog.id) {
+    const auditLogDBObject = {
+      sevakendra: {
+        connect: {
+          id: sevaKendraId,
         },
-        date: auditLog.date,
-        description: auditLog.description,
-        status: auditLog.status,
-      };
-      return auditLogDBObject;
-    }
+      },
+      date: sevaKendra.auditLog.date,
+      description: sevaKendra.auditLog.description,
+      status: sevaKendra.auditLog.status,
+    };
+    return auditLogDBObject;
   }
+
   return null;
 };
 
