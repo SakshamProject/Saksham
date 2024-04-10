@@ -210,7 +210,7 @@ model DivyangDetails {
   isDisabilitySinceBirth    Boolean?
   disabilitySince           DateTime?
   disabilityArea            String?
-  disabilityPercentage      String?
+  disabilityPercentage      Int?
   disabilityDueTo           String?
   certificateIssueAuthority CertificateIssueAuthority?
   disabilityCardUrl         String? // url

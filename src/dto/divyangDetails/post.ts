@@ -14,7 +14,8 @@ const createDivyangDetailsDBObject = (divyangDetails: DivyangDetailsRequest): Pr
         fatherName: divyangDetails.personalDetails.fatherName,
         motherName: divyangDetails.personalDetails.motherName,
         religion: divyangDetails.personalDetails.religion,
-        communityCategoryId: divyangDetails.personalDetails.communityCategoryId
+        communityCategoryId: divyangDetails.personalDetails.communityCategoryId,
+        community: divyangDetails.personalDetails.community
     }
     return newDivyangDetails
 }

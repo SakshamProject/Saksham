@@ -15,6 +15,7 @@ const divyangDetailsRequestSchema = z
     addressRequest: addressRequestSchema,
     disabiltyDetails: disabiltyDetailsRequestSchema,
     employmentDetails: employmentDetailsRequestSchema,
+    pageNumber: z.number().min(1).max(5)
   })
   .refine((data) => {
     return Object.values(data).some((value) => value !== undefined)
@@ -22,6 +23,9 @@ const divyangDetailsRequestSchema = z
 
 type DivyangDetailsRequest = z.infer<typeof divyangDetailsRequestSchema>
 
+type updateDivyangDetails = Prisma.DivyangDetailsUpdateInput;
+
 export { divyangDetailsRequestSchema, 
   DivyangDetailsRequest, 
-  getDivyangDetailsSchema }
+  getDivyangDetailsSchema,
+  updateDivyangDetails }
