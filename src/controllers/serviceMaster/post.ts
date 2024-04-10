@@ -3,7 +3,7 @@ import {
   filterServiceMasterSchema,
   postServiceMasterSchema,
   postServiceMasterType,
-} from "../../types/schemas/serviceMaster/serviceMasterSchema.js";
+} from "../../types/serviceMaster/serviceMasterSchema.js";
 import {
   createServiceDBInputObject,
   createServiceFilterInputObject,
