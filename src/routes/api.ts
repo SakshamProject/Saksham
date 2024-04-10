@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import { pingDB } from "../services/database/database.js";
 import typeMasterRouter from "./typeMaster/typeMaster.js";
-import errorHandler from "../middlewares/errorHandler.js";
+import errorHandler from "../middlewares/errorHandler/errorHandler.js";
 import userRouter from "./user/user.js";
 
 const apiRouter = Router();

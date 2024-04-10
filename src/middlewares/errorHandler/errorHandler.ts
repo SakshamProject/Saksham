@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import APIError from "../services/errors/APIError.js";
+import APIError from "../../services/errors/APIError.js";
 import { ZodError } from "zod";
 import { StatusCodes } from "http-status-codes"
 
