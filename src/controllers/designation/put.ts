@@ -3,7 +3,6 @@ import { updateDisabilityTypeRequestSchemaType } from "../../types/typeMaster/ge
 import { updateDesignationRequestSchema, updateDesignationRequestSchemaType } from "../../types/designation/designationSchema.js";
 import { putDesignationDBTransaction } from "../../services/database/designation/transaction/update.js";
 import { getDisabilityTypeByIdDB } from "../../services/database/typeMaster/generalMaster/disabilityType/read.js";
-import prisma from "../../services/database/database.js";
 import { createResponseOnlyData } from "../../types/createResponseSchema.js";
 import { getDesignationByIDDB } from "../../services/database/designation/read.js";
 

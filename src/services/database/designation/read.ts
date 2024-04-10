@@ -151,40 +151,25 @@ async function getDesignationByIDDB(id: string | undefined) {
       where: {
         id: id,
       },
-      select: {
-        id:true,
-        name:true,
-        sevaKendra: {
-          select: {
-            id: true,
-            name: true,
-            district: {
-              select: {
-                id: true,
-                name: true,
-                state: {
-                  select:{
-                    id:true,
-                    name:true
-                  }
-                 
-                
-                },
-              },
-            },
-          },
-        },
-        features: {
-          select: {
-            feature:{
-              select:{
-                id:true,
-                name:true
+      include:{
+        sevaKendra:{
+          include:{
+            district:{
+              include:{
+                state:true
               }
             }
-          },
+          }
         },
-      },
+        features:{
+          include:{
+            feature:true
+          }
+        },
+        createdBy:true,
+        updatedBy:true,
+        designationAuditLog:true
+      }
     });
 
     return designation;
