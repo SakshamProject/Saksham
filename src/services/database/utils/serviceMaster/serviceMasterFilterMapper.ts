@@ -39,16 +39,16 @@ function filterServiceMasterMapper(
 }
 
 function generateServiceFilter(body: filterServiceMasterType) {
-  const serviceWhereInput: any = {
+  const serviceTypeWhereInput: any = {
     AND: [],
   };
   for (const [columnName, filter] of Object.entries(body)) {
-    serviceWhereInput.AND.push(
+    serviceTypeWhereInput.AND.push(
       filterServiceMasterMapper(columnName, filter.operation, filter.value)
     );
   }
 
-  return serviceWhereInput;
+  return serviceTypeWhereInput;
 }
 
 export { generateServiceFilter, filterServiceMasterMapper };

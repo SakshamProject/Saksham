@@ -15,11 +15,13 @@ function createServiceDBInputObject(
   return serviceInput;
 }
 
+
+
 function createServiceFilterInputObject(
   body: filterServiceMasterType
-): Prisma.ServiceWhereInput {
-  const serviceWhereInput = generateServiceFilter(body);
-  return serviceWhereInput;
+): Prisma.ServiceTypeWhereInput {
+  const serviceTypeWhereInput = generateServiceFilter(body);
+  return serviceTypeWhereInput;
 }
 
 export { createServiceDBInputObject, createServiceFilterInputObject };

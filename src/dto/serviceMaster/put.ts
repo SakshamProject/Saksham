@@ -6,6 +6,7 @@ function createServiceDBUpdateObject(body: putServiceMasterType) {
     serviceTypeId: body.serviceTypeId,
     name: body.name,
   };
+  return serviceUpdate;
 }
 
 export { createServiceDBUpdateObject };

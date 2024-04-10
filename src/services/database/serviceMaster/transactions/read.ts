@@ -4,8 +4,9 @@ import throwDatabaseError from "../../utils/errorHandler.js";
 import {getServicesDB, getServiceTotalDB} from "../read.js";
 import prisma from "../../database.js";
 import serviceMasterDefaults from "../defaults/defaults.js";
+import {sortOrderEnum} from "../../../../types/getRequestSchema.js";
 
-async function getServicesDBTransaction(start = defaults.skip, rows = defaults.take, orderBy = serviceMasterDefaults.orderBy, sortOrder: "asc" | "desc" = defaults.sortOrder, searchText = "") {
+async function getServicesDBTransaction(start = defaults.skip, rows = defaults.take, orderBy = serviceMasterDefaults.orderBy, sortOrder: sortOrderEnum = defaults.sortOrder, searchText = "") {
     const transaction = prisma.$transaction(
         async (prismaTransaction: Prisma.TransactionClient) => {
             try {
@@ -18,7 +19,8 @@ async function getServicesDBTransaction(start = defaults.skip, rows = defaults.t
                     throwDatabaseError(error);
                 }
             }
-        }, defaults.transactionOptions);
+        }, defaults.transactionOptions
+    );
     return transaction;
 }
 

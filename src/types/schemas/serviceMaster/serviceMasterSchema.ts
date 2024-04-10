@@ -9,8 +9,8 @@ const postServiceMasterSchema = z.object({
 type postServiceMasterType = z.infer<typeof postServiceMasterSchema>;
 
 const filterServiceMasterSchema = z.object({
-  service: filter.optional(),
   serviceName: filter.optional(),
+  serviceTypeName: filter.optional(),
 });
 
 type filterServiceMasterType = z.infer<typeof filterServiceMasterSchema>;

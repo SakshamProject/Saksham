@@ -1,6 +1,7 @@
+import {Prisma} from "@prisma/client";
 
 const serviceMasterDefaults = {
-    orderBy: "createdAt",
+    orderBy: "updatedAt",
     select: {
         id: true,
         name: true,
