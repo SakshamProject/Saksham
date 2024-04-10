@@ -2,17 +2,17 @@ import { Designation, FeaturesOnDesignations, Prisma } from "@prisma/client";
 import { postDesignationRequestSchemaType, postDesignationType, postFeaturesOnDesignationsType } from "../../../../types/designation/designationSchema.js";
 import prisma from "../../database.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
-import { createPostDesignationDBObject, createPostFeaturesOnDesignationsDBObject } from "../../../../dto/designation/designation.js";
+import { createDesignationAuditLog, createPostDesignationDBObject, createPostFeaturesOnDesignationsDBObject } from "../../../../dto/designation/designation.js";
 import { createDesignationDB ,createFeaturesOnDesignationDB} from "../create.js";
 
 async function postDesignationDBTransaction(
   body: postDesignationRequestSchemaType,
-  assignedByID: string
+  createdByID: string
 ) {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
       try {
-        const postDesignationDBObject :postDesignationType = createPostDesignationDBObject(body);
+        const postDesignationDBObject :postDesignationType = createPostDesignationDBObject(body,createdByID);
 
         const designation: Designation | undefined = await createDesignationDB(
           prismaTransaction,
@@ -23,14 +23,15 @@ async function postDesignationDBTransaction(
           const PostFeaturesOnDesignationDBObject=
           createPostFeaturesOnDesignationsDBObject (
               designation?.id,
-              featureId,
-              assignedByID
+              featureId
             );
 
           const featuresOnDesignations: FeaturesOnDesignations | undefined = await createFeaturesOnDesignationDB(
             prismaTransaction,
             PostFeaturesOnDesignationDBObject
           );
+
+          const DesignationAuditLog = createDesignationAuditLog(designation?.id,body.description)
         }
 
         return designation;

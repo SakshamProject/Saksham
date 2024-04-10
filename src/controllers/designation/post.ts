@@ -10,8 +10,8 @@ async function postDesignation(request: Request, response: Response,next:NextFun
       const body = postDesignationRequestSchema.parse(request.body);
 
     if(request.user){
-      const assignedById:string = request.user.id;
-      const result = await postDesignationDBTransaction(body,assignedById);
+      const createdById:string = request.user.id;
+      const result = await postDesignationDBTransaction(body,createdById);
 
       const responseResult = await getDesignationByIDDB(result?.id);
       const responseData = createResponseOnlyData(responseResult ||{});

@@ -6,8 +6,9 @@ const postDesignationRequestSchema = z.object({
   stateId: z.string(),
   districtId: z.string(),
   sevaKendraId: z.string(),
-  designation: z.string().toUpperCase(),
+  designation: inputFieldSchema.toUpperCase(),
   featuresId: z.array(z.string()).min(1),
+  description : inputFieldSchema.optional()
 });
 
 type postDesignationRequestSchemaType = z.infer<

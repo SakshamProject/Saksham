@@ -11,7 +11,6 @@ const designationRouter = Router();
 designationRouter.use(authenticate);
 
 designationRouter.get('/',getDesignation);
-//designationRouter.get('/search/:name',getDesignationByNameDB);
 designationRouter.get('/:id',getDesignationById);
 designationRouter.post('/',postDesignation);
 designationRouter.delete('/:id',deleteDesignation);

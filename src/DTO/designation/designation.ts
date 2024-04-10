@@ -1,4 +1,4 @@
-import { Designation, FeaturesOnDesignations } from "@prisma/client";
+import { AuditLogStatusEnum, Designation, FeaturesOnDesignations, StatusEnum } from "@prisma/client";
 import { randomUUID } from "crypto";
 import {
   postDesignationRequestSchemaType,
@@ -7,13 +7,16 @@ import {
 } from "../../types/designation/designationSchema.js";
 
 const createPostDesignationDBObject = (
-  request: postDesignationRequestSchemaType
+  request: postDesignationRequestSchemaType,
+  createdById:string=""
 ) => {
   const createDesignationDBObject = {
     name: request.designation,
     sevaKendra: {
       connect: { id: request.sevaKendraId },
     },
+    createdById:createdById,
+    updatedById:createdById
   };
   return createDesignationDBObject;
 };
@@ -21,7 +24,7 @@ const createPostDesignationDBObject = (
 const createPostFeaturesOnDesignationsDBObject = (
   designationId: string | undefined,
   featureId: string,
-  assignedById: string
+ 
 ) => {
   const featuresOnDesignationsDBObject: postFeaturesOnDesignationsType = {
     designation: {
@@ -34,12 +37,8 @@ const createPostFeaturesOnDesignationsDBObject = (
         id: featureId,
       },
     },
-    assignedBy: {
-      connect: {
-        id: assignedById,
-      },
-    },
-    assignedOn: new Date(),
+  
+  
   };
 
   return featuresOnDesignationsDBObject;
@@ -65,8 +64,20 @@ const createPostFeaturesOnDesignationsDBObject = (
   }
   return UpdateDesignationObject;
 }
+
+function createDesignationAuditLog(designationId:string="",description:string=""){
+const designationAuditLog ={
+ designationId:designationId,
+ status:AuditLogStatusEnum.ACTIVE,
+ date:new Date(),
+ description:description
+}
+return designationAuditLog;
+}
+
 export {
   createPostDesignationDBObject,
   createPostFeaturesOnDesignationsDBObject,
   createUpdateDesignationObject,
+  createDesignationAuditLog
 };
