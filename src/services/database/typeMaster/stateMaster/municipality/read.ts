@@ -19,6 +19,18 @@ const getMunicipalityDB = async (
           mode: "insensitive",
         },
       },
+      select: {
+        name: true,
+        id: true,
+        districtId:true,
+        district: {
+          select: {
+            name: true,
+            id: true,
+            state: true,
+          },
+        },
+      },
       orderBy: {
         name: sortOrder,
       },
