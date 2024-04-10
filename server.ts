@@ -5,7 +5,6 @@ import morgan from "morgan";
 import path from "path";
 import fs from "fs";
 import cors from "cors";
-import winston from "winston";
 
 const server = express();
 

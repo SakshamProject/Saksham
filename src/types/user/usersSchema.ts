@@ -18,8 +18,9 @@ const usersPostSchema = z.object({
     password: z.string().regex(specialCharsRegex),
     // audit log
     status: z.nativeEnum(AuditLogStatusEnum),
-    date: dateSchema, // effective date
-    description: inputFieldSchema
+    effectiveDate: dateSchema, // effective date
+    // description: inputFieldSchema
+    description: z.string()
 });
 
 // const userPostRequestType = z.infer<typeof usersPostSchema>;
@@ -39,8 +40,9 @@ const usersPutSchema = z.object({
     password: z.string().regex(specialCharsRegex),
     // audit log
     status: z.nativeEnum(AuditLogStatusEnum),
-    date: dateSchema, // effective date
-    description: inputFieldSchema
+    effectiveDate: dateSchema,
+    description: z.string()
+    // description: inputFieldSchema
 });
 
 // const userPutRequestType = z.infer<typeof usersPutSchema>;

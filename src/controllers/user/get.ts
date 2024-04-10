@@ -18,7 +18,7 @@ const getUser = async (
         query.start,
         query.rows,
         query.sortOrder,
-        query.orderByColumn||"",
+        query.orderBy||"",
         query.searchText || ""
       );
       console.log(`recived responce initial 1${result}`)

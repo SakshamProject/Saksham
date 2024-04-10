@@ -1,4 +1,6 @@
 import winston from "winston";
+import path from "path";
+import config from "../../../config.js";
 
 // logger levels
 ////////////////
@@ -25,7 +27,7 @@ const levels = {
 
 const logger = winston.createLogger({
     format: winston.format.combine(winston.format.label(),
-        winston.format.colorize(),
+        // winston.format.colorize(),
         winston.format.timestamp(),
         winston.format.json(),
         winston.format.prettyPrint()),
@@ -34,8 +36,8 @@ const logger = winston.createLogger({
         // - Write all logs with importance level of `error` or less to `error.log`
         // - Write all logs with importance level of `info` or less to `.log`
         new winston.transports.Console(),
-        new winston.transports.File({ filename: '/logs/error.log', level: 'error' }),
-        new winston.transports.File({ filename: '/logs/.log' })
+        new winston.transports.File({ filename: path.join(config.__dirname,'logs','error.log'), level: 'error' }),
+        new winston.transports.File({ filename: path.join(config.__dirname,'logs','.log')})
     ],
 });
 
