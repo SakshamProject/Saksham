@@ -3,10 +3,11 @@ import throwDatabaseError from "../utils/errorHandler.js";
 import defaults from "../../../defaults.js";
 import {serviceMasterColumnNameMapper} from "../utils/serviceMaster/serviceMasterColumnNameMapper.js";
 import serviceMasterDefaults from "./defaults/defaults.js";
+import {sortOrderEnum} from "../../../types/getRequestSchema.js";
 
 async function filterServiceDB( prismaTransaction: Prisma.TransactionClient,
-                                orderBy = "createdAt",
-                               sortOrder: "asc" | "desc" = defaults.sortOrder,
+                                orderBy = serviceMasterDefaults.orderBy,
+                               sortOrder: sortOrderEnum = defaults.sortOrder,
                                skip = defaults.skip,
                                take = defaults.take,
                                serviceTypeWhereInput: Prisma.ServiceTypeWhereInput) {

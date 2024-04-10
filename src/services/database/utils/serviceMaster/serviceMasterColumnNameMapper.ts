@@ -3,20 +3,18 @@ function serviceMasterColumnNameMapper(orderByColumn: string, sortOrder: "asc" |
     const serviceMasterColumnNameMap: Map<string, any> = new Map();
 
     serviceMasterColumnNameMap.set("serviceTypeName", {
-        service: {
-            "name": sortOrder
-        }
+        "name": sortOrder
     });
 
     serviceMasterColumnNameMap.set("createdAt", {
         "createdAt": sortOrder
-    })
+    });
 
-    serviceMasterColumnNameMap.set("serviceName", {
-        "name": sortOrder
+    serviceMasterColumnNameMap.set("updatedAt", {
+        "updatedAt": sortOrder
     });
 
     return serviceMasterColumnNameMap.get(orderByColumn);
 }
 
-export { serviceMasterColumnNameMapper };
+export {serviceMasterColumnNameMapper};

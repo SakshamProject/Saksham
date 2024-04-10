@@ -3,8 +3,10 @@ import prisma from "../../database.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import {Prisma} from "@prisma/client";
 import {filterServiceDB, filterServiceTotalDB} from "../filter.js";
+import {sortOrderEnum} from "../../../../types/getRequestSchema.js";
+import serviceMasterDefaults from "../defaults/defaults.js";
 
-async function getFilterServicesDBTransaction(start = defaults.skip, rows = defaults.take, orderBy = "serviceName", sortOrder: "asc" | "desc" = defaults.sortOrder, serviceWhereInput: Prisma.ServiceWhereInput) {
+async function getFilterServicesDBTransaction(start = defaults.skip, rows = defaults.take, orderBy = serviceMasterDefaults.orderBy, sortOrder: sortOrderEnum = defaults.sortOrder, serviceWhereInput: Prisma.ServiceTypeWhereInput) {
     const transaction = await prisma.$transaction(
         async (prismaTransaction) => {
             try {
@@ -19,11 +21,7 @@ async function getFilterServicesDBTransaction(start = defaults.skip, rows = defa
                 }
             }
         },
-        {
-            isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
-            maxWait: 50000,
-            timeout: 10000,
-        }
+        defaults.transactionOptions
     );
     return transaction;
 }

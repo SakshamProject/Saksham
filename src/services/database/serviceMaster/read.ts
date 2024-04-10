@@ -5,11 +5,12 @@ import {serviceMasterColumnNameMapper} from "../utils/serviceMaster/serviceMaste
 import searchTextMapper from "../utils/serviceMaster/searchTextMapper.js";
 import defaults from "../../../defaults.js";
 import serviceMasterDefaults from "./defaults/defaults.js";
+import {sortOrderEnum} from "../../../types/getRequestSchema.js";
 
 async function getServicesDB(
     prismaTransaction: Prisma.TransactionClient,
-    orderByColumn: string = "createdAt",
-    sortOrder: "asc" | "desc" = "asc",
+    orderByColumn: string = serviceMasterDefaults.orderBy,
+    sortOrder: sortOrderEnum = defaults.sortOrder,
     skip = defaults.skip,
     take = defaults.take,
     searchText = ""
@@ -23,7 +24,7 @@ async function getServicesDB(
         };
 
         if (searchText !== "") {
-            query.where = searchTextMapper("Service", searchText);
+            query.where = searchTextMapper("ServiceType", searchText);
         }
 
         const services = await prismaTransaction.serviceType.findMany(query);
@@ -39,7 +40,7 @@ async function getServicesDB(
 async function getServiceTotalDB(prismaTransaction: Prisma.TransactionClient, searchText = "") {
         try {
             const total = prismaTransaction.serviceType.count({
-                where: searchTextMapper("Service", searchText),
+                where: searchTextMapper("ServiceType", searchText),
             });
             return total;
         }
@@ -57,11 +58,11 @@ async function getServiceByIdDB(id: string) {
                 id: id,
             },
             include: {
-                serviceType: true,
+                service: true,
             },
         };
 
-        const service = await prisma.service.findUniqueOrThrow(query);
+        const service = await prisma.serviceType.findUniqueOrThrow(query);
 
         return service;
     } catch (error) {

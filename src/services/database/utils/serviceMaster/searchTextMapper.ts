@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 function searchTextMapper(tableName: Prisma.ModelName, searchText: string) {
     const searchTextMap: Map<string, Prisma.ServiceTypeWhereInput> = new Map();
 
-    searchTextMap.set("Service", {
+    searchTextMap.set("ServiceType", {
             OR: [
                 {
                     name: {
