@@ -15,8 +15,16 @@ const createPostDesignationDBObject = (
     sevaKendra: {
       connect: { id: request.sevaKendraId },
     },
-    createdById:createdById,
-    updatedById:createdById
+    createdBy:{
+      connect:{
+        id:createdById
+      }
+    },
+    updatedBy:{
+      connect:{
+        id:createdById
+      }
+    }
   };
   return createDesignationDBObject;
 };
@@ -73,7 +81,7 @@ const designationAuditLog ={
   }
  },
  status:AuditLogStatusEnum.ACTIVE,
- date:new Date(),
+ date:new Date().toISOString(),
  description:"NEW DESIGNATION CREATED"
 }
 return designationAuditLog;
