@@ -1,4 +1,4 @@
-import { DivyangDetailsRequest, updateDivyangDetails } from "../../../types/divyangDetails/divyangDetailsSchema.js";
+import { updateDivyangDetails } from "../../../types/divyangDetails/divyangDetailsSchema.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 
