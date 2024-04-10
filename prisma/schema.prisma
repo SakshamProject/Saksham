@@ -171,12 +171,12 @@ model Designation {
   id   String @id @default(uuid())
   name String 
   sevaKendraId String
-  createdAt DateTime @default(now())
-  createdById String
-  updatedAt DateTime @default(now())
-  updatedById String
-  createdBy User @relation("createdBy", fields:[createdById],references: [id])
-  updatedBy  User @relation("updatedBy", fields: [updatedById], references: [id])
+  createdAt DateTime? @default(now())
+  createdById String?
+  updatedAt DateTime? @default(now())
+  updatedById String?
+  createdBy User? @relation("createdBy", fields:[createdById],references: [id])
+  updatedBy  User? @relation("updatedBy", fields: [updatedById], references: [id])
   sevaKendra   SevaKendra @relation(fields: [sevaKendraId], references: [id])
   @@unique([sevaKendraId,name])
 
