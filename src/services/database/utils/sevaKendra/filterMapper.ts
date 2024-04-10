@@ -82,7 +82,7 @@ const generateSevaKendraFilter = (
       );
     }
   }
-  SevaKendraWhereInput.ANd.push(globalSearchConditions);
+  SevaKendraWhereInput.AND.push(globalSearchConditions);
   return SevaKendraWhereInput;
 };
 

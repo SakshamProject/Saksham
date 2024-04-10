@@ -74,15 +74,19 @@ const sevaKendraFilter = z
 
 const getSevaKendraSchema = z.object({
   filters: sevaKendraFilter.optional(),
-  pagination: z.object({
-    rows: z.number(),
-    start: z.number(),
-  }),
-  searchText: z.string(),
-  sorting: z.object({
-    orderByColumn: z.nativeEnum(SevaKendraColumnNamesEnum),
-    sortOrder: z.nativeEnum(sortOrderEnum),
-  }),
+  pagination: z
+    .object({
+      rows: z.number(),
+      start: z.number(),
+    })
+    .optional(),
+  searchText: z.string().optional(),
+  sorting: z
+    .object({
+      orderByColumn: z.nativeEnum(SevaKendraColumnNamesEnum),
+      sortOrder: z.nativeEnum(sortOrderEnum),
+    })
+    .optional(),
 });
 type SevaKendraFilterType = z.infer<typeof sevaKendraFilter>;
 type GetSevaKendraSchemaType = z.infer<typeof getSevaKendraSchema>;

@@ -22,8 +22,8 @@ const getSevaKendra = async (
   try {
     const query = getSevaKendraSchema.parse(request.query);
     const orderByColumnAndSortOrder = sevaKendraColumnNameMapper(
-      query.sorting.orderByColumn,
-      query.sorting.sortOrder
+      query.sorting?.orderByColumn,
+      query.sorting?.sortOrder
     );
     const globalSearchConditions: SevaKendraWhere =
       SevaKendraGlobalSearchConditions(query.searchText);
@@ -34,8 +34,8 @@ const getSevaKendra = async (
     const result = await getSevaKendraDBTransaction(
       sevaKendraWhereInput,
       orderByColumnAndSortOrder,
-      query.pagination.start,
-      query.pagination.rows
+      query.pagination?.start,
+      query.pagination?.rows
     );
     const total = result?.total || 0;
     const count = result?.sevaKendra.length || 0;
