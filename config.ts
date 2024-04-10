@@ -11,7 +11,7 @@ function getEnvOrThrow(env_variable: string): string | number {
     return env_value;
   } else {
     throw new Error(
-      `ERROR: ${env_variable} is not defined.\n Possible fix: Add ${env_variable} to your .env file`
+      `ERROR: ${env_variable} is not defined.\n Possible fix: Add ${env_variable} to your .env file`,
     );
   }
 }

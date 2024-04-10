@@ -10,9 +10,9 @@ const getSevaKendraDBTransaction = async (
   skip: number = defaults.skip,
   take: number = defaults.take
 ) => {
-  const transaction = await prisma.$transaction(
-    async (prismaTransaction) => {
-      try {
+  try {
+    const transaction = await prisma.$transaction(
+      async (prismaTransaction) => {
         const sevaKendra = await getSevaKendraDB(
           prismaTransaction,
           searchConditions,
@@ -25,17 +25,17 @@ const getSevaKendraDBTransaction = async (
           searchConditions
         );
         return { sevaKendra, total };
-      } catch (error) {
-        if (error instanceof Error) throwDatabaseError(error);
+      },
+      {
+        isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration
+        maxWait: 5000, // default: 2000
+        timeout: 10000, // default: 5000
       }
-    },
-    {
-      isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration
-      maxWait: 5000, // default: 2000
-      timeout: 10000, // default: 5000
-    }
-  );
-  return transaction;
+    );
+    return transaction;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
 };
 
 export { getSevaKendraDBTransaction };

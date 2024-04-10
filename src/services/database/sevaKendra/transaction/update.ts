@@ -22,9 +22,9 @@ const updateSevaKendraDBTransaction = async (
   updateRequestSevaKendra: SevaKendraUpdateRequestSchemaType,
   updatedBy: string
 ) => {
-  const transaction = prisma.$transaction(
-    async (prismaTransaction) => {
-      try {
+  try {
+    const transaction = prisma.$transaction(
+      async (prismaTransaction) => {
         await createAuditLogIfExists(
           prismaTransaction,
           updateRequestSevaKendra,
@@ -54,17 +54,17 @@ const updateSevaKendraDBTransaction = async (
           id
         );
         return updatedSevaKendra;
-      } catch (error) {
-        if (error instanceof Error) throwDatabaseError(error);
+      },
+      {
+        isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration
+        maxWait: 5000, // default: 2000
+        timeout: 10000, // default: 5000
       }
-    },
-    {
-      isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration
-      maxWait: 5000, // default: 2000
-      timeout: 10000, // default: 5000
-    }
-  );
-  return transaction;
+    );
+    return transaction;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
 };
 
 export default updateSevaKendraDBTransaction;

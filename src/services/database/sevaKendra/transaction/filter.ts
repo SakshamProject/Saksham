@@ -12,24 +12,18 @@ const filterSevaKendraDBTransaction = async (
 ) => {
   try {
     const transaction = await prisma.$transaction(async (prismaTransaction) => {
-      try {
-        console.log("inside");
-
-        const filteredSevaKendra = await filterSevaKendraDB(
-          prismaTransaction,
-          skip,
-          take,
-          orderByColumnAndSortOrder,
-          sevaKendraWhereInput
-        );
-        const total = await filterSevaKendraDBTotal(
-          prismaTransaction,
-          sevaKendraWhereInput
-        );
-        return { filteredSevaKendra, total };
-      } catch (error) {
-        if (error instanceof Error) throwDatabaseError(error);
-      }
+      const filteredSevaKendra = await filterSevaKendraDB(
+        prismaTransaction,
+        skip,
+        take,
+        orderByColumnAndSortOrder,
+        sevaKendraWhereInput
+      );
+      const total = await filterSevaKendraDBTotal(
+        prismaTransaction,
+        sevaKendraWhereInput
+      );
+      return { filteredSevaKendra, total };
     });
     return transaction;
   } catch (error) {
