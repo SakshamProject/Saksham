@@ -24,15 +24,15 @@ const updateSevaKendraDBTransaction = async (
   updatedBy: string
 ) => {
   try {
-    console.log();
     const transaction = await prisma.$transaction(
       async (prismaTransaction) => {
+        // updating SevaKendraAuditLog table
         await createAuditLogIfExists(
           prismaTransaction,
           updateRequestSevaKendra,
           id
         );
-
+        // updating contactPerson table
         const contactPersonDBObject: ContactPerson =
           updateContactPersonDBObject(updateRequestSevaKendra);
         const updatedContactPerson = await updateContactPersonDB(
@@ -40,7 +40,7 @@ const updateSevaKendraDBTransaction = async (
           contactPersonDBObject,
           updateRequestSevaKendra.contactPerson.id
         );
-
+        // filtering and finding services to create and delete using existing service list
         const existingServices: SevaKendraServices | undefined | null =
           await getSevaKendraServicesById(prismaTransaction, id);
         const services: SevaKendraServicesList = updateServicesOnSevaKendras(
@@ -52,6 +52,7 @@ const updateSevaKendraDBTransaction = async (
           updatedBy,
           services
         );
+        // updating sevakendra table
         const updatedSevaKendra = await updateSevaKendraDB(
           prismaTransaction,
           sevaKendraDBObject,
@@ -70,25 +71,22 @@ const updateSevaKendraDBTransaction = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-
+//only one audit log entry in created at one time
 async function createAuditLogIfExists(
   prismaTransaction: Prisma.TransactionClient,
   updateRequestSevaKendra: SevaKendraUpdateRequestSchemaType,
   id: string
 ) {
-  if (updateRequestSevaKendra.auditLog) {
-    const auditLogDBObject: SevaKendraAuditLog | null =
-      createSevaKendraAuditLogDBObject(updateRequestSevaKendra, id);
-    console.log(auditLogDBObject);
-    if (auditLogDBObject) {
-      const createAuditLog = await createSevaKendraAuditLogDB(
-        prismaTransaction,
-        auditLogDBObject
-      );
-      console.log("created", createAuditLog);
-    } else {
-      throw new Error("auditlog object is null");
-    }
+  const auditLogDBObject: SevaKendraAuditLog | null =
+    createSevaKendraAuditLogDBObject(updateRequestSevaKendra, id);
+  if (auditLogDBObject) {
+    const createdAuditLog = await createSevaKendraAuditLogDB(
+      prismaTransaction,
+      auditLogDBObject
+    );
+    return createdAuditLog;
+  } else {
+    throw new Error("auditlog object is null");
   }
 }
 

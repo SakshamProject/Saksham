@@ -2,19 +2,19 @@ import {
   ServicesIds,
   SevaKendraRequestSchemaType,
   SevaKendraServices,
+  SevaKendraServicesList,
   SevaKendraUpdateRequestSchemaType,
 } from "../../../types/sevaKendra/sevaKendra.js";
 
 const updateServicesOnSevaKendras = (
   existingServices: SevaKendraServices | undefined | null,
   updateRequestSevaKendra: SevaKendraUpdateRequestSchemaType
-) => {
+): SevaKendraServicesList => {
   const existingServicesId =
     existingServices?.services.map((service) => service.serviceId) || [];
-  const currentServicesId = updateRequestSevaKendra.servicesBySevaKendra.map(
+  const currentServicesId = updateRequestSevaKendra.services.map(
     (service) => service.serviceId
   );
-  // console.log({ existingServices, existingServicesId, currentServicesId });
   const servicesToCreate = currentServicesId
     .filter((serviceId) => !existingServicesId.includes(serviceId))
     .map<ServicesIds>((id) => {

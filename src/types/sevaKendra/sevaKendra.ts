@@ -57,7 +57,7 @@ const SevaKendraUpdateRequestSchema = z.object({
     phoneNumber1: phoneNumberSchema,
     phoneNumber2: phoneNumberSchema,
   }),
-  servicesBySevaKendra: z
+  services: z
     .object({
       serviceId: uuidSchema,
     })

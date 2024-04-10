@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import SevaKendraRequestSchema, {
-  ContactPerson,
-  SevaKendraUpdate,
+import {
   SevaKendraUpdateRequestSchema,
   SevaKendraUpdateRequestSchemaType,
 } from "../../types/sevaKendra/sevaKendra.js";
