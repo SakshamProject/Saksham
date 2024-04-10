@@ -19,7 +19,7 @@ const getDistrictDB = async (
         MPConstituencies: true,
         Municipalities: true,
         PanchayatUnion: true,
-        taluk: true,
+        Taluk: true,
         TownPanchayats: true,
       },
       where: {
