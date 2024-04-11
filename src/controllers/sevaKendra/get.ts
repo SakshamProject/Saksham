@@ -20,28 +20,28 @@ const getSevaKendra = async (
   next: NextFunction
 ) => {
   try {
-    const query = getSevaKendraSchema.parse(request.query);
+    const sevaKendraRequest = getSevaKendraSchema.parse(request.body);
     const orderByColumnAndSortOrder = sevaKendraColumnNameMapper(
-      query.sorting?.orderByColumn,
-      query.sorting?.sortOrder
+      sevaKendraRequest.sorting?.orderByColumn,
+      sevaKendraRequest.sorting?.sortOrder
     );
     const globalSearchConditions: SevaKendraWhere =
-      SevaKendraGlobalSearchConditions(query.searchText);
+      SevaKendraGlobalSearchConditions(sevaKendraRequest.searchText);
     const sevaKendraWhereInput = createSevaKendraFilterInputObject(
-      query.filters,
+      sevaKendraRequest.filters,
       globalSearchConditions
     );
     const result = await getSevaKendraDBTransaction(
       sevaKendraWhereInput,
       orderByColumnAndSortOrder,
-      query.pagination?.start,
-      query.pagination?.rows
+      sevaKendraRequest.pagination?.start,
+      sevaKendraRequest.pagination?.rows
     );
     const total = result?.total || 0;
     const count = result?.sevaKendra.length || 0;
     const responseData = createResponseWithQuery(
       result?.sevaKendra || {},
-      query,
+      sevaKendraRequest,
       total,
       count
     );
