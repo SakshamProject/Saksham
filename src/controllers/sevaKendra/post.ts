@@ -13,6 +13,7 @@ const postSevaKendra = async (
   next: NextFunction
 ) => {
   try {
+    console.log("entry detected");
     const newSevaKendra: SevaKendraRequestSchemaType =
       SevaKendraRequestSchema.parse(request.body);
     const createdBy = "";
