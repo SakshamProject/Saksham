@@ -6,7 +6,6 @@ import {
 } from "../../../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
 import prisma from "../../../../database.js";
 import { createServiceDB, createServiceTypeDB } from "../create.js";
-import { getServiceTypeByIdDB } from "../read.js";
 import throwDatabaseError from "../../../../utils/errorHandler.js";
 import {
   createPostServiceDBObject,

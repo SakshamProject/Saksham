@@ -1,5 +1,5 @@
 import { z } from "zod";
-import inputFieldSchema, {filter, filterOperations} from "./../inputFieldSchema.js";
+import inputFieldSchema, {filter} from "./../inputFieldSchema.js";
 import {sortOrderEnum} from "../getRequestSchema.js";
 
 const postServiceMasterSchema = z.object({
