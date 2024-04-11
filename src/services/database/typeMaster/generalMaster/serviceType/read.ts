@@ -1,4 +1,4 @@
-import { Service } from "@prisma/client";
+import { Service, ServiceType } from "@prisma/client";
 import { sortOrderEnum } from "../../../../../types/getRequestSchema.js";
 import defaults from "../../../../../defaults.js";
 import { getServiceTypeWithServiceSchema } from "../../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
@@ -7,16 +7,12 @@ import throwDatabaseError from "../../../utils/errorHandler.js";
 
 async function getServiceTypeByIdDB(prismaTransaction:any, id: string | undefined) {
   try {
-    const serviceType: getServiceTypeWithServiceSchema | null =
-      await prisma.serviceType.findUnique({
+    const serviceType: ServiceType | null =
+      await prismaTransaction.serviceType.findUnique({
         where: {
           id: id,
         },
-        include: {
-          service: true,
-        },
       });
-      console.log(serviceType);
     return serviceType;
   } catch (err) {
     if (err instanceof Error) {
@@ -34,13 +30,7 @@ async function getServiceTypeDB(
 ) {
   try {
     const results = await prismaTransaction.serviceType.findMany({
-      include: {
-        service: {
-          select: {
-            name: true,
-          },
-        },
-      },
+     
       orderBy: {
         name: sortOrder,
       },

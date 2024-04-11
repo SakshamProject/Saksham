@@ -6,13 +6,18 @@ import throwDatabaseError from "../../../../utils/errorHandler.js";
 import { getDistrictDB, getDistrictDBTotal } from "../read.js";
 
 const getDistrictDBTransaction = async (
-  sortOrder: sortOrderEnum = defaults.sortOrder
+  sortOrder: sortOrderEnum = defaults.sortOrder,
+  searchText: string = ""
 ) => {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
       try {
-        const districts = await getDistrictDB(prismaTransaction, sortOrder);
-        const total = await getDistrictDBTotal(prismaTransaction);
+        const districts = await getDistrictDB(
+          prismaTransaction,
+          sortOrder,
+          searchText
+        );
+        const total = await getDistrictDBTotal(prismaTransaction, searchText);
         return { districts, total };
       } catch (error) {
         if (error instanceof Error) throwDatabaseError(error);

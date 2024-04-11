@@ -21,7 +21,7 @@ async function getServiceTypeById(
 ) {
   try {
     const id = request.params.id;
-    const serviceType: getServiceTypeWithServiceSchema | undefined | null =
+    const serviceType=
       await getServiceTypeByIdDB(prisma, id);
     const result = createResponseOnlyData(serviceType ||{});
     response.send(result);

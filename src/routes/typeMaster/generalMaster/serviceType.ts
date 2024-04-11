@@ -9,6 +9,9 @@ const serviceTypeRouter = express.Router();
 serviceTypeRouter.get("/",getServiceType);
 serviceTypeRouter.get("/:id",getServiceTypeById);
 serviceTypeRouter.post("/",postServiceType);
+// serviceTypeRouter.post("/",(req,res)=>{
+//     console.log("calls appropriate controller ")
+// })
 serviceTypeRouter.put("/:id",putServiceType);
 serviceTypeRouter.delete("/:id",deleteServiceType);
 serviceTypeRouter.get("/services/:serviceTypeId",getServiceByServiceTypeId);

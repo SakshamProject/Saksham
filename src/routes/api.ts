@@ -8,18 +8,17 @@ const apiRouter = Router();
 
 apiRouter.use(express.json());
 
-apiRouter.get(
-  "/check",
-  async (request: Request, response: Response): Promise<void> => {
+apiRouter.get("/check", async (request: Request, response: Response, next): Promise<void> => {
     try {
-      await pingDB();
-    } catch (error) {
-      response.json({ message: "Database Error", error: error });
+        await pingDB();
+        response.status(StatusCodes.OK).json({"message": "API is up and running!"});
     }
-    response.json({ message: "API is up and running!" });
-  }
-);
+    catch (error) {
+        next(error);
+    }
+});
 
+apiRouter.use("/services", serviceMasterRouter);
 apiRouter.use("/typemaster", typeMasterRouter);
 apiRouter.use("/divyang-details", divyangDetailsRouter)
 

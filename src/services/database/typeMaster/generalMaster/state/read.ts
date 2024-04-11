@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import defaults from "../../../../../defaults.js";
 import { sortOrderEnum } from "../../../../../types/getRequestSchema.js";
 import { getStateSchema } from "../../../../../types/typeMaster/generalMaster/stateSchema.js";
@@ -5,13 +6,20 @@ import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
 const getStateDB = async (
-  prismaTransaction: any,
-  sortOrder: sortOrderEnum = defaults.sortOrder
+  prismaTransaction: Prisma.TransactionClient,
+  sortOrder: sortOrderEnum = defaults.sortOrder,
+  searchText: string = ""
 ): Promise<getStateSchema[] | undefined> => {
   try {
     const states = await prismaTransaction.state.findMany({
       orderBy: {
         name: sortOrder,
+      },
+      where: {
+        name: {
+          contains: searchText,
+          mode: "insensitive",
+        },
       },
     });
     return states;
@@ -21,9 +29,19 @@ const getStateDB = async (
     }
   }
 };
-const getStateDBTotal = async (prismaTransaction: any) => {
+const getStateDBTotal = async (
+  prismaTransaction: Prisma.TransactionClient,
+  searchText: string = ""
+) => {
   try {
-    const states = await prismaTransaction.state.count({});
+    const states = await prismaTransaction.state.count({
+      where: {
+        name: {
+          contains: searchText,
+          mode: "insensitive",
+        },
+      },
+    });
     return states;
   } catch (error) {
     if (error instanceof Error) {
@@ -38,6 +56,9 @@ const getStateByIdDB = async (
     const state = await prisma.state.findFirstOrThrow({
       where: {
         id: id,
+      },
+      include: {
+        districts: true,
       },
     });
     return state;

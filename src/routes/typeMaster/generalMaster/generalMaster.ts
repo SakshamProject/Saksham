@@ -7,6 +7,7 @@ import serviceTypeRouter from "./serviceType.js";
 import { communityCategoryRouter } from "./communityCategory.js";
 import districtRouter from "./district.js";
 import stateRouter from "./state.js";
+import { getGeneralMaster } from "../../../controllers/typeMaster/generalMaster/get.js";
 
 const generalMasterRouter = express.Router();
 
@@ -18,11 +19,7 @@ generalMasterRouter.use("/servicetype", serviceTypeRouter);
 generalMasterRouter.use("/disabilitytype", disabilityTypeRouter);
 generalMasterRouter.get(
   "/generalmasterseed",
-  async (request: Request, response: Response, next: NextFunction) => {
-    const generalMaster = await prisma.generalMasters.findMany();
-    const responseData = createResponseOnlyData(generalMaster || {});
-    response.send(responseData);
-  }
+  getGeneralMaster
 );
 generalMasterRouter.use("/communitycategory", communityCategoryRouter);
 generalMasterRouter.use("/states", stateRouter);

@@ -7,9 +7,7 @@ async function deleteServiceTypeDB(id: string) {
       where: {
         id: id,
       },
-      include:{
-        service:true
-      }
+
     });
     return deletedService;
   } catch (err) {

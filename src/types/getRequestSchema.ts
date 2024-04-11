@@ -11,7 +11,7 @@ const getRequestSchema = z.object({
     .positive()
     .transform((val) => val - 1)
     .optional(),
-  orderByColumn: z.string().optional(),
+  orderBy: z.string().optional(),
   sortOrder: z.nativeEnum(sortOrderEnum).optional(),
   searchText: z.string().optional(),
 });
