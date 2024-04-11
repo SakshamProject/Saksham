@@ -39,20 +39,13 @@ const auditLogSchema = z.object({
   date: z.string().datetime(),
   description: inputFieldSchema,
 });
-
 export {
-  dateSchema,
-  auditLogSchema,
   dateSchema,
   auditLogSchema,
   queryParamsSchema,
   filter,
   filterOperationsEnum,
   inputFieldSchema,
-  phoneNumberSchema,
-  emailSchema,
-  landLineNumberSchema,
-  uuidSchema,
   phoneNumberSchema,
   emailSchema,
   landLineNumberSchema,
