@@ -35,7 +35,7 @@ const updateSevaKendraDB = async (
       data: sevaKendra,
       include: {
         contactPerson: true,
-        SevaKendraAuditLog: true,
+        auditLog: true,
         services: true,
       },
     });
