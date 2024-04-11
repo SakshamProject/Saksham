@@ -65,8 +65,8 @@ const getDistrictByIdDB = async (
           MLAConstituencies: true,
           MPConstituencies: true,
           Municipalities: true,
-          PanchayatUnion: true,
-          Taluk: true,
+          PanchayatUnions: true,
+          Taluks: true,
           TownPanchayats: true,
         },
       });
