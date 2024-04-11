@@ -82,6 +82,8 @@ model Service {
   createdAt DateTime @default(now())
   @@unique([serviceTypeId,name])
 
+  
+
   serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id],onDelete: Cascade)
   sevaKendras ServicesOnSevaKendras[]
   divyang     DivyangServiceMapping[]
@@ -99,9 +101,9 @@ model District {
   TownPanchayats    TownPanchayat[]
   Municipalities    Municipality[]
   Corporations      Corporation[]
-  PanchayatUnion    PanchayatUnion[]
+  PanchayatUnions    PanchayatUnion[]
   sevaKendraFollowUp SevaKendraFollowUp[]
-  Taluk Taluk[]
+  Taluks Taluk[]
 }
 
 model State {

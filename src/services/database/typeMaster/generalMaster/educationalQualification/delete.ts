@@ -1,9 +1,10 @@
+import { Prisma } from "@prisma/client";
 import prisma from "../../../database.js";
 import throwDatabaseError from "../../../utils/errorHandler.js";
 
-async function deleteEducationQualificationTypeDB(id:string){
+async function deleteEducationQualificationTypeDB(prismaTransaction: Prisma.TransactionClient, id:string){
     try
- {   const deletedEducationQualification = await prisma.educationQualificationType.delete(
+ {   const deletedEducationQualification = await prismaTransaction.educationQualificationType.delete(
         {
             where:{
                 id:id
@@ -20,7 +21,7 @@ async function deleteEducationQualificationTypeDB(id:string){
     }
 }
 
-async function deleteEducationQualificationDB(id: string) {
+async function deleteEducationQualificationDB(prismaTransaction: Prisma.TransactionClient, id: string) {
     try {
       const deletedEducationQualification = await prisma.educationQualification.delete({
         where: {
@@ -43,7 +44,10 @@ async function deleteEducationQualificationDB(id: string) {
     try {
       for (let existingId of existingEducationQualificationsId) {
         if (!updatedEducationQualificationsId.includes(existingId)) {
-          const deletedEducationQualification = await deleteEducationQualificationTypeDB(existingId);
+          console.log(existingId)
+          const deletedEducationQualification = await deleteEducationQualificationDB(
+            prismaTransaction,
+            existingId);
         }
       }
     } catch (err) {

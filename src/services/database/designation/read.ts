@@ -1,147 +1,66 @@
 import defaults from "../../../defaults.js";
-// import { DesignationResponse } from "../../../models/designation/designation.js";
 import { sortOrderEnum } from "../../../types/getRequestSchema.js";
-import { DesignationsearchCondition, designationColumnNameMapper } from "../utils/designation/designation.js";
+import { designationColumnNameMapper } from "../utils/designation/designation.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 async function getDesignationDB(
-  prismaTransaction:Prisma.TransactionClient,
-  skip: number = defaults.skip,
-  take: number = defaults.take,
-  orderByColumn: string = "",
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
-  searchText:string = ""
-){
- 
+  prismaTransaction: Prisma.TransactionClient,
+  searchCondition: Object,
+  OrderByObject: Object = { name: sortOrderEnum.ascending },
+  skip = defaults.skip,
+  take = defaults.take
+) {
   try {
-    const results = await prismaTransaction.designation.findMany({  
+    const results = await prismaTransaction.designation.findMany({
       skip: skip,
-     take: take,
-      select:{
-        id:true,
-        name:true,
-        sevaKendra:{
-          select:{
-            name:true,
-            district:{
-              select:{
-                name:true,
-                state:{
-                  select:{
-                    name:true
-                  }
-                }
-              }
-            }}
-          
-        }
-     },
-      where:{
-        OR:[{
-          name:{
-            contains:searchText,
-            mode:"insensitive"
-          }
-        },{
-          sevaKendra:{
-            name:{
-              contains:searchText,
-              mode:"insensitive"
-            }
-          }
+      take: take,
+      where: searchCondition,
+      select: {
+        id: true,
+        name: true,
+        sevaKendra: {
+          select: {
+            name: true,
+            district: {
+              select: {
+                name: true,
+                state: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
         },
-        {
-          sevaKendra:{
-            district:{
-              name:{
-                contains:searchText,
-                mode:"insensitive"
-              }
-            }
-          }        },
-        {
-          sevaKendra:{
-            district:{
-              state:{
-                name:{
-                  contains:searchText,
-                  mode:"insensitive"
-                }
-              }
-            }
-          }
-        }
-        ]
-    },
-  
-      orderBy: designationColumnNameMapper(orderByColumn, sortOrder),
+      },
+
+      orderBy: OrderByObject,
     });
     return results;
   } catch (err) {
-    if(err instanceof Error){
-      throwDatabaseError(err);    }
+    if (err instanceof Error) {
+      throwDatabaseError(err);
+    }
   }
 }
 
-async function getDesignationDBTotal( 
-  prismaTransaction:Prisma.TransactionClient,
-  skip: number = defaults.skip,
-  take: number = defaults.take,
-  orderByColumn: string = "",
-  sortOrder: sortOrderEnum = sortOrderEnum.ascending,
-  searchText:string = ""){
-    try {
-      const total:number = await prismaTransaction.designation.count({  
-      
-        where:{
-          OR:[{
-            name:{
-              contains:searchText,
-              mode:"insensitive"
-            }
-          },{
-            sevaKendra:{
-              name:{
-                contains:searchText,
-                mode:"insensitive"
-              }
-            }
-          },
-          {
-            sevaKendra:{
-              district:{
-                name:{
-                  contains:searchText,
-                  mode:"insensitive"
-                }
-              }
-            }
-          },
-          {
-            sevaKendra:{
-              district:{
-                state:{
-                  name:{
-                    contains:searchText,
-                    mode:"insensitive"
-                  }
-                }
-              }
-            }
-          }
-          ]
-      },
-    
-        orderBy: designationColumnNameMapper(orderByColumn, sortOrder),
-      });
-      return total;
-    } catch (err) {
-      if(err instanceof Error){
-        throwDatabaseError(err);    }
+async function getDesignationDBTotal(
+  prismaTransaction: Prisma.TransactionClient,
+  searchCondition: Object
+) {
+  try {
+    const total: number = await prismaTransaction.designation.count({
+      where: searchCondition,
+    });
+    return total;
+  } catch (err) {
+    if (err instanceof Error) {
+      throwDatabaseError(err);
     }
-
+  }
 }
 
 async function getDesignationByIDDB(id: string | undefined) {
@@ -151,8 +70,8 @@ async function getDesignationByIDDB(id: string | undefined) {
         id: id,
       },
       select: {
-        id:true,
-        name:true,
+        id: true,
+        name: true,
         sevaKendra: {
           select: {
             id: true,
@@ -162,12 +81,10 @@ async function getDesignationByIDDB(id: string | undefined) {
                 id: true,
                 name: true,
                 state: {
-                  select:{
-                    id:true,
-                    name:true
-                  }
-                 
-                
+                  select: {
+                    id: true,
+                    name: true,
+                  },
                 },
               },
             },
@@ -175,12 +92,35 @@ async function getDesignationByIDDB(id: string | undefined) {
         },
         features: {
           select: {
-            feature:{
-              select:{
-                id:true,
-                name:true
-              }
-            }
+            feature: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        createdAt: true,
+        createdBy: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        updatedAt: true,
+        updatedBy: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        designationAuditLog: {
+          select: {
+            status: true,
+            date: true,
+            description: true,
           },
         },
       },
@@ -192,21 +132,28 @@ async function getDesignationByIDDB(id: string | undefined) {
   }
 }
 
-async function getFeaturesIdByDesignationIdDB(prismaTransaction:Prisma.TransactionClient,id:string){
-  try{
-    const FeaturesOnDesignation = prismaTransaction.featuresOnDesignations.findMany({
-      where:{
-        designationId:id
-      },
-      
-    })
-    return FeaturesOnDesignation
-  }catch(err){
-    if(err instanceof Error){
+async function getFeaturesIdByDesignationIdDB(
+  prismaTransaction: Prisma.TransactionClient,
+  id: string
+) {
+  try {
+    const FeaturesOnDesignation =
+      prismaTransaction.featuresOnDesignations.findMany({
+        where: {
+          designationId: id,
+        },
+      });
+    return FeaturesOnDesignation;
+  } catch (err) {
+    if (err instanceof Error) {
       throwDatabaseError(err);
     }
   }
-
 }
 
-export { getDesignationDB, getDesignationByIDDB, getDesignationDBTotal ,getFeaturesIdByDesignationIdDB};
+export {
+  getDesignationDB,
+  getDesignationByIDDB,
+  getDesignationDBTotal,
+  getFeaturesIdByDesignationIdDB,
+};
