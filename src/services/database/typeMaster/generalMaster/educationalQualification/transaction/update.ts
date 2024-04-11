@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { retrieveEducationQualificationsId } from '../../../../../../controllers/typeMaster/generalMaster/educationalQualification/put.js'
+import { retrieveEducationQualificationsId } from '../../../../../utils/typemaster/educationQualification/educationQualificationType.js'
 import { createUpdateEducationQualificationTypeObject } from '../../../../../../dto/typeMaster/generalMaster/educationalQualification/put.js'
 import {
   getEducationQualificationTypeWithEducationQualificationSchema,
@@ -20,60 +20,61 @@ async function updateEducationQualificationTypeDBTransaction(
   id: string,
   body: updateEducationQualificationTypeRequestSchemaType,
 ) {
-  const transaction = await prisma.$transaction(async (prismaTransaction) => {
-    try {
-      const updateEducationQualificationTypeObject = createUpdateEducationQualificationTypeObject(
-        prismaTransaction,
-        body,
-      )
+  const transaction = await prisma.$transaction(
+    async (prismaTransaction) => {
+      try {
+        const updateEducationQualificationTypeObject = createUpdateEducationQualificationTypeObject(
+          prismaTransaction,
+          body,
+        )
 
-      const updatedEducationQualificationType:
-        | getEducationQualificationTypeWithEducationQualificationSchema
-        | undefined = await updateEducationQualificationTypeDB(
-        prismaTransaction,
-        updateEducationQualificationTypeObject,
-        id,
-      )
+        const updatedEducationQualificationType:
+          | getEducationQualificationTypeWithEducationQualificationSchema
+          | undefined = await updateEducationQualificationTypeDB(
+          prismaTransaction,
+          updateEducationQualificationTypeObject,
+          id,
+        )
 
-      const existingEducationQualifications = await getEducationQualificationByEducationQualificationTypeIdDB(
-        prismaTransaction,
-        id,
-      )
+        const existingEducationQualifications = await getEducationQualificationByEducationQualificationTypeIdDB(
+          prismaTransaction,
+          id,
+        )
 
-      const existingEducationQualificationsId:
-        | string[]
-        | undefined = retrieveEducationQualificationsId(
-        existingEducationQualifications,
-      )
+        const existingEducationQualificationsId:
+          | string[]
+          | undefined = retrieveEducationQualificationsId(
+          existingEducationQualifications,
+        )
 
-      const educationQualifications = body.educationQualification
+        const educationQualifications = body.educationQualification
 
-      const checkedEducationQualificationsId: string[] = await createCheckedEducationQualifications(
-        prismaTransaction,
-        educationQualifications,
-        updatedEducationQualificationType?.id,
-      )
+        const checkedEducationQualificationsId: string[] = await createCheckedEducationQualifications(
+          prismaTransaction,
+          educationQualifications,
+          updatedEducationQualificationType?.id,
+        )
 
-      await deleteUncheckedEducationQualifications(
-        prismaTransaction,
-        existingEducationQualificationsId,
-        checkedEducationQualificationsId,
-      );
+        await deleteUncheckedEducationQualifications(
+          prismaTransaction,
+          existingEducationQualificationsId,
+          checkedEducationQualificationsId,
+        )
 
-      const result = await getEducationQualificationTypeByIdDB(prismaTransaction, updatedEducationQualificationType?.id);
-
-      return result
-    } catch (error) {
-      if (error instanceof Error) {
-        throwDatabaseError(error)
+        return id
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error)
+          throwDatabaseError(error)
+        }
       }
-    }
-  },
-  {
-    isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
-    maxWait: 5000,
-    timeout: 10000,
-  })
+    },
+    {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+      maxWait: 5000,
+      timeout: 10000,
+    },
+  )
   return transaction
 }
 

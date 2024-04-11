@@ -2,8 +2,7 @@ import { updateEducationQualificationTypeRequestSchemaType, updateEducationQuali
 
 function createUpdateEducationQualificationTypeObject(prismaTransaction: any, body:updateEducationQualificationTypeRequestSchemaType){
     const UpdateEducationQualificationTypeObject:updateEducationQualificationTypeType = {
-        id:body.id,
-        name:body.name
+        name:body.name,
     }
     return UpdateEducationQualificationTypeObject;
 }
