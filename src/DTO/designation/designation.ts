@@ -6,11 +6,14 @@ import {
 } from "@prisma/client";
 import { randomUUID } from "crypto";
 import {
+  DesignationWhere,
+  designationFilterType,
   postDesignationRequestSchemaType,
   postFeaturesOnDesignationsType,
   updateDesignationRequestSchemaType,
 } from "../../types/designation/designationSchema.js";
 import { auditLogDefaults } from "../../defaults.js";
+import { designationFilterMapper } from "../../services/database/utils/designation/designation.js";
 
 const createPostDesignationDBObject = (
   request: postDesignationRequestSchemaType,
@@ -82,7 +85,7 @@ function createUpdateDesignationObject(
 
 function createDesignationAuditLog(
   designationId: string = "",
-  status:AuditLogStatusEnum= auditLogDefaults.status,
+  status: AuditLogStatusEnum = auditLogDefaults.status,
   date = auditLogDefaults.date,
   description: string = auditLogDefaults.description
 ) {
@@ -99,9 +102,49 @@ function createDesignationAuditLog(
   return designationAuditLog;
 }
 
+const generateDesignationFilter = (
+  filter: designationFilterType | undefined,
+  SearchConditions: DesignationWhere | null
+) => {
+  const designationWhereInput: any = {
+    AND: [],
+  };
+  if (filter) {
+    for (const { operation, value, field } of filter) {
+      designationWhereInput.AND.push(
+        designationFilterMapper(field, operation, value)
+      );
+    }
+  }
+  if (SearchConditions != null)
+    designationWhereInput.AND.push(SearchConditions);
+  return designationWhereInput;
+};
+
+function createDesignationFilterInputObject(
+  filter: designationFilterType | undefined,
+  searchCondition: DesignationWhere | null
+) {
+  const designationWhereInput: any = {
+    AND: [],
+  };
+  if (filter) {
+    for (const { operation, value, field } of filter) {
+      designationWhereInput.AND.push(
+        designationFilterMapper(field, operation, value)
+      );
+    }
+  }
+  if (searchCondition != null)
+    designationWhereInput.AND.push(searchCondition);
+  return designationWhereInput;
+}
+
 export {
   createPostDesignationDBObject,
   createPostFeaturesOnDesignationsDBObject,
   createUpdateDesignationObject,
   createDesignationAuditLog,
+  createDesignationFilterInputObject,
+  generateDesignationFilter,
 };

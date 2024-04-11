@@ -20,4 +20,11 @@ export const auditLogSchema = z
     description: inputFieldSchema,
   });
 
+  export enum filterOperationsEnum {
+    EQUALS = "equals",
+    NOTEQUALS = "notEquals",
+    STARTSWITH = "startsWith",
+    BEGINSWITH = "endsWith",
+  }
+
 export default inputFieldSchema;

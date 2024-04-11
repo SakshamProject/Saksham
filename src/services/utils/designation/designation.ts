@@ -19,7 +19,6 @@ async function createCheckedFeaturesOnDesignations(
           createPostFeaturesOnDesignationsDBObject(
             designationId,
             featureId,
-            assignedById
           );
         const FeaturesOnDesignations = await createFeaturesOnDesignationDB(
           prismaTransaction,
@@ -39,9 +38,7 @@ async function deleteUncheckedDesignations(
   checkedFeaturesId: string[] = [],
   designationId: string
 ) {
-  console.log(`[+]InsideDeeleteFunction`),
-    console.log(`[+]checkedFeaturesId`, checkedFeaturesId),
-    console.log(`[+]exisitingFeaturesId`, exisitingFeaturesId);
+
 
 
 
