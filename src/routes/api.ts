@@ -4,6 +4,7 @@ import typeMasterRouter from "./typeMaster/typeMaster.js";
 import serviceMasterRouter from "./serviceMaster/serviceMaster.js";
 import {StatusCodes} from "http-status-codes";
 import errorHandler from "../middlewares/errorHandler/errorHandler.js";
+import designationRouter from "./designation/designation.js";
 
 const apiRouter = Router();
 
