@@ -6,7 +6,7 @@ import { putDivyangDetails } from '../../controllers/divyangDetails/put.js'
 
 const divyangDetailsRouter = express.Router()
 
-divyangDetailsRouter.get("/", getDivyangDetails)
+divyangDetailsRouter.get("/post-list/", getDivyangDetails)
 divyangDetailsRouter.get("/:id", getDivyangDetailsbyId)
 divyangDetailsRouter.post("/", postDivyangDetails)
 divyangDetailsRouter.put("/:id", putDivyangDetails)
