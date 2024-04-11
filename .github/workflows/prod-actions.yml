@@ -7,6 +7,7 @@ on:
 
 env:
   NODE_ENV: production
+  DATABASE_URL: postgresql://48d8147f-7405-4b46-8f30-118298f2aa24-user:pw-6172e172-2faf-4b89-8ded-399f04881da3@postgres-free-tier-v2020.gigalixir.com:5432/48d8147f-7405-4b46-8f30-118298f2aa24?connection_limit=1
 
 jobs:
   deploy:
@@ -46,5 +47,4 @@ jobs:
         run: pnpm prisma generate
 
       - name: Build Backend
-        working-directory: ./backend
         run: pnpm tsc --build

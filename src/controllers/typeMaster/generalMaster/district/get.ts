@@ -18,7 +18,10 @@ const getDistrict = async (
 ) => {
   try {
     const query = getRequestSchema.parse(request.query);
-    const result = await getDistrictDBTransaction(query.sortOrder);
+    const result = await getDistrictDBTransaction(
+      query.sortOrder,
+      query.searchText
+    );
     const total = result?.total || 0;
     const count = result?.districts?.length || 0;
     console.log(result);

@@ -101,9 +101,9 @@ model District {
   TownPanchayats    TownPanchayat[]
   Municipalities    Municipality[]
   Corporations      Corporation[]
-  PanchayatUnion    PanchayatUnion[]
+  PanchayatUnions    PanchayatUnion[]
   sevaKendraFollowUp SevaKendraFollowUp[]
-  taluk Taluk[]
+  Taluks Taluk[]
 }
 
 model State {
@@ -208,6 +208,7 @@ model FeaturesOnDesignations {
   id            String   @id @default(uuid())
   featureId     String
   designationId String
+
 
   feature     Feature     @relation(fields: [featureId], references: [id])
   designation Designation @relation(fields: [designationId], references: [id])

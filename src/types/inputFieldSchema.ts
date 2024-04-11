@@ -1,7 +1,9 @@
 import { z } from "zod";
 import defaults from "../defaults.js";
-import { AuditLogStatusEnum } from "@prisma/client";
+import { phoneNumberRegex } from "./regex.js";
 import isISODate from "is-iso-date";
+import { AuditLogStatusEnum } from "@prisma/client";
+
 
 const inputFieldSchema = z
   .string()
@@ -11,20 +13,34 @@ const inputFieldSchema = z
     /^[\w\s.-]+$/gm,
     "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]"
   );
-export const queryParamsSchema = z.string().optional();
-export const auditLogSchema = z
-  .object({
-    id: z.string().optional(),
-    status: z.nativeEnum(AuditLogStatusEnum),
-    date: z.string().refine(isISODate, {"message": "Invalid ISO 8601 Date Time"}),
-    description: inputFieldSchema,
-  });
+const queryParamsSchema = z.string().optional();
 
-  export enum filterOperationsEnum {
-    EQUALS = "equals",
-    NOTEQUALS = "notEquals",
-    STARTSWITH = "startsWith",
-    BEGINSWITH = "endsWith",
-  }
+const filterOperations = z.enum([
+  "equals",
+  "notEquals",
+  "startsWith",
+  "endsWith",
+]);
+type filterOperationsEnum = z.infer<typeof filterOperations>;
+const filter = z.object({
+  operation: filterOperations,
+  value: z.string(),
+});
 
+const phoneNumberSchema = z.string().length(10).regex(phoneNumberRegex);
+const emailSchema = z.string().email();
+const landLineNumberSchema = z.string().min(6).regex(phoneNumberRegex);
+const uuidSchema = z.string().uuid();
+// const queryParamsSchema = z.string().optional();
+const dateSchema = z
+  .string()
+  .refine(isISODate, { message: "Not a valid ISO 8601 string date " });
+
+export {
+  queryParamsSchema,
+  filter,
+  filterOperations,
+  filterOperationsEnum,
+  inputFieldSchema,
+};
 export default inputFieldSchema;
