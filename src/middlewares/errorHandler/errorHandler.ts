@@ -13,14 +13,13 @@ function errorHandler(error: APIError, request: Request, response: Response, nex
         response
             .status(error.statusCode)
             .json({
-                "error": {
-                    "message": error.message,
-                    "severity": error.severity,
-                    "name": error.name
+                    "error": {
+                        "message": error.message,
+                        "severity": error.severity,
+                        "name": error.name
+                    }
                 }
-            }
-        );
+            );
     }
 }
-
 export default errorHandler;

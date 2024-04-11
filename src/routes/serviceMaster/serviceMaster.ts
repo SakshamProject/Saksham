@@ -6,7 +6,7 @@ import {
 import { deleteService } from "../../controllers/serviceMaster/delete.js";
 import {
   postService,
-  filterService,
+  filterService, listService,
 } from "../../controllers/serviceMaster/post.js";
 import { putService } from "../../controllers/serviceMaster/put.js";
 
@@ -18,5 +18,6 @@ serviceMasterRouter.put("/:serviceID", putService);
 serviceMasterRouter.get("/:serviceID", getServiceByID);
 serviceMasterRouter.delete("/:serviceID", deleteService);
 serviceMasterRouter.post("/filter", filterService);
+serviceMasterRouter.post("/list", listService);
 
 export default serviceMasterRouter;
