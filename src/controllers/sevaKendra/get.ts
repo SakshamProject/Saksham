@@ -25,8 +25,12 @@ const getSevaKendra = async (
       sevaKendraRequest.sorting?.orderByColumn,
       sevaKendraRequest.sorting?.sortOrder
     );
-    const globalSearchConditions: SevaKendraWhere =
-      SevaKendraGlobalSearchConditions(sevaKendraRequest.searchText);
+    console.log(sevaKendraRequest.searchText);
+    const globalSearchConditions: SevaKendraWhere | null =
+      sevaKendraRequest.searchText === undefined
+        ? null
+        : SevaKendraGlobalSearchConditions(sevaKendraRequest.searchText);
+    console.log(globalSearchConditions);
     const sevaKendraWhereInput = createSevaKendraFilterInputObject(
       sevaKendraRequest.filters,
       globalSearchConditions

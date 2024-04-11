@@ -70,7 +70,7 @@ const filterSevaKendraMapper = (
 
 const generateSevaKendraFilter = (
   sevaKendrafilter: SevaKendraFilterType | undefined,
-  globalSearchConditions: SevaKendraWhere
+  globalSearchConditions: SevaKendraWhere | null
 ) => {
   const SevaKendraWhereInput: any = {
     AND: [],
@@ -82,7 +82,8 @@ const generateSevaKendraFilter = (
       );
     }
   }
-  SevaKendraWhereInput.AND.push(globalSearchConditions);
+  if (globalSearchConditions != null)
+    SevaKendraWhereInput.AND.push(globalSearchConditions);
   return SevaKendraWhereInput;
 };
 

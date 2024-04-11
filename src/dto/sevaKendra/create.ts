@@ -45,7 +45,7 @@ const createSevaKendraDBObject = (
         status: AuditLogStatusEnum.ACTIVE,
       },
     },
-    currentStatus: AuditLogStatusEnum.ACTIVE,
+    // currentStatus: AuditLogStatusEnum.ACTIVE,
     createdBy: createdBy,
     createdAt: new Date().toISOString(),
     updatedBy: updatedBy,
@@ -56,7 +56,7 @@ const createSevaKendraDBObject = (
 
 const createSevaKendraFilterInputObject = (
   sevaKendraFilter: SevaKendraFilterType | undefined,
-  globalSearchConditions: SevaKendraWhere
+  globalSearchConditions: SevaKendraWhere | null
 ): SevaKendraWhere => {
   const sevaKendraWhereInput = generateSevaKendraFilter(
     sevaKendraFilter,
