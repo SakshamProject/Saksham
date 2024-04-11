@@ -10,13 +10,11 @@ async function createDesignationDB(
   prismaTransaction: Prisma.TransactionClient,
   dataObject: postDesignationType
 ) {
-  console.log(`[+]dataObject`,dataObject)
   try {
     const newDesignation: Designation =
       await prismaTransaction.designation.create({
         data: dataObject,
       });
-      console.log(`[+]newDesignation`,newDesignation)
 
     return newDesignation;
   } catch (err) {

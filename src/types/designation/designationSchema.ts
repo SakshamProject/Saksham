@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { AuditLogStatusEnum, Prisma } from "@prisma/client";
-import inputFieldSchema from "../inputFieldSchema.js";
+import inputFieldSchema, { auditLogSchema } from "../inputFieldSchema.js";
 
 const postDesignationRequestSchema = z.object({
   stateId: z.string(),
@@ -32,10 +32,7 @@ const updateDesignationRequestSchema = z.object({
   sevaKendraId: z.string(),
   designation: z.string().toUpperCase(),
   features: z.array(featuresSchema),
-  
-  status:z.nativeEnum(AuditLogStatusEnum),
-  date:z.string().datetime(),
-  description:inputFieldSchema.toUpperCase().optional()
+  auditLog:auditLogSchema
 })
 
 type updateDesignationRequestSchemaType =  z.infer<

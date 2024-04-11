@@ -13,7 +13,8 @@ async function putDesignation(
       const body: updateDesignationRequestSchemaType =
         updateDesignationRequestSchema.parse(request.body);
 
-        const updatedById :string|undefined = request.user?.id;
+
+      const updatedById :string|undefined = request.user?.id;
   
       const id :string = request.params.id;
   

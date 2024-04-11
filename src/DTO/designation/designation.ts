@@ -1,38 +1,43 @@
-import { AuditLogStatusEnum, Designation, FeaturesOnDesignations, StatusEnum } from "@prisma/client";
+import {
+  AuditLogStatusEnum,
+  Designation,
+  FeaturesOnDesignations,
+  StatusEnum,
+} from "@prisma/client";
 import { randomUUID } from "crypto";
 import {
   postDesignationRequestSchemaType,
   postFeaturesOnDesignationsType,
   updateDesignationRequestSchemaType,
 } from "../../types/designation/designationSchema.js";
+import { auditLogDefaults } from "../../defaults.js";
 
 const createPostDesignationDBObject = (
   request: postDesignationRequestSchemaType,
-  createdById:string=""
+  createdById: string = ""
 ) => {
   const createDesignationDBObject = {
     name: request.designation,
     sevaKendra: {
       connect: { id: request.sevaKendraId },
     },
-    createdBy:{
-      connect:{
-        id:createdById
-      }
+    createdBy: {
+      connect: {
+        id: createdById,
+      },
     },
-    updatedBy:{
-      connect:{
-        id:createdById
-      }
-    }
+    updatedBy: {
+      connect: {
+        id: createdById,
+      },
+    },
   };
   return createDesignationDBObject;
 };
 
 const createPostFeaturesOnDesignationsDBObject = (
   designationId: string | undefined,
-  featureId: string,
- 
+  featureId: string
 ) => {
   const featuresOnDesignationsDBObject: postFeaturesOnDesignationsType = {
     designation: {
@@ -45,52 +50,58 @@ const createPostFeaturesOnDesignationsDBObject = (
         id: featureId,
       },
     },
-  
-  
   };
 
   return featuresOnDesignationsDBObject;
 };
- function createUpdateDesignationObject(
+function createUpdateDesignationObject(
   body: updateDesignationRequestSchemaType,
-  id: string,
-  
+  updatedById: string = ""
 ) {
   const UpdateDesignationObject = {
-    name:body.designation,
-    sevaKendra:{
-      connect:{
-        id:body.sevaKendraId,
-        district:{
-          id:body.districtId,
-          state:{
-            id:body.stateId
-          }
-        }
-      }
+    name: body.designation,
+    sevaKendra: {
+      connect: {
+        id: body.sevaKendraId,
+        district: {
+          id: body.districtId,
+          state: {
+            id: body.stateId,
+          },
+        },
+      },
     },
- 
-  }
+    updatedBy: {
+      connect: {
+        id: updatedById,
+      },
+    },
+  };
   return UpdateDesignationObject;
 }
 
-function createDesignationAuditLog(designationId:string="",){
-const designationAuditLog ={
- designation:{
-  connect:{
-    id:designationId
-  }
- },
- status:AuditLogStatusEnum.ACTIVE,
- date:new Date().toISOString(),
- description:"NEW DESIGNATION CREATED"
-}
-return designationAuditLog;
+function createDesignationAuditLog(
+  designationId: string = "",
+  status:AuditLogStatusEnum= auditLogDefaults.status,
+  date = auditLogDefaults.date,
+  description: string = auditLogDefaults.description
+) {
+  const designationAuditLog = {
+    designation: {
+      connect: {
+        id: designationId,
+      },
+    },
+    status: status,
+    date: date,
+    description: description,
+  };
+  return designationAuditLog;
 }
 
 export {
   createPostDesignationDBObject,
   createPostFeaturesOnDesignationsDBObject,
   createUpdateDesignationObject,
-  createDesignationAuditLog
+  createDesignationAuditLog,
 };

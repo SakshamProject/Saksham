@@ -13,13 +13,11 @@ async function postDesignationDBTransaction(
     async (prismaTransaction) => {
       try {
         const postDesignationDBObject :postDesignationType = createPostDesignationDBObject(body,createdByID);
-        console.log(`[+]postDesignationDBObject`,postDesignationDBObject)
 
         const designation: Designation | undefined = await createDesignationDB(
           prismaTransaction,
           postDesignationDBObject
         );
-        console.log(`[+]designation`,designation)
 
 
         for (let featureId of body.featuresId) {
@@ -28,19 +26,16 @@ async function postDesignationDBTransaction(
               designation?.id,
               featureId
             );
-            console.log(`[+]PostFeaturesOnDesignationDBObject`,PostFeaturesOnDesignationDBObject)
 
 
           const featuresOnDesignations: FeaturesOnDesignations | undefined = await createFeaturesOnDesignationDB(
             prismaTransaction,
             PostFeaturesOnDesignationDBObject
           );
-          console.log(`[+]featuresOnDesignations`,featuresOnDesignations)
 
         }
         const designationAuditLogObject = createDesignationAuditLog(designation?.id);
           const designationAuditLog = await createDesignationAuditLogDB(prismaTransaction,designationAuditLogObject);
-          console.log(`[+]designationAuditLog`,designationAuditLog)
 
         return designation;
       } catch (error) {
