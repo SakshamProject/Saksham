@@ -1,6 +1,7 @@
-import { z } from "zod";
+import { date, z } from "zod";
 import inputFieldSchema, {
   auditLogSchema,
+  dateSchema,
   emailSchema,
   filter,
   filterOperationsEnum,
@@ -23,7 +24,7 @@ const SevaKendraRequestSchema = z.object({
   address: z.string(),
   landLineNumber: landLineNumberSchema,
   mobileNumber: phoneNumberSchema,
-  startDate: z.string().datetime().optional(),
+  startDate: dateSchema.optional(),
   contactPerson: z.object({
     id: uuidSchema.optional(),
     name: inputFieldSchema.toUpperCase(),
@@ -45,7 +46,7 @@ const SevaKendraUpdateRequestSchema = z.object({
   address: z.string(),
   landLineNumber: landLineNumberSchema,
   mobileNumber: phoneNumberSchema,
-  startDate: z.string().datetime().optional(),
+  startDate: dateSchema.optional(),
   contactPerson: z.object({
     id: uuidSchema,
     name: inputFieldSchema.toUpperCase(),

@@ -13,12 +13,6 @@ const inputFieldSchema = z
     "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]"
   );
 
-const phoneNumberSchema = z.string().length(15);
-const emailSchema = z.string().email();
-const landLineNumberSchema = z.string().min(6);
-const uuidSchema = z.string().uuid();
-const queryParamsSchema = z.string().optional();
-
 enum filterOperationsEnum {
   EQUALS = "equals",
   NOTEQUALS = "notEquals",
@@ -34,18 +28,11 @@ const phoneNumberSchema = z.string().length(10).regex(phoneNumberRegex);
 const emailSchema = z.string().email();
 const landLineNumberSchema = z.string().min(6).regex(phoneNumberRegex);
 const uuidSchema = z.string().uuid();
-// const queryParamsSchema = z.string().optional();
+const queryParamsSchema = z.string().optional();
 const dateSchema = z
   .string()
   .refine(isISODate, { message: "Not a valid ISO 8601 string date " });
 
-export {
-  queryParamsSchema,
-  filter,
-  filterOperations,
-  filterOperationsEnum,
-  inputFieldSchema,
-};
 const auditLogSchema = z.object({
   id: uuidSchema.optional(),
   status: z.nativeEnum(AuditLogStatusEnum),
@@ -53,6 +40,7 @@ const auditLogSchema = z.object({
   description: inputFieldSchema,
 });
 export {
+  dateSchema,
   auditLogSchema,
   queryParamsSchema,
   filter,

@@ -38,14 +38,14 @@ const createSevaKendraDBObject = (
         skipDuplicates: true,
       },
     },
-    SevaKendraAuditLog: {
+    auditLog: {
       create: {
         date: sevaKendraDefaults.date,
         description: sevaKendraDefaults.description,
         status: AuditLogStatusEnum.ACTIVE,
       },
     },
-    // currentStatus: AuditLogStatusEnum.ACTIVE,
+    currentStatus: AuditLogStatusEnum.ACTIVE,
     createdBy: createdBy,
     createdAt: new Date().toISOString(),
     updatedBy: updatedBy,

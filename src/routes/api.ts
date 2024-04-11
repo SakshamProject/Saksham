@@ -5,7 +5,7 @@ import serviceMasterRouter from "./serviceMaster/serviceMaster.js";
 import { StatusCodes } from "http-status-codes";
 
 import sevaKendraRouter from "./sevaKendra/sevaKendra.js";
-import errorHandler from "../middlewares/errorHandler.js";
+import errorHandler from "../middlewares/errorHandler/errorHandler.js";
 
 const apiRouter = Router();
 

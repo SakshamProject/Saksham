@@ -1,24 +1,33 @@
 -- CreateEnum
-CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE', 'TRANSGENDER', 'OTHERS');
+CREATE TYPE "GenderEnum" AS ENUM ('MALE', 'FEMALE', 'TRANSGENDER', 'OTHERS');
 
 -- CreateEnum
-CREATE TYPE "BloodGroup" AS ENUM ('O_POSITIVE', 'O_NEGATIVE', 'B_POSITIVE', 'B_NEGATIVE', 'A_POSITIVE', 'A_NEGATIVE', 'AB_POSITIVE', 'AB_NEGATIVE', 'HH', 'others');
+CREATE TYPE "BloodGroupEnum" AS ENUM ('O_POSITIVE', 'O_NEGATIVE', 'B_POSITIVE', 'B_NEGATIVE', 'A_POSITIVE', 'A_NEGATIVE', 'AB_POSITIVE', 'AB_NEGATIVE', 'HH', 'others');
 
 -- CreateEnum
-CREATE TYPE "Status" AS ENUM ('PENDING', 'COMPLETED');
+CREATE TYPE "StatusEnum" AS ENUM ('PENDING', 'COMPLETED');
 
 -- CreateEnum
-CREATE TYPE "CertificateIssueAuthority" AS ENUM ('MEDICAL_BOARD', 'GOVERNMENT_DOCTOR', 'PRIVATE_DOCTOR');
+CREATE TYPE "CertificateIssueAuthorityEnum" AS ENUM ('MEDICAL_BOARD', 'GOVERNMENT_DOCTOR', 'PRIVATE_DOCTOR');
+
+-- CreateEnum
+CREATE TYPE "AuditLogStatusEnum" AS ENUM ('ACTIVE', 'DEACTIVE');
 
 -- CreateTable
 CREATE TABLE "SevaKendra" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "districtId" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
     "mobileNumber" TEXT NOT NULL,
     "landLineNumber" TEXT NOT NULL,
     "startDate" TIMESTAMP(3),
     "contactPersonId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" TEXT NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "updatedBy" TEXT NOT NULL,
+    "currentStatus" "AuditLogStatusEnum",
 
     CONSTRAINT "SevaKendra_pkey" PRIMARY KEY ("id")
 );
@@ -27,9 +36,9 @@ CREATE TABLE "SevaKendra" (
 CREATE TABLE "SevaKendraAuditLog" (
     "id" TEXT NOT NULL,
     "sevaKendraId" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
-    "date" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
+    "status" "AuditLogStatusEnum" NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+    "description" TEXT,
 
     CONSTRAINT "SevaKendraAuditLog_pkey" PRIMARY KEY ("id")
 );
@@ -58,6 +67,8 @@ CREATE TABLE "ServicesOnSevaKendras" (
 CREATE TABLE "ServiceType" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "ServiceType_pkey" PRIMARY KEY ("id")
 );
@@ -96,7 +107,7 @@ CREATE TABLE "User" (
     "userId" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
-    "gender" "Gender",
+    "gender" "GenderEnum",
     "dateOfBirth" TIMESTAMP(3),
     "contactNumber" TEXT NOT NULL,
     "whatsappNumber" TEXT,
@@ -105,8 +116,24 @@ CREATE TABLE "User" (
     "mail" TEXT NOT NULL,
     "loginid" TEXT NOT NULL,
     "passwordId" TEXT NOT NULL,
+    "currentStatus" "AuditLogStatusEnum",
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3),
+    "createdById" TEXT,
+    "updatedById" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "UserAuditLog" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "status" "AuditLogStatusEnum" NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+    "description" TEXT,
+
+    CONSTRAINT "UserAuditLog_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -130,8 +157,24 @@ CREATE TABLE "Designation" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "sevaKendraId" TEXT NOT NULL,
+    "currentStatus" "AuditLogStatusEnum",
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "createdById" TEXT,
+    "updatedAt" TIMESTAMP(3),
+    "updatedById" TEXT,
 
     CONSTRAINT "Designation_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "DesignationAuditLog" (
+    "id" TEXT NOT NULL,
+    "designationId" TEXT NOT NULL,
+    "status" "AuditLogStatusEnum" NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+    "description" TEXT,
+
+    CONSTRAINT "DesignationAuditLog_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -139,8 +182,6 @@ CREATE TABLE "FeaturesOnDesignations" (
     "id" TEXT NOT NULL,
     "featureId" TEXT NOT NULL,
     "designationId" TEXT NOT NULL,
-    "assignedOn" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "assignedById" TEXT NOT NULL,
 
     CONSTRAINT "FeaturesOnDesignations_pkey" PRIMARY KEY ("id")
 );
@@ -152,8 +193,8 @@ CREATE TABLE "DivyangDetails" (
     "lastName" TEXT NOT NULL,
     "divyangId" TEXT NOT NULL,
     "picture" TEXT,
-    "gender" "Gender",
-    "bloodGroup" "BloodGroup" NOT NULL,
+    "gender" "GenderEnum",
+    "bloodGroup" "BloodGroupEnum" NOT NULL,
     "dateOfBirth" TIMESTAMP(3) NOT NULL,
     "age" INTEGER,
     "mailId" TEXT NOT NULL,
@@ -193,9 +234,9 @@ CREATE TABLE "DivyangDetails" (
     "isDisabilitySinceBirth" BOOLEAN,
     "disabilitySince" TIMESTAMP(3),
     "disabilityArea" TEXT,
-    "disabilityPercentage" TEXT,
+    "disabilityPercentage" INTEGER,
     "disabilityDueTo" TEXT,
-    "certificateIssueAuthority" "CertificateIssueAuthority",
+    "certificateIssueAuthority" "CertificateIssueAuthorityEnum",
     "disabilityCardUrl" TEXT,
     "disabilityDistrictId" TEXT,
     "identityCardNumber" TEXT,
@@ -225,11 +266,22 @@ CREATE TABLE "DivyangServiceMapping" (
     "dateOfService" TIMESTAMP(3) NOT NULL,
     "dueDate" TIMESTAMP(3) NOT NULL,
     "isFollowUpRequired" BOOLEAN,
-    "isCompleted" BOOLEAN NOT NULL,
+    "isCompleted" "StatusEnum" NOT NULL,
     "completedDate" TIMESTAMP(3),
     "donorId" TEXT,
 
     CONSTRAINT "DivyangServiceMapping_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "DivyangServiceMappingAuditLog" (
+    "id" TEXT NOT NULL,
+    "DivyangServiceMappingId" TEXT NOT NULL,
+    "status" "AuditLogStatusEnum" NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+    "description" TEXT NOT NULL,
+
+    CONSTRAINT "DivyangServiceMappingAuditLog_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -389,14 +441,25 @@ CREATE TABLE "EducationQualificationType" (
     CONSTRAINT "EducationQualificationType_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "generalMasters" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "generalMasters_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "SevaKendra_name_key" ON "SevaKendra"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ServicesOnSevaKendras_sevakendraId_serviceId_key" ON "ServicesOnSevaKendras"("sevakendraId", "serviceId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ServiceType_name_key" ON "ServiceType"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Service_name_key" ON "Service"("name");
+CREATE UNIQUE INDEX "Service_serviceTypeId_name_key" ON "Service"("serviceTypeId", "name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "District_name_key" ON "District"("name");
@@ -414,46 +477,49 @@ CREATE UNIQUE INDEX "User_loginid_key" ON "User"("loginid");
 CREATE UNIQUE INDEX "User_passwordId_key" ON "User"("passwordId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_updatedById_key" ON "User"("updatedById");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Feature_name_key" ON "Feature"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Designation_sevaKendraId_name_key" ON "Designation"("sevaKendraId", "name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "DivyangServiceMapping_donorId_key" ON "DivyangServiceMapping"("donorId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "DisabilityOfDivyang_disabilitySubTypeId_key" ON "DisabilityOfDivyang"("disabilitySubTypeId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "DisabilitySubType_name_key" ON "DisabilitySubType"("name");
+CREATE UNIQUE INDEX "DisabilitySubType_disabilityTypeId_name_key" ON "DisabilitySubType"("disabilityTypeId", "name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "DisabilityType_name_key" ON "DisabilityType"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "MPConstituency_name_key" ON "MPConstituency"("name");
+CREATE UNIQUE INDEX "MPConstituency_name_districtId_key" ON "MPConstituency"("name", "districtId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "MLAConstituency_name_key" ON "MLAConstituency"("name");
+CREATE UNIQUE INDEX "MLAConstituency_name_districtId_key" ON "MLAConstituency"("name", "districtId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "PanchayatUnion_name_key" ON "PanchayatUnion"("name");
+CREATE UNIQUE INDEX "PanchayatUnion_name_districtId_key" ON "PanchayatUnion"("name", "districtId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "TownPanchayat_name_key" ON "TownPanchayat"("name");
+CREATE UNIQUE INDEX "TownPanchayat_name_districtId_key" ON "TownPanchayat"("name", "districtId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Municipality_name_key" ON "Municipality"("name");
+CREATE UNIQUE INDEX "Municipality_name_districtId_key" ON "Municipality"("name", "districtId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Corporation_name_key" ON "Corporation"("name");
+CREATE UNIQUE INDEX "Corporation_name_districtId_key" ON "Corporation"("name", "districtId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Taluk_name_key" ON "Taluk"("name");
+CREATE UNIQUE INDEX "Taluk_name_districtId_key" ON "Taluk"("name", "districtId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "CommunityCategory_name_key" ON "CommunityCategory"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "EducationQualification_name_key" ON "EducationQualification"("name");
+CREATE UNIQUE INDEX "EducationQualification_educationQualificationTypeId_name_key" ON "EducationQualification"("educationQualificationTypeId", "name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "EducationQualificationType_name_key" ON "EducationQualificationType"("name");
@@ -474,10 +540,16 @@ ALTER TABLE "ServicesOnSevaKendras" ADD CONSTRAINT "ServicesOnSevaKendras_sevake
 ALTER TABLE "ServicesOnSevaKendras" ADD CONSTRAINT "ServicesOnSevaKendras_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "Service"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Service" ADD CONSTRAINT "Service_serviceTypeId_fkey" FOREIGN KEY ("serviceTypeId") REFERENCES "ServiceType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Service" ADD CONSTRAINT "Service_serviceTypeId_fkey" FOREIGN KEY ("serviceTypeId") REFERENCES "ServiceType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "District" ADD CONSTRAINT "District_stateId_fkey" FOREIGN KEY ("stateId") REFERENCES "State"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_updatedById_fkey" FOREIGN KEY ("updatedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_passwordId_fkey" FOREIGN KEY ("passwordId") REFERENCES "UserPassword"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -486,10 +558,19 @@ ALTER TABLE "User" ADD CONSTRAINT "User_passwordId_fkey" FOREIGN KEY ("passwordI
 ALTER TABLE "User" ADD CONSTRAINT "User_designationId_fkey" FOREIGN KEY ("designationId") REFERENCES "Designation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "UserAuditLog" ADD CONSTRAINT "UserAuditLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Designation" ADD CONSTRAINT "Designation_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Designation" ADD CONSTRAINT "Designation_updatedById_fkey" FOREIGN KEY ("updatedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Designation" ADD CONSTRAINT "Designation_sevaKendraId_fkey" FOREIGN KEY ("sevaKendraId") REFERENCES "SevaKendra"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "FeaturesOnDesignations" ADD CONSTRAINT "FeaturesOnDesignations_assignedById_fkey" FOREIGN KEY ("assignedById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "DesignationAuditLog" ADD CONSTRAINT "DesignationAuditLog_designationId_fkey" FOREIGN KEY ("designationId") REFERENCES "Designation"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "FeaturesOnDesignations" ADD CONSTRAINT "FeaturesOnDesignations_featureId_fkey" FOREIGN KEY ("featureId") REFERENCES "Feature"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -534,6 +615,9 @@ ALTER TABLE "DivyangServiceMapping" ADD CONSTRAINT "DivyangServiceMapping_servic
 ALTER TABLE "DivyangServiceMapping" ADD CONSTRAINT "DivyangServiceMapping_donorId_fkey" FOREIGN KEY ("donorId") REFERENCES "Donor"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "DivyangServiceMappingAuditLog" ADD CONSTRAINT "DivyangServiceMappingAuditLog_DivyangServiceMappingId_fkey" FOREIGN KEY ("DivyangServiceMappingId") REFERENCES "DivyangServiceMapping"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "SevaKendraFollowUp" ADD CONSTRAINT "SevaKendraFollowUp_divyangServiceMappingId_fkey" FOREIGN KEY ("divyangServiceMappingId") REFERENCES "DivyangServiceMapping"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -552,7 +636,7 @@ ALTER TABLE "DisabilityOfDivyang" ADD CONSTRAINT "DisabilityOfDivyang_divyangId_
 ALTER TABLE "DisabilityOfDivyang" ADD CONSTRAINT "DisabilityOfDivyang_disabilitySubTypeId_fkey" FOREIGN KEY ("disabilitySubTypeId") REFERENCES "DisabilitySubType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "DisabilitySubType" ADD CONSTRAINT "DisabilitySubType_disabilityTypeId_fkey" FOREIGN KEY ("disabilityTypeId") REFERENCES "DisabilityType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "DisabilitySubType" ADD CONSTRAINT "DisabilitySubType_disabilityTypeId_fkey" FOREIGN KEY ("disabilityTypeId") REFERENCES "DisabilityType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MPConstituency" ADD CONSTRAINT "MPConstituency_districtId_fkey" FOREIGN KEY ("districtId") REFERENCES "District"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -582,4 +666,4 @@ ALTER TABLE "DivyangEducationalQualification" ADD CONSTRAINT "DivyangEducational
 ALTER TABLE "DivyangEducationalQualification" ADD CONSTRAINT "DivyangEducationalQualification_DivyangDetailsId_fkey" FOREIGN KEY ("DivyangDetailsId") REFERENCES "DivyangDetails"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "EducationQualification" ADD CONSTRAINT "EducationQualification_educationQualificationTypeId_fkey" FOREIGN KEY ("educationQualificationTypeId") REFERENCES "EducationQualificationType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "EducationQualification" ADD CONSTRAINT "EducationQualification_educationQualificationTypeId_fkey" FOREIGN KEY ("educationQualificationTypeId") REFERENCES "EducationQualificationType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
