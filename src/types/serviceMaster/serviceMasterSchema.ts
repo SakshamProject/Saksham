@@ -1,5 +1,5 @@
 import { z } from "zod";
-import inputFieldSchema, { filter } from "../../inputFieldSchema.js";
+import inputFieldSchema, { filter } from "./../inputFieldSchema.js";
 
 const postServiceMasterSchema = z.object({
   serviceTypeId: z.string().uuid(),
@@ -9,8 +9,8 @@ const postServiceMasterSchema = z.object({
 type postServiceMasterType = z.infer<typeof postServiceMasterSchema>;
 
 const filterServiceMasterSchema = z.object({
-  service: filter.optional(),
   serviceName: filter.optional(),
+  serviceTypeName: filter.optional(),
 });
 
 type filterServiceMasterType = z.infer<typeof filterServiceMasterSchema>;

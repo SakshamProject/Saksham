@@ -3,7 +3,7 @@ import {
   filterServiceMasterSchema,
   postServiceMasterSchema,
   postServiceMasterType,
-} from "../../types/schemas/serviceMaster/serviceMasterSchema.js";
+} from "../../types/serviceMaster/serviceMasterSchema.js";
 import {
   createServiceDBInputObject,
   createServiceFilterInputObject,
@@ -19,9 +19,7 @@ async function postService(
   next: NextFunction
 ) {
   try {
-    const body: postServiceMasterType = postServiceMasterSchema.parse(
-      request.body
-    );
+    const body: postServiceMasterType = postServiceMasterSchema.parse(request.body);
     const serviceInput = createServiceDBInputObject(body);
     const service = await createServiceDB(serviceInput);
     const responseData = createResponseOnlyData(service);
@@ -37,6 +35,7 @@ async function filterService(
   next: NextFunction
 ) {
   try {
+    console.log(request);
     const body = filterServiceMasterSchema.parse(request.body);
     const query = filterRequestSchema.parse(request.query);
     const serviceWhereInput = createServiceFilterInputObject(body);

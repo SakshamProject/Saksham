@@ -12,16 +12,7 @@ const getDistrictDB = async (
 ): Promise<getDistrictsWithStateSchema[] | undefined> => {
   try {
     const districts = await prismaTransaction.district.findMany({
-      include: {
-        state: true,
-        Corporations: true,
-        MLAConstituencies: true,
-        MPConstituencies: true,
-        Municipalities: true,
-        PanchayatUnion: true,
-        Taluk: true,
-        TownPanchayats: true,
-      },
+      include: { state: true },
       where: {
         name: {
           contains: searchText,
@@ -70,6 +61,13 @@ const getDistrictByIdDB = async (
         },
         include: {
           state: true,
+          Corporations: true,
+          MLAConstituencies: true,
+          MPConstituencies: true,
+          Municipalities: true,
+          PanchayatUnions: true,
+          Taluks: true,
+          TownPanchayats: true,
         },
       });
     return district;

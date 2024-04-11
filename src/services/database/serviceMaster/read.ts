@@ -5,17 +5,18 @@ import {serviceMasterColumnNameMapper} from "../utils/serviceMaster/serviceMaste
 import searchTextMapper from "../utils/serviceMaster/searchTextMapper.js";
 import defaults from "../../../defaults.js";
 import serviceMasterDefaults from "./defaults/defaults.js";
+import {sortOrderEnum} from "../../../types/getRequestSchema.js";
 
 async function getServicesDB(
     prismaTransaction: Prisma.TransactionClient,
-    orderByColumn: string = "createdAt",
-    sortOrder: "asc" | "desc" = "asc",
+    orderByColumn: string = serviceMasterDefaults.orderBy,
+    sortOrder: sortOrderEnum = defaults.sortOrder,
     skip = defaults.skip,
     take = defaults.take,
     searchText = ""
 ) {
     try {
-        const query: Prisma.ServiceFindManyArgs = {
+        const query: Prisma.ServiceTypeFindManyArgs = {
             select: serviceMasterDefaults.select,
             take: take,
             skip: skip,
@@ -23,10 +24,10 @@ async function getServicesDB(
         };
 
         if (searchText !== "") {
-            query.where = searchTextMapper("Service", searchText);
+            query.where = searchTextMapper("ServiceType", searchText);
         }
 
-        const services = await prismaTransaction.service.findMany(query);
+        const services = await prismaTransaction.serviceType.findMany(query);
         return services;
     } catch (error) {
         if (error instanceof Error) {
@@ -38,8 +39,8 @@ async function getServicesDB(
 
 async function getServiceTotalDB(prismaTransaction: Prisma.TransactionClient, searchText = "") {
         try {
-            const total = prismaTransaction.service.count({
-                where: searchTextMapper("Service", searchText),
+            const total = prismaTransaction.serviceType.count({
+                where: searchTextMapper("ServiceType", searchText),
             });
             return total;
         }
@@ -57,11 +58,11 @@ async function getServiceByIdDB(id: string) {
                 id: id,
             },
             include: {
-                serviceType: true,
+                service: true,
             },
         };
 
-        const service = await prisma.service.findUniqueOrThrow(query);
+        const service = await prisma.serviceType.findUniqueOrThrow(query);
 
         return service;
     } catch (error) {
