@@ -10,7 +10,8 @@ import { generateSevaKendraFilter } from "../../services/database/utils/sevaKend
 
 const createSevaKendraDBObject = (
   sevaKendra: SevaKendraRequestSchemaType,
-  createdBy: string
+  createdBy: string,
+  updatedBy: string
 ) => {
   const sevaKendraDBObject: SevaKendra = {
     name: sevaKendra.name,
@@ -44,8 +45,11 @@ const createSevaKendraDBObject = (
         status: AuditLogStatusEnum.ACTIVE,
       },
     },
+    currentStatus: AuditLogStatusEnum.ACTIVE,
     createdBy: createdBy,
     createdAt: new Date().toISOString(),
+    updatedBy: updatedBy,
+    updatedAt: new Date().toISOString(),
   };
   return sevaKendraDBObject;
 };
