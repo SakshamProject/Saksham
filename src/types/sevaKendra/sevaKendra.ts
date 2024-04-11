@@ -78,7 +78,10 @@ const getSevaKendraSchema = z.object({
   pagination: z
     .object({
       rows: z.number().positive(),
-      start: z.number().positive(),
+      start: z
+        .number()
+        .positive()
+        .transform((number) => number - 1),
     })
     .optional(),
   searchText: z.string().optional(),

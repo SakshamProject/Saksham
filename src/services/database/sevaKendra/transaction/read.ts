@@ -24,6 +24,9 @@ const getSevaKendraDBTransaction = async (
           prismaTransaction,
           searchConditions
         );
+        console.log("sevakendra length", sevaKendra.length);
+        console.log("total", total);
+
         return { sevaKendra, total };
       },
       {
