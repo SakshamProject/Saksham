@@ -1,8 +1,10 @@
 import express, { Request, Response, Router } from "express";
 import { pingDB } from "../services/database/database.js";
 import typeMasterRouter from "./typeMaster/typeMaster.js";
-import errorHandler from "../middlewares/errorHandler.js";
 import { divyangDetailsRouter } from "./divyangDetails/divyangDetails.js";
+import { StatusCodes } from "http-status-codes/build/cjs/status-codes.js";
+import serviceMasterRouter from "./serviceMaster/serviceMaster.js";
+import errorHandler from "../middlewares/errorHandler/errorHandler.js";
 
 const apiRouter = Router();
 

@@ -9,7 +9,6 @@ const inputFieldSchema = z
     /^[\w\s.-]+$/gm,
     "No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, _]"
   );
-const queryParamsSchema = z.string().optional();
 
 const filterOperations = z.enum([
   "equals",
@@ -23,27 +22,18 @@ const filter = z.object({
   value: z.string(),
 });
 
-const phoneNumberSchema = z.string().length(10).regex(phoneNumberRegex);
+const phoneNumberSchema = z.string().length(10);
 const emailSchema = z.string().email();
-const landLineNumberSchema = z.string().min(6).regex(phoneNumberRegex);
+const landLineNumberSchema = z.string().min(6);
 const uuidSchema = z.string().uuid();
-// const queryParamsSchema = z.string().optional();
-const dateSchema = z.string().refine(isISODate, { message: "Not a valid ISO 8601 string date "});
+const queryParamsSchema = z.string().optional();
 
-export { queryParamsSchema, filter, filterOperations, filterOperationsEnum, inputFieldSchema };
-
-  const phoneNumberSchema = z.string().length(10);
-  const emailSchema = z.string().email();
-  const landLineNumberSchema = z.string().min(6);
-  const uuidSchema = z.string().uuid();
-  const queryParamsSchema = z.string().optional();
-  
-  export {
-    phoneNumberSchema,
-    emailSchema,
-    landLineNumberSchema,
-    uuidSchema,
-    queryParamsSchema,
-  };
+export {
+  phoneNumberSchema,
+  emailSchema,
+  landLineNumberSchema,
+  uuidSchema,
+  queryParamsSchema,
+};
 
 export default inputFieldSchema;
