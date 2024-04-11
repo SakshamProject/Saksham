@@ -1,6 +1,5 @@
 import { Prisma } from "@prisma/client";
 import defaults from "../../../../defaults.js";
-import { sortOrderEnum } from "../../../../types/getRequestSchema.js";
 import prisma from "../../database.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import { getDesignationDB, getDesignationDBTotal } from "../read.js";
