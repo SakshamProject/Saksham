@@ -1,5 +1,7 @@
 import { z } from "zod";
 import defaults from "../defaults.js";
+import { phoneNumberRegex } from "./regex.js";
+import isISODate from "is-iso-date";
 
 const inputFieldSchema = z
   .string()
@@ -28,7 +30,15 @@ const emailSchema = z.string().email();
 const landLineNumberSchema = z.string().min(6).regex(phoneNumberRegex);
 const uuidSchema = z.string().uuid();
 // const queryParamsSchema = z.string().optional();
-const dateSchema = z.string().refine(isISODate, { message: "Not a valid ISO 8601 string date "});
+const dateSchema = z
+  .string()
+  .refine(isISODate, { message: "Not a valid ISO 8601 string date " });
 
-export { queryParamsSchema, filter, filterOperations, filterOperationsEnum, inputFieldSchema };
+export {
+  queryParamsSchema,
+  filter,
+  filterOperations,
+  filterOperationsEnum,
+  inputFieldSchema,
+};
 export default inputFieldSchema;
