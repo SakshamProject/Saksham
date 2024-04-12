@@ -145,6 +145,7 @@ model User {
   designationsUpdated          Designation[] @relation("updatedBy")
   sevaKendraFollowUp SevaKendraFollowUp[]
   userAuditLog UserAuditLog[]
+  divyangServiceMapping DivyangServiceMapping[]
 }
 
 model UserAuditLog {
@@ -331,6 +332,8 @@ model DivyangServiceMapping {
   nonSevaKendraFollowUp NonSevaKendraFollowUp[]
   sevaKendraFollowUp SevaKendraFollowUp[]
   divyangServiceMappingAuditLog DivyangServiceMappingAuditLog[]
+  user  User @relation   (fields:[userId],references: [id])
+
 }
 
 model DivyangServiceMappingAuditLog {
