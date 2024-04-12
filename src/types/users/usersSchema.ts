@@ -28,8 +28,8 @@ const usersPutSchema = z.object({
     userId: z.string(),
     firstName: z.string(),
     lastName: z.string(),
-    gender: z.nativeEnum(GenderEnum),
-    dateOfBirth: dateSchema,
+    gender: z.nativeEnum(GenderEnum).optional(),
+    dateOfBirth: dateSchema.optional(),
     designationId: z.string().uuid(),
     mail: emailSchema,
     contactNumber: phoneNumberSchema,
@@ -39,7 +39,7 @@ const usersPutSchema = z.object({
     // audit log
     status: z.nativeEnum(AuditLogStatusEnum),
     effectiveDate: dateSchema,
-    description: inputFieldSchema
+    description: inputFieldSchema.optional()
 });
 type userPutRequestType = z.infer<typeof usersPutSchema>;
 
