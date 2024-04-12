@@ -6,6 +6,7 @@ import {
 } from "../../types/createResponseSchema.js"
 import { getUserByIdDB } from "../../services/database/users/read.js";
 import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
+
 const getUser = async (
     request: Request,
     response: Response,
@@ -21,7 +22,6 @@ const getUser = async (
         query.orderBy||"",
         query.searchText || ""
       );
-      console.log(`recived responce initial 1${result}`)
       const count: number =  0;
       const total: number = result?.total || 0;
       if (result && result.users) {
@@ -40,18 +40,17 @@ const getUser = async (
       next(error);
     }
 };
-const getUserById = async (
-  request: Request,
-  response: Response,
-  next: NextFunction
-) => {
+
+
+async function getUserById (request: Request, response: Response, next: NextFunction) {
   try {
-    const id: string = request.params.id;
-    const result = await getUserByIdDB(id);
-      const responseData = createResponseOnlyData(result||{})
+    const userId: string = request.params.userId;
+    const result = await getUserByIdDB(userId);
+      const responseData = createResponseOnlyData(result)
     response.send(responseData);
   } catch (error) {
     next(error);
   }
-};
+}
+
 export { getUser ,getUserById}
