@@ -2,20 +2,22 @@ import { z } from 'zod'
 import inputFieldSchema from '../inputFieldSchema.js'
 
 const IdProofUploadsRequestSchema = z.object({
-  voterId: inputFieldSchema,
+  voterId: inputFieldSchema.optional(),
   panCardNumber: z
     .string()
-    .regex(/^[A-Z]{5}[0-9]{4}[A-Z]$/, 'Invalid PAN card number format'),
-  drivingLicense: z.string().length(64),
-  rationCardNumber: z.string().length(64),
+    .regex(/^[A-Z]{5}[0-9]{4}[A-Z]$/, 'Invalid PAN card number format')
+    .optional(),
+  drivingLicense: z.string().length(64).optional(),
+  rationCardNumber: z.string().length(64).optional(),
   aadharCardNumber: z
     .string()
     .length(12)
-    .regex(/^\d{12}$/, 'Invalid Aadhaar number format'),
-  pensionCardNumber: z.string().length(64),
-  medicalInsuranceNumber: z.string().length(64),
-  disabilitySchemeNumber: z.string().length(64),
-  BPL_OR_APL_Number: z.string().length(64),
+    .regex(/^\d{12}$/, 'Invalid Aadhaar number format')
+    .optional(),
+  pensionCardNumber: z.string().length(64).optional(),
+  medicalInsuranceNumber: z.string().length(64).optional(),
+  disabilitySchemeNumber: z.string().length(64).optional(),
+  BPL_OR_APL_Number: z.string().length(64).optional(),
 })
 
-export {IdProofUploadsRequestSchema}
+export { IdProofUploadsRequestSchema }
