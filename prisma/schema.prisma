@@ -146,7 +146,9 @@ model User {
   designationsUpdated   Designation[]           @relation("updatedBy")
   sevaKendraFollowUp    SevaKendraFollowUp[]
   userAuditLog          UserAuditLog[]
-  divyangServiceMapping DivyangServiceMapping[]
+  divyangServiceMapping DivyangServiceMapping[]  @relation("inchargeUser")
+  createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
+  updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
 }
 
 model UserAuditLog {
@@ -338,19 +340,17 @@ model DivyangServiceMapping {
   donor                           Donor?                          @relation(fields: [donorId], references: [id])
   nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
   sevaKendraFollowUp              SevaKendraFollowUp[]
-  divyangServiceMappingAuditLog   DivyangServiceMappingAuditLog[]
-  user                            User                            @relation(fields: [userId], references: [id])
+  user                            User                            @relation("inchargeUser",fields: [userId], references: [id])
+  createdAt                       DateTime                        @default(now())
+  updatedAt                       DateTime                        @updatedAt
+  createdById                     String
+  updatedById                     String
+  createdBy                       User                             @relation("serviceMappingCreatedBy",fields: [createdById],references: [id])
+  updatedBy                       User                             @relation("serviceMappingUpdatedBy",fields: [updatedById],references: [id])
+
 }
 
-model DivyangServiceMappingAuditLog {
-  id                      String             @id @default(uuid())
-  DivyangServiceMappingId String
-  status                  AuditLogStatusEnum
-  date                    DateTime
-  description             String
 
-  divyangServiceMapping DivyangServiceMapping @relation(fields: [DivyangServiceMappingId], references: [id])
-}
 
 model Donor {
   id                    String                 @id @default(uuid())
