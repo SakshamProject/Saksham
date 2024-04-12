@@ -10,8 +10,8 @@ function createUserDBObject(body: userPostRequestType): Prisma.UserCreateInput {
         dateOfBirth: body.dateOfBirth,
         contactNumber: body.contactNumber,
         whatsappNumber: body.whatsappNumber,
-        mail: body.email,
-        loginid: body.loginId,
+        email: body.email,
+        loginId: body.loginId,
         designation: {
             connect: {
                 id: body.designationId
