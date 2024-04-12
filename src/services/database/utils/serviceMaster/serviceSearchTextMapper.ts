@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-function searchTextMapper(tableName: Prisma.ModelName, searchText: string) {
+function serviceSearchTextMapper(tableName: Prisma.ModelName, searchText: string) {
     const searchTextMap: Map<string, Prisma.ServiceTypeWhereInput> = new Map();
 
     searchTextMap.set("ServiceType", {
@@ -27,4 +27,4 @@ function searchTextMapper(tableName: Prisma.ModelName, searchText: string) {
     return searchTextMap.get(tableName);
 }
 
-export default searchTextMapper;
+export default serviceSearchTextMapper;

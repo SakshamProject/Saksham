@@ -4,13 +4,15 @@ import prisma from "../../database.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import { Prisma } from "@prisma/client";
 import { getUserDB, getUserTotal } from "../read.js";
+import usersDefaults from "../defaults/usersDefaults.js";
+import {userOrderByEnum} from "../../../../types/users/usersSchema.js";
 
 const getUsersDBTransaction = async (
     start: number = defaults.skip,
     rows: number = defaults.take,
     sortOrder: sortOrderEnum = defaults.sortOrder,
-    orderBy: string,
-    searchText: string | undefined
+    orderBy: userOrderByEnum = usersDefaults.orderBy,
+    userWhereInput: Prisma.UserWhereInput
 ) => {
     const transaction = await prisma.$transaction(
       async (prismaTransaction) => {
@@ -19,11 +21,11 @@ const getUsersDBTransaction = async (
                 prismaTransaction,
                 sortOrder,
                 orderBy,
-                searchText
+                  userWhereInput
               );
               const total =await getUserTotal(
                  prismaTransaction,
-                 searchText
+                  userWhereInput
                 );
                   return { users, total };
         } catch (error) {

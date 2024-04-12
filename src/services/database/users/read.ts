@@ -8,7 +8,7 @@ async function getUserDB(
     prismaTransaction:Prisma.TransactionClient,
     sortOrder: sortOrderEnum = defaults.sortOrder,
     orderBy:string,
-    searchText: string = ""
+    userWhereInput: Prisma.UserWhereInput
     ) {
     try {
           const results = await prismaTransaction.user.findMany({
@@ -30,55 +30,7 @@ async function getUserDB(
             orderBy: {
               firstName: sortOrder,
             },
-            where: {
-              OR: [
-                {
-                    firstName: {
-                        contains: searchText,
-                        mode: "insensitive",
-                    },
-                },
-                {
-                  designation: {
-                    name: {
-                      contains: searchText,
-                      mode: "insensitive",
-                    },
-                    sevaKendra: {
-                      OR: [
-                        {
-                          name: {
-                            contains: searchText,
-                            mode: "insensitive",
-                          },
-                          district: {
-                            OR: [
-                              {
-                                name: {
-                                  contains: searchText,
-                                  mode: "insensitive",
-                                },
-                                state: {
-                                  OR: [
-                                    {
-                                      name: {
-                                        contains: searchText,
-                                        mode: "insensitive",
-                                      }
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              ]
-            },
-          });
+            where: userWhereInput});
           return results;
         } catch (err) {
       if (err instanceof Error) {
@@ -88,58 +40,16 @@ async function getUserDB(
       }
 async function getUserTotal(
     prismaTransaction: Prisma.TransactionClient,
-    searchText: string = ""
+    userWhereInput: Prisma.UserWhereInput
 ) {
     try {
       const userTotal: number =
         await prismaTransaction.user.count({
-          where: {
-            OR: [
-              {
-                firstName: {
-                  contains: searchText,
-                  mode: "insensitive",
-                },
-                OR: [
-                  {
-                    designation: {
-                      name: {
-                        contains: searchText,
-                        mode: "insensitive",
-                      },
-                      OR: [{
-                        sevaKendra: {
-                          name: {
-                            contains: searchText,
-                            mode: "insensitive",
-                          },
-                          OR: [{
-                            district: {
-                              name: {
-                                contains: searchText,
-                                mode: "insensitive",
-                              },
-                              OR: [{
-                                state: {
-                                  name: {
-                                    contains: searchText,
-                                    mode: "insensitive",
-                                  }
-                                }
-                              }]
-                            }
-                          }]
-                        }
-                      }]
-                    }
-                  }]
-              }]
-          },
-        });
+          where: userWhereInput});
         return userTotal;
-      } catch (err) {
-        if (err instanceof Error) {
-          throwDatabaseError(err);
+      } catch (error) {
+        if (error instanceof Error) {
+          throwDatabaseError(error);
         }
       }
 }

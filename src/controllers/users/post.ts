@@ -1,5 +1,5 @@
 import {NextFunction, Response, Request} from "express";
-import {usersPostSchema} from "../../types/users/usersSchema.js";
+import {userListSchema, usersPostSchema} from "../../types/users/usersSchema.js";
 import log from "../../services/logger/logger.js";
 import { createUserDBObject } from "../../dto/users/post.js";
 import {createUserDB} from "../../services/database/users/create.js";
@@ -26,4 +26,30 @@ async function postUser(request: Request, response: Response, next: NextFunction
     }
 }
 
-export { postUser };
+import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
+import {listUserWhereInput} from "../../dto/users/post.js";
+
+const listUser = async (
+    request: Request,
+    response: Response,
+    next: NextFunction
+) => {
+    try {
+        console.log("sending get req");
+        const body = userListSchema.parse(request.body);
+        const userWhereInput = listUserWhereInput(body);
+        const result = await getUsersDBTransaction(
+            body.pagination?.start,
+            body.pagination?.rows,
+            body.sorting?.sortOrder,
+            body.sorting?.orderByColumn,
+            userWhereInput
+        );
+        response.json(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export { postUser, listUser };
