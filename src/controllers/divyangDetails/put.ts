@@ -7,6 +7,7 @@ import {
 import { createResponseOnlyData } from '../../types/createResponseSchema.js'
 import { createUpdateDTOObject } from '../../dto/divyangDetails/put.js'
 import { updateDivyangDetailsDB } from '../../services/database/divyangDetails/update.js'
+import APIError from '../../services/errors/APIError.js'
 
 const putDivyangDetails = async (
   request: Request,
@@ -29,6 +30,8 @@ const putDivyangDetails = async (
         | updateDivyangDetails
         | undefined = await updateDivyangDetailsDB(updateDTOObject, id)
       responseData = createResponseOnlyData(result || {})
+    } else {
+      console.log('object not created')
     }
     response.send(responseData)
   } catch (error) {

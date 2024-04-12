@@ -1,168 +1,180 @@
 import { Prisma } from '@prisma/client'
-import { DivyangDetailsRequest } from '../../types/divyangDetails/divyangDetailsSchema.js'
+import { updateDivyangDetailsRequest } from '../../types/divyangDetails/divyangDetailsSchema.js'
+import { PersonalDetails } from '../../types/divyangDetails/personalDetailsSchema.js'
+import { Address } from '../../types/divyangDetails/addressSchema.js'
+import { EmploymentDetails } from '../../types/divyangDetails/employmentDetailsSchema.js'
+import { IdProofUploads } from '../../types/divyangDetails/IdProofUploadsSchema.js'
+import { DisabilityDetails } from '../../types/divyangDetails/disabilityDetailsSchema.js'
 
 const updatePersonalDetailsDBObject = (
-  divyangDetails: DivyangDetailsRequest,
+  personalDetails: PersonalDetails,
 ): Prisma.DivyangDetailsUpdateInput => {
   const updatePersonalDetails: Prisma.DivyangDetailsUpdateInput = {
-    divyangId: divyangDetails.personalDetails.divyangId,
-    firstName: divyangDetails.personalDetails.firstName,
-    lastName: divyangDetails.personalDetails.lastName,
-    picture: divyangDetails.personalDetails.picture,
-    bloodGroup: divyangDetails.personalDetails.bloodGroup,
-    gender: divyangDetails.personalDetails.gender,
-    dateOfBirth: divyangDetails.personalDetails.dateOfBirth,
-    age: divyangDetails.personalDetails.age,
-    mailId: divyangDetails.personalDetails.mailId,
-    mobileNumber: divyangDetails.personalDetails.mobileNumber,
-    fatherName: divyangDetails.personalDetails.fatherName,
-    motherName: divyangDetails.personalDetails.motherName,
-    isMarried: divyangDetails.personalDetails.isMarried,
-    spouseName: divyangDetails.personalDetails.spouseName,
-    spouseNumber: divyangDetails.personalDetails.spouseNumber,
-    religion: divyangDetails.personalDetails.religion,
+    divyangId: personalDetails.divyangId,
+    firstName: personalDetails.firstName,
+    lastName: personalDetails.lastName,
+    picture: personalDetails.picture,
+    bloodGroup: personalDetails.bloodGroup,
+    gender: personalDetails.gender,
+    dateOfBirth: personalDetails.dateOfBirth,
+    age: personalDetails.age,
+    mailId: personalDetails.mailId,
+    mobileNumber: personalDetails.mobileNumber,
+    fatherName: personalDetails.fatherName,
+    motherName: personalDetails.motherName,
+    isMarried: personalDetails.isMarried,
+    spouseName: personalDetails.spouseName,
+    spouseNumber: personalDetails.spouseNumber,
+    religion: personalDetails.religion,
     communityCategory: {
       connect: {
-        id: divyangDetails.personalDetails.communityCategoryId
-      }
+        id: personalDetails.communityCategoryId,
+      },
     },
-    community: divyangDetails.personalDetails.community,
-    extraCurricularActivity:
-      divyangDetails.personalDetails.extraCurricularActivity,
+    community: personalDetails.community,
+    extraCurricularActivity: personalDetails.extraCurricularActivity,
   }
   return updatePersonalDetails
 }
 
 const updateAddressDBObject = (
-  divyangDetails: DivyangDetailsRequest,
+  addressRequest: Address,
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateAddress: Prisma.DivyangDetailsUpdateInput = {
-    doorNumber: divyangDetails.addressRequest.doorNumber,
-    flatNumber: divyangDetails.addressRequest.flatNumber,
-    streetName: divyangDetails.addressRequest.streetName,
-    nagarName: divyangDetails.addressRequest.nagarName,
+    doorNumber: addressRequest.doorNumber,
+    flatNumber: addressRequest.flatNumber,
+    streetName: addressRequest.streetName,
+    nagarName: addressRequest.nagarName,
     district: {
       connect: {
-        id: divyangDetails.addressRequest.districtId,
+        id: addressRequest.districtId,
       },
     },
-    isRural: divyangDetails.addressRequest.isRural,
-    villageName: divyangDetails.addressRequest.villageName,
+    isRural: addressRequest.isRural,
+    villageName: addressRequest.villageName,
     panchayatUnion: {
       connect: {
-        id: divyangDetails.addressRequest.panchayatUnionId,
+        id: addressRequest.panchayatUnionId,
       },
     },
     taluk: {
       connect: {
-        id: divyangDetails.addressRequest.talukId,
+        id: addressRequest.talukId,
       },
     },
     townPanchayat: {
       connect: {
-        id: divyangDetails.addressRequest.townPanchayatId,
+        id: addressRequest.townPanchayatId,
       },
     },
     municipality: {
       connect: {
-        id: divyangDetails.addressRequest.municipalityId,
+        id: addressRequest.municipalityId,
       },
     },
     corporation: {
       connect: {
-        id: divyangDetails.addressRequest.corporationId,
+        id: addressRequest.corporationId,
       },
     },
     mlaconstituency: {
       connect: {
-        id: divyangDetails.addressRequest.MLAConstituencyId,
+        id: addressRequest.MLAConstituencyId,
       },
     },
     mpconstituency: {
       connect: {
-        id: divyangDetails.addressRequest.MPConstituancyId,
+        id: addressRequest.MPConstituencyId,
       },
     },
-    pincode: divyangDetails.addressRequest.pincode,
+    pincode: addressRequest.pincode,
   }
   return updateAddress
 }
 
 const updateEmploymentDetailsDBObject = (
-  divyangDetails: DivyangDetailsRequest,
+  employmentDetails: EmploymentDetails,
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
-    isEmployed: divyangDetails.employmentDetails.isEmployed,
-    unemployedSince: divyangDetails.employmentDetails.unemployedSince,
-    occupation: divyangDetails.employmentDetails.occupation,
-    income: divyangDetails.employmentDetails.income,
-    fatherOccupation: divyangDetails.employmentDetails.fatherOccupation,
-    fatherIncome: divyangDetails.employmentDetails.fatherIncome,
-    motherOccupation: divyangDetails.employmentDetails.motherOccupation,
-    motherIncome: divyangDetails.employmentDetails.motherIncome,
-    spouseOccupation: divyangDetails.employmentDetails.spouseOccupation,
-    spouseIncome: divyangDetails.employmentDetails.spouseIncome,
+    isEmployed: employmentDetails.isEmployed,
+    unemployedSince: employmentDetails.unemployedSince,
+    occupation: employmentDetails.occupation,
+    income: employmentDetails.income,
+    fatherOccupation: employmentDetails.fatherOccupation,
+    fatherIncome: employmentDetails.fatherIncome,
+    motherOccupation: employmentDetails.motherOccupation,
+    motherIncome: employmentDetails.motherIncome,
+    spouseOccupation: employmentDetails.spouseOccupation,
+    spouseIncome: employmentDetails.spouseIncome,
   }
   return updateEmploymentDetails
 }
 
 const updateIdProofUploadsDBObject = (
-  divyangDetails: DivyangDetailsRequest,
+  IdProofUploads: IdProofUploads,
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
-    voterId: divyangDetails.IdProofUploads.voterId,
-    panCardNumber: divyangDetails.IdProofUploads.panCardNumber,
-    drivingLicense: divyangDetails.IdProofUploads.drivingLicense,
-    rationCardNumber: divyangDetails.IdProofUploads.rationCardNumber,
-    aadharCardNumber: divyangDetails.IdProofUploads.aadharCardNumber,
-    pensionCardNumber: divyangDetails.IdProofUploads.pensionCardNumber,
-    medicalInsuranceNumber:
-      divyangDetails.IdProofUploads.medicalInsuranceNumber,
-    disabilitySchemeNumber:
-      divyangDetails.IdProofUploads.disabilitySchemeNumber,
-    BPL_OR_APL_Number: divyangDetails.IdProofUploads.BPL_OR_APL_Number,
+    voterId: IdProofUploads.voterId,
+    panCardNumber: IdProofUploads.panCardNumber,
+    drivingLicense: IdProofUploads.drivingLicense,
+    rationCardNumber: IdProofUploads.rationCardNumber,
+    aadharCardNumber: IdProofUploads.aadharCardNumber,
+    pensionCardNumber: IdProofUploads.pensionCardNumber,
+    medicalInsuranceNumber: IdProofUploads.medicalInsuranceNumber,
+    disabilitySchemeNumber: IdProofUploads.disabilitySchemeNumber,
+    BPL_OR_APL_Number: IdProofUploads.BPL_OR_APL_Number,
   }
   return updateEmploymentDetails
 }
 
 const updateDisabilityDetailsDBObject = (
-  divyangDetails: DivyangDetailsRequest,
+  disabilityDetails: DisabilityDetails,
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
-    isDisabilitySinceBirth:
-      divyangDetails.disabiltyDetails.isDisabilitySinceBirth,
-    disabilitySince: divyangDetails.disabiltyDetails.disabilitySince,
-    disabilityArea: divyangDetails.disabiltyDetails.disabilityArea,
-    disabilityPercentage: divyangDetails.disabiltyDetails.disabilityPercentage,
-    disabilityDueTo: divyangDetails.disabiltyDetails.disabilityDueTo,
-    certificateIssueAuthority:
-      divyangDetails.disabiltyDetails.certificateIssueAuthority,
-    disabilityCardUrl: divyangDetails.disabiltyDetails.disabilityCardUrl,
-    disabilityDistrictId: divyangDetails.disabiltyDetails.disabilityDistrictId,
-    identityCardNumber: divyangDetails.disabiltyDetails.identityCardNumber,
-    udidCardNumber: divyangDetails.disabiltyDetails.udidCardNumber,
-    udidEnrollmentNumber: divyangDetails.disabiltyDetails.udidEnrollmentNumber,
-    udidCardUrl: divyangDetails.disabiltyDetails.udidCardUrl,
+    isDisabilitySinceBirth: disabilityDetails.isDisabilitySinceBirth,
+    disabilitySince: disabilityDetails.disabilitySince,
+    disabilityArea: disabilityDetails.disabilityArea,
+    disabilityPercentage: disabilityDetails.disabilityPercentage,
+    disabilityDueTo: disabilityDetails.disabilityDueTo,
+    certificateIssueAuthority: disabilityDetails.certificateIssueAuthority,
+    disabilityCardUrl: disabilityDetails.disabilityCardUrl,
+    districtCode: disabilityDetails.districtCode,
+    stateCode: disabilityDetails.stateCode,
+    identityCardNumber: disabilityDetails.identityCardNumber,
+    UDIDCardNumber: disabilityDetails.UDIDCardNumber,
+    UDIDEnrollmentNumber: disabilityDetails.UDIDEnrollmentNumber,
+    UDIDCardUrl: disabilityDetails.UDIDCardUrl,
   }
   return updateEmploymentDetails
 }
 
 function createUpdateDTOObject(
   pageNumber: number,
-  DivyangDetailsRequest: DivyangDetailsRequest,
+  updateDivyangDetailsRequest: updateDivyangDetailsRequest,
 ) {
-  if (pageNumber === 1) {
-    return updatePersonalDetailsDBObject(DivyangDetailsRequest)
-  } else if (pageNumber === 2) {
-    return updateAddressDBObject(DivyangDetailsRequest)
-  } else if (pageNumber === 3) {
-    return updateEmploymentDetailsDBObject(DivyangDetailsRequest)
-  } else if (pageNumber === 4) {
-    return updateDisabilityDetailsDBObject(DivyangDetailsRequest)
-  } else if (pageNumber === 5) {
-    return updateIdProofUploadsDBObject(DivyangDetailsRequest)
+  if (pageNumber === 1 && updateDivyangDetailsRequest.personalDetails) {
+    return updatePersonalDetailsDBObject(
+      updateDivyangDetailsRequest.personalDetails,
+    )
+  } else if (pageNumber === 2 && updateDivyangDetailsRequest.addressRequest) {
+    return updateAddressDBObject(updateDivyangDetailsRequest.addressRequest)
+  } else if (
+    pageNumber === 3 &&
+    updateDivyangDetailsRequest.employmentDetails
+  ) {
+    return updateEmploymentDetailsDBObject(
+      updateDivyangDetailsRequest.employmentDetails,
+    )
+  } else if (pageNumber === 4 && updateDivyangDetailsRequest.disabiltyDetails) {
+    return updateDisabilityDetailsDBObject(
+      updateDivyangDetailsRequest.disabiltyDetails,
+    )
+  } else if (pageNumber === 5 && updateDivyangDetailsRequest.IdProofUploads) {
+    return updateIdProofUploadsDBObject(
+      updateDivyangDetailsRequest.IdProofUploads,
+    )
   } else {
-    console.log('Error - Enter a valid page number')
+    console.log('Error - Enter a valid page number or object not present')
   }
 }
 

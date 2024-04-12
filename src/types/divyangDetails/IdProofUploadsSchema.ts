@@ -19,5 +19,6 @@ const IdProofUploadsRequestSchema = z.object({
   disabilitySchemeNumber: z.string().length(64).optional(),
   BPL_OR_APL_Number: z.string().length(64).optional(),
 })
+type IdProofUploads = z.infer<typeof IdProofUploadsRequestSchema>
 
-export { IdProofUploadsRequestSchema }
+export { IdProofUploadsRequestSchema, IdProofUploads }

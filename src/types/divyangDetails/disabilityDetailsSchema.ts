@@ -26,5 +26,6 @@ const disabiltyDetailsRequestSchema = z
       data.UDIDEnrollmentNumber !== undefined
     )
   })
+  type DisabilityDetails = z.infer<typeof disabiltyDetailsRequestSchema>
 
-export { disabiltyDetailsRequestSchema }
+export { disabiltyDetailsRequestSchema, DisabilityDetails }

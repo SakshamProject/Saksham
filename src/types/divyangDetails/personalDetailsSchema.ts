@@ -27,5 +27,5 @@ const personalDetailsRequestSchema = z.object({
   community: inputFieldSchema,
   extraCurricularActivity: inputFieldSchema.optional(),
 })
-
-export { personalDetailsRequestSchema }
+type PersonalDetails = z.infer<typeof personalDetailsRequestSchema>
+export { personalDetailsRequestSchema, PersonalDetails }

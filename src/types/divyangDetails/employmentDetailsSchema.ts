@@ -13,5 +13,6 @@ const employmentDetailsRequestSchema = z.object({
   spouseOccupation: inputFieldSchema.optional(),
   spouseIncome: z.number().optional(),
 })
+type EmploymentDetails = z.infer<typeof employmentDetailsRequestSchema>
 
-export { employmentDetailsRequestSchema }
+export { employmentDetailsRequestSchema, EmploymentDetails }

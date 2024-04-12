@@ -41,5 +41,5 @@ const addressRequestSchema = z
         'Validation failed: If rural, villageName and panchayatUnionId are mandatory; if urban, MLAConstituencyId and MPConstituencyId are mandatory',
     },
   )
-
-export { addressRequestSchema }
+type Address = z.infer<typeof addressRequestSchema>
+export { addressRequestSchema, Address }
