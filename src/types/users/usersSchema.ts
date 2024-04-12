@@ -22,8 +22,7 @@ const usersPostSchema = z.object({
     // description: inputFieldSchema
     description: z.string().optional()
 });
-
-// const userPostRequestType = z.infer<typeof usersPostSchema>;
+const userPostRequestType = z.infer<typeof usersPostSchema>;
 
 const usersPutSchema = z.object({
     sevaKendraId: uuidSchema,
@@ -44,8 +43,7 @@ const usersPutSchema = z.object({
     description: z.string()
     // description: inputFieldSchema
 });
-
-// const userPutRequestType = z.infer<typeof usersPutSchema>;
+const userPutRequestType = z.infer<typeof usersPutSchema>;
 
 export { usersPostSchema, usersPutSchema};
-// export { userPostRequestType, userPutRequestType };
+export { userPostRequestType, userPutRequestType };

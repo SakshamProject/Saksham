@@ -7,6 +7,9 @@ async function postUser(request: Request, response: Response, next: NextFunction
         const body = usersPostSchema.parse(request.body);
         log( "info", `[controller/post]:\n body: %o`, body);
         log("info", `[controller/post]:\n file: %o`, request.file || {});
+
+        const userInputObject = createUserDBObject(body);
+        log("info", `[controller/post]:\n userInputObject: %o`, userInputObject);
         response.json({message: "Under Construction!"});
     }
     catch(error) {
