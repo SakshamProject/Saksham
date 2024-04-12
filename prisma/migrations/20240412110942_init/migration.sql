@@ -113,8 +113,8 @@ CREATE TABLE "User" (
     "whatsappNumber" TEXT,
     "designationId" TEXT NOT NULL,
     "picture" TEXT,
-    "mail" TEXT NOT NULL,
-    "loginid" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "loginId" TEXT NOT NULL,
     "passwordId" TEXT NOT NULL,
     "currentStatus" "AuditLogStatusEnum",
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -206,6 +206,7 @@ CREATE TABLE "DivyangDetails" (
     "spouseNumber" TEXT,
     "religion" TEXT NOT NULL,
     "communityCategoryId" TEXT NOT NULL,
+    "community" TEXT NOT NULL,
     "extraCurricularActivity" TEXT,
     "voterId" TEXT,
     "panCardNumber" TEXT,
@@ -221,6 +222,10 @@ CREATE TABLE "DivyangDetails" (
     "streetName" TEXT,
     "nagarName" TEXT,
     "districtId" TEXT,
+    "doorNumberCommunication" TEXT,
+    "flatNumberCommunication" TEXT,
+    "nagarNameCommunication" TEXT,
+    "districtIdCommunication" TEXT,
     "isRural" BOOLEAN,
     "villageName" TEXT,
     "panchayatUnionId" TEXT,
@@ -238,7 +243,8 @@ CREATE TABLE "DivyangDetails" (
     "disabilityDueTo" TEXT,
     "certificateIssueAuthority" "CertificateIssueAuthorityEnum",
     "disabilityCardUrl" TEXT,
-    "disabilityDistrictId" TEXT,
+    "districtCode" TEXT,
+    "stateCode" TEXT,
     "identityCardNumber" TEXT,
     "udidCardNumber" TEXT,
     "udidEnrollmentNumber" TEXT,
@@ -266,6 +272,7 @@ CREATE TABLE "DivyangServiceMapping" (
     "dateOfService" TIMESTAMP(3) NOT NULL,
     "dueDate" TIMESTAMP(3) NOT NULL,
     "isFollowUpRequired" BOOLEAN,
+    "isNonSevaKendraFollowUpRequired" BOOLEAN NOT NULL,
     "isCompleted" "StatusEnum" NOT NULL,
     "completedDate" TIMESTAMP(3),
     "donorId" TEXT,
@@ -321,7 +328,8 @@ CREATE TABLE "NonSevaKendraFollowUp" (
 CREATE TABLE "DisabilityOfDivyang" (
     "id" TEXT NOT NULL,
     "divyangId" TEXT NOT NULL,
-    "disabilitySubTypeId" TEXT NOT NULL,
+    "disabilityTypeId" TEXT NOT NULL,
+    "disabilitySubTypeId" TEXT,
     "divyangDisabilityDetailsId" TEXT NOT NULL,
 
     CONSTRAINT "DisabilityOfDivyang_pkey" PRIMARY KEY ("id")
@@ -471,7 +479,7 @@ CREATE UNIQUE INDEX "State_name_key" ON "State"("name");
 CREATE UNIQUE INDEX "User_userId_key" ON "User"("userId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_loginid_key" ON "User"("loginid");
+CREATE UNIQUE INDEX "User_loginId_key" ON "User"("loginId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_passwordId_key" ON "User"("passwordId");
@@ -606,6 +614,9 @@ ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_panchayatUnionId_fke
 ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_districtId_fkey" FOREIGN KEY ("districtId") REFERENCES "District"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "DivyangDetails" ADD CONSTRAINT "DivyangDetails_districtIdCommunication_fkey" FOREIGN KEY ("districtIdCommunication") REFERENCES "District"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "DivyangServiceMapping" ADD CONSTRAINT "DivyangServiceMapping_divyangId_fkey" FOREIGN KEY ("divyangId") REFERENCES "DivyangDetails"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -613,6 +624,9 @@ ALTER TABLE "DivyangServiceMapping" ADD CONSTRAINT "DivyangServiceMapping_servic
 
 -- AddForeignKey
 ALTER TABLE "DivyangServiceMapping" ADD CONSTRAINT "DivyangServiceMapping_donorId_fkey" FOREIGN KEY ("donorId") REFERENCES "Donor"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DivyangServiceMapping" ADD CONSTRAINT "DivyangServiceMapping_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "DivyangServiceMappingAuditLog" ADD CONSTRAINT "DivyangServiceMappingAuditLog_DivyangServiceMappingId_fkey" FOREIGN KEY ("DivyangServiceMappingId") REFERENCES "DivyangServiceMapping"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -633,7 +647,10 @@ ALTER TABLE "NonSevaKendraFollowUp" ADD CONSTRAINT "NonSevaKendraFollowUp_divyan
 ALTER TABLE "DisabilityOfDivyang" ADD CONSTRAINT "DisabilityOfDivyang_divyangId_fkey" FOREIGN KEY ("divyangId") REFERENCES "DivyangDetails"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "DisabilityOfDivyang" ADD CONSTRAINT "DisabilityOfDivyang_disabilitySubTypeId_fkey" FOREIGN KEY ("disabilitySubTypeId") REFERENCES "DisabilitySubType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "DisabilityOfDivyang" ADD CONSTRAINT "DisabilityOfDivyang_disabilitySubTypeId_fkey" FOREIGN KEY ("disabilitySubTypeId") REFERENCES "DisabilitySubType"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DisabilityOfDivyang" ADD CONSTRAINT "DisabilityOfDivyang_disabilityTypeId_fkey" FOREIGN KEY ("disabilityTypeId") REFERENCES "DisabilityType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "DisabilitySubType" ADD CONSTRAINT "DisabilitySubType_disabilityTypeId_fkey" FOREIGN KEY ("disabilityTypeId") REFERENCES "DisabilityType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
