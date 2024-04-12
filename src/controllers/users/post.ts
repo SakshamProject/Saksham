@@ -4,6 +4,9 @@ import log from "../../services/logger/logger.js";
 import { createUserDBObject } from "../../dto/users/post.js";
 import {createUserDB} from "../../services/database/users/create.js";
 import {createResponseOnlyData} from "../../types/createResponseSchema.js";
+import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
+import {listUserWhereInput} from "../../dto/users/post.js";
+
 
 async function postUser(request: Request, response: Response, next: NextFunction) {
     try {
@@ -26,18 +29,12 @@ async function postUser(request: Request, response: Response, next: NextFunction
     }
 }
 
-import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
-import {listUserWhereInput} from "../../dto/users/post.js";
-
-const listUser = async (
-    request: Request,
-    response: Response,
-    next: NextFunction
-) => {
+async function listUser (request: Request, response: Response, next: NextFunction) {
     try {
-        console.log("sending get req");
         const body = userListSchema.parse(request.body);
+        log("info", "[controller/listUser]: body: %o", body);
         const userWhereInput = listUserWhereInput(body);
+        log("info", "[controller/listUser]: userWhereInput: %o", userWhereInput);
         const result = await getUsersDBTransaction(
             body.pagination?.start,
             body.pagination?.rows,
@@ -45,6 +42,7 @@ const listUser = async (
             body.sorting?.orderByColumn,
             userWhereInput
         );
+        log("info", "[controller/listUser]: result: %o", result || {});
         response.json(result);
     } catch (error) {
         next(error);
