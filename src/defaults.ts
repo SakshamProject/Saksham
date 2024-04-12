@@ -15,7 +15,7 @@ type Defaults = {
 }
 const defaults: Defaults = {
     skip : 0,
-    take : 10,
+    take : 0,
     minFieldLength: 3,
     sortOrder: sortOrderEnum.ascending,
     transactionOptions: {
