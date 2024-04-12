@@ -4,8 +4,8 @@ import {
     createResponseOnlyData,
     createResponseWithQuery,
 } from "../../types/createResponseSchema.js"
-import { getUserByIdDB } from "../../services/database/user/read.js";
-import { getUsersDBTransaction } from "../../services/database/user/transaction/read.js";
+import { getUserByIdDB } from "../../services/database/users/read.js";
+import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
 const getUser = async (
     request: Request,
     response: Response,

@@ -23,14 +23,16 @@ function getEnvOrDefault(env_variable: string, default_value: string): string {
 }
 
 type Config = {
-    PORT: number,
+    PORT: 3000,
     ENV : string,
-    __dirname: string
+    __dirname: string,
     base_url: string
+    debug_mode: boolean
 }
 
 const config: Config = {
     PORT: 3000,
+    debug_mode: getEnvOrDefault("DEBUG_MODE", "false").toLowerCase() === "true",
     ENV: getEnvOrDefault("NODE_ENV", "development"),
     __dirname: path.dirname(fileURLToPath(import.meta.url)),
     base_url: "http://localhost:3000/api"

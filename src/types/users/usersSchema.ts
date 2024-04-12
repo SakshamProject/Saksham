@@ -4,23 +4,23 @@ import inputFieldSchema, {dateSchema, emailSchema, phoneNumberSchema, uuidSchema
 import {specialCharsRegex} from "../regex.js";
 
 const usersPostSchema = z.object({
-    sevaKendraId: uuidSchema,
-    userId: z.string(),
-    firstName: z.string(),
-    lastName: z.string(),
-    gender: z.nativeEnum(GenderEnum),
-    dateOfBirth: dateSchema,
-    designationId: z.string().uuid(),
-    mail: emailSchema,
-    contactNumber: phoneNumberSchema,
-    whatsappNumber: phoneNumberSchema,
-    loginId: phoneNumberSchema,
-    password: z.string().regex(specialCharsRegex),
+    sevaKendraId: uuidSchema.optional(),
+    userId: z.string().optional(),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    gender: z.nativeEnum(GenderEnum).optional(),
+    dateOfBirth: dateSchema.optional(),
+    designationId: z.string().uuid().optional(),
+    mail: emailSchema.optional(),
+    contactNumber: phoneNumberSchema.optional(),
+    whatsappNumber: phoneNumberSchema.optional(),
+    loginId: phoneNumberSchema.optional(),
+    password: z.string().regex(specialCharsRegex).optional(),
     // audit log
-    status: z.nativeEnum(AuditLogStatusEnum),
-    effectiveDate: dateSchema, // effective date
+    status: z.nativeEnum(AuditLogStatusEnum).optional(),
+    effectiveDate: dateSchema.optional(), // effective date
     // description: inputFieldSchema
-    description: z.string()
+    description: z.string().optional()
 });
 
 // const userPostRequestType = z.infer<typeof usersPostSchema>;
