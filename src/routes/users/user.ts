@@ -6,7 +6,7 @@ import {authenticate} from "../../middlewares/auth/auth.js";
 
 const userRouter = Router();
 userRouter.get("/", getUser);
-userRouter.get("/:id", getUserById);
+userRouter.get("/:userId", getUserById);
 userRouter.post("/", authenticate, fileHandler.single("profile-photo"), postUser);
 // userRouter.post("/", authenticate, postUser);
 export default userRouter;
