@@ -1,5 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { userPostRequestType } from "../../types/users/usersSchema.js";
+import {createHmac} from "node:crypto";
+import config from "../../../config.js";
 
 function createUserDBObject(body: userPostRequestType): Prisma.UserCreateInput {
     const userInputObject: Prisma.UserCreateInput = {
@@ -19,7 +21,7 @@ function createUserDBObject(body: userPostRequestType): Prisma.UserCreateInput {
         },
         password: {
             create: {
-                hashedPassword: "abcd@123"
+                hashedPassword: createHmac('sha256', config.secret).update('I love cupcakes').digest('hex')
             }
         },
         userAuditLog: {
@@ -32,3 +34,5 @@ function createUserDBObject(body: userPostRequestType): Prisma.UserCreateInput {
     }
     return userInputObject;
 }
+
+export { createUserDBObject };

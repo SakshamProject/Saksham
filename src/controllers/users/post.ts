@@ -1,6 +1,7 @@
 import {NextFunction, Response, Request} from "express";
 import {usersPostSchema} from "../../types/users/usersSchema.js";
 import log from "../../services/logger/logger.js";
+import { createUserDBObject } from "../../dto/users/post.js";
 
 async function postUser(request: Request, response: Response, next: NextFunction) {
     try {

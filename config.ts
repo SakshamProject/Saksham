@@ -28,6 +28,7 @@ type Config = {
     __dirname: string,
     base_url: string
     debug_mode: boolean
+    secret: string
 }
 
 const config: Config = {
@@ -35,7 +36,8 @@ const config: Config = {
     debug_mode: getEnvOrDefault("DEBUG_MODE", "false").toLowerCase() === "true",
     ENV: getEnvOrDefault("NODE_ENV", "development"),
     __dirname: path.dirname(fileURLToPath(import.meta.url)),
-    base_url: "http://localhost:3000/api"
+    base_url: "http://localhost:3000/api",
+    secret: getEnvOrThrow("SECRET")
 }
 
 export default config;
