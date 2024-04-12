@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { userPostRequestType } from "../../types/users/usersSchema.js";
 import {createHmac} from "node:crypto";
 import config from "../../../config.js";
+import usersDefaults from "../../services/database/users/defaults/usersDefaults.js";
 
 function createUserDBObject(body: userPostRequestType): Prisma.UserCreateInput {
     const userInputObject: Prisma.UserCreateInput = {
@@ -10,6 +11,7 @@ function createUserDBObject(body: userPostRequestType): Prisma.UserCreateInput {
         lastName: body.lastName,
         gender: body.gender,
         dateOfBirth: body.dateOfBirth,
+        currentStatus: usersDefaults.currentStatus,
         contactNumber: body.contactNumber,
         whatsappNumber: body.whatsappNumber,
         email: body.email,
