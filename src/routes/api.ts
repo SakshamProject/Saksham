@@ -2,7 +2,6 @@ import express, { Request, Response, Router } from "express";
 import { pingDB } from "../services/database/database.js";
 import typeMasterRouter from "./typeMaster/typeMaster.js";
 import { divyangDetailsRouter } from "./divyangDetails/divyangDetails.js";
-import { StatusCodes } from "http-status-codes/build/cjs/status-codes.js";
 import serviceMasterRouter from "./serviceMaster/serviceMaster.js";
 import { StatusCodes } from "http-status-codes";
 
@@ -27,7 +26,7 @@ apiRouter.get(
     }
   }
 );
-apiRouter.use("/divyangdetails",divyangDetailsRouter)
+apiRouter.use("/divyangdetails", divyangDetailsRouter);
 apiRouter.use("/services", serviceMasterRouter);
 apiRouter.use("/sevakendras", sevaKendraRouter);
 apiRouter.use("/typemaster", typeMasterRouter);
