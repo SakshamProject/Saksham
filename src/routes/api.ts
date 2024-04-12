@@ -27,7 +27,7 @@ apiRouter.get(
     }
   }
 );
-
+apiRouter.use("/divyangdetails",divyangDetailsRouter)
 apiRouter.use("/services", serviceMasterRouter);
 apiRouter.use("/sevakendras", sevaKendraRouter);
 apiRouter.use("/typemaster", typeMasterRouter);
