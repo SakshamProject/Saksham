@@ -4,6 +4,7 @@ import prisma from "../../database.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import { Prisma } from "@prisma/client";
 import { getUserDB, getUserTotal } from "../read.js";
+
 const getUsersDBTransaction = async (
     start: number = defaults.skip,
     rows: number = defaults.take,
@@ -14,18 +15,17 @@ const getUsersDBTransaction = async (
     const transaction = await prisma.$transaction(
       async (prismaTransaction) => {
             try {
-            console.log("reached transaction")
-          const users = await getUserDB(
-            prismaTransaction,
-            sortOrder,
-            orderBy,
-            searchText
-          );
-          const total =await getUserTotal(
-             prismaTransaction,
-             searchText
-            );
-              return { users, total };
+              const users = await getUserDB(
+                prismaTransaction,
+                sortOrder,
+                orderBy,
+                searchText
+              );
+              const total =await getUserTotal(
+                 prismaTransaction,
+                 searchText
+                );
+                  return { users, total };
         } catch (error) {
           if (error instanceof Error) throwDatabaseError(error);
         }
