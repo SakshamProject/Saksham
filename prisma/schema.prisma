@@ -95,7 +95,7 @@ model District {
   stateId            String
   sevakendra         SevaKendra[]
   state              State                @relation(fields: [stateId], references: [id])
-  disability         DivyangDetails[]
+  disability         DivyangDetails[]     @relation("disability")
   MPConstituencies   MPConstituency[]
   MLAConstituencies  MLAConstituency[]
   TownPanchayats     TownPanchayat[]
@@ -104,6 +104,7 @@ model District {
   PanchayatUnions    PanchayatUnion[]
   sevaKendraFollowUp SevaKendraFollowUp[]
   Taluks             Taluk[]
+  divyangDetails     DivyangDetails[]     @relation("divyangDetails")
 }
 
 model State {
@@ -246,21 +247,25 @@ model DivyangDetails {
   disabilitySchemeNumber  String?
   BPL_OR_APL_Number       String?
 
-  doorNumber        String?
-  flatNumber        String?
-  streetName        String?
-  nagarName         String?
-  districtId        String?
-  isRural           Boolean?
-  villageName       String?
-  panchayatUnionId  String?
-  talukId           String?
-  townPanchayatId   String?
-  municipalityId    String?
-  corporationId     String?
-  MLAConstituencyId String?
-  MPConstituancyId  String?
-  pincode           Int?
+  doorNumber              String?
+  flatNumber              String?
+  streetName              String?
+  nagarName               String?
+  districtId              String?
+  doorNumberCommunication String?
+  flatNumberCommunication String?
+  nagarNameCommunication  String?
+  districtIdCommunication String?
+  isRural                 Boolean?
+  villageName             String?
+  panchayatUnionId        String?
+  talukId                 String?
+  townPanchayatId         String?
+  municipalityId          String?
+  corporationId           String?
+  MLAConstituencyId       String?
+  MPConstituancyId        String?
+  pincode                 Int?
 
   isDisabilitySinceBirth    Boolean?
   disabilitySince           DateTime?
@@ -269,11 +274,14 @@ model DivyangDetails {
   disabilityDueTo           String?
   certificateIssueAuthority CertificateIssueAuthorityEnum?
   disabilityCardUrl         String? // url
-  disabilityDistrictId      String?
-  identityCardNumber        String?
-  udidCardNumber            String?
-  udidEnrollmentNumber      String?
-  udidCardUrl               String? // url
+
+  districtCode String?
+  stateCode    String?
+
+  identityCardNumber   String?
+  udidCardNumber       String?
+  udidEnrollmentNumber String?
+  udidCardUrl          String? // url
 
   isEmployed       Boolean?
   unemployedSince  DateTime?
@@ -294,10 +302,12 @@ model DivyangDetails {
   townPanchayat         TownPanchayat?                    @relation(fields: [townPanchayatId], references: [id])
   taluk                 Taluk?                            @relation(fields: [talukId], references: [id])
   panchayatUnion        PanchayatUnion?                   @relation(fields: [panchayatUnionId], references: [id])
-  district              District?                         @relation(fields: [districtId], references: [id])
+  district              District?                         @relation("disability", fields: [districtId], references: [id])
   disabilities          DisabilityOfDivyang[]
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
+  districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
+
   // divyangDetailsAuditLog DivyangDetailsAuditLog[]
 }
 
@@ -312,23 +322,24 @@ model DivyangDetails {
 // }
 
 model DivyangServiceMapping {
-  id                            String                          @id @default(uuid())
-  divyangId                     String
-  divyang                       DivyangDetails                  @relation(fields: [divyangId], references: [id])
-  userId                        String
-  serviceId                     String
-  service                       Service                         @relation(fields: [serviceId], references: [id])
-  dateOfService                 DateTime
-  dueDate                       DateTime
-  isFollowUpRequired            Boolean?
-  isCompleted                   StatusEnum
-  completedDate                 DateTime?
-  donorId                       String?                         @unique
-  donor                         Donor?                          @relation(fields: [donorId], references: [id])
-  nonSevaKendraFollowUp         NonSevaKendraFollowUp[]
-  sevaKendraFollowUp            SevaKendraFollowUp[]
-  divyangServiceMappingAuditLog DivyangServiceMappingAuditLog[]
-  user                          User                            @relation(fields: [userId], references: [id])
+  id                              String                          @id @default(uuid())
+  divyangId                       String
+  divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
+  userId                          String
+  serviceId                       String
+  service                         Service                         @relation(fields: [serviceId], references: [id])
+  dateOfService                   DateTime
+  dueDate                         DateTime
+  isFollowUpRequired              Boolean?
+  isNonSevaKendraFollowUpRequired Boolean
+  isCompleted                     StatusEnum
+  completedDate                   DateTime?
+  donorId                         String?                         @unique
+  donor                           Donor?                          @relation(fields: [donorId], references: [id])
+  nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
+  sevaKendraFollowUp              SevaKendraFollowUp[]
+  divyangServiceMappingAuditLog   DivyangServiceMappingAuditLog[]
+  user                            User                            @relation(fields: [userId], references: [id])
 }
 
 model DivyangServiceMappingAuditLog {
@@ -372,13 +383,15 @@ model NonSevaKendraFollowUp {
 }
 
 model DisabilityOfDivyang {
-  id                         String @id @default(uuid())
+  id                         String  @id @default(uuid())
   divyangId                  String
-  disabilitySubTypeId        String
+  disabilityTypeId           String
+  disabilitySubTypeId        String?
   divyangDisabilityDetailsId String
 
-  DivyangDetails DivyangDetails    @relation(fields: [divyangId], references: [id])
-  disabilityType DisabilitySubType @relation(fields: [disabilitySubTypeId], references: [id])
+  DivyangDetails    DivyangDetails     @relation(fields: [divyangId], references: [id])
+  disabilitySubType DisabilitySubType? @relation(fields: [disabilitySubTypeId], references: [id])
+  disabilityYType   DisabilityType     @relation(fields: [disabilityTypeId], references: [id])
 }
 
 model DisabilitySubType {
@@ -393,9 +406,10 @@ model DisabilitySubType {
 }
 
 model DisabilityType {
-  id         String              @id @default(uuid())
-  name       String              @unique
-  disability DisabilitySubType[]
+  id                  String                @id @default(uuid())
+  name                String                @unique
+  disability          DisabilitySubType[]
+  disabilityOfDivyang DisabilityOfDivyang[]
 }
 
 model MPConstituency {
