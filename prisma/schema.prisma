@@ -269,11 +269,14 @@ model DivyangDetails {
   disabilityDueTo           String?
   certificateIssueAuthority CertificateIssueAuthorityEnum?
   disabilityCardUrl         String? // url
-  disabilityDistrictId      String?
-  identityCardNumber        String?
-  udidCardNumber            String?
-  udidEnrollmentNumber      String?
-  udidCardUrl               String? // url
+
+  districtCode String?
+  stateCode    String?
+
+  identityCardNumber   String?
+  udidCardNumber       String?
+  udidEnrollmentNumber String?
+  udidCardUrl          String? // url
 
   isEmployed       Boolean?
   unemployedSince  DateTime?
