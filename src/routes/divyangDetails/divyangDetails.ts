@@ -13,6 +13,6 @@ divyangDetailsRouter.post('/list/', getDivyangDetails)
 divyangDetailsRouter.get('/:id', getDivyangDetailsbyId)
 divyangDetailsRouter.post('/', postDivyangDetails)
 divyangDetailsRouter.put('/:id', putDivyangDetails)
-divyangDetailsRouter.delete('/:id', deleteDivyangDetails)
+// divyangDetailsRouter.delete('/:id', deleteDivyangDetails)
 
 export { divyangDetailsRouter }
