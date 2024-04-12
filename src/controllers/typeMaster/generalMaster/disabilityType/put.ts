@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  getSelectedDisabilitySubTypeSchema,
   updateDisabilityTypeRequestSchema,
   updateDisabilityTypeRequestSchemaType,
 } from "../../../../types/typeMaster/generalMaster/disabilityType.js";

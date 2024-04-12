@@ -1,9 +1,13 @@
 import { Prisma } from "@prisma/client";
 import {
+  generateServiceFilter,
+  generateServiceList
+} from "../../services/database/utils/serviceMaster/serviceMasterFilterMapper.js";
+import {
   filterServiceMasterType,
-  postServiceMasterType,
-} from "../../types/schemas/serviceMaster/serviceMasterSchema.js";
-import { generateServiceFilter } from "../../services/database/utils/serviceMaster/serviceMasterFilterMapper.js";
+  listServiceMasterType,
+  postServiceMasterType
+} from "../../types/serviceMaster/serviceMasterSchema.js";
 
 function createServiceDBInputObject(
   body: postServiceMasterType
@@ -15,7 +19,12 @@ function createServiceDBInputObject(
   return serviceInput;
 }
 
-
+function createServiceListWhereInput(
+    body: listServiceMasterType
+) {
+  const serviceTypeWhereInput = generateServiceList(body);
+  return serviceTypeWhereInput;
+}
 
 function createServiceFilterInputObject(
   body: filterServiceMasterType
@@ -24,4 +33,4 @@ function createServiceFilterInputObject(
   return serviceTypeWhereInput;
 }
 
-export { createServiceDBInputObject, createServiceFilterInputObject };
+export { createServiceDBInputObject, createServiceFilterInputObject, createServiceListWhereInput };

@@ -1,5 +1,4 @@
 import { getRequestType } from "./getRequestSchema.js";
-import { filterRequestType } from "./filterRequestSchema.js";
 
 const createResponseOnlyData = (result: Object = {}) => {
   const createdResponse = {
@@ -19,7 +18,7 @@ const createResponseWithQuery = (
     request: {
       start: (request.start || 0) + 1,
       rows: request.rows,
-      orderBy: request.orderBy,
+      orderByColumn: request.orderByColumn,
       sortOrder: request.sortOrder,
       searchText: request.searchText,
     },
@@ -30,20 +29,15 @@ const createResponseWithQuery = (
 };
 
 const createResponseForFilter = (
-  result: Object[] = [],
-  request: filterRequestType,
+  result: Object = {},
+  request: Object = {},
   total: number = 0,
   count: number,
   filters: Object
 ) => {
   const createdResponse = {
     data: result,
-    request: {
-      start: (request.start || 0) + 1,
-      rows: request.rows,
-      orderBy: request.orderBy,
-      sortOrder: request.sortOrder,
-    },
+    request: request,
     total: total,
     count: count,
     filters: filters,

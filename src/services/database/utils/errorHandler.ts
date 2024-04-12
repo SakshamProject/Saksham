@@ -10,30 +10,41 @@ const PrismaKnownErrors = {
 };
 
 function throwDatabaseError(error: Error) {
+
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        throw prismaErrors(error);
+        throw prismaKnownErrors(error);
     }
+
+    if (error instanceof Prisma.PrismaClientUnknownRequestError) {
+        throw new APIError(
+          "Oh No! Some Unknown Database Error Occurred. Please Try Again.",
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "DatabaseUnknownError",
+            "E"
+        );
+    }
+
     throw new APIError(
-        "Some database error occurred",
+        "Some Database Error Occurred",
         StatusCodes.INTERNAL_SERVER_ERROR,
         "DatabaseError",
         "E"
     );
 }
 
-function prismaErrors(error: Prisma.PrismaClientKnownRequestError) {
+function prismaKnownErrors(error: Prisma.PrismaClientKnownRequestError) {
     if (error.code === PrismaKnownErrors.RecordNotFound) {
         throw new APIError(
-          "The specified record could not be found",
+          "The Specified Record Could Not Be Found",
           StatusCodes.INTERNAL_SERVER_ERROR,
-          "Database record not found",
+          "DatabaseRecordNotFound",
           "E"
         );
     }
 
     if (error.code === PrismaKnownErrors.UniqueConstraintViolation) {
         throw new APIError(
-          `Unique contraint violated in column -> ${error.meta?.target}`,
+          `Unique Constraint Violated In Column -> ${error.meta?.target}`,
           StatusCodes.BAD_REQUEST,
           "Unique constraint violation",
           "E"
@@ -42,7 +53,7 @@ function prismaErrors(error: Prisma.PrismaClientKnownRequestError) {
 
     if (error.code === PrismaKnownErrors.DatabaseConnectivityError) {
         throw new APIError(
-            "Could not connect to the database",
+            "Could Not Connect To The Database",
             StatusCodes.INTERNAL_SERVER_ERROR,
             "DatabaseConnectivityError",
             "S"
@@ -50,14 +61,14 @@ function prismaErrors(error: Prisma.PrismaClientKnownRequestError) {
     }
     if (error.code === PrismaKnownErrors.ForeignKeyError) {
         throw new APIError(
-            `Foreign Key Error on ${error.meta?.field_name}`,
+            `Foreign Key Error On ${error.meta?.field_name}`,
             StatusCodes.INTERNAL_SERVER_ERROR,
             "DatabaseForeignKeyError",
             "E"
         );
     }
     throw new APIError(
-        "Some database error occurred",
+        "Some Database Error Occurred",
         StatusCodes.INTERNAL_SERVER_ERROR,
         "DatabaseError",
         "E"

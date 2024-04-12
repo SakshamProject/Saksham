@@ -33,7 +33,7 @@ async function getEducationQualificationType(request:Request, response:Response,
     const total:number = result?.total || 0;
     const count:number = result?.educationQualificationType?.length || 0;
     const responseData = createResponseWithQuery(
-        result || {},
+        result?.educationQualificationType || {},
         query,
         total,
         count

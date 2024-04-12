@@ -1,7 +1,7 @@
-import {Prisma} from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import throwDatabaseError from "../utils/errorHandler.js";
 import defaults from "../../../defaults.js";
-import {serviceMasterColumnNameMapper} from "../utils/serviceMaster/serviceMasterColumnNameMapper.js";
+import { serviceMasterColumnNameMapper } from "../utils/serviceMaster/serviceMasterColumnNameMapper.js";
 import serviceMasterDefaults from "./defaults/defaults.js";
 import {sortOrderEnum} from "../../../types/getRequestSchema.js";
 
@@ -42,4 +42,4 @@ async function filterServiceTotalDB(prismaTransaction: Prisma.TransactionClient,
     }
 }
 
-export {filterServiceDB, filterServiceTotalDB};
+export { filterServiceDB, filterServiceTotalDB };

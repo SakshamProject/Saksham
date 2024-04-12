@@ -1,5 +1,6 @@
-import {Prisma} from "@prisma/client";
-import {sortOrderEnum} from "./types/getRequestSchema.js";
+
+import { AuditLogStatusEnum, Prisma } from "@prisma/client";
+import { sortOrderEnum } from "./types/getRequestSchema.js";
 
 type Defaults = {
     skip: number,
@@ -24,4 +25,14 @@ const defaults: Defaults = {
     }
 }
 
+
+ const auditLogDefaults = {
+
+  status:AuditLogStatusEnum.ACTIVE,
+  date :new Date().toISOString(),
+  description: "NEW RECORD CREATED"
+}
+
+
+export {auditLogDefaults}
 export default defaults;

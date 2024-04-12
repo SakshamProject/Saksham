@@ -82,6 +82,8 @@ model Service {
   createdAt DateTime @default(now())
   @@unique([serviceTypeId,name])
 
+  
+
   serviceType     ServiceType          @relation(fields: [serviceTypeId], references: [id],onDelete: Cascade)
   sevaKendras ServicesOnSevaKendras[]
   divyang     DivyangServiceMapping[]
