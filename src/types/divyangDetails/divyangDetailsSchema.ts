@@ -5,9 +5,39 @@ import { addressRequestSchema } from './addressSchema.js'
 import { disabiltyDetailsRequestSchema } from './disabilityDetailsSchema.js'
 import { employmentDetailsRequestSchema } from './employmentDetailsSchema.js'
 import { Prisma } from '@prisma/client'
+import { filterOperationsEnum } from '../inputFieldSchema.js'
+import { DivyangDetailsColumnNamesEnum } from './divyangDetailsDefaults.js'
+import { sortOrderEnum } from '../getRequestSchema.js'
 
 type getDivyangDetailsSchema = Prisma.DivyangDetailsGetPayload<{}>
-
+const divyangDetailsFilter = z
+  .object({
+    operation: z.nativeEnum(filterOperationsEnum),
+    field: z.nativeEnum(DivyangDetailsColumnNamesEnum),
+    value: z.string(),
+  })
+  .array()
+type DivyangDetailsFilterType = z.infer<typeof divyangDetailsFilter>
+const getDivyangDetailsSchema = z.object({
+  filters: divyangDetailsFilter.optional(),
+  pagination: z
+    .object({
+      rows: z.number().positive(),
+      start: z
+        .number()
+        .positive()
+        .transform((number) => number - 1),
+    })
+    .optional(),
+  searchText: z.string().optional(),
+  sorting: z
+    .object({
+      orderByColumn: z.nativeEnum(DivyangDetailsColumnNamesEnum),
+      sortOrder: z.nativeEnum(sortOrderEnum),
+    })
+    .optional(),
+})
+type DivyangDetailsSchemaType = z.infer<typeof getDivyangDetailsSchema>
 const divyangDetailsRequestSchema = z
   .object({
     personalDetails: personalDetailsRequestSchema,
@@ -48,8 +78,10 @@ type postDivyangDetailsRequest = z.infer<typeof postDivyangDetailsRequestSchema>
 type updateDivyangDetails = Prisma.DivyangDetailsUpdateInput
 
 type createDivyangDetails = Prisma.DivyangDetailsCreateInput
-
+type DivyangDetailsWhere = Prisma.DivyangDetailsWhereInput
 export {
+  DivyangDetailsSchemaType,
+  DivyangDetailsFilterType,
   divyangDetailsRequestSchema,
   DivyangDetailsRequest,
   getDivyangDetailsSchema,
@@ -59,4 +91,5 @@ export {
   postDivyangDetailsRequest,
   postDivyangDetailsRequestSchema,
   createDivyangDetails,
+  DivyangDetailsWhere,
 }

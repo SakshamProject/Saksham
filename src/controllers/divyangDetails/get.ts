@@ -1,12 +1,17 @@
 import { NextFunction, Response, Request } from 'express'
-import getRequestSchema from '../../types/getRequestSchema.js'
 import {
   createResponseOnlyData,
   createResponseWithQuery,
 } from '../../types/createResponseSchema.js'
 import { getDivyangDetailsDBTransaction } from '../../services/database/divyangDetails/transaction/read.js'
-import { getDivyangDetailsSchema } from '../../types/divyangDetails/divyangDetailsSchema.js'
+import {
+  DivyangDetailsSchemaType,
+  getDivyangDetailsSchema,
+} from '../../types/divyangDetails/divyangDetailsSchema.js'
 import { getDivyangDetailsByIdDB } from '../../services/database/divyangDetails/read.js'
+import DivyangDetailsGlobalSearchConditions from '../../services/database/utils/divyangDetails/searchConditions.js'
+import { createDivyangDetailsFilterInputObject } from '../../dto/divyangDetails/post.js'
+import { divyangDetailsColumnNameMapper } from '../../services/database/utils/divyangDetails/divyangDetailsMapper.js'
 
 const getDivyangDetails = async (
   request: Request,
@@ -14,18 +19,26 @@ const getDivyangDetails = async (
   next: NextFunction,
 ) => {
   try {
-    const query = getRequestSchema.parse(request.query)
+    const divyangDetailsRequest: DivyangDetailsSchemaType = getDivyangDetailsSchema.parse(
+      request.body,
+    )
+    const orderByColumnAndSortOrder = divyangDetailsColumnNameMapper(
+      divyangDetailsRequest.sorting?.orderByColumn,
+      divyangDetailsRequest.sorting?.sortOrder,
+    )
+    const globalSearchConditions = DivyangDetailsGlobalSearchConditions(divyangDetailsRequest.searchText)
+    const divyangDetailsWhereInput = createDivyangDetailsFilterInputObject(divyangDetailsRequest.filters,globalSearchConditions)
     const result = await getDivyangDetailsDBTransaction(
-      query.start,
-      query.rows,
-      query.sortOrder,
-      query.searchText,
+      divyangDetailsRequest.pagination?.start,
+      divyangDetailsRequest.pagination?.rows,
+      orderByColumnAndSortOrder,
+      divyangDetailsWhereInput
     )
     const count: number = result?.divyangDetails?.length || 0
     const total: number = result?.total || 0
     const responseData = createResponseWithQuery(
       result?.divyangDetails || {},
-      query,
+      divyangDetailsRequest,
       total,
       count,
     )
