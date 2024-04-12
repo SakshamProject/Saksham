@@ -29,8 +29,6 @@ const featuresSchema = z.object({
 
 
 const updateDesignationRequestSchema = z.object({
-  stateId: z.string(),
-  districtId: z.string(),
   sevaKendraId: z.string(),
   designation: z.string().toUpperCase(),
   features: z.array(featuresSchema),
