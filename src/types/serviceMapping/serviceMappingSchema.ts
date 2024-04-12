@@ -17,25 +17,24 @@ const nonSevaKendraFollowUpSchema = z.object({
 const postServiceMappingRequestSchema = z
   .object({
     divyangId: uuidSchema,
-    sevaKendraId: uuidSchema,
     userId: uuidSchema,
     serviceId: uuidSchema,
     dateOfService: dateSchema,
     dueDate: dateSchema,
-    isNonSevaKendraVolunteerRequired: z.boolean(),
+    isNonSevaKendraFollowUpRequired: z.boolean(),
     nonSevaKendraFollowUp: nonSevaKendraFollowUpSchema,
   })
   .refine(
     (data) => {
-      if (data.sevaKendraId) {
+      if (data.userId) {
         return (
-          data.userId !== undefined && data.nonSevaKendraFollowUp == undefined
+          data.nonSevaKendraFollowUp === undefined
         );
       } else {
         return (
-          data.sevaKendraId !== undefined &&
-          data.userId !== undefined &&
-          data.nonSevaKendraFollowUp == undefined
+         
+          data.userId === undefined &&
+          data.nonSevaKendraFollowUp !== undefined
         );
       }
     },
@@ -46,7 +45,7 @@ const postServiceMappingRequestSchema = z
   )
   .transform((data) => ({
     ...data,
-    isNonSevaKendraVolunteerRequired: data.sevaKendraId ? false : true,
+    isNonSevaKendraFollowUpRequired: data.userId ? false : true,
   }));
 
 type postServiceMappingRequestSchemaType = z.infer<
