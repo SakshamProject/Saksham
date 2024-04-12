@@ -1,18 +1,18 @@
-import { string, z } from 'zod'
+import { string, z } from "zod";
 import inputFieldSchema, {
   emailSchema,
   phoneNumberSchema,
   uuidSchema,
-} from '../inputFieldSchema.js'
-import { BloodGroup, Gender } from '@prisma/client'
+} from "../inputFieldSchema.js";
+import { BloodGroupEnum, GenderEnum } from "@prisma/client";
 
 const personalDetailsRequestSchema = z.object({
   firstName: inputFieldSchema,
   lastName: inputFieldSchema,
   divyangId: /*uuidSchema*/ inputFieldSchema,
   picture: inputFieldSchema.optional(),
-  bloodGroup: z.nativeEnum(BloodGroup),
-  gender: z.nativeEnum(Gender),
+  bloodGroup: z.nativeEnum(BloodGroupEnum),
+  gender: z.nativeEnum(GenderEnum),
   dateOfBirth: z.string().datetime(),
   age: z.number().optional(),
   mailId: emailSchema,
@@ -26,6 +26,6 @@ const personalDetailsRequestSchema = z.object({
   communityCategoryId: /*uuidSchema*/ inputFieldSchema,
   community: inputFieldSchema,
   extraCurricularActivity: inputFieldSchema.optional(),
-})
+});
 
-export { personalDetailsRequestSchema }
+export { personalDetailsRequestSchema };
