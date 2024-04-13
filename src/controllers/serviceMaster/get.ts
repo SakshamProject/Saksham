@@ -17,7 +17,7 @@ async function getServices(
     const result = await getServicesDBTransaction(
         query.start,
         query.rows,
-        query.orderBy,
+        query.orderByColumn,
         query.sortOrder,
         query.searchText
     );
