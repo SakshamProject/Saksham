@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import {
   getDesignationByIDDB,
+  getFeaturesDB,
 } from "../../services/database/designation/read.js";
 import {
   createResponseOnlyData,
@@ -80,4 +81,14 @@ async function getDesignationById(
   }
 }
 
-export { getDesignationById, getDesignation };
+async function getFeatures(request:Request,response:Response,next:NextFunction){
+  try{
+    const features = await getFeaturesDB();
+    const responseData = createResponseOnlyData(features)
+    response.send(responseData);
+  }catch(err){
+    next(err)
+  }
+  }
+
+export { getDesignationById, getDesignation ,getFeatures};
