@@ -335,7 +335,7 @@ model DivyangServiceMapping {
   id                              String                          @id @default(uuid())
   divyangId                       String
   divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
-  userId                          String
+  userId                          String?
   serviceId                       String
   service                         Service                         @relation(fields: [serviceId], references: [id])
   dateOfService                   DateTime
@@ -348,7 +348,7 @@ model DivyangServiceMapping {
   donor                           Donor?                          @relation(fields: [donorId], references: [id])
   nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
   sevaKendraFollowUp              SevaKendraFollowUp[]
-  user                            User                            @relation("inchargeUser",fields: [userId], references: [id])
+  user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
   createdAt                       DateTime                        @default(now())
   updatedAt                       DateTime                        @updatedAt
   createdById                     String
