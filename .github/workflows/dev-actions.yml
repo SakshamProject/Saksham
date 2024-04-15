@@ -6,7 +6,6 @@ on:
       - main
 env:
   NODE_ENV: development
-  DATABASE_URL: postgresql://c756e046-e7e2-480e-8870-312e80624095-user:pw-13731656-8d7c-4f6c-94ef-3095b869d082@postgres-free-tier-v2020.gigalixir.com:5432/c756e046-e7e2-480e-8870-312e80624095
 
 jobs:
   deploy:
@@ -18,7 +17,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Setup PNPM
         uses: pnpm/action-setup@v3

@@ -64,7 +64,7 @@ async function createCheckedEducationQualifications(
         const createdEducationQualification:
           | EducationQualification
           | undefined = await createEducationQualificationDB(
-          prisma,
+          prismaTransaction,
           postEducationQualificationDBObject,
         )
 

@@ -12,16 +12,22 @@ async function getServicesDB(
     orderByColumn: string = serviceMasterDefaults.orderBy,
     sortOrder: sortOrderEnum = defaults.sortOrder,
     skip = defaults.skip,
-    take = defaults.take,
+    take = 0,
     searchText = ""
 ) {
     try {
         const query: Prisma.ServiceTypeFindManyArgs = {
-            select: serviceMasterDefaults.select,
-            take: take,
+            select: {
+                id: true,
+                name: true
+            },
             skip: skip,
             orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
         };
+
+        if ( (take > 0) ) {
+            query.take = take;
+        }
 
         if (searchText !== "") {
             query.where = serviceSearchTextMapper("ServiceType", searchText);

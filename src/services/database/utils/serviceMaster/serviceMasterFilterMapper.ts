@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
-import {filterServiceMasterType} from "../../../../types/serviceMaster/serviceMasterSchema.js";
+import {filterServiceMasterType, listServiceMasterType} from "../../../../types/serviceMaster/serviceMasterSchema.js";
+import searchTextMapper from "./serviceSearchTextMapper.js";
 
 function filterServiceMasterMapper(
   columnName: string,
@@ -38,6 +39,28 @@ function filterServiceMasterMapper(
   return filterServiceMasterMap.get(columnName);
 }
 
+function generateServiceList(body: listServiceMasterType) {
+  const serviceTypeWhereInput: any = {
+    AND: [],
+  };
+
+  if (body.filters) {
+    for (const {operation, value, field} of (body.filters)) {
+      serviceTypeWhereInput.AND.push(
+          filterServiceMasterMapper(field, operation, value)
+      );
+    }
+  }
+
+  if (body.searchText) {
+    if (body.searchText !== "") {
+      serviceTypeWhereInput.AND.push(searchTextMapper("ServiceType", body.searchText));
+    }
+  }
+
+  return serviceTypeWhereInput;
+}
+
 function generateServiceFilter(body: filterServiceMasterType) {
   const serviceTypeWhereInput: any = {
     AND: [],
@@ -51,4 +74,4 @@ function generateServiceFilter(body: filterServiceMasterType) {
   return serviceTypeWhereInput;
 }
 
-export { generateServiceFilter, filterServiceMasterMapper };
+export { generateServiceFilter, filterServiceMasterMapper, generateServiceList };

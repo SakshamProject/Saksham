@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  filterServiceMasterSchema,
+  filterServiceMasterSchema, listServiceMasterSchema,
   postServiceMasterSchema,
   postServiceMasterType,
 } from "../../types/serviceMaster/serviceMasterSchema.js";
 import {
   createServiceDBInputObject,
-  createServiceFilterInputObject,
+  createServiceFilterInputObject, createServiceListWhereInput,
 } from "../../dto/serviceMaster/post.js";
 import {createServiceDB} from "../../services/database/serviceMaster/create.js";
 import {getFilterServicesDBTransaction} from "../../services/database/serviceMaster/transactions/filter.js";
@@ -47,4 +47,23 @@ async function filterService(
     next(error);
   }
 }
-export { postService, filterService };
+
+async function listService(request: Request, response: Response, next: NextFunction) {
+  try {
+    const body = listServiceMasterSchema.parse(request.body);
+    const serviceWhereInput = createServiceListWhereInput(body);
+
+    const results = await getFilterServicesDBTransaction(
+        body.pagination?.start,
+        body.pagination?.rows,
+        body.sorting?.orderByColumn,
+        body.sorting?.sortOrder,
+        serviceWhereInput
+    );
+    response.json(createResponseForFilter(results?.services, body, results?.total, results?.services?.length, body.filters));
+  } catch(error) {
+    next(error);
+  }
+}
+
+export { postService, listService, filterService };
