@@ -5,8 +5,6 @@ import { sortOrderEnum } from "../getRequestSchema.js";
 import { designationColumnNamesEnum } from "./designationEnum.js";
 
 const postDesignationRequestSchema = z.object({
-  stateId: z.string(),
-  districtId: z.string(),
   sevaKendraId: z.string(),
   designation: inputFieldSchema.toUpperCase(),
   featuresId: z.array(z.string()).min(1)
