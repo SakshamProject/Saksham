@@ -48,6 +48,11 @@ const postServiceMappingRequestSchema = z
     isNonSevaKendraFollowUpRequired: data.userId ? false : true,
   }));
 
+ const  putServiceMappingRequestSchema = z.object({
+  
+ })
+
+
 type postServiceMappingRequestSchemaType = z.infer<
   typeof postServiceMappingRequestSchema
 >;
