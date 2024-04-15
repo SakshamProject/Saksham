@@ -45,7 +45,7 @@ const serviceMasterFilterSchema = z.object({
 }).array();
 
 const paginationSchema = z.object({
-  start: z.coerce.number().positive(),
+  start: z.coerce.number().positive().transform((number) => { return (number - 1) }),
   rows: z.coerce.number().positive(),
 });
 
