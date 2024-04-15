@@ -47,7 +47,8 @@ async function getUserTotal(
 const getUserByIdDB = async (id: string) => {
     try {
         const user = await prisma.user.findFirstOrThrow({
-            select: usersDefaults.select,
+            // select: usersDefaults.select,
+            include: usersDefaults.includeAll,
             where: {
                 id: id,
             },
