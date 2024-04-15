@@ -1,17 +1,18 @@
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
+import { filterOperationsEnum } from "../inputFieldSchema.js";
+import { ServiceMappingColumnNamesEnum } from "./serviceMappingDefaults.js";
 
 type ServiceMappingWhere = Prisma.DivyangServiceMappingWhereInput;
 
-const sevaMappingFilter = z
+const serviceMappingFilter = z
   .object({
     operation: z.nativeEnum(filterOperationsEnum),
-    field: z.nativeEnum(SevaKendraColumnNamesEnum),
+    field: z.nativeEnum(ServiceMappingColumnNamesEnum),
     value: z.string(),
   })
   .array();
-const getServiceMappingSchema = z.object({
-
-})
+type serviceMappingFilterType = z.infer<typeof serviceMappingFilter>;
+const getServiceMappingSchema = z.object({});
 
 export { ServiceMappingWhere };
