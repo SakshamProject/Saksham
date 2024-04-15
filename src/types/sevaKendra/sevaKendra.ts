@@ -93,6 +93,8 @@ const getSevaKendraSchema = z.object({
     })
     .optional(),
 });
+
+
 type SevaKendraFilterType = z.infer<typeof sevaKendraFilter>;
 type GetSevaKendraSchemaType = z.infer<typeof getSevaKendraSchema>;
 type SevaKendraRequestSchemaType = z.infer<typeof SevaKendraRequestSchema>;

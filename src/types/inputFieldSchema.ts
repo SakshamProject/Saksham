@@ -39,7 +39,9 @@ const auditLogSchema = z.object({
   date: z.string().datetime(),
   description: inputFieldSchema.optional(),
 });
+const auditLogStatusEnumSchema = z.nativeEnum(AuditLogStatusEnum).optional();
 export {
+  auditLogStatusEnumSchema,
   dateSchema,
   auditLogSchema,
   queryParamsSchema,
