@@ -32,8 +32,8 @@ const createResponseForFilter = (
   result: Object = {},
   request: Object = {},
   total: number = 0,
-  count: number,
-  filters: Object
+  count: number = 0,
+  filters: Object = {}
 ) => {
   const createdResponse = {
     data: result,
