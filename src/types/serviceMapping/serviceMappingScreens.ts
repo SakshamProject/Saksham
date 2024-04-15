@@ -36,6 +36,8 @@ const getServiceMappingSchema = z.object({
 type getServiceMappingSchemaType = z.infer<typeof getServiceMappingSchema>;
 export {
   ServiceMappingWhere,
+  serviceMappingFilter,
+  serviceMappingFilterType,
   getServiceMappingSchema,
   getServiceMappingSchemaType,
 };
