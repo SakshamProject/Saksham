@@ -29,10 +29,12 @@ type Config = {
   ENV: string;
   __dirname: string;
   base_url: string;
+  DEBUG_MODE: boolean
 };
 
 const config: Config = {
   PORT: getEnvOrThrow("PORT"),
+  DEBUG_MODE: getEnvOrDefault("DEBUG_MODE", "FALSE").toUpperCase() === "TRUE",
   ENV: getEnvOrDefault("NODE_ENV", "development"),
   __dirname: path.dirname(fileURLToPath(import.meta.url)),
   base_url: "http://localhost:3000/api",
