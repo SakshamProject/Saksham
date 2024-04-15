@@ -149,6 +149,8 @@ model User {
   divyangServiceMapping DivyangServiceMapping[]  @relation("inchargeUser")
   createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
   updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
+  createdDivyangDetails DivyangDetails[] @relation("divyangCreatedBy")
+  updatedDivyangDetails DivyangDetails[] @relation("divyangUpdatedBy")
 }
 
 model UserAuditLog {
@@ -295,6 +297,10 @@ model DivyangDetails {
   motherIncome     Int?
   spouseOccupation String?
   spouseIncome     Int?
+  createdAt                       DateTime                        @default(now())
+  updatedAt                       DateTime                        @updatedAt
+  createdById                     String
+  updatedById                     String
 
   communityCategory     CommunityCategory                 @relation(fields: [communityCategoryId], references: [id])
   corporation           Corporation?                      @relation(fields: [corporationId], references: [id])
@@ -309,6 +315,8 @@ model DivyangDetails {
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
   districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
+  createdBy                       User                             @relation("divyangCreatedBy",fields: [createdById],references: [id])
+  updatedBy                       User                             @relation("divyangUpdatedBy",fields: [updatedById],references: [id])
 
   // divyangDetailsAuditLog DivyangDetailsAuditLog[]
 }
