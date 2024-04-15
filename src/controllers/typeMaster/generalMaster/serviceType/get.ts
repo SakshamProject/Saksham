@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { getServiceTypeWithServiceSchema } from "../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
-import { getServiceTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
+import {  getServiceTypeByIdDB } from "../../../../services/database/typeMaster/generalMaster/serviceType/read.js";
 import getRequestSchema, {
   getRequestType,
 } from "../../../../types/getRequestSchema.js";
@@ -86,6 +85,12 @@ async function getServiceByServiceTypeId(
   } catch (err) {
     next(err);
   }
+
 }
 
-export { getServiceTypeById, getServiceType, getServiceByServiceTypeId };
+
+
+
+
+
+export { getServiceTypeById, getServiceType, getServiceByServiceTypeId};
