@@ -102,7 +102,7 @@ function generateUserListWhereInput(body: userListType) {
     if (body.filters) {
         for (const {operation, value, field} of (body.filters)) {
             userWhereInput.AND.push(
-                userWhereInput(field, operation, value)
+                usersFilterMapper(field, operation, value)
             );
         }
     }
