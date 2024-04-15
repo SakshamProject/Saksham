@@ -17,7 +17,9 @@ const divyangDetailsFilter = z
     value: z.string(),
   })
   .array()
-type DivyangDetailsFilterType = z.infer<typeof divyangDetailsFilter>
+
+  type DivyangDetailsFilterType = z.infer<typeof divyangDetailsFilter>
+
 const getDivyangDetailsSchema = z.object({
   filters: divyangDetailsFilter.optional(),
   pagination: z
@@ -38,6 +40,7 @@ const getDivyangDetailsSchema = z.object({
     .optional(),
 })
 type DivyangDetailsSchemaType = z.infer<typeof getDivyangDetailsSchema>
+
 const divyangDetailsRequestSchema = z
   .object({
     personalDetails: personalDetailsRequestSchema,
