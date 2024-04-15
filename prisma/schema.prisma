@@ -102,7 +102,6 @@ model District {
   Municipalities     Municipality[]
   Corporations       Corporation[]
   PanchayatUnions    PanchayatUnion[]
-  sevaKendraFollowUp SevaKendraFollowUp[]
   Taluks             Taluk[]
   divyangDetails     DivyangDetails[]     @relation("divyangDetails")
 }
@@ -371,11 +370,10 @@ model Donor {
 model SevaKendraFollowUp {
   id                      String                @id @default(uuid())
   date                    DateTime
-  districtId              String
   userId                  String
   divyangServiceMappingId String
   divyangServiceMapping   DivyangServiceMapping @relation(fields: [divyangServiceMappingId], references: [id])
-  district                District              @relation(fields: [districtId], references: [id])
+  
   user                    User                  @relation(fields: [userId], references: [id])
 }
 
