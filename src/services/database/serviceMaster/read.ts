@@ -12,7 +12,7 @@ async function getServicesDB(
     orderByColumn: string = serviceMasterDefaults.orderBy,
     sortOrder: sortOrderEnum = defaults.sortOrder,
     skip = defaults.skip,
-    take = defaults.take,
+    take = 0,
     searchText = ""
 ) {
     try {
