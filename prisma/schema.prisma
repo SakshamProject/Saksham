@@ -146,7 +146,11 @@ model User {
   designationsUpdated   Designation[]           @relation("updatedBy")
   sevaKendraFollowUp    SevaKendraFollowUp[]
   userAuditLog          UserAuditLog[]
-  divyangServiceMapping DivyangServiceMapping[]
+  divyangServiceMapping DivyangServiceMapping[]  @relation("inchargeUser")
+  createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
+  updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
+  createdDivyangDetails DivyangDetails[] @relation("divyangCreatedBy")
+  updatedDivyangDetails DivyangDetails[] @relation("divyangUpdatedBy")
 }
 
 model UserAuditLog {
@@ -294,6 +298,10 @@ model DivyangDetails {
   motherIncome     Int?
   spouseOccupation String?
   spouseIncome     Int?
+  createdAt                       DateTime                        @default(now())
+  updatedAt                       DateTime                        @updatedAt
+  createdById                     String
+  updatedById                     String
 
   communityCategory     CommunityCategory                 @relation(fields: [communityCategoryId], references: [id])
   corporation           Corporation?                      @relation(fields: [corporationId], references: [id])
@@ -308,6 +316,8 @@ model DivyangDetails {
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
   districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
+  createdBy                       User                             @relation("divyangCreatedBy",fields: [createdById],references: [id])
+  updatedBy                       User                             @relation("divyangUpdatedBy",fields: [updatedById],references: [id])
 
   // divyangDetailsAuditLog DivyangDetailsAuditLog[]
 }
@@ -339,19 +349,17 @@ model DivyangServiceMapping {
   donor                           Donor?                          @relation(fields: [donorId], references: [id])
   nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
   sevaKendraFollowUp              SevaKendraFollowUp[]
-  divyangServiceMappingAuditLog   DivyangServiceMappingAuditLog[]
-  user                            User                            @relation(fields: [userId], references: [id])
+  user                            User                            @relation("inchargeUser",fields: [userId], references: [id])
+  createdAt                       DateTime                        @default(now())
+  updatedAt                       DateTime                        @updatedAt
+  createdById                     String
+  updatedById                     String
+  createdBy                       User                             @relation("serviceMappingCreatedBy",fields: [createdById],references: [id])
+  updatedBy                       User                             @relation("serviceMappingUpdatedBy",fields: [updatedById],references: [id])
+
 }
 
-model DivyangServiceMappingAuditLog {
-  id                      String             @id @default(uuid())
-  DivyangServiceMappingId String
-  status                  AuditLogStatusEnum
-  date                    DateTime
-  description             String
 
-  divyangServiceMapping DivyangServiceMapping @relation(fields: [DivyangServiceMappingId], references: [id])
-}
 
 model Donor {
   id                    String                 @id @default(uuid())

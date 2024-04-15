@@ -10,7 +10,7 @@ const addressRequestSchema = z
     districtId: uuidSchema,
     doorNumberCommunication: z.string(),
     flatNumberCommunication: z.string().optional(),
-    nagarNameCommunication: inputFieldSchema,
+    nagarNameCommunication: inputFieldSchema.optional(),
     districtIdCommunication: uuidSchema,
     isRural: z.boolean(),
     villageName: inputFieldSchema.optional(),

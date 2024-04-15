@@ -105,10 +105,14 @@ async function getServiceByServiceTypeIdDBTotal(prismaTransaction: any,id: strin
 }
 
 
+
+
+
 export {
   getServiceTypeByIdDB,
   getServiceTypeDB,
   getServiceByServiceTypeIdDB,
   getServiceTypeTotal,
   getServiceByServiceTypeIdDBTotal
+
 };

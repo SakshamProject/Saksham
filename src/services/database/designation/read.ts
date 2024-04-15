@@ -151,9 +151,22 @@ async function getFeaturesIdByDesignationIdDB(
   }
 }
 
+
+async function getFeaturesDB(){
+  try{
+    const features = await prisma.feature.findMany();
+    return features;
+  }catch(err){
+    if (err instanceof Error) {
+      throwDatabaseError(err);
+    }
+  }
+}
+
 export {
   getDesignationDB,
   getDesignationByIDDB,
   getDesignationDBTotal,
   getFeaturesIdByDesignationIdDB,
+  getFeaturesDB
 };
