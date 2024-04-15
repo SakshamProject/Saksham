@@ -7,9 +7,11 @@ async function postServiceMapping(request:Request,response:Response,next:NextFun
     try{
 
         const body:postServiceMappingRequestSchemaType = postServiceMappingRequestSchema.parse(request.body);
+        console.log(`[+]body`,body)
         if(request.user){
         const createdById:string |undefined= request.user?.id;
-        const result = postServiceMappingDBTransaction(body,createdById);
+        const result =await postServiceMappingDBTransaction(body,createdById);
+        console.log(`[+]resilt`,result)
        // const responseResult = await getServiceMappingByIdDB(result?.id);
         const responseData = createResponseOnlyData(result ||{});
         response.send(responseData);

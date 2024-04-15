@@ -36,17 +36,20 @@ async function postServiceMappingDBTransaction(
 
         if (body.isNonSevaKendraFollowUpRequired) {
 
-          const PostNonSevaKendraFollowUpDBObject: postNonSevaKendraFollowUpType =
+          const PostNonSevaKendraFollowUpDBObject: postNonSevaKendraFollowUpType|undefined =
             createPostNonSevaKendraFollowUpDBObject(body, serviceMapping?.id);
             console.log(`[+]PostNonSevaKendraFollowUpDBObject`,PostNonSevaKendraFollowUpDBObject)
 
-          const NonSevaKendraFollowUp: NonSevaKendraFollowUp | undefined =
+          if(PostNonSevaKendraFollowUpDBObject){
+            const NonSevaKendraFollowUp: NonSevaKendraFollowUp | undefined =
             await createNonSevaKendraFollowUpDB(
               prismaTransaction,
               PostNonSevaKendraFollowUpDBObject
             );
             console.log(`[+]NonSevaKendraFollowUp`,NonSevaKendraFollowUp)
         }
+          }
+        
 
         return serviceMapping;
       } catch (error) {

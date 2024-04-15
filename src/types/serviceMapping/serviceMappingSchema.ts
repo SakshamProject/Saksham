@@ -56,9 +56,44 @@ type postServiceMappingType = Prisma.DivyangServiceMappingCreateInput;
 
 type postNonSevaKendraFollowUpType = Prisma.NonSevaKendraFollowUpCreateInput;
 
+type CreateServiceMappingDBObjectType= {
+  divyang: {
+    connect: {
+      id: string;
+    };
+  };
+  service: {
+    connect: {
+      id: string;
+    };
+  };
+  dateOfService: string;
+  dueDate: string;
+  isNonSevaKendraFollowUpRequired: boolean;
+  isCompleted: "PENDING";
+  createdBy: {
+    connect: {
+      id: string;
+    };
+  };
+  updatedBy: {
+    connect: {
+      id: string;
+    };
+  };
+} & {
+  user?: {
+    connect: {
+      id: string;
+    };
+  };
+};
+
+
 export {
   postServiceMappingRequestSchema,
   postServiceMappingRequestSchemaType,
   postServiceMappingType,
   postNonSevaKendraFollowUpType,
+  CreateServiceMappingDBObjectType
 };

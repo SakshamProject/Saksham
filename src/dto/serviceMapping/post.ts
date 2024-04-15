@@ -1,19 +1,15 @@
 import { StatusEnum } from "@prisma/client";
-import { postServiceMappingRequestSchemaType } from "../../types/serviceMapping/serviceMappingSchema.js";
+import { CreateServiceMappingDBObjectType, postServiceMappingRequestSchemaType, postServiceMappingType } from "../../types/serviceMapping/serviceMappingSchema.js";
 
 const createPostServiceMappingDBObject = (
     body: postServiceMappingRequestSchemaType,
     createdById: string = ""
   ) => {
-    const createServiceMappingDBObject = {
+    const createServiceMappingDBObject : postServiceMappingType
+     = {
      divyang:{
         connect:{
             id:body.divyangId
-        }
-     },
-     user:{
-        connect:{
-            id:body.userId
         }
      },
      service:{
@@ -23,7 +19,7 @@ const createPostServiceMappingDBObject = (
      },
      dateOfService:body.dateOfService,
      dueDate:body.dueDate,
-     isNonSevaKendraFollowUpRequired:body.isNonSevaKendraVolunteerRequired,
+     isNonSevaKendraFollowUpRequired:body.isNonSevaKendraFollowUpRequired,
      isCompleted:StatusEnum.PENDING,
       createdBy: {
         connect: {
@@ -36,11 +32,24 @@ const createPostServiceMappingDBObject = (
         },
       },
     };
+
+    if (body.userId) {
+      createServiceMappingDBObject.user = {
+        connect: {
+          id: body.userId,
+        },
+      };
+    }
+  
     return createServiceMappingDBObject;
   };
 
+    
+  
+
   function createPostNonSevaKendraFollowUpDBObject(body:postServiceMappingRequestSchemaType,serviceMappingId:string=""){
-    const PostNonSevaKendraFollowUpDBObject = {
+    if(body.nonSevaKendraFollowUp){
+      const PostNonSevaKendraFollowUpDBObject = {
         name:body.nonSevaKendraFollowUp.name,
         mobileNumber:body.nonSevaKendraFollowUp.mobileNumber,
         email:body.nonSevaKendraFollowUp.email,
@@ -52,6 +61,9 @@ const createPostServiceMappingDBObject = (
         }
     }
     return PostNonSevaKendraFollowUpDBObject;
+    }
+    
+   
   }
 
   export {createPostServiceMappingDBObject,createPostNonSevaKendraFollowUpDBObject};
