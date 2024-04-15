@@ -100,15 +100,32 @@ const getSevaKendraServicesById = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-
+const getSevaKendraStatus = async (sevaKendraId: string) => {
+  const currentDate = new Date(Date.now()).toISOString();
+  const sevakendraStatus = await prisma.sevaKendraAuditLog.findFirst({
+    where: {
+      AND: [
+        {
+          date: {
+            lt: currentDate,
+          },
+        },
+        {
+          sevaKendraId: sevaKendraId,
+        },
+      ],
+    },
+    orderBy: {
+      date: "desc",
+    },
+  });
+  return sevakendraStatus?.status == AuditLogStatusEnum.ACTIVE ? true : false;
+};
 const getSevaKendraByDistrictIdDB = async (districtId: string) => {
   try {
     const sevakendras = await prisma.sevaKendra.findMany({
       where: {
-        AND: [
-          { districtId: districtId },
-          { currentStatus: AuditLogStatusEnum.ACTIVE },
-        ],
+        AND: [{ districtId: districtId }],
       },
       select: {
         id: true,
