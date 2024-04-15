@@ -24,35 +24,41 @@ function usersSearchTextMapper(searchText = ""): Prisma.UserWhereInput {
                         contains: searchText,
                         mode: "insensitive",
                     },
+                }
+            },
+            {
+                designation: {
                     sevaKendra: {
-                        OR: [
-                            {
+                        name: {
+                            contains: searchText,
+                            mode: "insensitive",
+                        }
+                    }
+                }
+            },
+            {
+                designation: {
+                    sevaKendra: {
+                        district: {
+                            name: {
+                                contains: searchText,
+                                mode: "insensitive",
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                designation: {
+                    sevaKendra: {
+                        district: {
+                            state: {
                                 name: {
                                     contains: searchText,
                                     mode: "insensitive",
-                                },
-                                district: {
-                                    OR: [
-                                        {
-                                            name: {
-                                                contains: searchText,
-                                                mode: "insensitive",
-                                            },
-                                            state: {
-                                                OR: [
-                                                    {
-                                                        name: {
-                                                            contains: searchText,
-                                                            mode: "insensitive",
-                                                        }
-                                                    }
-                                                ]
-                                            }
-                                        }
-                                    ]
                                 }
                             }
-                        ]
+                        }
                     }
                 }
             }
