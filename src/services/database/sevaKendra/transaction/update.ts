@@ -80,11 +80,13 @@ async function createAuditLogIfExists(
   const auditLogDBObject: SevaKendraAuditLog | null =
     createSevaKendraAuditLogDBObject(updateRequestSevaKendra, id);
   if (auditLogDBObject) {
-    const createdAuditLog = await createSevaKendraAuditLogDB(
-      prismaTransaction,
-      auditLogDBObject
-    );
-    return createdAuditLog;
+    if (auditLogDBObject.status != updateRequestSevaKendra.currentStatus) {
+      const createdAuditLog = await createSevaKendraAuditLogDB(
+        prismaTransaction,
+        auditLogDBObject
+      );
+      return createdAuditLog;
+    }
   } else {
     throw new Error("auditlog object is null");
   }

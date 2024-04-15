@@ -28,7 +28,7 @@ model SevaKendra {
   updatedAt       DateTime            @updatedAt
   updatedBy       String
   currentStatus   AuditLogStatusEnum?
-
+  @@unique([name,districtId])
   services      ServicesOnSevaKendras[]
   district      District                @relation(fields: [districtId], references: [id])
   contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])

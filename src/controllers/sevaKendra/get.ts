@@ -10,7 +10,7 @@ import {
   createResponseWithQuery,
 } from "../../types/createResponseSchema.js";
 import { getSevaKendraDBTransaction } from "../../services/database/sevaKendra/transaction/read.js";
-import { getSevaKendraByIdDB } from "../../services/database/sevaKendra/read.js";
+import { getSevaKendraByDistrictIdDB, getSevaKendraByIdDB } from "../../services/database/sevaKendra/read.js";
 import { createSevaKendraFilterInputObject } from "../../dto/sevaKendra/create.js";
 import SevaKendraGlobalSearchConditions from "../../services/database/utils/sevaKendra/searchConditions.js";
 
@@ -39,7 +39,6 @@ const getSevaKendra = async (
       sevaKendraRequest.pagination?.start,
       sevaKendraRequest.pagination?.rows
     );
-    console.log(sevaKendraRequest.pagination?.start, "Start ");
     const total = result?.total || 0;
     const count = result?.sevaKendra.length || 0;
     const responseData = createResponseWithQuery(
@@ -69,4 +68,18 @@ const getSevaKendraById = async (
   }
 };
 
-export { getSevaKendra, getSevaKendraById };
+const getSevaKendraByDistrictId = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  try {
+    const districtId = request.params.districtId;
+    const result = await getSevaKendraByDistrictIdDB(districtId);
+    const responseData = createResponseOnlyData(result);
+    response.send(responseData);
+  } catch (error) {
+    next(error);
+  }
+};
+export { getSevaKendra, getSevaKendraById, getSevaKendraByDistrictId };

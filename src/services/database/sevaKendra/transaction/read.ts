@@ -11,7 +11,6 @@ const getSevaKendraDBTransaction = async (
   take: number = defaults.take
 ) => {
   try {
-    console.log(skip, "skip", "take", take);
     const transaction = await prisma.$transaction(
       async (prismaTransaction) => {
         const sevaKendra = await getSevaKendraDB(
@@ -25,8 +24,6 @@ const getSevaKendraDBTransaction = async (
           prismaTransaction,
           searchConditions
         );
-        console.log("sevakendra length", sevaKendra.length);
-        console.log("total", total);
 
         return { sevaKendra, total };
       },

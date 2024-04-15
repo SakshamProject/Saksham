@@ -47,6 +47,7 @@ const SevaKendraUpdateRequestSchema = z.object({
   landLineNumber: landLineNumberSchema,
   mobileNumber: phoneNumberSchema,
   startDate: dateSchema.optional(),
+  currentStatus: z.nativeEnum(AuditLogStatusEnum),
   contactPerson: z.object({
     id: uuidSchema,
     name: inputFieldSchema.toUpperCase(),
