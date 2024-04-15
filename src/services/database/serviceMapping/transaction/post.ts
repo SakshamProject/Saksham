@@ -25,23 +25,27 @@ async function postServiceMappingDBTransaction(
       try {
         const postServiceMappingDBObject: postServiceMappingType =
           createPostServiceMappingDBObject(body, createdByID);
+        console.log(`[+]postServiceMappingDBObject`,postServiceMappingDBObject);
 
         const serviceMapping: DivyangServiceMapping | undefined =
           await createServiceMappingDB(
             prismaTransaction,
             postServiceMappingDBObject
           );
+          console.log(`[+]serviceMapping`,serviceMapping)
 
-        if (body.isNonSevaKendraVolunteerRequired) {
+        if (body.isNonSevaKendraFollowUpRequired) {
 
           const PostNonSevaKendraFollowUpDBObject: postNonSevaKendraFollowUpType =
             createPostNonSevaKendraFollowUpDBObject(body, serviceMapping?.id);
+            console.log(`[+]PostNonSevaKendraFollowUpDBObject`,PostNonSevaKendraFollowUpDBObject)
 
           const NonSevaKendraFollowUp: NonSevaKendraFollowUp | undefined =
             await createNonSevaKendraFollowUpDB(
               prismaTransaction,
               PostNonSevaKendraFollowUpDBObject
             );
+            console.log(`[+]NonSevaKendraFollowUp`,NonSevaKendraFollowUp)
         }
 
         return serviceMapping;

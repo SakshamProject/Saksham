@@ -12,4 +12,5 @@ serviceMappingRouter.use(authenticate);
 serviceMappingRouter.post("/", postServiceMapping);
 
 
+
 export default serviceMappingRouter;

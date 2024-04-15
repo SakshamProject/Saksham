@@ -17,12 +17,12 @@ const nonSevaKendraFollowUpSchema = z.object({
 const postServiceMappingRequestSchema = z
   .object({
     divyangId: uuidSchema,
-    userId: uuidSchema,
+    userId: uuidSchema.optional(),
     serviceId: uuidSchema,
     dateOfService: dateSchema,
     dueDate: dateSchema,
-    isNonSevaKendraFollowUpRequired: z.boolean(),
-    nonSevaKendraFollowUp: nonSevaKendraFollowUpSchema,
+    isNonSevaKendraFollowUpRequired: z.boolean().optional(),
+    nonSevaKendraFollowUp: nonSevaKendraFollowUpSchema.optional(),
   })
   .refine(
     (data) => {
