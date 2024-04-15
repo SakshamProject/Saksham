@@ -64,6 +64,9 @@ const getSevaKendraByIdDB = async (sevaKendraId: string): Promise<any> => {
         id: sevaKendraId,
       },
       include: {
+        district: {
+          include: { state: true },
+        },
         contactPerson: true,
         services: true,
         auditLog: true,

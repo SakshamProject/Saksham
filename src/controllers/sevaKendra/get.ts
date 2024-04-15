@@ -25,12 +25,10 @@ const getSevaKendra = async (
       sevaKendraRequest.sorting?.orderByColumn,
       sevaKendraRequest.sorting?.sortOrder
     );
-    console.log(sevaKendraRequest.searchText);
     const globalSearchConditions: SevaKendraWhere | null =
       sevaKendraRequest.searchText === undefined
         ? null
         : SevaKendraGlobalSearchConditions(sevaKendraRequest.searchText);
-    console.log(globalSearchConditions);
     const sevaKendraWhereInput = createSevaKendraFilterInputObject(
       sevaKendraRequest.filters,
       globalSearchConditions
@@ -41,6 +39,7 @@ const getSevaKendra = async (
       sevaKendraRequest.pagination?.start,
       sevaKendraRequest.pagination?.rows
     );
+    console.log(sevaKendraRequest.pagination?.start, "Start ");
     const total = result?.total || 0;
     const count = result?.sevaKendra.length || 0;
     const responseData = createResponseWithQuery(
@@ -61,7 +60,6 @@ const getSevaKendraById = async (
   next: NextFunction
 ) => {
   try {
-    console.log("wrong function");
     const id = request.params.id;
     const result = await getSevaKendraByIdDB(id);
     const responseData = createResponseOnlyData(result);

@@ -16,7 +16,7 @@ const createResponseWithQuery = (
   const createdResponse = {
     data: result,
     request: {
-      start: (request.start || 0) + 1,
+      start: request.start ? request.start + 1 : 0,
       rows: request.rows,
       orderByColumn: request.orderByColumn,
       sortOrder: request.sortOrder,
