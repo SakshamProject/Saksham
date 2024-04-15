@@ -1,5 +1,5 @@
 import { StatusEnum } from "@prisma/client";
-import { CreateServiceMappingDBObjectType, postServiceMappingRequestSchemaType, postServiceMappingType } from "../../types/serviceMapping/serviceMappingSchema.js";
+import {  postServiceMappingRequestSchemaType, postServiceMappingType } from "../../types/serviceMapping/serviceMappingSchema.js";
 
 const createPostServiceMappingDBObject = (
     body: postServiceMappingRequestSchemaType,
