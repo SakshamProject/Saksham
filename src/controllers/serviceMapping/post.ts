@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { postServiceMappingRequestSchema, postServiceMappingRequestSchemaType } from "../../types/serviceMapping/serviceMappingSchema.js";
 import { createResponseOnlyData } from "../../types/createResponseSchema.js";
-import { postServiceMappingDBTransaction } from "../../services/database/serviceMapping/transaction/post.js";
+import { postServiceMappingDBTransaction } from "../../services/database/serviceMapping/transaction/create.js";
 
 async function postServiceMapping(request:Request,response:Response,next:NextFunction){
     try{

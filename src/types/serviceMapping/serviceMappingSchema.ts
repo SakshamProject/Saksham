@@ -5,7 +5,7 @@ import inputFieldSchema, {
   phoneNumberSchema,
   uuidSchema,
 } from "../inputFieldSchema.js";
-import { Prisma } from "@prisma/client";
+import { HowTheyGotServiceEnum, Prisma, StatusEnum } from "@prisma/client";
 
 const nonSevaKendraFollowUpSchema = z.object({
   name: inputFieldSchema,
@@ -48,57 +48,88 @@ const postServiceMappingRequestSchema = z
     isNonSevaKendraFollowUpRequired: data.userId ? false : true,
   }));
 
- const  putServiceMappingRequestSchema = z.object({
-  
- })
-
 
 type postServiceMappingRequestSchemaType = z.infer<
   typeof postServiceMappingRequestSchema
 >;
 
+const donorSchema=z.object({
+  name:inputFieldSchema,
+  contact:phoneNumberSchema,
+  address:inputFieldSchema
+})
+
+
+const putServiceMappingSchema =z.object({
+
+  isCompleted:z.nativeEnum(StatusEnum) ,
+  completedDate:dateSchema.optional(),
+  howTheyGotService: z.nativeEnum(HowTheyGotServiceEnum).optional(),
+  reasonForNonCompletion:inputFieldSchema.optional(),
+  isFollowUpRequired:z.boolean().optional(),
+  userId:uuidSchema.optional(),
+  isNonSevaKendraFollowUpRequired:z.boolean().optional(),
+  nonSevaKendraFollowUp:nonSevaKendraFollowUpSchema.optional(),
+  donor:donorSchema.optional()
+  
+})  .refine(
+  (data) => {
+    if (data.isCompleted===StatusEnum.COMPLETED) {
+      return (
+        data.completedDate !== undefined &&
+        data.howTheyGotService!==undefined &&
+        data.isFollowUpRequired === undefined &&
+        data.userId === undefined&&
+        data.isNonSevaKendraFollowUpRequired===undefined &&
+        data.nonSevaKendraFollowUp===undefined
+  
+      );
+    } else if(data.isCompleted===StatusEnum.PENDING){
+      if(data.isFollowUpRequired){
+        return (
+       
+          data.reasonForNonCompletion !== undefined &&
+          data.userId !== undefined
+        );
+      }else if(data.isNonSevaKendraFollowUpRequired){
+        return (
+       
+          data.reasonForNonCompletion !== undefined &&
+          data.nonSevaKendraFollowUp !== undefined
+        );
+      }
+      else{
+        return data.reasonForNonCompletion !== undefined
+      }
+  
+    }
+  },
+  {
+    message:
+      "Validation failed: Please give necessary data",
+  }
+)
+
+
 type postServiceMappingType = Prisma.DivyangServiceMappingCreateInput;
 
 type postNonSevaKendraFollowUpType = Prisma.NonSevaKendraFollowUpCreateInput;
 
-type CreateServiceMappingDBObjectType= {
-  divyang: {
-    connect: {
-      id: string;
-    };
-  };
-  service: {
-    connect: {
-      id: string;
-    };
-  };
-  dateOfService: string;
-  dueDate: string;
-  isNonSevaKendraFollowUpRequired: boolean;
-  isCompleted: "PENDING";
-  createdBy: {
-    connect: {
-      id: string;
-    };
-  };
-  updatedBy: {
-    connect: {
-      id: string;
-    };
-  };
-} & {
-  user?: {
-    connect: {
-      id: string;
-    };
-  };
-};
+type putServiceMappingSchemaType =z.infer<typeof putServiceMappingSchema>;
+
+type donorSchemaType = Prisma.DonorCreateInput;
+
+
+
 
 
 export {
   postServiceMappingRequestSchema,
+  putServiceMappingSchema,
   postServiceMappingRequestSchemaType,
   postServiceMappingType,
   postNonSevaKendraFollowUpType,
-  CreateServiceMappingDBObjectType
+  putServiceMappingSchemaType,
+  donorSchemaType
+  
 };
