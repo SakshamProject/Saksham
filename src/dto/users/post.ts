@@ -24,7 +24,7 @@ function createUserDBObject(body: userPostRequestType): Prisma.UserCreateInput {
         },
         password: {
             create: {
-                hashedPassword: createHmac('sha256', config.secret).update('I love cupcakes').digest('hex')
+                hashedPassword: createHmac('sha256', config.SECRET).update('I love cupcakes').digest('hex')
             }
         },
         userAuditLog: {

@@ -140,17 +140,17 @@ model User {
   updatedBy    User?   @relation("updatedBy", fields: [updatedById], references: [id])
   usersUpdated User[]  @relation("updatedBy")
 
-  password              UserPassword            @relation(fields: [passwordId], references: [id])
-  designation           Designation             @relation("Designation-Users", fields: [designationId], references: [id])
-  designationsCreated   Designation[]           @relation("createdBy")
-  designationsUpdated   Designation[]           @relation("updatedBy")
-  sevaKendraFollowUp    SevaKendraFollowUp[]
-  userAuditLog          UserAuditLog[]
-  divyangServiceMapping DivyangServiceMapping[]  @relation("inchargeUser")
+  password                      UserPassword            @relation(fields: [passwordId], references: [id])
+  designation                   Designation             @relation("Designation-Users", fields: [designationId], references: [id])
+  designationsCreated           Designation[]           @relation("createdBy")
+  designationsUpdated           Designation[]           @relation("updatedBy")
+  sevaKendraFollowUp            SevaKendraFollowUp[]
+  userAuditLog                  UserAuditLog[]
+  divyangServiceMapping         DivyangServiceMapping[] @relation("inchargeUser")
   createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
   updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
-  createdDivyangDetails DivyangDetails[] @relation("divyangCreatedBy")
-  updatedDivyangDetails DivyangDetails[] @relation("divyangUpdatedBy")
+  createdDivyangDetails         DivyangDetails[]        @relation("divyangCreatedBy")
+  updatedDivyangDetails         DivyangDetails[]        @relation("divyangUpdatedBy")
 }
 
 model UserAuditLog {
@@ -297,10 +297,10 @@ model DivyangDetails {
   motherIncome     Int?
   spouseOccupation String?
   spouseIncome     Int?
-  createdAt                       DateTime                        @default(now())
-  updatedAt                       DateTime                        @updatedAt
-  createdById                     String
-  updatedById                     String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  createdById      String
+  updatedById      String
 
   communityCategory     CommunityCategory                 @relation(fields: [communityCategoryId], references: [id])
   corporation           Corporation?                      @relation(fields: [corporationId], references: [id])
@@ -315,8 +315,8 @@ model DivyangDetails {
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
   districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
-  createdBy                       User                             @relation("divyangCreatedBy",fields: [createdById],references: [id])
-  updatedBy                       User                             @relation("divyangUpdatedBy",fields: [updatedById],references: [id])
+  createdBy             User                              @relation("divyangCreatedBy", fields: [createdById], references: [id])
+  updatedBy             User                              @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
 
   // divyangDetailsAuditLog DivyangDetailsAuditLog[]
 }
@@ -332,33 +332,30 @@ model DivyangDetails {
 // }
 
 model DivyangServiceMapping {
-  id                              String                          @id @default(uuid())
+  id                              String                  @id @default(uuid())
   divyangId                       String
-  divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
+  divyang                         DivyangDetails          @relation(fields: [divyangId], references: [id])
   userId                          String
   serviceId                       String
-  service                         Service                         @relation(fields: [serviceId], references: [id])
+  service                         Service                 @relation(fields: [serviceId], references: [id])
   dateOfService                   DateTime
   dueDate                         DateTime
   isFollowUpRequired              Boolean?
   isNonSevaKendraFollowUpRequired Boolean
   isCompleted                     StatusEnum
   completedDate                   DateTime?
-  donorId                         String?                         @unique
-  donor                           Donor?                          @relation(fields: [donorId], references: [id])
+  donorId                         String?                 @unique
+  donor                           Donor?                  @relation(fields: [donorId], references: [id])
   nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
   sevaKendraFollowUp              SevaKendraFollowUp[]
-  user                            User                            @relation("inchargeUser",fields: [userId], references: [id])
-  createdAt                       DateTime                        @default(now())
-  updatedAt                       DateTime                        @updatedAt
+  user                            User                    @relation("inchargeUser", fields: [userId], references: [id])
+  createdAt                       DateTime                @default(now())
+  updatedAt                       DateTime                @updatedAt
   createdById                     String
   updatedById                     String
-  createdBy                       User                             @relation("serviceMappingCreatedBy",fields: [createdById],references: [id])
-  updatedBy                       User                             @relation("serviceMappingUpdatedBy",fields: [updatedById],references: [id])
-
+  createdBy                       User                    @relation("serviceMappingCreatedBy", fields: [createdById], references: [id])
+  updatedBy                       User                    @relation("serviceMappingUpdatedBy", fields: [updatedById], references: [id])
 }
-
-
 
 model Donor {
   id                    String                 @id @default(uuid())

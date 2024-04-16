@@ -6,6 +6,7 @@ import {createUserDB} from "../../services/database/users/create.js";
 import {createResponseOnlyData} from "../../types/createResponseSchema.js";
 import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
 import {listUserWhereInput} from "../../dto/users/post.js";
+import {saveFile, saveFiles} from "../../middlewares/fileHandler/fileHandler.js";
 
 
 async function postUser(request: Request, response: Response, next: NextFunction) {
@@ -21,6 +22,9 @@ async function postUser(request: Request, response: Response, next: NextFunction
         log("info", `[controller/postUser]:\n newUser: %o`, newUser || {});
         // TODO createdBy Id
 
+        if (newUser && request.file) {
+            saveFile(newUser.id, request.file);
+        }
         const responseData = createResponseOnlyData(newUser);
         response.json(responseData);
     }
