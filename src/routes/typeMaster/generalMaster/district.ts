@@ -14,5 +14,5 @@ districtRouter.get("/", getDistrict);
 districtRouter.get("/:id", getDistrictById);
 districtRouter.delete("/:id", deleteDistrict);
 districtRouter.put("/:id", updateDistrict);
-districtRouter.get("/:id/sevakendras", getSevaKendraByDistrictId);
+districtRouter.get("/:districtId/sevakendras", getSevaKendraByDistrictId);
 export default districtRouter;
