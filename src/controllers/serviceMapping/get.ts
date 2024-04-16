@@ -33,4 +33,4 @@ const getServiceMappingById = async (
   }
 };
 
-export { getServiceMapping };
+export { getServiceMapping, getServiceMappingById };
