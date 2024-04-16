@@ -6,10 +6,10 @@ import throwDatabaseError from "../../utils/errorHandler.js";
 import { getServiceMappingDB, getServiceMappingDBTotal } from "../read.js";
 
 const getServiceMappingDBTransaction = async (
-  skip: number = defaults.skip,
-  take: number = defaults.take,
   searchConditions: ServiceMappingWhere,
-  orderByColumnAndSortOrder: Object = { dateOfService: "asc" }
+  orderByColumnAndSortOrder: Object = { dateOfService: "asc" },
+  skip: number = defaults.skip,
+  take: number = defaults.take
 ) => {
   try {
     const transaction = await prisma.$transaction(

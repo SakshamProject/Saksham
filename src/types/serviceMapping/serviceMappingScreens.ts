@@ -15,7 +15,7 @@ const serviceMappingFilter = z
   .array();
 type serviceMappingFilterType = z.infer<typeof serviceMappingFilter>;
 const getServiceMappingSchema = z.object({
-  filter: serviceMappingFilter.optional(),
+  filters: serviceMappingFilter.optional(),
   pagination: z
     .object({
       rows: z.number().positive(),

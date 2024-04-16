@@ -1,3 +1,4 @@
+import { StatusEnum } from "@prisma/client";
 import { ServiceMappingWhere } from "../../../../types/serviceMapping/serviceMappingScreens.js";
 
 const ServiceMappingGlobalSearchConditions = (searchText: string = "") => {
@@ -62,7 +63,17 @@ const ServiceMappingGlobalSearchConditions = (searchText: string = "") => {
         },
       },
       {
-        dateOfService: {},
+        dateOfService: {
+          equals: searchText,
+        },
+      },
+      {
+        isCompleted: {
+          equals:
+            StatusEnum.COMPLETED == searchText.toUpperCase()
+              ? StatusEnum.COMPLETED
+              : StatusEnum.PENDING,
+        },
       },
     ],
   };
