@@ -1,17 +1,15 @@
-import { date, z } from "zod";
+import { z } from "zod";
 import inputFieldSchema, {
   auditLogSchema,
   dateSchema,
   emailSchema,
-  filter,
   filterOperationsEnum,
   landLineNumberSchema,
   phoneNumberSchema,
   uuidSchema,
 } from "../inputFieldSchema.js";
-import { AuditLogStatusEnum, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { SevaKendraColumnNamesEnum } from "./sevaKendraDefaults.js";
-import { sevaKendraColumnNameMapper } from "../../services/database/utils/sevaKendra/sevaKendraMapper.js";
 import { sortOrderEnum } from "../getRequestSchema.js";
 
 const SevaKendraColumnNameSchema = z
