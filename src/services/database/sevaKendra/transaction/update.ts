@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../../database.js";
-import { getSevaKendraServicesById } from "../read.js";
+import { getSevaKendraServicesById, getSevaKendraStatusDB } from "../read.js";
 import {
   ContactPerson,
   SevaKendraAuditLog,
@@ -17,6 +17,8 @@ import {
   updateSevaKendraDBObject,
 } from "../../../../dto/sevaKendra/update.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
+import APIError from "../../../errors/APIError.js";
+import { StatusCodes } from "http-status-codes";
 
 const updateSevaKendraDBTransaction = async (
   id: string,
@@ -68,7 +70,9 @@ const updateSevaKendraDBTransaction = async (
     );
     return transaction;
   } catch (error) {
+    if (error instanceof APIError) throw error;
     if (error instanceof Error) throwDatabaseError(error);
+    throw error;
   }
 };
 //only one audit log entry in created at one time
@@ -80,12 +84,24 @@ async function createAuditLogIfExists(
   const auditLogDBObject: SevaKendraAuditLog | null =
     createSevaKendraAuditLogDBObject(updateRequestSevaKendra, id);
   if (auditLogDBObject) {
-    if (auditLogDBObject.status != updateRequestSevaKendra.currentStatus) {
+    const currentDate = new Date(Date().toLocaleString()).toISOString();
+    const statusOfSevaKendra = await getSevaKendraStatusDB(
+      updateRequestSevaKendra.id,
+      currentDate
+    );
+    if (auditLogDBObject.status != statusOfSevaKendra) {
       const createdAuditLog = await createSevaKendraAuditLogDB(
         prismaTransaction,
         auditLogDBObject
       );
       return createdAuditLog;
+    } else {
+      throw new APIError(
+        "SevaKendra status is not changed . Update Failed!",
+        StatusCodes.BAD_REQUEST,
+        "StatusNotChanged",
+        "I"
+      );
     }
   } else {
     throw new Error("auditlog object is null");

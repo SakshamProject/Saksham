@@ -30,9 +30,6 @@ apiRouter.use("/services", serviceMasterRouter);
 apiRouter.use("/sevakendras", sevaKendraRouter);
 apiRouter.use("/typemaster", typeMasterRouter);
 apiRouter.use("/designation", designationRouter);
-// apiRouter.get("/designation",(req,res)=>{
-//   res.send(`[+]router`)
-// })
 
 apiRouter.use(errorHandler);
 export default apiRouter;

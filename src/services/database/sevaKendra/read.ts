@@ -19,6 +19,8 @@ const getSevaKendraDB = async (
       select: {
         id: true,
         name: true,
+        createdAt: true,
+        updatedAt: true,
         district: {
           select: {
             id: true,
@@ -100,19 +102,73 @@ const getSevaKendraServicesById = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-
-const getSevaKendraByDistrictIdDB = async (districtId: string) => {
+const getSevaKendraStatusDB = async (
+  sevaKendraId: string,
+  currentDate: string
+) => {
   try {
+    const SevaKendraAuditLog = await prisma.sevaKendraAuditLog.findFirstOrThrow(
+      {
+        where: {
+          AND: [
+            { sevaKendraId: sevaKendraId },
+            {
+              date: {
+                lte: currentDate,
+              },
+            },
+          ],
+        },
+        orderBy: {
+          date: "desc",
+        },
+        take: 1,
+        select: {
+          status: true,
+        },
+      }
+    );
+    return SevaKendraAuditLog.status || AuditLogStatusEnum.DEACTIVE;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+const getSevaKendraByDistrictIdDB = async (
+  districtId: string,
+  status: AuditLogStatusEnum | undefined
+) => {
+  try {
+    const currentDate = new Date(Date.now()).toISOString();
     const sevakendras = await prisma.sevaKendra.findMany({
       where: {
         AND: [
           { districtId: districtId },
-          { currentStatus: AuditLogStatusEnum.ACTIVE },
+          {
+            auditLog: {
+              every: {
+                status: status,
+              },
+            },
+          },
         ],
       },
       select: {
         id: true,
         name: true,
+        auditLog: {
+          select: {
+            status: true,
+          },
+          where: {
+            date: {
+              lt: currentDate,
+            },
+          },
+          orderBy: {
+            date: "desc",
+          },
+          take: 1,
+        },
       },
     });
     return sevakendras;
@@ -126,4 +182,5 @@ export {
   getSevaKendraByIdDB,
   getSevaKendraServicesById,
   getSevaKendraByDistrictIdDB,
+  getSevaKendraStatusDB,
 };
