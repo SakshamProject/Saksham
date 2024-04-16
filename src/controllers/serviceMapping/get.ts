@@ -62,7 +62,7 @@ const getServiceMappingById = async (
 ) => {
   try {
     const serviceMappingId = request.params.id;
-    const result = getServiceMappingByIdDB(serviceMappingId);
+    const result = await getServiceMappingByIdDB(serviceMappingId);
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
   } catch (error) {

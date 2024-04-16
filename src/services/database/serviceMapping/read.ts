@@ -18,6 +18,42 @@ const getServiceMappingDB = async (
         take: take,
         where: searchConditions,
         orderBy: orderByColumnAndSortOrder,
+        select: {
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+          user: {
+            select: {
+              designation: {
+                select: {
+                  sevaKendra: {
+                    select: {
+                      id: true,
+                      name: true,
+                      district: {
+                        select: {
+                          id: true,
+                          name: true,
+                          state: {
+                            select: { id: true, name: true },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          dateOfService: true,
+          isCompleted: true,
+          service: {
+            select: { id: true, name: true },
+          },
+          divyang: {
+            select: { id: true, firstName: true },
+          },
+        },
       });
     return serviceMapping;
   } catch (error) {
@@ -40,17 +76,26 @@ const getServiceMappingDBTotal = async (
 };
 
 const getServiceMappingByIdDB = async (id: string) => {
-  const serviceMapping = await prisma.divyangServiceMapping.findUnique({
-    where: {
-      id: id,
-    },
-    include: {
-      user: true,
-      sevaKendraFollowUp: true,
-      nonSevaKendraFollowUp: true,
-      donor: true,
-    },
-  });
+  try {
+    const serviceMapping = await prisma.divyangServiceMapping.findFirstOrThrow({
+      where: {
+        id: id,
+      },
+      include: {
+        user: true,
+        sevaKendraFollowUp: true,
+        nonSevaKendraFollowUp: true,
+        donor: true,
+        createdBy: true,
+        updatedBy: true,
+        divyang: true,
+        service: true,
+      },
+    });
+    return serviceMapping;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
 };
 export {
   getServiceMappingDB,
