@@ -19,6 +19,8 @@ const getSevaKendraDB = async (
       select: {
         id: true,
         name: true,
+        createdAt: true,
+        updatedAt: true,
         district: {
           select: {
             id: true,

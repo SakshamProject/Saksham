@@ -41,7 +41,7 @@ const sevaKendraColumnNameMapper = (
   sevaKendraColumnNameMap.set(SevaKendraColumnNamesEnum.CREATED_AT, {
     createdAt: sortOrder,
   });
-  sevaKendraColumnNameMap.set(SevaKendraColumnNamesEnum.CREATED_AT, {
+  sevaKendraColumnNameMap.set(SevaKendraColumnNamesEnum.UPDATED_AT, {
     updatedAt: sortOrder,
   });
   return sevaKendraColumnNameMap.get(orderByColumn);
