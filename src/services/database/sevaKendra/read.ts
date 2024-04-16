@@ -104,7 +104,6 @@ const getSevaKendraStatusDB = async (
   sevaKendraId: string,
   currentDate: string
 ) => {
-  // console.log("currentDate", currentDate);
   try {
     const SevaKendraAuditLog = await prisma.sevaKendraAuditLog.findFirstOrThrow(
       {
@@ -127,7 +126,6 @@ const getSevaKendraStatusDB = async (
         },
       }
     );
-    // console.log(SevaKendraAuditLog);
     return SevaKendraAuditLog.status || AuditLogStatusEnum.DEACTIVE;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
