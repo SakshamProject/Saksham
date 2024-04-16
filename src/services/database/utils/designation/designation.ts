@@ -10,6 +10,10 @@ function designationColumnNameMapper(
 ) {
   const designationColumnNameMap: Map<string, any> = new Map();
 
+  designationColumnNameMap.set("createdAt", {
+    createdAt: sortOrder,
+  });
+
   designationColumnNameMap.set("designations", {
     name: sortOrder,
   });
