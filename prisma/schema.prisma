@@ -28,7 +28,7 @@ model SevaKendra {
   updatedAt       DateTime            @updatedAt
   updatedBy       String
   currentStatus   AuditLogStatusEnum?
-
+  @@unique([name,districtId])
   services      ServicesOnSevaKendras[]
   district      District                @relation(fields: [districtId], references: [id])
   contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])
@@ -333,27 +333,31 @@ model DivyangDetails {
 model DivyangServiceMapping {
   id                              String                          @id @default(uuid())
   divyangId                       String
-  divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
   userId                          String?
   serviceId                       String
-  service                         Service                         @relation(fields: [serviceId], references: [id])
   dateOfService                   DateTime
   dueDate                         DateTime
   isFollowUpRequired              Boolean?
   isNonSevaKendraFollowUpRequired Boolean
   isCompleted                     StatusEnum
+  howTheyGotService               HowTheyGotServiceEnum?
   completedDate                   DateTime?
   donorId                         String?                         @unique
-  donor                           Donor?                          @relation(fields: [donorId], references: [id])
-  nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
-  sevaKendraFollowUp              SevaKendraFollowUp[]
-  user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
   createdAt                       DateTime                        @default(now())
   updatedAt                       DateTime                        @updatedAt
   createdById                     String
   updatedById                     String
+  
+  divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
+  service                         Service                         @relation(fields: [serviceId], references: [id])
+  donor                           Donor?                          @relation(fields: [donorId], references: [id])
+  user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
   createdBy                       User                             @relation("serviceMappingCreatedBy",fields: [createdById],references: [id])
   updatedBy                       User                             @relation("serviceMappingUpdatedBy",fields: [updatedById],references: [id])
+
+  nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
+  sevaKendraFollowUp              SevaKendraFollowUp[]
+
 
 }
 
@@ -562,3 +566,9 @@ enum AuditLogStatusEnum {
   ACTIVE
   DEACTIVE
 }
+
+enum HowTheyGotServiceEnum {
+  WHATSAPP 
+  VOLUNTEER 
+  SEVAKENDRA
+} 
