@@ -342,18 +342,18 @@ model DivyangDetails {
   createdBy             Person                            @relation("divyangCreatedBy", fields: [createdById], references: [id])
   updatedBy             Person                            @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
 
-  // divyangDetailsAuditLog DivyangDetailsAuditLog[]
+  divyangDetailsAuditLog DivyangDetailsAuditLog[]
 }
 
-// model DivyangDetailsAuditLog {
-//   id           String @id @default(uuid())
-//   divyangDetailsId String
-//   status       AuditLogStatusEnum
-//   date         DateTime
-//   description  String?
+model DivyangDetailsAuditLog {
+  id               String             @id @default(uuid())
+  divyangDetailsId String
+  status           AuditLogStatusEnum
+  date             DateTime
+  description      String?
 
-//   divyangDetails DivyangDetails @relation(fields: [divyangDetailsId], references: [id])
-// }
+  divyangDetails DivyangDetails @relation(fields: [divyangDetailsId], references: [id])
+}
 
 model DivyangServiceMapping {
   id                              String                 @id @default(uuid())
