@@ -12,7 +12,7 @@ async function putServiceMapping(request:Request,response:Response,next:NextFunc
 
   if(request.user){
     const updatedById:string = request.user?.id;
-    const result = putServiceMappingDBTransaction(body,id,updatedById);
+    const result = await putServiceMappingDBTransaction(body,id,updatedById);
 
     //const responseResult = await getServiceMappingByIdDB(result);
   
@@ -27,3 +27,4 @@ async function putServiceMapping(request:Request,response:Response,next:NextFunc
     }
 
 }
+export {putServiceMapping}

@@ -18,10 +18,16 @@ async function putServiceMappingDBTransaction(
           if(body.isCompleted===StatusEnum.COMPLETED){
 
             if(body.donor){
+              
               const postDonorDBObject:donorSchemaType = createPostDonorObject(body.donor);
               const donor:Donor|undefined = await createDonorDB(prismaTransaction,postDonorDBObject);
-              const updateServiceMappingDBObject = createupdateServiceMappingDBObject(body,donor?.id,updatedById)
-              // const serviceMapping = await updateServiceMappingDB(prismaTransaction,updateServiceMappingDBObject,id)
+              const updateServiceMappingDBObject = createupdateServiceMappingDBObject(body,updatedById,donor?.id)
+              const serviceMapping = await updateServiceMappingDB(prismaTransaction,updateServiceMappingDBObject,id)
+
+            }else{
+
+              const updateServiceMappingDBObject = createupdateServiceMappingDBObject(body,updatedById)
+              const serviceMapping = await updateServiceMappingDB(prismaTransaction,updateServiceMappingDBObject,id)
             }
           }
 

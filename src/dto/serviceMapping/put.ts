@@ -11,7 +11,7 @@ function createPostDonorObject(donorDetails:donorSchemaType){
 return postDonorObject
 }
 
-function createupdateServiceMappingDBObject(body:putServiceMappingSchemaType,donorId:string="",updatedById:string){
+function createupdateServiceMappingDBObject(body:putServiceMappingSchemaType,updatedById:string,donorId:string=""){
 
     const updateServiceMappingDBObject:serviceMappingUpdateType={
 
@@ -30,11 +30,12 @@ function createupdateServiceMappingDBObject(body:putServiceMappingSchemaType,don
     if(donorId===""){
         return updateServiceMappingDBObject;
     }else{
-        return updateServiceMappingDBObject.donor={
+         updateServiceMappingDBObject.donor={
             connect:{
                 id:donorId
             }
         }
+        return updateServiceMappingDBObject;
     }
 
 }

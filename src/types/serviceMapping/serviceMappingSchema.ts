@@ -89,7 +89,8 @@ const putServiceMappingSchema =z.object({
         return (
        
           data.reasonForNonCompletion !== undefined &&
-          data.userId !== undefined
+          data.userId !== undefined &&
+          data.donor===undefined
         );
       }else if(data.isNonSevaKendraFollowUpRequired){
         return (
