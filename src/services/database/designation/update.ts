@@ -22,28 +22,4 @@ async function updateDesignationDB(prismaTransaction:Prisma.TransactionClient, u
     }
      
   }
-
-async function getDesignationStatus(prismaTransaction:Prisma.TransactionClient,designationId:string){
-  const currentDate = new Date().toISOString();
-  const status =await prismaTransaction.designation.findFirst({
-    where:{
-      id:designationId
-    },
-    include: {
-      designationAuditLog: {
-          where: {
-              date:{
-                lt :currentDate
-              } 
-          },
-          orderBy: {
-              date:'desc'
-          },
-          take: 1
-      }
-  }
-  })
-  return status?.designationAuditLog[0].status;
-}
-
-  export {updateDesignationDB,getDesignationStatus};
+  export {updateDesignationDB};

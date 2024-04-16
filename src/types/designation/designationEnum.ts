@@ -1,5 +1,4 @@
 enum designationColumnNamesEnum {
-    CREATEDAT="createdAt",
     DESIGNATIONS = "designations",
     SEVAKENDRANAME = "sevaKendraName",
     SEVAKENDRADISTRICT = "sevaKendraDistrict",

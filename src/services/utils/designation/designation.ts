@@ -24,10 +24,12 @@ async function createCheckedFeaturesOnDesignations(
           prismaTransaction,
           postFeaturesOnDesignationsDBObject
         );
+        console.log("[+]FeaturesOnDesignations", FeaturesOnDesignations);
         return FeaturesOnDesignations;
       })
   );
 
+  console.log(`[+]createFeaturesOnDesignations`, createFeaturesOnDesignations);
 }
 
 async function deleteUncheckedDesignations(
@@ -58,7 +60,7 @@ async function deleteUncheckedDesignations(
         return deletedFeaturesOnDesignation;
       })
   );
- 
+  console.log(`[+]deleteFeaturesOnDesignations`, deleteFeaturesOnDesignations);
 }
 
 function retrieveFeatureIds(

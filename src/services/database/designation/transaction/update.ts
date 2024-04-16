@@ -1,4 +1,4 @@
-import { AuditLogStatusEnum, Designation, FeaturesOnDesignations, Prisma } from "@prisma/client";
+import { Designation, FeaturesOnDesignations, Prisma } from "@prisma/client";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import { updateDesignationRequestSchemaType } from "../../../../types/designation/designationSchema.js";
 import prisma from "../../database.js";
@@ -6,7 +6,7 @@ import {
   createDesignationAuditLog,
   createUpdateDesignationObject,
 } from "../../../../dto/designation/designation.js";
-import { getDesignationStatus, updateDesignationDB } from "../update.js";
+import { updateDesignationDB } from "../update.js";
 import { getFeaturesIdByDesignationIdDB } from "../read.js";
 import {
   createCheckedFeaturesOnDesignations,
@@ -63,10 +63,6 @@ async function putDesignationDBTransaction(
           id
         );
 
-        const status = await getDesignationStatus(prismaTransaction,id)
-
-       if (status !== body.auditLog.status){
-
         const designationAuditLogObject = createDesignationAuditLog(
           id,
           body.auditLog.status,
@@ -77,8 +73,6 @@ async function putDesignationDBTransaction(
           prismaTransaction,
           designationAuditLogObject
         );
-
-       }
 
         return id;
       } catch (error) {

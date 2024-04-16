@@ -22,7 +22,7 @@ function throwDatabaseError(error: Error) {
       "E"
     );
   }
-  if (error instanceof APIError) throw error;
+  if (error instanceof APIError) return error;
 
   throw new APIError(
     "Some Database Error Occurred",
