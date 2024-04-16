@@ -355,11 +355,6 @@ model DivyangServiceMapping {
   updatedAt                       DateTime                        @updatedAt
   createdById                     String
   updatedById                     String
-  
-  divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
-  service                         Service                         @relation(fields: [serviceId], references: [id])
-  donor                           Donor?                          @relation(fields: [donorId], references: [id])
-  user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
 
   divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
   createdBy                       User                             @relation("serviceMappingCreatedBy",fields: [createdById],references: [id])
@@ -369,11 +364,6 @@ model DivyangServiceMapping {
   donor                           Donor?                          @relation(fields: [donorId], references: [id])
   nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
   sevaKendraFollowUp              SevaKendraFollowUp[]
-
-  nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
-  sevaKendraFollowUp              SevaKendraFollowUp[]
-
-
 }
 
 model Donor {
