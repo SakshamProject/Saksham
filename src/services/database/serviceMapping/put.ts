@@ -5,6 +5,15 @@ import { serviceMappingUpdateType } from "../../../types/serviceMapping/serviceM
 async function updateServiceMappingDB(prismaTransaction:Prisma.TransactionClient,dataObject:serviceMappingUpdateType,id:string){
     try{
 
+        const serviceMapping = await prismaTransaction.divyangServiceMapping.update({
+            where: {
+                id: id,
+              },
+             
+              data:dataObject
+        })
+        return serviceMapping;
+
     }catch(err){
         if(err instanceof Error){
             throwDatabaseError(err);

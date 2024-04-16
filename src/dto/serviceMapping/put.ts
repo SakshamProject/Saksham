@@ -11,7 +11,7 @@ function createPostDonorObject(donorDetails:donorSchemaType){
 return postDonorObject
 }
 
-function createupdateServiceMappingDBObject(body:putServiceMappingSchemaType,updatedById:string,donorId:string=""){
+function createupdateServiceMappingCompletionDBObject(body:putServiceMappingSchemaType,updatedById:string,donorId:string=""){
 
     const updateServiceMappingDBObject:serviceMappingUpdateType={
 
@@ -40,4 +40,4 @@ function createupdateServiceMappingDBObject(body:putServiceMappingSchemaType,upd
 
 }
 
-export {createPostDonorObject,createupdateServiceMappingDBObject};
+export {createPostDonorObject,createupdateServiceMappingCompletionDBObject};

@@ -1,5 +1,5 @@
 import { Donor, Prisma, StatusEnum } from "@prisma/client";
-import { createPostDonorObject, createupdateServiceMappingDBObject } from "../../../../dto/serviceMapping/put.js";
+import { createPostDonorObject, createupdateServiceMappingCompletionDBObject } from "../../../../dto/serviceMapping/put.js";
 import { donorSchemaType, putServiceMappingSchemaType } from "../../../../types/serviceMapping/serviceMappingSchema.js";
 import prisma from "../../database.js";
 import { createDonorDB } from "../post.js";
@@ -26,8 +26,20 @@ async function putServiceMappingDBTransaction(
 
             }else{
 
-              const updateServiceMappingDBObject = createupdateServiceMappingDBObject(body,updatedById)
+              const updateServiceMappingDBObject = createupdateServiceMappingCompletionDBObject(body,updatedById)
+              console.log(`[+]updateServiceMappingDBObject`,updateServiceMappingDBObject)
               const serviceMapping = await updateServiceMappingDB(prismaTransaction,updateServiceMappingDBObject,id)
+              console.log(`[+]serviceMapping`,serviceMapping)
+
+            }
+          }
+          else{
+            if(body.isFollowUpRequired){
+
+            }else if (body.isNonSevaKendraFollowUpRequired){
+
+            }else{
+              const updateSeviceMappingDBObject = createUpdateServiceMappingDBObject()
             }
           }
 
