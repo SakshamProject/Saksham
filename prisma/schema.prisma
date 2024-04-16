@@ -341,6 +341,7 @@ model DivyangServiceMapping {
   isNonSevaKendraFollowUpRequired Boolean
   isCompleted                     StatusEnum
   howTheyGotService               HowTheyGotServiceEnum?
+  reasonForNonCompletion          String?
   completedDate                   DateTime?
   donorId                         String?                         @unique
   createdAt                       DateTime                        @default(now())
