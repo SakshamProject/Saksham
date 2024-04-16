@@ -562,3 +562,9 @@ enum AuditLogStatusEnum {
   ACTIVE
   DEACTIVE
 }
+
+enum HowTheyGotServiceEnum {
+  WHATSAPP 
+  VOLUNTEER 
+  SEVAKENDRA
+} 
