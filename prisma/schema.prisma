@@ -14,6 +14,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Person {
+  id         String   @id @default(uuid())
+  loginId    String   @unique
+  passwordId String   @unique
+  pasword    Password @relation(fields: [passwordId], references: [id])
+  user       User?    @relation("person")
+
+  divyangsCreated DivyangDetails[] @relation("divyangCreatedBy")
+  divyangsUpdated DivyangDetails[] @relation("divyangUpdatedBy")
+}
+
+model Password {
+  id       String  @id @default(uuid())
+  password String
+  person   Person?
+}
+
 model SevaKendra {
   id              String    @id @default(uuid())
   name            String    @unique
@@ -129,21 +146,25 @@ model User {
   designationId  String
   picture        String? // url
   email          String
-  loginId        String      @unique
-  passwordId     String      @unique
+  // loginId        String      @unique
+  // passwordId     String      @unique
+
+  personId String @unique
+  person   Person @relation("person", references: [passwordId], fields: [id])
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 
-  createdById  String?
-  createdBy    User?   @relation("createdBy", fields: [createdById], references: [id])
-  usersCreated User[]  @relation("createdBy")
+  usersCreated User[] @relation("createdBy")
+  usersUpdated User[] @relation("updatedBy")
 
-  updatedById  String? @unique
-  updatedBy    User?   @relation("updatedBy", fields: [updatedById], references: [id])
-  usersUpdated User[]  @relation("updatedBy")
+  createdById String?
+  createdBy   User?   @relation("createdBy", fields: [createdById], references: [id])
 
-  password                      UserPassword            @relation(fields: [passwordId], references: [id])
+  updatedById String? @unique
+  updatedBy   User?   @relation("updatedBy", fields: [updatedById], references: [id])
+
+  // password                      UserPassword            @relation(fields: [passwordId], references: [id])
   designation                   Designation             @relation("Designation-Users", fields: [designationId], references: [id])
   designationsCreated           Designation[]           @relation("createdBy")
   designationsUpdated           Designation[]           @relation("updatedBy")
@@ -152,8 +173,6 @@ model User {
   divyangServiceMapping         DivyangServiceMapping[] @relation("inchargeUser")
   createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
   updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
-  createdDivyangDetails         DivyangDetails[]        @relation("divyangCreatedBy")
-  updatedDivyangDetails         DivyangDetails[]        @relation("divyangUpdatedBy")
   createdSevaKendra             SevaKendra[]            @relation("sevaKendraCreatedBy")
   updatedSevaKendra             SevaKendra[]            @relation("sevaKendraUpdatedBy")
 }
@@ -168,11 +187,11 @@ model UserAuditLog {
   user User @relation(fields: [userId], references: [id])
 }
 
-model UserPassword {
-  id             String @id @default(uuid())
-  hashedPassword String
-  user           User?
-}
+// model UserPassword {
+//   id             String @id @default(uuid())
+//   hashedPassword String
+//   user           User?
+// }
 
 // side bars seva kendra master, service master
 model Feature {
@@ -320,8 +339,8 @@ model DivyangDetails {
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
   districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
-  createdBy             User                              @relation("divyangCreatedBy", fields: [createdById], references: [id])
-  updatedBy             User                              @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
+  createdBy             Person                            @relation("divyangCreatedBy", fields: [createdById], references: [id])
+  updatedBy             Person                            @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
 
   // divyangDetailsAuditLog DivyangDetailsAuditLog[]
 }
