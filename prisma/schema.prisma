@@ -362,8 +362,6 @@ model DivyangServiceMapping {
 
 }
 
-
-
 model Donor {
   id                    String                 @id @default(uuid())
   name                  String
