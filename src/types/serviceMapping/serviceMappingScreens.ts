@@ -11,6 +11,9 @@ const serviceAdditionalWhereSchema = z.object({
   startDate: z.string().datetime().optional(),
   endDate: z.string().datetime().optional(),
 });
+type ServiceAdditionalWhereSchemaType = z.infer<
+  typeof serviceAdditionalWhereSchema
+>;
 const serviceMappingFilter = z
   .object({
     operation: z.nativeEnum(filterOperationsEnum),
@@ -40,6 +43,8 @@ const getServiceMappingSchema = z.object({
 });
 type getServiceMappingSchemaType = z.infer<typeof getServiceMappingSchema>;
 export {
+  serviceAdditionalWhereSchema,
+  ServiceAdditionalWhereSchemaType,
   ServiceMappingWhere,
   serviceMappingFilter,
   serviceMappingFilterType,

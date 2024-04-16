@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import {
+  ServiceAdditionalWhereSchemaType,
   ServiceMappingWhere,
   getServiceMappingSchema,
+  serviceAdditionalWhereSchema,
   serviceMappingFilter,
 } from "../../types/serviceMapping/serviceMappingScreens.js";
 import { getServiceMappingByIdDB } from "../../services/database/serviceMapping/read.js";
@@ -21,6 +23,8 @@ const getServiceMapping = async (
 ) => {
   try {
     const serviceMappingRequest = getServiceMappingSchema.parse(request.body);
+    const serviceAdditionalWhere: ServiceAdditionalWhereSchemaType =
+      serviceAdditionalWhereSchema.parse(request.query);
     const orderByColumnAndSortOrder = serviceMappingColumnNameMapper(
       serviceMappingRequest.sorting?.orderByColumn,
       serviceMappingRequest.sorting?.sortOrder
@@ -33,7 +37,8 @@ const getServiceMapping = async (
           );
     const serviceMappingWhereInput = createServiceMappingFilterInputObject(
       serviceMappingRequest.filters,
-      globalSearchConditions
+      globalSearchConditions,
+      serviceAdditionalWhere
     );
     const result = await getServiceMappingDBTransaction(
       serviceMappingWhereInput,

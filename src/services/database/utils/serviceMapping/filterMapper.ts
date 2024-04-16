@@ -3,6 +3,7 @@ import { Prisma, StatusEnum } from "@prisma/client";
 import { ServiceMappingColumnNamesEnum } from "../../../../types/serviceMapping/serviceMappingDefaults.js";
 import { filterOperationsEnum } from "../../../../types/inputFieldSchema.js";
 import {
+  ServiceAdditionalWhereSchemaType,
   ServiceMappingWhere,
   serviceMappingFilterType,
 } from "../../../../types/serviceMapping/serviceMappingScreens.js";
@@ -60,7 +61,7 @@ const filterServiceMappingMapper = (
               },
             },
           },
-        },   
+        },
       },
     },
   });
@@ -107,7 +108,8 @@ const filterServiceMappingMapper = (
 
 const generateServiceMappingFilter = (
   serviceMappingfilter: serviceMappingFilterType | undefined,
-  globalSearchConditions: ServiceMappingWhere | null
+  globalSearchConditions: ServiceMappingWhere | null,
+  serviceAdditionalWhere: ServiceAdditionalWhereSchemaType
 ) => {
   const ServiceMappingWhereInput: any = {
     AND: [],
@@ -121,6 +123,36 @@ const generateServiceMappingFilter = (
   }
   if (globalSearchConditions != null)
     ServiceMappingWhereInput.AND.push(globalSearchConditions);
+  if (serviceAdditionalWhere.districtId != undefined) {
+    const additionalWhere: ServiceMappingWhere = {
+      user: {
+        designation: {
+          sevaKendra: {
+            districtId: serviceAdditionalWhere.districtId,
+          },
+        },
+      },
+    };
+    ServiceMappingWhereInput.AND.push(additionalWhere);
+  }
+  if (serviceAdditionalWhere.serviceStatus != undefined) {
+    const additionalWhere: ServiceMappingWhere = {
+      isCompleted: serviceAdditionalWhere.serviceStatus,
+    };
+    ServiceMappingWhereInput.AND.push(additionalWhere);
+  }
+  if (
+    serviceAdditionalWhere.startDate != undefined ||
+    serviceAdditionalWhere.endDate != undefined
+  ) {
+    const additionalWhere: ServiceMappingWhere = {
+      dateOfService: {
+        lte: serviceAdditionalWhere.startDate,
+        gte: serviceAdditionalWhere.startDate,
+      },
+    };
+    ServiceMappingWhereInput.AND.push(additionalWhere);
+  }
   return ServiceMappingWhereInput;
 };
 
