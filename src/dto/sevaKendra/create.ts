@@ -40,15 +40,15 @@ const createSevaKendraDBObject = (
     },
     auditLog: {
       create: {
-        date: sevaKendraDefaults.date,
+        // date: sevaKendraDefaults.date,
         description: sevaKendraDefaults.description,
         status: AuditLogStatusEnum.ACTIVE,
       },
     },
     currentStatus: AuditLogStatusEnum.ACTIVE,
-    createdBy: createdBy,
+    // createdBy: createdBy,
     createdAt: new Date().toISOString(),
-    updatedBy: updatedBy,
+    // updatedBy: updatedBy,
     updatedAt: new Date().toISOString(),
   };
   return sevaKendraDBObject;
