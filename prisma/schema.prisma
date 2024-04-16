@@ -27,7 +27,6 @@ model SevaKendra {
   createdById       String?
   updatedAt       DateTime            @updatedAt
   updatedById       String?
-  currentStatus   AuditLogStatusEnum?
 
   @@unique([name,districtId])
   services      ServicesOnSevaKendras[]

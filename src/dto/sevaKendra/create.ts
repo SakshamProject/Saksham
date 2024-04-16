@@ -45,7 +45,6 @@ const createSevaKendraDBObject = (
         status: AuditLogStatusEnum.ACTIVE,
       },
     },
-    currentStatus: AuditLogStatusEnum.ACTIVE,
     // createdBy: createdBy,
     createdAt: new Date().toISOString(),
     // updatedBy: updatedBy,
