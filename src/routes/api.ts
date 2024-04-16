@@ -31,8 +31,7 @@ apiRouter.use("/services", serviceMasterRouter);
 apiRouter.use("/sevakendras", sevaKendraRouter);
 apiRouter.use("/typemaster", typeMasterRouter);
 apiRouter.use("/designation", designationRouter);
-apiRouter.use("/servicemapping",serviceMappingRouter);
-
+apiRouter.use("/servicemapping", serviceMappingRouter);
 
 apiRouter.use(errorHandler);
 export default apiRouter;

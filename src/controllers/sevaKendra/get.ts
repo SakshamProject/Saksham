@@ -17,6 +17,8 @@ import {
 } from "../../services/database/sevaKendra/read.js";
 import { createSevaKendraFilterInputObject } from "../../dto/sevaKendra/create.js";
 import SevaKendraGlobalSearchConditions from "../../services/database/utils/sevaKendra/searchConditions.js";
+import { AuditLogStatusEnum } from "@prisma/client";
+import { auditLogStatusEnumSchema } from "../../types/inputFieldSchema.js";
 
 const getSevaKendra = async (
   request: Request,
@@ -25,7 +27,6 @@ const getSevaKendra = async (
 ) => {
   try {
     const sevaKendraRequest = getSevaKendraSchema.parse(request.body);
-    console.log(request.body, "   parsed  ", sevaKendraRequest);
     const orderByColumnAndSortOrder = sevaKendraColumnNameMapper(
       sevaKendraRequest.sorting?.orderByColumn,
       sevaKendraRequest.sorting?.sortOrder
@@ -80,7 +81,9 @@ const getSevaKendraByDistrictId = async (
 ) => {
   try {
     const districtId = request.params.districtId;
-    const result = await getSevaKendraByDistrictIdDB(districtId);
+    const status: AuditLogStatusEnum | undefined =
+      auditLogStatusEnumSchema.parse(request.params.status);
+    const result = await getSevaKendraByDistrictIdDB(districtId, status);
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
   } catch (error) {

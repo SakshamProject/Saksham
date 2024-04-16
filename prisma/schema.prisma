@@ -24,23 +24,26 @@ model SevaKendra {
   startDate       DateTime?
   contactPersonId String
   createdAt       DateTime            @default(now())
-  createdBy       String
+  createdById       String?
   updatedAt       DateTime            @updatedAt
-  updatedBy       String
+  updatedById       String?
   currentStatus   AuditLogStatusEnum?
+
   @@unique([name,districtId])
   services      ServicesOnSevaKendras[]
   district      District                @relation(fields: [districtId], references: [id])
   contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])
   designations  Designation[]
   auditLog      SevaKendraAuditLog[]
+  createdBy     User?                    @relation("sevaKendraCreatedBy",fields:[createdById],references: [id])
+  updatedBy     User?                    @relation("sevaKendraUpdatedBy",fields: [updatedById],references: [id])
 }
 
 model SevaKendraAuditLog {
   id           String             @id @default(uuid())
   sevaKendraId String
   status       AuditLogStatusEnum
-  date         DateTime
+  date         DateTime            @default(now())  
   description  String?
 
   sevakendra SevaKendra @relation(fields: [sevaKendraId], references: [id])
@@ -91,8 +94,9 @@ model Service {
 
 model District {
   id                 String               @id @default(uuid())
-  name               String               @unique
+  name               String               
   stateId            String
+  @@unique([name,stateId])
   sevakendra         SevaKendra[]
   state              State                @relation(fields: [stateId], references: [id])
   disability         DivyangDetails[]     @relation("disability")
@@ -150,6 +154,8 @@ model User {
   updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
   createdDivyangDetails DivyangDetails[] @relation("divyangCreatedBy")
   updatedDivyangDetails DivyangDetails[] @relation("divyangUpdatedBy")
+  createdSevaKendra     SevaKendra[] @relation("sevaKendraCreatedBy")
+  updatedSevaKendra     SevaKendra[] @relation("sevaKendraUpdatedBy")
 }
 
 model UserAuditLog {
@@ -237,6 +243,7 @@ model DivyangDetails {
   spouseName              String?
   spouseNumber            String?
   religion                String
+  community               String
   communityCategoryId     String
   extraCurricularActivity String?
   // all below here are in next page
@@ -348,21 +355,16 @@ model DivyangServiceMapping {
   updatedAt                       DateTime                        @updatedAt
   createdById                     String
   updatedById                     String
-  
+
   divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
-  service                         Service                         @relation(fields: [serviceId], references: [id])
-  donor                           Donor?                          @relation(fields: [donorId], references: [id])
-  user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
   createdBy                       User                             @relation("serviceMappingCreatedBy",fields: [createdById],references: [id])
   updatedBy                       User                             @relation("serviceMappingUpdatedBy",fields: [updatedById],references: [id])
-
+  service                         Service                         @relation(fields: [serviceId], references: [id])
+  user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
+  donor                           Donor?                          @relation(fields: [donorId], references: [id])
   nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
   sevaKendraFollowUp              SevaKendraFollowUp[]
-
-
 }
-
-
 
 model Donor {
   id                    String                 @id @default(uuid())
