@@ -91,8 +91,9 @@ model Service {
 
 model District {
   id                 String               @id @default(uuid())
-  name               String               @unique
+  name               String               
   stateId            String
+  @@unique([name,stateId])
   sevakendra         SevaKendra[]
   state              State                @relation(fields: [stateId], references: [id])
   disability         DivyangDetails[]     @relation("disability")

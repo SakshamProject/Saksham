@@ -6,5 +6,7 @@ enum ServiceMappingColumnNamesEnum {
   SERVICE_NAME = "serviceName",
   SERVICE_DATE = "serviceDate",
   SERVICE_STATUS = "serviceStatus",
+  CREATED_AT = "createdAt",
+  UPDATED_AT = "updatedAt"
 }
 export { ServiceMappingColumnNamesEnum };
