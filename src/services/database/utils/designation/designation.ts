@@ -14,6 +14,10 @@ function designationColumnNameMapper(
     createdAt: sortOrder,
   });
 
+  designationColumnNameMap.set("updatedAt", {
+    updatedAt: sortOrder,
+  });
+
   designationColumnNameMap.set("designations", {
     name: sortOrder,
   });
