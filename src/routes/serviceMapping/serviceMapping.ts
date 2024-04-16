@@ -1,8 +1,12 @@
 import express from "express";
-import { getServiceMappingById } from "../../controllers/serviceMapping/get.js";
+import {
+  getServiceMapping,
+  getServiceMappingById,
+} from "../../controllers/serviceMapping/get.js";
 
 const serviceMappingRouter = express.Router();
 
 serviceMappingRouter.get("/:id", getServiceMappingById);
+serviceMappingRouter.post("/list", getServiceMapping);
 
 export default serviceMappingRouter;
