@@ -65,6 +65,7 @@ async function getDesignationDBTotal(
 
 async function getDesignationByIDDB(id: string | undefined) {
   try {
+    const currentDate = new Date(Date.now()).toISOString();
     const designation = await prisma.designation.findUnique({
       where: {
         id: id,
@@ -119,9 +120,16 @@ async function getDesignationByIDDB(id: string | undefined) {
         designationAuditLog: {
           select: {
             status: true,
-            date: true,
-            description: true,
           },
+          where: {
+            date: {
+              lt: currentDate,
+            },
+          },
+          orderBy: {
+            date: "desc",
+          },
+          take: 1,
         },
       },
     });
