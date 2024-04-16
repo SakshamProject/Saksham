@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import defaults from "../../../defaults.js";
 import { ServiceMappingWhere } from "../../../types/serviceMapping/serviceMappingScreens.js";
 import throwDatabaseError from "../utils/errorHandler.js";
+import prisma from "../database.js";
 
 const getServiceMappingDB = async (
   prismaTransaction: Prisma.TransactionClient,
@@ -37,4 +38,22 @@ const getServiceMappingDBTotal = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-export { getServiceMappingDB, getServiceMappingDBTotal };
+
+const getServiceMappingByIdDB = async (id: string) => {
+  const serviceMapping = await prisma.divyangServiceMapping.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      user: true,
+      sevaKendraFollowUp: true,
+      nonSevaKendraFollowUp: true,
+      donor: true,
+    },
+  });
+};
+export {
+  getServiceMappingDB,
+  getServiceMappingDBTotal,
+  getServiceMappingByIdDB,
+};
