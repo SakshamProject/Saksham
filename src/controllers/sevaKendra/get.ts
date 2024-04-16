@@ -14,6 +14,7 @@ import { getSevaKendraDBTransaction } from "../../services/database/sevaKendra/t
 import {
   getSevaKendraByDistrictIdDB,
   getSevaKendraByIdDB,
+  getSevaKendraStatusDB,
 } from "../../services/database/sevaKendra/read.js";
 import { createSevaKendraFilterInputObject } from "../../dto/sevaKendra/create.js";
 import SevaKendraGlobalSearchConditions from "../../services/database/utils/sevaKendra/searchConditions.js";
@@ -68,7 +69,13 @@ const getSevaKendraById = async (
   try {
     const id = request.params.id;
     const result = await getSevaKendraByIdDB(id);
-    const responseData = createResponseOnlyData(result);
+    const currentDate = new Date(Date.now()).toISOString();
+    const status = await getSevaKendraStatusDB(id, currentDate);
+    const responseData = createResponseOnlyData({
+      ...result,
+      status: status,
+      timestamp: currentDate,
+    });
     response.send(responseData);
   } catch (error) {
     next(error);
@@ -83,7 +90,7 @@ const getSevaKendraByDistrictId = async (
   try {
     const districtId = request.params.districtId;
     const status: AuditLogStatusEnum | undefined =
-      auditLogStatusEnumSchema.parse(request.params.status);
+      auditLogStatusEnumSchema.parse(request.query.status);
     const result = await getSevaKendraByDistrictIdDB(districtId, status);
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
