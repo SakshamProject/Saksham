@@ -16,9 +16,13 @@ async function filterServiceDB( prismaTransaction: Prisma.TransactionClient,
             select: serviceMasterDefaults.select,
             where: serviceTypeWhereInput,
             skip: skip,
-            take: take,
             orderBy: serviceMasterColumnNameMapper(orderBy, sortOrder),
         };
+
+        if (take > 0) {
+            query.take = take;
+        }
+
         const results = await prismaTransaction.serviceType.findMany(query);
         return results;
     } catch (error) {

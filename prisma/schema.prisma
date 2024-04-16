@@ -28,7 +28,7 @@ model SevaKendra {
   updatedAt       DateTime            @updatedAt
   updatedBy       String
   currentStatus   AuditLogStatusEnum?
-
+  @@unique([name,districtId])
   services      ServicesOnSevaKendras[]
   district      District                @relation(fields: [districtId], references: [id])
   contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])
@@ -102,7 +102,6 @@ model District {
   Municipalities     Municipality[]
   Corporations       Corporation[]
   PanchayatUnions    PanchayatUnion[]
-  sevaKendraFollowUp SevaKendraFollowUp[]
   Taluks             Taluk[]
   divyangDetails     DivyangDetails[]     @relation("divyangDetails")
 }
@@ -149,6 +148,8 @@ model User {
   divyangServiceMapping DivyangServiceMapping[]  @relation("inchargeUser")
   createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
   updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
+  createdDivyangDetails DivyangDetails[] @relation("divyangCreatedBy")
+  updatedDivyangDetails DivyangDetails[] @relation("divyangUpdatedBy")
 }
 
 model UserAuditLog {
@@ -295,6 +296,10 @@ model DivyangDetails {
   motherIncome     Int?
   spouseOccupation String?
   spouseIncome     Int?
+  createdAt                       DateTime                        @default(now())
+  updatedAt                       DateTime                        @updatedAt
+  createdById                     String
+  updatedById                     String
 
   communityCategory     CommunityCategory                 @relation(fields: [communityCategoryId], references: [id])
   corporation           Corporation?                      @relation(fields: [corporationId], references: [id])
@@ -309,6 +314,8 @@ model DivyangDetails {
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
   districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
+  createdBy                       User                             @relation("divyangCreatedBy",fields: [createdById],references: [id])
+  updatedBy                       User                             @relation("divyangUpdatedBy",fields: [updatedById],references: [id])
 
   // divyangDetailsAuditLog DivyangDetailsAuditLog[]
 }
@@ -327,7 +334,7 @@ model DivyangServiceMapping {
   id                              String                          @id @default(uuid())
   divyangId                       String
   divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
-  userId                          String
+  userId                          String?
   serviceId                       String
   service                         Service                         @relation(fields: [serviceId], references: [id])
   dateOfService                   DateTime
@@ -340,7 +347,7 @@ model DivyangServiceMapping {
   donor                           Donor?                          @relation(fields: [donorId], references: [id])
   nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
   sevaKendraFollowUp              SevaKendraFollowUp[]
-  user                            User                            @relation("inchargeUser",fields: [userId], references: [id])
+  user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
   createdAt                       DateTime                        @default(now())
   updatedAt                       DateTime                        @updatedAt
   createdById                     String
@@ -363,11 +370,10 @@ model Donor {
 model SevaKendraFollowUp {
   id                      String                @id @default(uuid())
   date                    DateTime
-  districtId              String
   userId                  String
   divyangServiceMappingId String
   divyangServiceMapping   DivyangServiceMapping @relation(fields: [divyangServiceMappingId], references: [id])
-  district                District              @relation(fields: [districtId], references: [id])
+  
   user                    User                  @relation(fields: [userId], references: [id])
 }
 

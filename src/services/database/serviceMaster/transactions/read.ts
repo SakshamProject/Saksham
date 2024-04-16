@@ -6,7 +6,7 @@ import prisma from "../../database.js";
 import serviceMasterDefaults from "../defaults/defaults.js";
 import {sortOrderEnum} from "../../../../types/getRequestSchema.js";
 
-async function getServicesDBTransaction(start = defaults.skip, rows = defaults.take, orderBy = serviceMasterDefaults.orderBy, sortOrder: sortOrderEnum = defaults.sortOrder, searchText = "") {
+async function getServicesDBTransaction(start = defaults.skip, rows = 0, orderBy = serviceMasterDefaults.orderBy, sortOrder: sortOrderEnum = defaults.sortOrder, searchText = "") {
     const transaction = prisma.$transaction(
         async (prismaTransaction: Prisma.TransactionClient) => {
             try {

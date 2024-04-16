@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import defaults from "../../../defaults.js";
 import { sortOrderEnum } from "../../../types/getRequestSchema.js";
 import prisma from "../database.js";
@@ -64,6 +64,9 @@ const getSevaKendraByIdDB = async (sevaKendraId: string): Promise<any> => {
         id: sevaKendraId,
       },
       include: {
+        district: {
+          include: { state: true },
+        },
         contactPerson: true,
         services: true,
         auditLog: true,
@@ -97,9 +100,30 @@ const getSevaKendraServicesById = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+
+const getSevaKendraByDistrictIdDB = async (districtId: string) => {
+  try {
+    const sevakendras = await prisma.sevaKendra.findMany({
+      where: {
+        AND: [
+          { districtId: districtId },
+          { currentStatus: AuditLogStatusEnum.ACTIVE },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    return sevakendras;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 export {
   getSevaKendraDB,
   getSevaKendraDBTotal,
   getSevaKendraByIdDB,
   getSevaKendraServicesById,
+  getSevaKendraByDistrictIdDB,
 };

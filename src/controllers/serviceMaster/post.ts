@@ -60,7 +60,7 @@ async function listService(request: Request, response: Response, next: NextFunct
         body.sorting?.sortOrder,
         serviceWhereInput
     );
-    response.json(results);
+    response.json(createResponseForFilter(results?.services, body, results?.total, results?.services?.length, body.filters));
   } catch(error) {
     next(error);
   }
