@@ -119,6 +119,8 @@ type putServiceMappingSchemaType =z.infer<typeof putServiceMappingSchema>;
 
 type donorSchemaType = Prisma.DonorCreateInput;
 
+type serviceMappingUpdateType=Prisma.DivyangServiceMappingUpdateInput;
+
 
 
 
@@ -130,6 +132,7 @@ export {
   postServiceMappingType,
   postNonSevaKendraFollowUpType,
   putServiceMappingSchemaType,
-  donorSchemaType
+  donorSchemaType,
+  serviceMappingUpdateType
   
 };

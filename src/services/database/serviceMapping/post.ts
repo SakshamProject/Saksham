@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import throwDatabaseError from "../utils/errorHandler.js";
-import { postNonSevaKendraFollowUpType, postServiceMappingType } from "../../../types/serviceMapping/serviceMappingSchema.js";
+import { donorSchemaType, postNonSevaKendraFollowUpType, postServiceMappingType } from "../../../types/serviceMapping/serviceMappingSchema.js";
 
 async function createServiceMappingDB(prismaTransaction:Prisma.TransactionClient,dataObject:postServiceMappingType) {
   try {
@@ -31,4 +31,18 @@ async function createNonSevaKendraFollowUpDB(prismaTransaction:Prisma.Transactio
   }
 }
 
-export { createServiceMappingDB, createNonSevaKendraFollowUpDB };
+async function createDonorDB(prismaTransaction:Prisma.TransactionClient,dataObject:donorSchemaType){
+try{
+
+    const donor = prismaTransaction.donor.create({
+      data:dataObject
+    })
+    return donor;
+}catch(err){
+  if (err instanceof Error) {
+    throwDatabaseError(err);
+}
+}
+}
+
+export { createServiceMappingDB, createNonSevaKendraFollowUpDB ,createDonorDB};
