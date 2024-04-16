@@ -1,11 +1,16 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, StatusEnum } from "@prisma/client";
 import { z } from "zod";
-import { filterOperationsEnum } from "../inputFieldSchema.js";
+import { filterOperationsEnum, uuidSchema } from "../inputFieldSchema.js";
 import { ServiceMappingColumnNamesEnum } from "./serviceMappingDefaults.js";
 import { sortOrderEnum } from "../getRequestSchema.js";
 
 type ServiceMappingWhere = Prisma.DivyangServiceMappingWhereInput;
-
+const serviceAdditionalWhereSchema = z.object({
+  serviceStatus: z.nativeEnum(StatusEnum).optional(),
+  districtId: uuidSchema.optional(),
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
+});
 const serviceMappingFilter = z
   .object({
     operation: z.nativeEnum(filterOperationsEnum),
