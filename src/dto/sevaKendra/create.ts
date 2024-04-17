@@ -40,7 +40,7 @@ const createSevaKendraDBObject = (
     },
     auditLog: {
       create: {
-        // date: sevaKendraDefaults.date,
+        date: sevaKendraDefaults.date,
         description: sevaKendraDefaults.description,
         status: AuditLogStatusEnum.ACTIVE,
       },
