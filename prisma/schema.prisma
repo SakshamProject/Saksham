@@ -165,7 +165,7 @@ model User {
   updatedBy    User?   @relation("updatedBy", fields: [updatedById], references: [id])
 
 
-  password              UserPassword            @relation(fields: [passwordId], references: [id])
+  //password              UserPassword            @relation(fields: [passwordId], references: [id])
   designation           Designation             @relation("Designation-Users", fields: [designationId], references: [id])
   designationsCreated   Designation[]           @relation("createdBy")
   designationsUpdated   Designation[]           @relation("updatedBy")
@@ -391,7 +391,6 @@ model DivyangServiceMapping {
   nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
   //sevaKendraFollowUp              SevaKendraFollowUp[]
 
-  sevaKendraFollowUp    SevaKendraFollowUp[]
 }
 
 model Donor {
@@ -411,15 +410,7 @@ model Donor {
   
 //   user                    User                  @relation(fields: [userId], references: [id])
 // }
-model SevaKendraFollowUp {
-  id                      String                @id @default(uuid())
-  date                    DateTime
-  userId                  String
-  divyangServiceMappingId String
-  divyangServiceMapping   DivyangServiceMapping @relation(fields: [divyangServiceMappingId], references: [id])
 
-  user User @relation(fields: [userId], references: [id])
-}
 
 model NonSevaKendraFollowUp {
   id                      String  @id @default(uuid())
