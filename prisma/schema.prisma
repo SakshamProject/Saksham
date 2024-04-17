@@ -176,7 +176,7 @@ model User {
 
   // password                      UserPassword            @relation(fields: [passwordId], references: [id])
 
-  sevaKendraFollowUp            SevaKendraFollowUp[]
+  // sevaKendraFollowUp            SevaKendraFollowUp[]
 
   createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
   updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
