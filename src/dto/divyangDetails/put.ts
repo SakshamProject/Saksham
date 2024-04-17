@@ -8,6 +8,7 @@ import { DisabilityDetails } from '../../types/divyangDetails/disabilityDetailsS
 
 const updatePersonalDetailsDBObject = (
   personalDetails: PersonalDetails,
+  updatedBy: string,
 ): Prisma.DivyangDetailsUpdateInput => {
   const updatePersonalDetails: Prisma.DivyangDetailsUpdateInput = {
     divyangId: personalDetails.divyangId,
@@ -33,12 +34,18 @@ const updatePersonalDetailsDBObject = (
     },
     community: personalDetails.community,
     extraCurricularActivity: personalDetails.extraCurricularActivity,
+    updatedBy: {
+      connect: {
+        id: updatedBy,
+      },
+    },
   }
   return updatePersonalDetails
 }
 
 const updateAddressDBObject = (
   addressRequest: Address,
+  updatedBy: string,
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateAddress: Prisma.DivyangDetailsUpdateInput = {
     doorNumber: addressRequest.doorNumber,
@@ -88,12 +95,18 @@ const updateAddressDBObject = (
       },
     },
     pincode: addressRequest.pincode,
+    updatedBy: {
+      connect: {
+        id: updatedBy,
+      },
+    },
   }
   return updateAddress
 }
 
 const updateEmploymentDetailsDBObject = (
   employmentDetails: EmploymentDetails,
+  updatedBy: string,
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     isEmployed: employmentDetails.isEmployed,
@@ -106,12 +119,18 @@ const updateEmploymentDetailsDBObject = (
     motherIncome: employmentDetails.motherIncome,
     spouseOccupation: employmentDetails.spouseOccupation,
     spouseIncome: employmentDetails.spouseIncome,
+    updatedBy: {
+      connect: {
+        id: updatedBy,
+      },
+    },
   }
   return updateEmploymentDetails
 }
 
 const updateIdProofUploadsDBObject = (
   IdProofUploads: IdProofUploads,
+  updatedBy: string,
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     voterId: IdProofUploads.voterId,
@@ -123,12 +142,18 @@ const updateIdProofUploadsDBObject = (
     medicalInsuranceNumber: IdProofUploads.medicalInsuranceNumber,
     disabilitySchemeNumber: IdProofUploads.disabilitySchemeNumber,
     BPL_OR_APL_Number: IdProofUploads.BPL_OR_APL_Number,
+    updatedBy: {
+      connect: {
+        id: updatedBy,
+      },
+    },
   }
   return updateEmploymentDetails
 }
 
 const updateDisabilityDetailsDBObject = (
   disabilityDetails: DisabilityDetails,
+  updatedBy: string
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     isDisabilitySinceBirth: disabilityDetails.isDisabilitySinceBirth,
@@ -144,6 +169,11 @@ const updateDisabilityDetailsDBObject = (
     udidCardNumber: disabilityDetails.udidCardNumber,
     udidEnrollmentNumber: disabilityDetails.udidEnrollmentNumber,
     udidCardUrl: disabilityDetails.udidCardUrl,
+    updatedBy: {
+      connect: {
+        id: updatedBy,
+      },
+    },
   }
   return updateEmploymentDetails
 }
@@ -152,26 +182,34 @@ function createUpdateDTOObject(
   pageNumber: number,
   updateDivyangDetailsRequest: updateDivyangDetailsRequest,
 ) {
+  const updatedBy = updateDivyangDetailsRequest.updatedBy
+
   if (pageNumber === 1 && updateDivyangDetailsRequest.personalDetails) {
     return updatePersonalDetailsDBObject(
       updateDivyangDetailsRequest.personalDetails,
+      updatedBy,
     )
   } else if (pageNumber === 2 && updateDivyangDetailsRequest.addressRequest) {
-    return updateAddressDBObject(updateDivyangDetailsRequest.addressRequest)
+    return updateAddressDBObject(
+      updateDivyangDetailsRequest.addressRequest,
+      updatedBy)
   } else if (
     pageNumber === 3 &&
     updateDivyangDetailsRequest.employmentDetails
   ) {
     return updateEmploymentDetailsDBObject(
       updateDivyangDetailsRequest.employmentDetails,
+      updatedBy
     )
   } else if (pageNumber === 4 && updateDivyangDetailsRequest.disabiltyDetails) {
     return updateDisabilityDetailsDBObject(
       updateDivyangDetailsRequest.disabiltyDetails,
+      updatedBy
     )
   } else if (pageNumber === 5 && updateDivyangDetailsRequest.IdProofUploads) {
     return updateIdProofUploadsDBObject(
       updateDivyangDetailsRequest.IdProofUploads,
+      updatedBy
     )
   } else {
     console.log('Error - Enter a valid page number or object not present')

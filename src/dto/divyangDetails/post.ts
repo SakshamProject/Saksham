@@ -1,13 +1,13 @@
-import { generateDivyangDetailsFilter } from "../../services/database/utils/divyangDetails/filterMapper.js";
+import { generateDivyangDetailsFilter } from '../../services/database/utils/divyangDetails/filterMapper.js'
 import {
   createDivyangDetails,
   DivyangDetailsFilterType,
   DivyangDetailsWhere,
   postDivyangDetailsRequest,
-} from "../../types/divyangDetails/divyangDetailsSchema.js";
+} from '../../types/divyangDetails/divyangDetailsSchema.js'
 
 const createDivyangDetailsDBObject = (
-  divyangDetails: postDivyangDetailsRequest
+  divyangDetails: postDivyangDetailsRequest,
 ): createDivyangDetails => {
   const newDivyangDetails: createDivyangDetails = {
     divyangId: divyangDetails.personalDetails.divyangId,
@@ -34,18 +34,28 @@ const createDivyangDetailsDBObject = (
     community: divyangDetails.personalDetails.community,
     extraCurricularActivity:
       divyangDetails.personalDetails.extraCurricularActivity,
-  };
-  return newDivyangDetails;
-};
+    createdBy: {
+      connect: {
+        id: divyangDetails.createdBy,
+      },
+    },
+    updatedBy: {
+      connect: {
+        id: divyangDetails.updatedBy,
+      },
+    },
+  }
+  return newDivyangDetails
+}
 
 const createDivyangDetailsFilterInputObject = (
   divyangDetailsFilter: DivyangDetailsFilterType | undefined,
-  globalSearchConditions: DivyangDetailsWhere | null
+  globalSearchConditions: DivyangDetailsWhere | null,
 ): DivyangDetailsWhere => {
   const divyangDetailsWhereInput = generateDivyangDetailsFilter(
     divyangDetailsFilter,
-    globalSearchConditions
-  );
-  return divyangDetailsWhereInput;
-};
-export { createDivyangDetailsDBObject, createDivyangDetailsFilterInputObject };
+    globalSearchConditions,
+  )
+  return divyangDetailsWhereInput
+}
+export { createDivyangDetailsDBObject, createDivyangDetailsFilterInputObject }
