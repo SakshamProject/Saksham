@@ -34,7 +34,7 @@ function createUserDBObject(request: Request): Prisma.UserCreateInput {
     }
     return userInputObject;
 }
-function updateUserDBObject(request: Request): Prisma.UserCreateInput {
+function updateUserDBObject(request: Request): Prisma.UserUpdateInput {
     const userUpdateObject: Prisma.UserUpdateInput = {
         person: {
             connect: {
@@ -55,14 +55,13 @@ function updateUserDBObject(request: Request): Prisma.UserCreateInput {
                 id: request.body.designationId
             }
         },
-        userAuditLog: {
-            update: {
-                description: request.body.description,
-                status: request.body.status,
-                date: request.body.effectiveDate,
-            }
+        // userAuditLog: {
+        //     update : {
+        //         description: request.body.description,
+        //         status: request.body.status,
+        //         date: request.body.effectiveDate,
+        //     }
         }
-    }
     return userUpdateObject;
 }
 
