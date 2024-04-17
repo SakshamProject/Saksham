@@ -19,7 +19,7 @@ const postServiceMappingRequestSchema = z
     divyangId: uuidSchema,
     userId: uuidSchema.optional(),
     serviceId: uuidSchema,
-    startDate: dateSchema,
+    dateOfService: dateSchema,
     dueDate: dateSchema,
     isNonSevaKendraFollowUpRequired: z.boolean(),
     nonSevaKendraFollowUp: nonSevaKendraFollowUpSchema.optional(),
@@ -58,7 +58,7 @@ const donorSchema=z.object({
 
 const followUpSchema=z.object({
   userId:uuidSchema,
-  date:dateSchema
+  followUpdate:dateSchema
 })
 
 
@@ -91,16 +91,27 @@ const putServiceMappingSchema =z.object({
           data.reasonForNonCompletion !== undefined &&
           data.nonSevaKendraFollowUp !== undefined&&
           data.completedDate===undefined &&
-          data.howTheyGotService===undefined
+          data.howTheyGotService===undefined&&
+          data.followUp ===undefined&&
+          data.donor===undefined
         );
-      }
-      }
-      else{
+      }   else{
         return data.reasonForNonCompletion !== undefined&&
         data.followUp!==undefined&&
         data.completedDate===undefined &&
-        data.howTheyGotService===undefined
+        data.howTheyGotService===undefined&&
+        data.donor===undefined
       }
+      }else if(data.isCompleted===StatusEnum.STOPPED){
+        return data.completedDate !==undefined &&
+        data.reasonForNonCompletion !== undefined &&
+        data.howTheyGotService === undefined&&
+          data.nonSevaKendraFollowUp === undefined&&
+          data.followUp === undefined&&
+          data.isNonSevaKendraFollowUpRequired===false &&
+          data.donor===undefined
+      }
+   
   
   },
   {

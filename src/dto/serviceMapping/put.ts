@@ -1,9 +1,6 @@
 import { Prisma, StatusEnum } from "@prisma/client";
-// import {
-//   donorSchemaType,
-//   putServiceMappingSchemaType,
-//   serviceMappingUpdateType,
-// } from "../../types/serviceMapping/serviceMappingSchema.js";
+import { donorSchemaType, putServiceMappingSchemaType, serviceMappingUpdateType } from "../../types/serviceMapping/serviceMappingSchema.js";
+
 
 function createPostDonorObject(donorDetails: donorSchemaType) {
   const postDonorObject = {
@@ -42,36 +39,80 @@ function createupdateServiceMappingCompletionDBObject(
   }
 }
 
-function createupdateServiceMappingPendingDBObject(
-  body: putServiceMappingSchemaType,
-  updatedById: string
-) {
-  const updateServiceMappingPendingDBObject = {
-    userId:body.followUp?.userId,
-    isFollowUpRequired:body.isFollowUpRequired,
-    isNonSevaKendraFollowUpRequired :body.isNonSevaKendraFollowUpRequired,
-    //reasonForNonCompletion:body.reasonForNonCompletion,
-    isCompleted:StatusEnum.COMPLETED,
+// function createupdateServiceMappingPendingDBObject(
+//   body: putServiceMappingSchemaType,
+//   updatedById: string
+// ) {
+//   const updateServiceMappingPendingDBObject = {
+//     userId:body.followUp?.userId,
+//     isFollowUpRequired:body.isFollowUpRequired,
+//     isNonSevaKendraFollowUpRequired :body.isNonSevaKendraFollowUpRequired,
+//     //reasonForNonCompletion:body.reasonForNonCompletion,
+//     isCompleted:StatusEnum.COMPLETED,
 
-  updatedBy: {
-    connect: {
-      id: updatedById
+//   updatedBy: {
+//     connect: {
+//       id: updatedById
+//     }
+//   }
+//   };
+// return updateServiceMappingPendingDBObject;
+// }
+
+function createUpdateServiceMappingStoppedDBObject(body:putServiceMappingSchemaType,updatedById:string){
+    const UpdateServiceMappingStoppedDBObject={
+        isCompleted:body.isCompleted,
+        completedDate:body.completedDate,
+        reasonForNonCompletion:body.reasonForNonCompletion,
+        updatedBy:{
+          connect:{
+            id:updatedById
+          }
+        }
     }
-  }
-  };
-return updateServiceMappingPendingDBObject;
+return UpdateServiceMappingStoppedDBObject;
 }
 
-function createUpdateServiceMappingWithFollowUpDBObject(body,updatedById){
-    const UpdateServiceMappingWithFollowUpDBObject={
-        isCompleted:StatusEnum.PENDING,
-        
-    }
 
+function createUpdateServiceMappingWithNonSevaKendraFollowUpDBObject(body:putServiceMappingSchemaType,updatedById:string){
+  const UpdateServiceMappingWithNonSevaKendraFollowUpDBObject={
+    user:undefined,
+    followUpDate:body.followUp?.followUpdate,
+    isNonSevaKendraFollowUpRequired:body.isNonSevaKendraFollowUpRequired,
+    isCompleted:body.isCompleted,
+    reasonForNonCompletion:body.reasonForNonCompletion,
+    updatedBy:{
+      connect:{
+        id:updatedById
+      }
+    }
+  }
+  return UpdateServiceMappingWithNonSevaKendraFollowUpDBObject;
+}
+
+function createUpdateServiceMappingWithSevaKendraFollowUpDBObject(body:putServiceMappingSchemaType,updatedById:string){
+const UpdateServiceMappingWithSevaKendraFollowUpDBObject={
+  user:{
+    connect:{
+      id:body.followUp?.userId
+    }
+  },
+  followUpDate:body.followUp?.followUpdate,
+  isNonSevaKendraFollowUpRequired:body.isNonSevaKendraFollowUpRequired,
+  isCompleted:body.isCompleted,
+  updatedBy:{
+    connect:{
+      id:updatedById
+    }
+  }
+}
+return UpdateServiceMappingWithSevaKendraFollowUpDBObject;
 }
 
 export {
   createPostDonorObject,
   createupdateServiceMappingCompletionDBObject,
-  createupdateServiceMappingPendingDBObject,
+  createUpdateServiceMappingStoppedDBObject,
+  createUpdateServiceMappingWithNonSevaKendraFollowUpDBObject,
+  createUpdateServiceMappingWithSevaKendraFollowUpDBObject
 };
