@@ -34,9 +34,4 @@ apiRouter.use("/designation", designationRouter);
 apiRouter.use("/users", userRouter);
 
 apiRouter.use(errorHandler);
-
-apiRouter.use("*", (request: Request, response: Response, next: NextFunction) => {
-    response.status(StatusCodes.NOT_FOUND).json({"message": "Ohh you are lost, read the API documentation to find your way back home :)"});
-});
-
 export default apiRouter;
