@@ -16,14 +16,14 @@ const disabiltyDetailsRequestSchema = z
     districtCode: z.string(),
     stateCode: z.string(),
     identityCardNumber: z.string().length(64),
-    UDIDCardNumber: z.string().length(64),
-    UDIDCardUrl: z.string(),
-    UDIDEnrollmentNumber: z.string().length(64),
+    udidCardNumber: z.string().length(64),
+    udidCardUrl: z.string(),
+    udidEnrollmentNumber: z.string().length(64),
   })
   .refine((data) => {
     return (
-      data.UDIDCardNumber !== undefined &&
-      data.UDIDEnrollmentNumber !== undefined
+      data.udidCardNumber !== undefined &&
+      data.udidEnrollmentNumber !== undefined
     )
   })
   type DisabilityDetails = z.infer<typeof disabiltyDetailsRequestSchema>

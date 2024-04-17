@@ -5,10 +5,8 @@ import prisma from "../../database.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import { getDivyangDetailsDB, getDivyangDetailsTotalDB } from "../read.js";
 import {
-  DivyangDetailsFilterType,
   DivyangDetailsWhere,
-} from "../../../../types/divyangDetails/divyangDetailsSchema.js";
-import { DivyangDetailsColumnNamesEnum } from "../../../../types/divyangDetails/divyangDetailsDefaults.js";
+} from '../../../../types/divyangDetails/divyangDetailsSchema.js'
 
 const getDivyangDetailsDBTransaction = async (
   start: number = defaults.skip,

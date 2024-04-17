@@ -141,9 +141,9 @@ const updateDisabilityDetailsDBObject = (
     districtCode: disabilityDetails.districtCode,
     stateCode: disabilityDetails.stateCode,
     identityCardNumber: disabilityDetails.identityCardNumber,
-    UDIDCardNumber: disabilityDetails.UDIDCardNumber,
-    UDIDEnrollmentNumber: disabilityDetails.UDIDEnrollmentNumber,
-    UDIDCardUrl: disabilityDetails.UDIDCardUrl,
+    udidCardNumber: disabilityDetails.udidCardNumber,
+    udidEnrollmentNumber: disabilityDetails.udidEnrollmentNumber,
+    udidCardUrl: disabilityDetails.udidCardUrl,
   }
   return updateEmploymentDetails
 }
