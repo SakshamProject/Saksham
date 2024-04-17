@@ -39,7 +39,7 @@ async function getServicesDB(
         }
 
         if (searchText !== "") {
-            query.where = serviceSearchTextMapper("ServiceType", searchText);
+            // query.where = serviceSearchTextMapper("ServiceType", searchText);
         }
 
         const services = await prismaTransaction.service.findMany(query);

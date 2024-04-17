@@ -176,7 +176,7 @@ model User {
 
   // password                      UserPassword            @relation(fields: [passwordId], references: [id])
 
-  sevaKendraFollowUp            SevaKendraFollowUp[]
+  // sevaKendraFollowUp            SevaKendraFollowUp[]
 
   createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
   updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
@@ -270,7 +270,6 @@ model DivyangDetails {
   religion                String
   community               String
   communityCategoryId     String
-  community               String
   extraCurricularActivity String?
   // all below here are in next page
   voterId                 String?
