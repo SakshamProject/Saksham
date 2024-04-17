@@ -9,4 +9,5 @@ const userRouter = Router();
 userRouter.post("/list", listUser);
 userRouter.get("/:userId", getUserById);
 userRouter.post("/", authenticate, fileHandler.single("profilePhoto"), postUser);
+userRouter.put("/", authenticate, fileHandler.single("profilePhoto"), postUser);
 export default userRouter;

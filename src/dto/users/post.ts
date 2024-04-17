@@ -34,6 +34,38 @@ function createUserDBObject(request: Request): Prisma.UserCreateInput {
     }
     return userInputObject;
 }
+function updateUserDBObject(request: Request): Prisma.UserCreateInput {
+    const userUpdateObject: Prisma.UserUpdateInput = {
+        person: {
+            connect: {
+                id: request.user.id,
+            }
+        },
+        userId: request.body.userId,
+        firstName: request.body.firstName,
+
+        lastName: request.body.lastName,
+        gender: request.body.gender,
+        dateOfBirth: request.body.dateOfBirth,
+        contactNumber: request.body.contactNumber,
+        whatsappNumber: request.body.whatsappNumber,
+        email: request.body.email,
+        designation: {
+            connect: {
+                id: request.body.designationId
+            }
+        },
+        userAuditLog: {
+            update: {
+                description: request.body.description,
+                status: request.body.status,
+                date: request.body.effectiveDate,
+            }
+        }
+    }
+    return userUpdateObject;
+}
+
 
 function listUserWhereInput(body: userListType): Prisma.UserWhereInput {
     const userWhereInput = generateUserListWhereInput(body);

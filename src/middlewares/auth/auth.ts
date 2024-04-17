@@ -3,7 +3,7 @@ import log from "../../services/logger/logger.js";
 
 function authenticate(request: Request, response: Response, next: NextFunction) {
     const user: User = {
-        id: "28818dba-67b8-4a33-8a3a-26d2f171227a",
+        id: "2691d6f9-7660-4f81-afe2-19d20c84f545",
     };
     request.user = user;
     // log("info", "[middleware/auth]:\n %o", user);
