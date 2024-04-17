@@ -86,6 +86,7 @@ const getDivyangDetailsSearchByColumn = async (
       divyangDetailsSearchRequest
     );
     const responseData = createResponseOnlyData(result);
+    response.send(responseData)
   } catch (error) {
     next(error);
   }
