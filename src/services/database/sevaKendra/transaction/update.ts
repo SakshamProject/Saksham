@@ -89,22 +89,17 @@ async function createAuditLogIfExists(
       updateRequestSevaKendra.id,
       currentDate
     );
-    if (auditLogDBObject.status != statusOfSevaKendra) {
+    if (auditLogDBObject.status != statusOfSevaKendra?.status) {
       const createdAuditLog = await createSevaKendraAuditLogDB(
         prismaTransaction,
         auditLogDBObject
       );
       return createdAuditLog;
     } else {
-      throw new APIError(
-        "SevaKendra status is not changed . Update Failed!",
-        StatusCodes.BAD_REQUEST,
-        "StatusNotChanged",
-        "I"
-      );
+      console.log("!!!  SevaKendra status is not changed . Update Failed!");
     }
   } else {
-    throw new Error("auditlog object is null");
+    console.log("!!!  auditlog object is null");
   }
 }
 

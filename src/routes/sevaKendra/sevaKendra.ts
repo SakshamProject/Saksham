@@ -14,6 +14,7 @@ sevaKendraRouter.post("/list/", getSevaKendra);
 sevaKendraRouter.get("/:id", getSevaKendraById);
 sevaKendraRouter.post("/", postSevaKendra);
 sevaKendraRouter.put("/:id", putSevaKendra);
-sevaKendraRouter.get("/districts/:districtId", getSevaKendraByDistrictId);
+// sevaKendraRouter.get("/:id/users",)
+// sevaKendraRouter.get("/districts/:districtId", getSevaKendraByDistrictId);
 
 export default sevaKendraRouter;

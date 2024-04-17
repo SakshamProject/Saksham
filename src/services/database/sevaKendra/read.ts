@@ -70,7 +70,15 @@ const getSevaKendraByIdDB = async (sevaKendraId: string): Promise<any> => {
           include: { state: true },
         },
         contactPerson: true,
-        services: true,
+        services: {
+          include: {
+            service: {
+              include: {
+                serviceType: true,
+              },
+            },
+          },
+        },
         auditLog: true,
       },
     });
@@ -123,12 +131,9 @@ const getSevaKendraStatusDB = async (
           date: "desc",
         },
         take: 1,
-        select: {
-          status: true,
-        },
       }
     );
-    return SevaKendraAuditLog.status || AuditLogStatusEnum.DEACTIVE;
+    return SevaKendraAuditLog;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }
