@@ -45,7 +45,7 @@ const getDivyangDetailsByIdDB = async (id: string) => {
   }
 };
 
-async function getDivyangDetailsTotal(
+async function getDivyangDetailsTotalDB(
   prismaTransaction: any,
   divyangDetailsWhereInput: DivyangDetailsWhere
 ) {
@@ -63,4 +63,75 @@ async function getDivyangDetailsTotal(
   }
 }
 
-export { getDivyangDetailsDB, getDivyangDetailsTotal, getDivyangDetailsByIdDB };
+const getDiyangDetailsByDivyangIdDB = async (divyangId: string) => {
+  try {
+    const divyangDetails = await prisma.divyangDetails.findMany({
+      where: {
+        divyangId: divyangId,
+      },
+      orderBy: {
+        firstName: "asc",
+      },
+    });
+    return divyangDetails;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+
+const getDivyangDetailsByMobileNumberDB = async (mobileNumber: string) => {
+  try {
+    const divyangDetails = await prisma.divyangDetails.findMany({
+      where: {
+        mobileNumber: mobileNumber,
+      },
+      orderBy: {
+        firstName: "asc",
+      },
+    });
+    return divyangDetails;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+
+const getDivyangDetailsByAadharNumberDB = async (aadharNumber: string) => {
+  try {
+    const divyangDetails = await prisma.divyangDetails.findMany({
+      where: {
+        aadharCardNumber: aadharNumber,
+      },
+      orderBy: {
+        firstName: "asc",
+      },
+    });
+    return divyangDetails;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+
+const getDivyangDetailsByUDIDNumberDB = async (UDIDNumber: string) => {
+  try {
+    const divyangDetails = await prisma.divyangDetails.findMany({
+      where: {
+        udidCardNumber: UDIDNumber,
+      },
+      orderBy: {
+        firstName: "asc",
+      },
+    });
+    return divyangDetails;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+export {
+  getDivyangDetailsDB,
+  getDivyangDetailsTotalDB,
+  getDivyangDetailsByIdDB,
+  getDivyangDetailsByAadharNumberDB,
+  getDivyangDetailsByMobileNumberDB,
+  getDivyangDetailsByUDIDNumberDB,
+  getDiyangDetailsByDivyangIdDB,
+};

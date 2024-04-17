@@ -1,9 +1,9 @@
-import { Prisma } from '@prisma/client'
-import defaults from '../../../../defaults.js'
-import { sortOrderEnum } from '../../../../types/getRequestSchema.js'
-import prisma from '../../database.js'
-import throwDatabaseError from '../../utils/errorHandler.js'
-import { getDivyangDetailsDB, getDivyangDetailsTotal } from '../read.js'
+import { Prisma } from "@prisma/client";
+import defaults from "../../../../defaults.js";
+import { sortOrderEnum } from "../../../../types/getRequestSchema.js";
+import prisma from "../../database.js";
+import throwDatabaseError from "../../utils/errorHandler.js";
+import { getDivyangDetailsDB, getDivyangDetailsTotalDB } from "../read.js";
 import {
   DivyangDetailsWhere,
 } from '../../../../types/divyangDetails/divyangDetailsSchema.js'
@@ -12,7 +12,7 @@ const getDivyangDetailsDBTransaction = async (
   start: number = defaults.skip,
   rows: number = defaults.take,
   orderByColumnAndSortOrder: Object = { firstName: sortOrderEnum.ascending },
-  divyangDetailsWhereInput: DivyangDetailsWhere,
+  divyangDetailsWhereInput: DivyangDetailsWhere
 ) => {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
@@ -20,17 +20,17 @@ const getDivyangDetailsDBTransaction = async (
         const divyangDetails = await getDivyangDetailsDB(
           prismaTransaction,
           orderByColumnAndSortOrder,
-          divyangDetailsWhereInput,
-        )
+          divyangDetailsWhereInput
+        );
 
-        const total = await getDivyangDetailsTotal(
+        const total = await getDivyangDetailsTotalDB(
           prismaTransaction,
-          divyangDetailsWhereInput,
-        )
-        return { divyangDetails, total }
+          divyangDetailsWhereInput
+        );
+        return { divyangDetails, total };
       } catch (error) {
         if (error instanceof Error) {
-          throwDatabaseError(error)
+          throwDatabaseError(error);
         }
       }
     },
@@ -38,9 +38,9 @@ const getDivyangDetailsDBTransaction = async (
       isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
       maxWait: 50000,
       timeout: 10000,
-    },
-  )
-  return transaction
-}
+    }
+  );
+  return transaction;
+};
 
-export { getDivyangDetailsDBTransaction }
+export { getDivyangDetailsDBTransaction };
