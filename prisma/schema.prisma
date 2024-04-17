@@ -391,7 +391,6 @@ model DivyangServiceMapping {
   nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
   //sevaKendraFollowUp              SevaKendraFollowUp[]
 
-  sevaKendraFollowUp    SevaKendraFollowUp[]
 }
 
 model Donor {
@@ -411,15 +410,6 @@ model Donor {
   
 //   user                    User                  @relation(fields: [userId], references: [id])
 // }
-model SevaKendraFollowUp {
-  id                      String                @id @default(uuid())
-  date                    DateTime
-  userId                  String
-  divyangServiceMappingId String
-  divyangServiceMapping   DivyangServiceMapping @relation(fields: [divyangServiceMappingId], references: [id])
-
-  user User @relation(fields: [userId], references: [id])
-}
 
 model NonSevaKendraFollowUp {
   id                      String  @id @default(uuid())
