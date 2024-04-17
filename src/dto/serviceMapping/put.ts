@@ -39,25 +39,6 @@ function createupdateServiceMappingCompletionDBObject(
   }
 }
 
-// function createupdateServiceMappingPendingDBObject(
-//   body: putServiceMappingSchemaType,
-//   updatedById: string
-// ) {
-//   const updateServiceMappingPendingDBObject = {
-//     userId:body.followUp?.userId,
-//     isFollowUpRequired:body.isFollowUpRequired,
-//     isNonSevaKendraFollowUpRequired :body.isNonSevaKendraFollowUpRequired,
-//     //reasonForNonCompletion:body.reasonForNonCompletion,
-//     isCompleted:StatusEnum.COMPLETED,
-
-//   updatedBy: {
-//     connect: {
-//       id: updatedById
-//     }
-//   }
-//   };
-// return updateServiceMappingPendingDBObject;
-// }
 
 function createUpdateServiceMappingStoppedDBObject(body:putServiceMappingSchemaType,updatedById:string){
     const UpdateServiceMappingStoppedDBObject={
