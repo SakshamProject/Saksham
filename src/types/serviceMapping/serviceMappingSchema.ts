@@ -19,22 +19,23 @@ const postServiceMappingRequestSchema = z
     divyangId: uuidSchema,
     userId: uuidSchema.optional(),
     serviceId: uuidSchema,
-    dateOfService: dateSchema,
+    startDate: dateSchema,
     dueDate: dateSchema,
-    isNonSevaKendraFollowUpRequired: z.boolean().optional(),
+    isNonSevaKendraFollowUpRequired: z.boolean(),
     nonSevaKendraFollowUp: nonSevaKendraFollowUpSchema.optional(),
   })
   .refine(
     (data) => {
-      if (data.userId) {
+      if (data.isNonSevaKendraFollowUpRequired) {
         return (
-          data.nonSevaKendraFollowUp === undefined
+          data.nonSevaKendraFollowUp !== undefined &&
+          data.userId ===undefined
         );
       } else {
         return (
          
-          data.userId === undefined &&
-          data.nonSevaKendraFollowUp !== undefined
+          data.userId !== undefined &&
+          data.nonSevaKendraFollowUp === undefined
         );
       }
     },
@@ -43,10 +44,6 @@ const postServiceMappingRequestSchema = z
         "Validation failed: Either SevaKendra detail or non-sevaKendra volunteer detail has to be given completely",
     }
   )
-  .transform((data) => ({
-    ...data,
-    isNonSevaKendraFollowUpRequired: data.userId ? false : true,
-  }));
 
 
 type postServiceMappingRequestSchemaType = z.infer<

@@ -17,7 +17,9 @@ const createPostServiceMappingDBObject = (
             id:body.serviceId
         }
      },
-     dateOfService:body.dateOfService,
+
+     startDate:body.startDate,
+     followUpDate:body.startDate,
      dueDate:body.dueDate,
      isNonSevaKendraFollowUpRequired:body.isNonSevaKendraFollowUpRequired,
      isCompleted:StatusEnum.PENDING,
