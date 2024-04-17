@@ -1,4 +1,4 @@
-import express, { Request, Response, Router } from "express";
+import express, {NextFunction, Request, Response, Router} from "express";
 import { pingDB } from "../services/database/database.js";
 import typeMasterRouter from "./typeMaster/typeMaster.js";
 import userRouter from "./users/user.js";
@@ -34,5 +34,4 @@ apiRouter.use("/designation", designationRouter);
 apiRouter.use("/users", userRouter);
 
 apiRouter.use(errorHandler);
-
 export default apiRouter;
