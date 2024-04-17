@@ -82,13 +82,33 @@ const getServiceMappingByIdDB = async (id: string) => {
         id: id,
       },
       include: {
-        user: true,
+        user: {
+          include: {
+            designation: {
+              include: {
+                sevaKendra: {
+                  include: {
+                    district: {
+                      include: {
+                        state: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         nonSevaKendraFollowUp: true,
         donor: true,
         createdBy: true,
         updatedBy: true,
         divyang: true,
-        service: true,
+        service: {
+          include: {
+            serviceType: true,
+          },
+        },
       },
     });
     return serviceMapping;
