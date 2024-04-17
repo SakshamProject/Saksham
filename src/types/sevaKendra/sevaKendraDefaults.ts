@@ -1,6 +1,6 @@
 const sevaKendraDefaults = {
   description: "SevaKendra is started",
-  date: "2024-04-05T13:30:00Z",
+  date: new Date(Date.now()).toISOString(),
   //2024-04-05T13:30:00Z  ISO-8601 DateTime
 };
 
