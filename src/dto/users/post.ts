@@ -1,37 +1,34 @@
 import { Prisma } from "@prisma/client";
-import {userListType, userPostRequestType} from "../../types/users/usersSchema.js";
-import {createHmac} from "node:crypto";
-import config from "../../../config.js";
-import usersDefaults from "../../services/database/users/defaults/usersDefaults.js";
+import { Request } from "express";
+import {userListType} from "../../types/users/usersSchema.js";
 import generateUserListWhereInput from "../../services/database/utils/users/usersFilterMapper.js";
 
-function createUserDBObject(body: userPostRequestType): Prisma.UserCreateInput {
+function createUserDBObject(request: Request): Prisma.UserCreateInput {
     const userInputObject: Prisma.UserCreateInput = {
-        userId: body.userId,
-        firstName: body.firstName,
-        lastName: body.lastName,
-        gender: body.gender,
-        dateOfBirth: body.dateOfBirth,
-        currentStatus: usersDefaults.currentStatus,
-        contactNumber: body.contactNumber,
-        whatsappNumber: body.whatsappNumber,
-        email: body.email,
-        loginId: body.loginId,
-        designation: {
+        person: {
             connect: {
-                id: body.designationId
+                id: request.user.id,
             }
         },
-        password: {
-            create: {
-                hashedPassword: createHmac('sha256', config.SECRET).update(body.password).digest('hex')
+        userId: request.body.userId,
+        firstName: request.body.firstName,
+
+        lastName: request.body.lastName,
+        gender: request.body.gender,
+        dateOfBirth: request.body.dateOfBirth,
+        contactNumber: request.body.contactNumber,
+        whatsappNumber: request.body.whatsappNumber,
+        email: request.body.email,
+        designation: {
+            connect: {
+                id: request.body.designationId
             }
         },
         userAuditLog: {
             create: {
-                description: body.description,
-                status: body.status,
-                date: body.effectiveDate,
+                description: request.body.description,
+                status: request.body.status,
+                date: request.body.effectiveDate,
             }
         }
     }

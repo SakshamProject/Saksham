@@ -15,8 +15,6 @@ const usersPostSchema = z.object({
     email: emailSchema,
     contactNumber: phoneNumberSchema,
     whatsappNumber: phoneNumberSchema,
-    loginId: phoneNumberSchema,
-    password: z.string().regex(specialCharsRegex),
     // audit log
     status: z.nativeEnum(AuditLogStatusEnum),
     effectiveDate: dateSchema, // effective date
@@ -35,8 +33,6 @@ const usersPutSchema = z.object({
     mail: emailSchema,
     contactNumber: phoneNumberSchema,
     whatsappNumber: phoneNumberSchema,
-    loginId: phoneNumberSchema,
-    password: z.string().regex(specialCharsRegex),
     // audit log
     status: z.nativeEnum(AuditLogStatusEnum),
     effectiveDate: dateSchema,
