@@ -349,7 +349,7 @@ model DivyangDetails {
   createdBy             Person                            @relation("divyangCreatedBy", fields: [createdById], references: [id])
   updatedBy             Person                            @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
 
-  divyangDetailsAuditLog DivyangDetailsAuditLog[]
+  auditLog DivyangDetailsAuditLog[]
 }
 
 model DivyangDetailsAuditLog {

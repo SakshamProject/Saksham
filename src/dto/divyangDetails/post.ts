@@ -1,4 +1,5 @@
 import { generateDivyangDetailsFilter } from '../../services/database/utils/divyangDetails/filterMapper.js'
+import { DivyangDetailsAuditLogDefaults } from '../../types/divyangDetails/divyangDetailsDefaults.js'
 import {
   createDivyangDetails,
   DivyangDetailsFilterType,
@@ -42,6 +43,13 @@ const createDivyangDetailsDBObject = (
     updatedBy: {
       connect: {
         id: divyangDetails.updatedBy,
+      },
+    },
+    auditLog: {
+      create: {
+        date: DivyangDetailsAuditLogDefaults.date,
+        status: DivyangDetailsAuditLogDefaults.status,
+        description: DivyangDetailsAuditLogDefaults.description, // description value might change
       },
     },
   }

@@ -38,10 +38,12 @@ const auditLogSchema = z.object({
     date: z.string().datetime(),
     description: inputFieldSchema,
 });
+type auditLogSchemaType = z.infer<typeof auditLogSchema>
 const auditLogStatusEnumSchema = z.nativeEnum(AuditLogStatusEnum).optional();
 export {
     dateSchema,
     auditLogSchema,
+    auditLogSchemaType,
     queryParamsSchema,
     filter,
     filterOperationsEnum,

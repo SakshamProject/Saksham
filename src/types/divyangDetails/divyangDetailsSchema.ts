@@ -5,7 +5,7 @@ import { addressRequestSchema } from './addressSchema.js'
 import { disabiltyDetailsRequestSchema } from './disabilityDetailsSchema.js'
 import { employmentDetailsRequestSchema } from './employmentDetailsSchema.js'
 import { Prisma } from '@prisma/client'
-import { filterOperationsEnum, uuidSchema } from '../inputFieldSchema.js'
+import { auditLogSchema, filterOperationsEnum, uuidSchema } from '../inputFieldSchema.js'
 import {
   DivyangDetailsColumnNamesEnum,
   DivyangDetailsSearchColumnNamesEnum,
@@ -57,6 +57,7 @@ const divyangDetailsRequestSchema = z
     disabiltyDetails: disabiltyDetailsRequestSchema,
     employmentDetails: employmentDetailsRequestSchema,
     updatedBy: uuidSchema,
+    auditLog:auditLogSchema,
   })
   .refine((data) => {
     return Object.values(data).some((value) => value !== undefined)
@@ -70,6 +71,7 @@ const updateDivyangDetailsRequestSchema = z
     disabiltyDetails: disabiltyDetailsRequestSchema.optional(),
     employmentDetails: employmentDetailsRequestSchema.optional(),
     updatedBy: uuidSchema,
+    auditLog:auditLogSchema,
     pageNumber: z.number().min(1).max(5),
   })
   .refine((data) => {
