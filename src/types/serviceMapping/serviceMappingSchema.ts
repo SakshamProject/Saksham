@@ -68,9 +68,8 @@ const putServiceMappingSchema =z.object({
   completedDate:dateSchema.optional(),
   howTheyGotService: z.nativeEnum(HowTheyGotServiceEnum).optional(),
   reasonForNonCompletion:inputFieldSchema.optional(),
-  isFollowUpRequired:z.boolean().optional(),
   followUp:followUpSchema.optional(),
-  isNonSevaKendraFollowUpRequired:z.boolean().optional(),
+  isNonSevaKendraFollowUpRequired:z.boolean(),
   nonSevaKendraFollowUp:nonSevaKendraFollowUpSchema.optional(),
   donor:donorSchema.optional()
   
@@ -79,37 +78,34 @@ const putServiceMappingSchema =z.object({
     if (data.isCompleted===StatusEnum.COMPLETED) {
       return (
         data.completedDate !== undefined &&
-        data.howTheyGotService!==undefined &&
-        data.isFollowUpRequired === undefined &&
         data.followUp === undefined&&
-        data.isNonSevaKendraFollowUpRequired===undefined &&
-        data.nonSevaKendraFollowUp===undefined
+        data.isNonSevaKendraFollowUpRequired===false &&
+        data.nonSevaKendraFollowUp===undefined&&
+        data.reasonForNonCompletion===undefined
   
       );
     } else if(data.isCompleted===StatusEnum.PENDING){
-      if(data.isFollowUpRequired){
+      if(data.isNonSevaKendraFollowUpRequired){
         return (
        
           data.reasonForNonCompletion !== undefined &&
-          data.followUp !== undefined &&
-          data.donor===undefined
+          data.nonSevaKendraFollowUp !== undefined&&
+          data.completedDate===undefined &&
+          data.howTheyGotService===undefined
         );
-      }else if(data.isNonSevaKendraFollowUpRequired){
-        return (
-       
-          data.reasonForNonCompletion !== undefined &&
-          data.nonSevaKendraFollowUp !== undefined
-        );
+      }
       }
       else{
-        return data.reasonForNonCompletion !== undefined
+        return data.reasonForNonCompletion !== undefined&&
+        data.followUp!==undefined&&
+        data.completedDate===undefined &&
+        data.howTheyGotService===undefined
       }
   
-    }
   },
   {
     message:
-      "Validation failed: Please give necessary data",
+      "Validation failed: Please give necessary data for either sevaKendra followup or non-sevakendra followup",
   }
 )
 

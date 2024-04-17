@@ -1,9 +1,9 @@
 import { Prisma, StatusEnum } from "@prisma/client";
-import {
-  donorSchemaType,
-  putServiceMappingSchemaType,
-  serviceMappingUpdateType,
-} from "../../types/serviceMapping/serviceMappingSchema.js";
+// import {
+//   donorSchemaType,
+//   putServiceMappingSchemaType,
+//   serviceMappingUpdateType,
+// } from "../../types/serviceMapping/serviceMappingSchema.js";
 
 function createPostDonorObject(donorDetails: donorSchemaType) {
   const postDonorObject = {
