@@ -69,10 +69,12 @@ const getSevaKendraById = async (
     const id = request.params.id;
     const result = await getSevaKendraByIdDB(id);
     const currentDate = new Date(Date.now()).toISOString();
-    const status = await getSevaKendraStatusDB(id, currentDate);
+    const auditLog = await getSevaKendraStatusDB(id, currentDate);
     const responseData = createResponseOnlyData({
       ...result,
-      status: status,
+      status: auditLog?.status,
+      description: auditLog?.description,
+      effectiveFromDate: auditLog?.date,
       timestamp: currentDate,
     });
     response.send(responseData);

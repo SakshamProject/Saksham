@@ -176,7 +176,7 @@ model User {
 
   // password                      UserPassword            @relation(fields: [passwordId], references: [id])
 
-  //sevaKendraFollowUp            SevaKendraFollowUp[]
+  // sevaKendraFollowUp            SevaKendraFollowUp[]
 
   createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
   updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
@@ -367,7 +367,7 @@ model DivyangServiceMapping {
   divyangId                       String
   userId                          String?
   serviceId                       String
-  startDate                      DateTime
+  dateOfService                     DateTime
   followUpDate                   DateTime
   dueDate                         DateTime
   //isFollowUpRequired             Boolean?
@@ -410,6 +410,7 @@ model Donor {
   
 //   user                    User                  @relation(fields: [userId], references: [id])
 // }
+
 
 model NonSevaKendraFollowUp {
   id                      String  @id @default(uuid())
@@ -584,6 +585,7 @@ enum BloodGroupEnum {
 enum StatusEnum {
   PENDING
   COMPLETED
+  STOPPED
 }
 
 enum CertificateIssueAuthorityEnum {
