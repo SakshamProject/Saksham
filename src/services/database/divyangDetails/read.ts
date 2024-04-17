@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import defaults from "../../../defaults.js";
 import {
   DivyangDetailsRequest,
+  DivyangDetailsSearchType,
   DivyangDetailsWhere,
 } from "../../../types/divyangDetails/divyangDetailsSchema.js";
 import { sortOrderEnum } from "../../../types/getRequestSchema.js";
@@ -129,6 +130,24 @@ const getDivyangDetailsByUDIDNumberDB = async (UDIDNumber: string) => {
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+
+const getDivyangDetailsSearchByColumnDB = async (
+  divyangDetailsSearch: DivyangDetailsSearchType
+) => {
+  try {
+    const divyangDetails = await prisma.divyangDetails.findMany({
+      where: {
+        [divyangDetailsSearch.column]: divyangDetailsSearch.value,
+      },
+      orderBy: {
+        firstName: "asc",
+      },
+    });
+    return divyangDetails;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 export {
   getDivyangDetailsDB,
   getDivyangDetailsTotalDB,
@@ -137,4 +156,5 @@ export {
   getDivyangDetailsByMobileNumberDB,
   getDivyangDetailsByUDIDNumberDB,
   getDiyangDetailsByDivyangIdDB,
+  getDivyangDetailsSearchByColumnDB,
 };

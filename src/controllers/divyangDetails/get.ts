@@ -6,9 +6,14 @@ import {
 import { getDivyangDetailsDBTransaction } from "../../services/database/divyangDetails/transaction/read.js";
 import {
   DivyangDetailsSchemaType,
+  DivyangDetailsSearchType,
   getDivyangDetailsSchema,
+  getDivyangDetailsSearch,
 } from "../../types/divyangDetails/divyangDetailsSchema.js";
-import { getDivyangDetailsByIdDB } from "../../services/database/divyangDetails/read.js";
+import {
+  getDivyangDetailsByIdDB,
+  getDivyangDetailsSearchByColumnDB,
+} from "../../services/database/divyangDetails/read.js";
 import DivyangDetailsGlobalSearchConditions from "../../services/database/utils/divyangDetails/searchConditions.js";
 import { createDivyangDetailsFilterInputObject } from "../../dto/divyangDetails/post.js";
 import { divyangDetailsColumnNameMapper } from "../../services/database/utils/divyangDetails/divyangDetailsMapper.js";
@@ -69,4 +74,25 @@ const getDivyangDetailsbyId = async (
   }
 };
 
-export { getDivyangDetails, getDivyangDetailsbyId };
+const getDivyangDetailsSearchByColumn = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  try {
+    const divyangDetailsSearchRequest: DivyangDetailsSearchType =
+      getDivyangDetailsSearch.parse(request.query);
+    const result = await getDivyangDetailsSearchByColumnDB(
+      divyangDetailsSearchRequest
+    );
+    const responseData = createResponseOnlyData(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export {
+  getDivyangDetails,
+  getDivyangDetailsbyId,
+  getDivyangDetailsSearchByColumn,
+};
