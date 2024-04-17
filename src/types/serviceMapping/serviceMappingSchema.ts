@@ -88,7 +88,7 @@ const putServiceMappingSchema =z.object({
       if(data.isNonSevaKendraFollowUpRequired){
         return (
        
-          data.reasonForNonCompletion !== undefined &&
+          //data.reasonForNonCompletion !== undefined &&
           data.nonSevaKendraFollowUp !== undefined&&
           data.completedDate===undefined &&
           data.howTheyGotService===undefined&&
@@ -96,15 +96,16 @@ const putServiceMappingSchema =z.object({
           data.donor===undefined
         );
       }   else{
-        return data.reasonForNonCompletion !== undefined&&
-        data.followUp!==undefined&&
+        
+        //data.reasonForNonCompletion !== undefined&&
+        return data.followUp!==undefined&&
         data.completedDate===undefined &&
         data.howTheyGotService===undefined&&
         data.donor===undefined
       }
       }else if(data.isCompleted===StatusEnum.STOPPED){
         return data.completedDate !==undefined &&
-        data.reasonForNonCompletion !== undefined &&
+       // data.reasonForNonCompletion !== undefined &&
         data.howTheyGotService === undefined&&
           data.nonSevaKendraFollowUp === undefined&&
           data.followUp === undefined&&

@@ -77,7 +77,6 @@ return UpdateServiceMappingStoppedDBObject;
 function createUpdateServiceMappingWithNonSevaKendraFollowUpDBObject(body:putServiceMappingSchemaType,updatedById:string){
   const UpdateServiceMappingWithNonSevaKendraFollowUpDBObject={
     user:undefined,
-    followUpDate:body.followUp?.followUpdate,
     isNonSevaKendraFollowUpRequired:body.isNonSevaKendraFollowUpRequired,
     isCompleted:body.isCompleted,
     reasonForNonCompletion:body.reasonForNonCompletion,

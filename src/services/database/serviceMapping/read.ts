@@ -83,7 +83,6 @@ const getServiceMappingByIdDB = async (id: string) => {
       },
       include: {
         user: true,
-        sevaKendraFollowUp: true,
         nonSevaKendraFollowUp: true,
         donor: true,
         createdBy: true,

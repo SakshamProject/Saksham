@@ -61,11 +61,12 @@ async function putServiceMappingDBTransaction(
               id
             );
           }
-        } else if ((body.isCompleted = StatusEnum.STOPPED)) {
+        } else if ((body.isCompleted === StatusEnum.STOPPED)) {
+
           const updateServiceMappingDBObject =
             createUpdateServiceMappingStoppedDBObject(body, updatedById);
-            
-          const serviceMapping = updateServiceMappingDB(
+
+          const serviceMapping = await updateServiceMappingDB(
             prismaTransaction,
             updateServiceMappingDBObject,
             id
