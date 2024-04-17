@@ -1,10 +1,7 @@
 import { Prisma } from "@prisma/client";
-import defaults from "../../../defaults.js";
 import {
-  DivyangDetailsRequest,
   DivyangDetailsWhere,
 } from "../../../types/divyangDetails/divyangDetailsSchema.js";
-import { sortOrderEnum } from "../../../types/getRequestSchema.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 
