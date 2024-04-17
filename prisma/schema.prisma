@@ -19,7 +19,7 @@ model Person {
   loginId    String   @unique
   passwordId String   @unique
   pasword    Password @relation(fields: [passwordId], references: [id])
-  user       User?    @relation("person")
+  user       User?
 
   divyangsCreated DivyangDetails[] @relation("divyangCreatedBy")
   divyangsUpdated DivyangDetails[] @relation("divyangUpdatedBy")
@@ -136,7 +136,7 @@ model State {
 
 model User {
   id             String      @id @default(uuid())
-  userId         String      @unique // check datatype
+  userId         String      @unique
   firstName      String
   lastName       String
   gender         GenderEnum?
@@ -149,8 +149,8 @@ model User {
   // loginId        String      @unique
   // passwordId     String      @unique
 
-  personId String @unique
-  person   Person @relation("person", references: [passwordId], fields: [id])
+  personId String? @unique
+  person   Person? @relation(fields: [personId], references: [id])
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
@@ -161,7 +161,7 @@ model User {
   createdById String?
   createdBy   User?   @relation("createdBy", fields: [createdById], references: [id])
 
-  updatedById String? @unique
+  updatedById String?
   updatedBy   User?   @relation("updatedBy", fields: [updatedById], references: [id])
 
   // password              UserPassword            @relation(fields: [passwordId], references: [id])
