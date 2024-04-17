@@ -44,10 +44,13 @@ const designationFilter = z
 const getDesignationSchema = z.object({
   filters: designationFilter.optional(),
   pagination: z
-    .object({
-      rows: z.number(),
-      start: z.number(),
-    })
+  .object({
+    rows: z.number().positive(),
+    start: z
+      .number()
+      .positive()
+      .transform((number) => number - 1),
+  })
     .optional(),
   searchText: z.string().optional(),
   sorting: z

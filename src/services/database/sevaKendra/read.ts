@@ -70,7 +70,11 @@ const getSevaKendraByIdDB = async (sevaKendraId: string): Promise<any> => {
           include: { state: true },
         },
         contactPerson: true,
-        services: true,
+        services: {
+          select: {
+            service: true,
+          },
+        },
         auditLog: true,
       },
     });
