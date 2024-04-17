@@ -16,24 +16,33 @@ async function getServicesDB(
     searchText = ""
 ) {
     try {
-        const query: Prisma.ServiceTypeFindManyArgs = {
+        const query: Prisma.ServiceFindManyArgs = {
             select: {
                 id: true,
-                name: true
+                name: true,
+                serviceType: {
+                    select: {
+                        name: true,
+                        id: true
+                    }
+                }
             },
             skip: skip,
-            orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
+            orderBy: { // alphabetical
+                name: "asc"
+            }
+            // orderBy: serviceMasterColumnNameMapper(orderByColumn, sortOrder),
         };
 
         if ( (take > 0) ) {
             query.take = take;
         }
 
-        if (searchText !== "") {
-            query.where = serviceSearchTextMapper("ServiceType", searchText);
-        }
+        // if (searchText !== "") {
+        //     query.where = searchTextMapper("ServiceType", searchText);
+        // }
 
-        const services = await prismaTransaction.serviceType.findMany(query);
+        const services = await prismaTransaction.service.findMany(query);
         return services;
     } catch (error) {
         if (error instanceof Error) {
@@ -45,8 +54,8 @@ async function getServicesDB(
 
 async function getServiceTotalDB(prismaTransaction: Prisma.TransactionClient, searchText = "") {
         try {
-            const total = prismaTransaction.serviceType.count({
-                where: serviceSearchTextMapper("ServiceType", searchText),
+            const total = prismaTransaction.service.count({
+                // where: searchTextMapper("ServiceType", searchText),
             });
             return total;
         }

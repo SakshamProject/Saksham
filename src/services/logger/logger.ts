@@ -45,7 +45,7 @@ const logger = winston.createLogger({
     ],
 });
 
-function log(level: string, message: string, ...args: object[]) {
+function log(level: string, message: string, ...args: any[]) {
     if (config.DEBUG_MODE) {
         logger.log(level, message, ...args);
     }

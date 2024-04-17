@@ -14,33 +14,53 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Person {
+  id         String   @id @default(uuid())
+  loginId    String   @unique
+  passwordId String   @unique
+  pasword    Password @relation(fields: [passwordId], references: [id])
+  user       User?    @relation("person")
+
+  divyangsCreated DivyangDetails[] @relation("divyangCreatedBy")
+  divyangsUpdated DivyangDetails[] @relation("divyangUpdatedBy")
+}
+
+model Password {
+  id       String  @id @default(uuid())
+  password String
+  person   Person?
+}
+
 model SevaKendra {
-  id              String              @id @default(uuid())
-  name            String              @unique
+  id              String    @id @default(uuid())
+  name            String    @unique
   districtId      String
   address         String
   mobileNumber    String
   landLineNumber  String
   startDate       DateTime?
   contactPersonId String
-  createdAt       DateTime            @default(now())
-  createdBy       String
-  updatedAt       DateTime            @updatedAt
-  updatedBy       String
-  currentStatus   AuditLogStatusEnum?
+  createdAt       DateTime  @default(now())
+  createdById     String?
+  updatedAt       DateTime  @updatedAt
+  updatedById     String?
 
   services      ServicesOnSevaKendras[]
   district      District                @relation(fields: [districtId], references: [id])
   contactPerson ContactPerson           @relation(fields: [contactPersonId], references: [id])
   designations  Designation[]
   auditLog      SevaKendraAuditLog[]
+  createdBy     User?                   @relation("sevaKendraCreatedBy", fields: [createdById], references: [id])
+  updatedBy     User?                   @relation("sevaKendraUpdatedBy", fields: [updatedById], references: [id])
+
+  @@unique([name, districtId])
 }
 
 model SevaKendraAuditLog {
   id           String             @id @default(uuid())
   sevaKendraId String
   status       AuditLogStatusEnum
-  date         DateTime
+  date         DateTime           @default(now())
   description  String?
 
   sevakendra SevaKendra @relation(fields: [sevaKendraId], references: [id])
@@ -90,21 +110,22 @@ model Service {
 }
 
 model District {
-  id                 String               @id @default(uuid())
-  name               String               @unique
-  stateId            String
-  sevakendra         SevaKendra[]
-  state              State                @relation(fields: [stateId], references: [id])
-  disability         DivyangDetails[]     @relation("disability")
-  MPConstituencies   MPConstituency[]
-  MLAConstituencies  MLAConstituency[]
-  TownPanchayats     TownPanchayat[]
-  Municipalities     Municipality[]
-  Corporations       Corporation[]
-  PanchayatUnions    PanchayatUnion[]
-  sevaKendraFollowUp SevaKendraFollowUp[]
-  Taluks             Taluk[]
-  divyangDetails     DivyangDetails[]     @relation("divyangDetails")
+  id                String            @id @default(uuid())
+  name              String
+  stateId           String
+  sevakendra        SevaKendra[]
+  state             State             @relation(fields: [stateId], references: [id])
+  disability        DivyangDetails[]  @relation("disability")
+  MPConstituencies  MPConstituency[]
+  MLAConstituencies MLAConstituency[]
+  TownPanchayats    TownPanchayat[]
+  Municipalities    Municipality[]
+  Corporations      Corporation[]
+  PanchayatUnions   PanchayatUnion[]
+  Taluks            Taluk[]
+  divyangDetails    DivyangDetails[]  @relation("divyangDetails")
+
+  @@unique([name, stateId])
 }
 
 model State {
@@ -114,8 +135,8 @@ model State {
 }
 
 model User {
-  id             String              @id @default(uuid())
-  userId         String              @unique // check datatype
+  id             String      @id @default(uuid())
+  userId         String      @unique // check datatype
   firstName      String
   lastName       String
   gender         GenderEnum?
@@ -125,32 +146,40 @@ model User {
   designationId  String
   picture        String? // url
   email          String
-  loginId        String              @unique
-  passwordId     String              @unique
-  currentStatus  AuditLogStatusEnum?
+  // loginId        String      @unique
+  // passwordId     String      @unique
+
+  personId String @unique
+  person   Person @relation("person", references: [passwordId], fields: [id])
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 
-  createdById  String?
-  createdBy    User?   @relation("createdBy", fields: [createdById], references: [id])
-  usersCreated User[]  @relation("createdBy")
+  usersCreated User[] @relation("createdBy")
+  usersUpdated User[] @relation("updatedBy")
 
-  updatedById  String? @unique
-  updatedBy    User?   @relation("updatedBy", fields: [updatedById], references: [id])
-  usersUpdated User[]  @relation("updatedBy")
+  createdById String?
+  createdBy   User?   @relation("createdBy", fields: [createdById], references: [id])
 
-  password              UserPassword            @relation(fields: [passwordId], references: [id])
+  updatedById String? @unique
+  updatedBy   User?   @relation("updatedBy", fields: [updatedById], references: [id])
+
+  // password              UserPassword            @relation(fields: [passwordId], references: [id])
   designation           Designation             @relation("Designation-Users", fields: [designationId], references: [id])
   designationsCreated   Designation[]           @relation("createdBy")
   designationsUpdated   Designation[]           @relation("updatedBy")
-  sevaKendraFollowUp    SevaKendraFollowUp[]
+  // sevaKendraFollowUp    SevaKendraFollowUp[]
   userAuditLog          UserAuditLog[]
-  divyangServiceMapping DivyangServiceMapping[]  @relation("inchargeUser")
+  divyangServiceMapping DivyangServiceMapping[] @relation("inchargeUser")
+
+  // password                      UserPassword            @relation(fields: [passwordId], references: [id])
+
+  // sevaKendraFollowUp            SevaKendraFollowUp[]
+
   createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
   updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
-  createdDivyangDetails DivyangDetails[] @relation("divyangCreatedBy")
-  updatedDivyangDetails DivyangDetails[] @relation("divyangUpdatedBy")
+  createdSevaKendra             SevaKendra[]            @relation("sevaKendraCreatedBy")
+  updatedSevaKendra             SevaKendra[]            @relation("sevaKendraUpdatedBy")
 }
 
 model UserAuditLog {
@@ -163,11 +192,11 @@ model UserAuditLog {
   user User @relation(fields: [userId], references: [id])
 }
 
-model UserPassword {
-  id             String @id @default(uuid())
-  hashedPassword String
-  user           User?
-}
+// model UserPassword {
+//   id             String @id @default(uuid())
+//   hashedPassword String
+//   user           User?
+// }
 
 // side bars seva kendra master, service master
 model Feature {
@@ -179,10 +208,9 @@ model Feature {
 // e.g. coordinator , volunteers
 // or Designation
 model Designation {
-  id            String              @id @default(uuid())
-  name          String
-  sevaKendraId  String
-  currentStatus AuditLogStatusEnum?
+  id           String @id @default(uuid())
+  name         String
+  sevaKendraId String
 
   createdAt   DateTime? @default(now())
   createdById String?
@@ -238,6 +266,7 @@ model DivyangDetails {
   spouseName              String?
   spouseNumber            String?
   religion                String
+  community               String
   communityCategoryId     String
   extraCurricularActivity String?
   // all below here are in next page
@@ -297,10 +326,10 @@ model DivyangDetails {
   motherIncome     Int?
   spouseOccupation String?
   spouseIncome     Int?
-  createdAt                       DateTime                        @default(now())
-  updatedAt                       DateTime                        @updatedAt
-  createdById                     String
-  updatedById                     String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  createdById      String
+  updatedById      String
 
   communityCategory     CommunityCategory                 @relation(fields: [communityCategoryId], references: [id])
   corporation           Corporation?                      @relation(fields: [corporationId], references: [id])
@@ -315,50 +344,51 @@ model DivyangDetails {
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
   districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
-  createdBy                       User                             @relation("divyangCreatedBy",fields: [createdById],references: [id])
-  updatedBy                       User                             @relation("divyangUpdatedBy",fields: [updatedById],references: [id])
+  createdBy             Person                            @relation("divyangCreatedBy", fields: [createdById], references: [id])
+  updatedBy             Person                            @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
 
-  // divyangDetailsAuditLog DivyangDetailsAuditLog[]
+  divyangDetailsAuditLog DivyangDetailsAuditLog[]
 }
 
-// model DivyangDetailsAuditLog {
-//   id           String @id @default(uuid())
-//   divyangDetailsId String
-//   status       AuditLogStatusEnum
-//   date         DateTime
-//   description  String?
+model DivyangDetailsAuditLog {
+  id               String             @id @default(uuid())
+  divyangDetailsId String
+  status           AuditLogStatusEnum
+  date             DateTime
+  description      String?
 
-//   divyangDetails DivyangDetails @relation(fields: [divyangDetailsId], references: [id])
-// }
+  divyangDetails DivyangDetails @relation(fields: [divyangDetailsId], references: [id])
+}
 
 model DivyangServiceMapping {
-  id                              String                          @id @default(uuid())
+  id                              String                 @id @default(uuid())
   divyangId                       String
-  divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
-  userId                          String
+  userId                          String?
   serviceId                       String
-  service                         Service                         @relation(fields: [serviceId], references: [id])
-  dateOfService                   DateTime
+  startDate                       DateTime
+  followUpDate                    DateTime
   dueDate                         DateTime
-  isFollowUpRequired              Boolean?
+  // isFollowUpRequired             Boolean?
   isNonSevaKendraFollowUpRequired Boolean
   isCompleted                     StatusEnum
+  howTheyGotService               HowTheyGotServiceEnum?
+  reasonForNonCompletion          String?
   completedDate                   DateTime?
-  donorId                         String?                         @unique
-  donor                           Donor?                          @relation(fields: [donorId], references: [id])
-  nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
-  sevaKendraFollowUp              SevaKendraFollowUp[]
-  user                            User                            @relation("inchargeUser",fields: [userId], references: [id])
-  createdAt                       DateTime                        @default(now())
-  updatedAt                       DateTime                        @updatedAt
+  donorId                         String?                @unique
+  createdAt                       DateTime               @default(now())
+  updatedAt                       DateTime               @updatedAt
   createdById                     String
   updatedById                     String
-  createdBy                       User                             @relation("serviceMappingCreatedBy",fields: [createdById],references: [id])
-  updatedBy                       User                             @relation("serviceMappingUpdatedBy",fields: [updatedById],references: [id])
 
+  divyang               DivyangDetails          @relation(fields: [divyangId], references: [id])
+  createdBy             User                    @relation("serviceMappingCreatedBy", fields: [createdById], references: [id])
+  updatedBy             User                    @relation("serviceMappingUpdatedBy", fields: [updatedById], references: [id])
+  service               Service                 @relation(fields: [serviceId], references: [id])
+  user                  User?                   @relation("inchargeUser", fields: [userId], references: [id])
+  donor                 Donor?                  @relation(fields: [donorId], references: [id])
+  nonSevaKendraFollowUp NonSevaKendraFollowUp[]
+  // sevaKendraFollowUp              SevaKendraFollowUp[]
 }
-
-
 
 model Donor {
   id                    String                 @id @default(uuid())
@@ -368,16 +398,15 @@ model Donor {
   divyangServiceMapping DivyangServiceMapping?
 }
 
-model SevaKendraFollowUp {
-  id                      String                @id @default(uuid())
-  date                    DateTime
-  districtId              String
-  userId                  String
-  divyangServiceMappingId String
-  divyangServiceMapping   DivyangServiceMapping @relation(fields: [divyangServiceMappingId], references: [id])
-  district                District              @relation(fields: [districtId], references: [id])
-  user                    User                  @relation(fields: [userId], references: [id])
-}
+// model SevaKendraFollowUp {
+//   id                      String                @id @default(uuid())
+//   date                    DateTime
+//   userId                  String
+//   divyangServiceMappingId String
+//   divyangServiceMapping   DivyangServiceMapping @relation(fields: [divyangServiceMappingId], references: [id])
+
+//   user                    User                  @relation(fields: [userId], references: [id])
+// }
 
 model NonSevaKendraFollowUp {
   id                      String  @id @default(uuid())
@@ -563,4 +592,20 @@ enum CertificateIssueAuthorityEnum {
 enum AuditLogStatusEnum {
   ACTIVE
   DEACTIVE
+}
+
+enum HowTheyGotServiceEnum {
+  WHATSAPP
+  VOLUNTEER
+  SEVAKENDRA
+}
+
+enum FeaturesEnum {
+  DASHBOARD
+  SEVAKENDRA_SETUP
+  SEVAKENDRA_USERS
+  TYPE_MASTERS
+  DIVYANG_DETAILS
+  SERVICE_MASTER
+  SERVICE_MAPPING
 }

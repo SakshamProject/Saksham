@@ -1,10 +1,7 @@
 import {
   AuditLogStatusEnum,
-  Designation,
-  FeaturesOnDesignations,
-  StatusEnum,
+  
 } from "@prisma/client";
-import { randomUUID } from "crypto";
 import {
   DesignationWhere,
   designationFilterType,
@@ -66,12 +63,7 @@ function createUpdateDesignationObject(
     sevaKendra: {
       connect: {
         id: body.sevaKendraId,
-        district: {
-          id: body.districtId,
-          state: {
-            id: body.stateId,
-          },
-        },
+    
       },
     },
     updatedBy: {

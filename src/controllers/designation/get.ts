@@ -4,6 +4,7 @@ import {
   getFeaturesDB,
 } from "../../services/database/designation/read.js";
 import {
+  createResponseForFilter,
   createResponseOnlyData,
   createResponseWithQuery,
 } from "../../types/createResponseSchema.js";
@@ -18,51 +19,48 @@ import {
 } from "../../services/database/utils/designation/designation.js";
 import { createDesignationFilterInputObject } from "../../dto/designation/designation.js";
 
-
 async function getDesignation(
   request: Request,
   response: Response,
   next: NextFunction
 ) {
-  try{
+  try {
     const body = getDesignationSchema.parse(request.body);
 
-  const orderByObject = designationColumnNameMapper(
-    body.sorting?.orderByColumn,
-    body.sorting?.sortOrder
-  );
+    const orderByObject = designationColumnNameMapper(
+      body.sorting?.orderByColumn,
+      body.sorting?.sortOrder
+    );
 
-  const searchCondition: DesignationWhere | null =
-    body.searchText === undefined
-      ? null
-      : designationsearchCondition(body.searchText);
+    const searchCondition: DesignationWhere | null =
+      body.searchText === undefined
+        ? null
+        : designationsearchCondition(body.searchText);
 
-  const designationWhereInput = createDesignationFilterInputObject(
-    body.filters,
-    searchCondition
-  );
+    const designationWhereInput = createDesignationFilterInputObject(
+      body.filters,
+      searchCondition
+    );
 
+    const result = await getDesignationDBTransaction(
+      designationWhereInput,
+      orderByObject,
+      body.pagination?.start,
+      body.pagination?.rows
+    );
+    const count: number = result?.designations?.length || 0;
+    const total: number = result?.total || 0;
+    const responseData = createResponseForFilter(
+      result?.designations || {},
+      request.body,
+      total,
+      count
+    );
 
-  const result = await getDesignationDBTransaction(
-    designationWhereInput,
-    orderByObject,
-    body.pagination?.start,
-    body.pagination?.rows
-  );
-  const count: number = result?.designations?.length || 0;
-  const total: number = result?.total || 0;
-  const responseData = createResponseWithQuery(
-    result?.designations || {},
-    body,
-    total,
-    count
-  );
-
-  response.send(responseData);
-  }catch(err){
-    next(err)
+    response.send(responseData);
+  } catch (err) {
+    next(err);
   }
-  
 }
 
 async function getDesignationById(
@@ -81,14 +79,18 @@ async function getDesignationById(
   }
 }
 
-async function getFeatures(request:Request,response:Response,next:NextFunction){
-  try{
+async function getFeatures(
+  request: Request,
+  response: Response,
+  next: NextFunction
+) {
+  try {
     const features = await getFeaturesDB();
-    const responseData = createResponseOnlyData(features)
+    const responseData = createResponseOnlyData(features);
     response.send(responseData);
-  }catch(err){
-    next(err)
+  } catch (err) {
+    next(err);
   }
-  }
+}
 
-export { getDesignationById, getDesignation ,getFeatures};
+export { getDesignationById, getDesignation, getFeatures };
