@@ -5,7 +5,6 @@ import { Request } from "express";
 import fs from "fs";
 import log from "../../services/logger/logger.js";
 import defaults from "../../defaults.js";
-import {Prisma} from "@prisma/client";
 import APIError from "../../services/errors/APIError.js";
 import {StatusCodes} from "http-status-codes";
 
