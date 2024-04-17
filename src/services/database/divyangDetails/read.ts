@@ -1,16 +1,17 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from '@prisma/client'
 import {
-  DivyangDetailsRequest,
   DivyangDetailsSearchType,
   DivyangDetailsWhere,
-} from "../../../types/divyangDetails/divyangDetailsSchema.js";
-import prisma from "../database.js";
-import throwDatabaseError from "../utils/errorHandler.js";
+} from '../../../types/divyangDetails/divyangDetailsSchema.js'
+import prisma from '../database.js'
+import throwDatabaseError from '../utils/errorHandler.js'
 
 const getDivyangDetailsDB = async (
   prismaTransaction: Prisma.TransactionClient,
   orderByColumnAndSortOrder: Object,
-  divyangDetailsWhereInput: DivyangDetailsWhere
+  divyangDetailsWhereInput: DivyangDetailsWhere,
+  skip: number,
+  take: number,
 ) => {
   try {
     const divyangsDetails = await prismaTransaction.divyangDetails.findMany({
@@ -22,15 +23,17 @@ const getDivyangDetailsDB = async (
       },
       orderBy: orderByColumnAndSortOrder,
       where: divyangDetailsWhereInput,
-    });
+      skip:skip,
+      take:take
+    })
 
-    return divyangsDetails;
+    return divyangsDetails
   } catch (error) {
     if (error instanceof Error) {
-      throwDatabaseError(error);
+      throwDatabaseError(error)
     }
   }
-};
+}
 
 const getDivyangDetailsByIdDB = async (id: string) => {
   try {
@@ -38,29 +41,29 @@ const getDivyangDetailsByIdDB = async (id: string) => {
       where: {
         id: id,
       },
-    });
-    return divyangDetails;
+    })
+    return divyangDetails
   } catch (error) {
     if (error instanceof Error) {
-      throwDatabaseError(error);
+      throwDatabaseError(error)
     }
   }
-};
+}
 
 async function getDivyangDetailsTotalDB(
   prismaTransaction: any,
-  divyangDetailsWhereInput: DivyangDetailsWhere
+  divyangDetailsWhereInput: DivyangDetailsWhere,
 ) {
   try {
     const divyangDetails: number = await prismaTransaction.DivyangDetails.count(
       {
         where: divyangDetailsWhereInput,
-      }
-    );
-    return divyangDetails;
+      },
+    )
+    return divyangDetails
   } catch (error) {
     if (error instanceof Error) {
-      throwDatabaseError(error);
+      throwDatabaseError(error)
     }
   }
 }
@@ -72,14 +75,14 @@ const getDiyangDetailsByDivyangIdDB = async (divyangId: string) => {
         divyangId: divyangId,
       },
       orderBy: {
-        firstName: "asc",
+        firstName: 'asc',
       },
-    });
-    return divyangDetails;
+    })
+    return divyangDetails
   } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
+    if (error instanceof Error) throwDatabaseError(error)
   }
-};
+}
 
 const getDivyangDetailsByMobileNumberDB = async (mobileNumber: string) => {
   try {
@@ -88,14 +91,14 @@ const getDivyangDetailsByMobileNumberDB = async (mobileNumber: string) => {
         mobileNumber: mobileNumber,
       },
       orderBy: {
-        firstName: "asc",
+        firstName: 'asc',
       },
-    });
-    return divyangDetails;
+    })
+    return divyangDetails
   } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
+    if (error instanceof Error) throwDatabaseError(error)
   }
-};
+}
 
 const getDivyangDetailsByAadharNumberDB = async (aadharNumber: string) => {
   try {
@@ -104,14 +107,14 @@ const getDivyangDetailsByAadharNumberDB = async (aadharNumber: string) => {
         aadharCardNumber: aadharNumber,
       },
       orderBy: {
-        firstName: "asc",
+        firstName: 'asc',
       },
-    });
-    return divyangDetails;
+    })
+    return divyangDetails
   } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
+    if (error instanceof Error) throwDatabaseError(error)
   }
-};
+}
 
 const getDivyangDetailsByUDIDNumberDB = async (UDIDNumber: string) => {
   try {
@@ -120,17 +123,17 @@ const getDivyangDetailsByUDIDNumberDB = async (UDIDNumber: string) => {
         udidCardNumber: UDIDNumber,
       },
       orderBy: {
-        firstName: "asc",
+        firstName: 'asc',
       },
-    });
-    return divyangDetails;
+    })
+    return divyangDetails
   } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
+    if (error instanceof Error) throwDatabaseError(error)
   }
-};
+}
 
 const getDivyangDetailsSearchByColumnDB = async (
-  divyangDetailsSearch: DivyangDetailsSearchType
+  divyangDetailsSearch: DivyangDetailsSearchType,
 ) => {
   try {
     const divyangDetails = await prisma.divyangDetails.findMany({
@@ -138,14 +141,43 @@ const getDivyangDetailsSearchByColumnDB = async (
         [divyangDetailsSearch.column]: divyangDetailsSearch.value,
       },
       orderBy: {
-        firstName: "asc",
+        firstName: 'asc',
       },
-    });
-    return divyangDetails;
+    })
+    return divyangDetails
   } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
+    if (error instanceof Error) throwDatabaseError(error)
   }
-};
+}
+
+const getDivyangDetailsStatusDB = async (
+  divyangDetailsId: string,
+  currentDate: string,
+) => {
+  try {
+    const divyangDetailsAuditLog = await prisma.divyangDetailsAuditLog.findFirstOrThrow(
+      {
+        where: {
+          AND: [
+            { divyangDetailsId: divyangDetailsId },
+            {
+              date: {
+                lte: currentDate,
+              },
+            },
+          ],
+        },
+        orderBy: {
+          date: 'desc',
+        },
+        take: 1,
+      },
+    )
+    return divyangDetailsAuditLog
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error)
+  }
+}
 export {
   getDivyangDetailsDB,
   getDivyangDetailsTotalDB,
@@ -155,4 +187,5 @@ export {
   getDivyangDetailsByUDIDNumberDB,
   getDiyangDetailsByDivyangIdDB,
   getDivyangDetailsSearchByColumnDB,
-};
+  getDivyangDetailsStatusDB,
+}

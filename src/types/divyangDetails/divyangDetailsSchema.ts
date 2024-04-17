@@ -71,7 +71,7 @@ const updateDivyangDetailsRequestSchema = z
     disabiltyDetails: disabiltyDetailsRequestSchema.optional(),
     employmentDetails: employmentDetailsRequestSchema.optional(),
     updatedBy: uuidSchema,
-    auditLog:auditLogSchema,
+    auditLog:auditLogSchema.optional(),
     pageNumber: z.number().min(1).max(5),
   })
   .refine((data) => {

@@ -52,5 +52,6 @@ export {
     emailSchema,
     landLineNumberSchema,
     uuidSchema,
+    auditLogStatusEnumSchema
 };
 export default inputFieldSchema;

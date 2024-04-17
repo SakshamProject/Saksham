@@ -9,10 +9,11 @@ import {
 } from '../../../../types/divyangDetails/divyangDetailsSchema.js'
 
 const getDivyangDetailsDBTransaction = async (
+  divyangDetailsWhereInput: DivyangDetailsWhere,
   start: number = defaults.skip,
   rows: number = defaults.take,
   orderByColumnAndSortOrder: Object = { firstName: sortOrderEnum.ascending },
-  divyangDetailsWhereInput: DivyangDetailsWhere
+
 ) => {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
@@ -20,7 +21,9 @@ const getDivyangDetailsDBTransaction = async (
         const divyangDetails = await getDivyangDetailsDB(
           prismaTransaction,
           orderByColumnAndSortOrder,
-          divyangDetailsWhereInput
+          divyangDetailsWhereInput,
+          start,
+          rows,
         );
 
         const total = await getDivyangDetailsTotalDB(

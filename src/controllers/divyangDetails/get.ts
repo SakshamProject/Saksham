@@ -38,10 +38,10 @@ const getDivyangDetails = async (
       globalSearchConditions
     );
     const result = await getDivyangDetailsDBTransaction(
+      divyangDetailsWhereInput,
       divyangDetailsRequest.pagination?.start,
       divyangDetailsRequest.pagination?.rows,
       orderByColumnAndSortOrder,
-      divyangDetailsWhereInput
     );
     const count: number = result?.divyangDetails?.length || 0;
     const total: number = result?.total || 0;
