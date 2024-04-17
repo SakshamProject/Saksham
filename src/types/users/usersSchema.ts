@@ -13,6 +13,8 @@ const usersPostSchema = z.object({
     dateOfBirth: dateSchema.optional(),
     designationId: z.string().uuid(),
     email: emailSchema,
+    loginId: inputFieldSchema,
+    password: z.string(),
     contactNumber: phoneNumberSchema,
     whatsappNumber: phoneNumberSchema,
     // audit log
@@ -31,6 +33,8 @@ const usersPutSchema = z.object({
     dateOfBirth: dateSchema.optional(),
     designationId: z.string().uuid(),
     mail: emailSchema,
+    loginId: inputFieldSchema,
+    password: z.string(),
     contactNumber: phoneNumberSchema,
     whatsappNumber: phoneNumberSchema,
     // audit log

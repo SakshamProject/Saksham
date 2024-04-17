@@ -18,7 +18,7 @@ model Person {
   id         String   @id @default(uuid())
   loginId    String   @unique
   passwordId String   @unique
-  pasword    Password @relation(fields: [passwordId], references: [id])
+  password   Password @relation(fields: [passwordId], references: [id])
   user       User?
 
   divyangsCreated DivyangDetails[] @relation("divyangCreatedBy")
@@ -149,8 +149,8 @@ model User {
   // loginId        String      @unique
   // passwordId     String      @unique
 
-  personId String? @unique
-  person   Person? @relation(fields: [personId], references: [id])
+  personId String @unique
+  person   Person @relation(fields: [personId], references: [id])
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
