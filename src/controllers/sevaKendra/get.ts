@@ -6,13 +6,20 @@ import {
   getSevaKendraSchema,
 } from "../../types/sevaKendra/sevaKendra.js";
 import {
+  createResponseForFilter,
   createResponseOnlyData,
   createResponseWithQuery,
 } from "../../types/createResponseSchema.js";
 import { getSevaKendraDBTransaction } from "../../services/database/sevaKendra/transaction/read.js";
-import { getSevaKendraByIdDB } from "../../services/database/sevaKendra/read.js";
+import {
+  getSevaKendraByDistrictIdDB,
+  getSevaKendraByIdDB,
+  getSevaKendraStatusDB,
+} from "../../services/database/sevaKendra/read.js";
 import { createSevaKendraFilterInputObject } from "../../dto/sevaKendra/create.js";
 import SevaKendraGlobalSearchConditions from "../../services/database/utils/sevaKendra/searchConditions.js";
+import { AuditLogStatusEnum } from "@prisma/client";
+import { auditLogStatusEnumSchema } from "../../types/inputFieldSchema.js";
 
 const getSevaKendra = async (
   request: Request,
@@ -21,16 +28,15 @@ const getSevaKendra = async (
 ) => {
   try {
     const sevaKendraRequest = getSevaKendraSchema.parse(request.body);
+    console.log(request.body, "   parsed  ", sevaKendraRequest);
     const orderByColumnAndSortOrder = sevaKendraColumnNameMapper(
       sevaKendraRequest.sorting?.orderByColumn,
       sevaKendraRequest.sorting?.sortOrder
     );
-    console.log(sevaKendraRequest.searchText);
     const globalSearchConditions: SevaKendraWhere | null =
       sevaKendraRequest.searchText === undefined
         ? null
         : SevaKendraGlobalSearchConditions(sevaKendraRequest.searchText);
-    console.log(globalSearchConditions);
     const sevaKendraWhereInput = createSevaKendraFilterInputObject(
       sevaKendraRequest.filters,
       globalSearchConditions
@@ -43,9 +49,9 @@ const getSevaKendra = async (
     );
     const total = result?.total || 0;
     const count = result?.sevaKendra.length || 0;
-    const responseData = createResponseWithQuery(
+    const responseData = createResponseForFilter(
       result?.sevaKendra || {},
-      sevaKendraRequest,
+      request.body,
       total,
       count
     );
@@ -61,14 +67,35 @@ const getSevaKendraById = async (
   next: NextFunction
 ) => {
   try {
-    console.log("wrong function");
     const id = request.params.id;
     const result = await getSevaKendraByIdDB(id);
-    const responseData = createResponseOnlyData(result);
+    const currentDate = new Date(Date.now()).toISOString();
+    const status = await getSevaKendraStatusDB(id, currentDate);
+    const responseData = createResponseOnlyData({
+      ...result,
+      status: status,
+      timestamp: currentDate,
+    });
     response.send(responseData);
   } catch (error) {
     next(error);
   }
 };
 
-export { getSevaKendra, getSevaKendraById };
+const getSevaKendraByDistrictId = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  try {
+    const districtId = request.params.districtId;
+    const status: AuditLogStatusEnum | undefined =
+      auditLogStatusEnumSchema.parse(request.query.status);
+    const result = await getSevaKendraByDistrictIdDB(districtId, status);
+    const responseData = createResponseOnlyData(result);
+    response.send(responseData);
+  } catch (error) {
+    next(error);
+  }
+};
+export { getSevaKendra, getSevaKendraById, getSevaKendraByDistrictId };

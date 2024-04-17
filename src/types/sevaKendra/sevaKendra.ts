@@ -45,6 +45,7 @@ const SevaKendraUpdateRequestSchema = z.object({
   landLineNumber: landLineNumberSchema,
   mobileNumber: phoneNumberSchema,
   startDate: dateSchema.optional(),
+  currentStatus: z.nativeEnum(AuditLogStatusEnum),
   contactPerson: z.object({
     id: uuidSchema,
     name: inputFieldSchema.toUpperCase(),
@@ -90,6 +91,8 @@ const getSevaKendraSchema = z.object({
     })
     .optional(),
 });
+
+
 type SevaKendraFilterType = z.infer<typeof sevaKendraFilter>;
 type GetSevaKendraSchemaType = z.infer<typeof getSevaKendraSchema>;
 type SevaKendraRequestSchemaType = z.infer<typeof SevaKendraRequestSchema>;

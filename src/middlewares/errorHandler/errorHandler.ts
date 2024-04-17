@@ -1,4 +1,4 @@
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
 import APIError from "../../services/errors/APIError.js";
 import {ZodError} from "zod";
 import {StatusCodes} from "http-status-codes"

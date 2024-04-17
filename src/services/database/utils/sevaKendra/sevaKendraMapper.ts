@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { sortOrderEnum } from "../../../../types/getRequestSchema.js";
 import { SevaKendraColumnNamesEnum } from "../../../../types/sevaKendra/sevaKendraDefaults.js";
 
@@ -5,7 +6,10 @@ const sevaKendraColumnNameMapper = (
   orderByColumn: SevaKendraColumnNamesEnum = SevaKendraColumnNamesEnum.NAME,
   sortOrder: sortOrderEnum = sortOrderEnum.ascending
 ) => {
-  const sevaKendraColumnNameMap: Map<string, Object> = new Map();
+  const sevaKendraColumnNameMap: Map<
+    string,
+    Prisma.SevaKendraOrderByWithRelationAndSearchRelevanceInput
+  > = new Map();
 
   sevaKendraColumnNameMap.set(SevaKendraColumnNamesEnum.NAME, {
     name: sortOrder,
@@ -34,7 +38,12 @@ const sevaKendraColumnNameMapper = (
       phoneNumber1: sortOrder,
     },
   });
-
+  sevaKendraColumnNameMap.set(SevaKendraColumnNamesEnum.CREATED_AT, {
+    createdAt: sortOrder,
+  });
+  sevaKendraColumnNameMap.set(SevaKendraColumnNamesEnum.UPDATED_AT, {
+    updatedAt: sortOrder,
+  });
   return sevaKendraColumnNameMap.get(orderByColumn);
 };
 
