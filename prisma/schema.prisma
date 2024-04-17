@@ -371,7 +371,7 @@ model DivyangServiceMapping {
   followUpDate                   DateTime
   dueDate                         DateTime
   //isFollowUpRequired             Boolean?
-  isNonSevaKendraFollowUpRequired Boolean 
+  isNonSevaKendraFollowUpRequired  Boolean 
   isCompleted                     StatusEnum 
   howTheyGotService               HowTheyGotServiceEnum?
   reasonForNonCompletion          String?

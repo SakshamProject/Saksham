@@ -5,12 +5,14 @@ import {
     getServiceMapping,
     getServiceMappingById,
   } from "../../controllers/serviceMapping/get.js";
-  
+  import { putServiceMapping } from "../../controllers/serviceMapping/put.js";
+
 
 const serviceMappingRouter = Router();
 
 serviceMappingRouter.use(authenticate);
 serviceMappingRouter.post("/", postServiceMapping);
+serviceMappingRouter.put("/:id", putServiceMapping);
 serviceMappingRouter.get("/:id", getServiceMappingById);
 serviceMappingRouter.post("/list", getServiceMapping);
 

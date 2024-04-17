@@ -17,7 +17,9 @@ const createPostServiceMappingDBObject = (
             id:body.serviceId
         }
      },
+
      dateOfService:body.dateOfService,
+     followUpDate:body.dateOfService,
      dueDate:body.dueDate,
      isNonSevaKendraFollowUpRequired:body.isNonSevaKendraFollowUpRequired,
      isCompleted:StatusEnum.PENDING,
@@ -47,7 +49,7 @@ const createPostServiceMappingDBObject = (
     
   
 
-  function createPostNonSevaKendraFollowUpDBObject(body:postServiceMappingRequestSchemaType,serviceMappingId:string=""){
+  function createPostNonSevaKendraFollowUpDBObject(body:any,serviceMappingId:string=""){
     if(body.nonSevaKendraFollowUp){
       const PostNonSevaKendraFollowUpDBObject = {
         name:body.nonSevaKendraFollowUp.name,

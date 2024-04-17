@@ -21,20 +21,21 @@ const postServiceMappingRequestSchema = z
     serviceId: uuidSchema,
     dateOfService: dateSchema,
     dueDate: dateSchema,
-    isNonSevaKendraFollowUpRequired: z.boolean().optional(),
+    isNonSevaKendraFollowUpRequired: z.boolean(),
     nonSevaKendraFollowUp: nonSevaKendraFollowUpSchema.optional(),
   })
   .refine(
     (data) => {
-      if (data.userId) {
+      if (data.isNonSevaKendraFollowUpRequired) {
         return (
-          data.nonSevaKendraFollowUp === undefined
+          data.nonSevaKendraFollowUp !== undefined &&
+          data.userId ===undefined
         );
       } else {
         return (
          
-          data.userId === undefined &&
-          data.nonSevaKendraFollowUp !== undefined
+          data.userId !== undefined &&
+          data.nonSevaKendraFollowUp === undefined
         );
       }
     },
@@ -43,10 +44,6 @@ const postServiceMappingRequestSchema = z
         "Validation failed: Either SevaKendra detail or non-sevaKendra volunteer detail has to be given completely",
     }
   )
-  .transform((data) => ({
-    ...data,
-    isNonSevaKendraFollowUpRequired: data.userId ? false : true,
-  }));
 
 
 type postServiceMappingRequestSchemaType = z.infer<
@@ -59,6 +56,11 @@ const donorSchema=z.object({
   address:inputFieldSchema
 })
 
+const followUpSchema=z.object({
+  userId:uuidSchema,
+  followUpdate:dateSchema
+})
+
 
 const putServiceMappingSchema =z.object({
 
@@ -66,9 +68,8 @@ const putServiceMappingSchema =z.object({
   completedDate:dateSchema.optional(),
   howTheyGotService: z.nativeEnum(HowTheyGotServiceEnum).optional(),
   reasonForNonCompletion:inputFieldSchema.optional(),
-  isFollowUpRequired:z.boolean().optional(),
-  userId:uuidSchema.optional(),
-  isNonSevaKendraFollowUpRequired:z.boolean().optional(),
+  followUp:followUpSchema.optional(),
+  isNonSevaKendraFollowUpRequired:z.boolean(),
   nonSevaKendraFollowUp:nonSevaKendraFollowUpSchema.optional(),
   donor:donorSchema.optional()
   
@@ -77,36 +78,45 @@ const putServiceMappingSchema =z.object({
     if (data.isCompleted===StatusEnum.COMPLETED) {
       return (
         data.completedDate !== undefined &&
-        data.howTheyGotService!==undefined &&
-        data.isFollowUpRequired === undefined &&
-        data.userId === undefined&&
-        data.isNonSevaKendraFollowUpRequired===undefined &&
-        data.nonSevaKendraFollowUp===undefined
+        data.followUp === undefined&&
+        data.isNonSevaKendraFollowUpRequired===false &&
+        data.nonSevaKendraFollowUp===undefined&&
+        data.reasonForNonCompletion===undefined
   
       );
     } else if(data.isCompleted===StatusEnum.PENDING){
-      if(data.isFollowUpRequired){
+      if(data.isNonSevaKendraFollowUpRequired){
         return (
        
           data.reasonForNonCompletion !== undefined &&
-          data.userId !== undefined
+          data.nonSevaKendraFollowUp !== undefined&&
+          data.completedDate===undefined &&
+          data.howTheyGotService===undefined&&
+          data.followUp ===undefined&&
+          data.donor===undefined
         );
-      }else if(data.isNonSevaKendraFollowUpRequired){
-        return (
-       
-          data.reasonForNonCompletion !== undefined &&
-          data.nonSevaKendraFollowUp !== undefined
-        );
+      }   else{
+        return data.reasonForNonCompletion !== undefined&&
+        data.followUp!==undefined&&
+        data.completedDate===undefined &&
+        data.howTheyGotService===undefined&&
+        data.donor===undefined
       }
-      else{
-        return data.reasonForNonCompletion !== undefined
+      }else if(data.isCompleted===StatusEnum.STOPPED){
+        return data.completedDate !==undefined &&
+        data.reasonForNonCompletion !== undefined &&
+        data.howTheyGotService === undefined&&
+          data.nonSevaKendraFollowUp === undefined&&
+          data.followUp === undefined&&
+          data.isNonSevaKendraFollowUpRequired===false &&
+          data.donor===undefined
       }
+   
   
-    }
   },
   {
     message:
-      "Validation failed: Please give necessary data",
+      "Validation failed: Please give necessary data for either sevaKendra followup or non-sevakendra followup",
   }
 )
 
