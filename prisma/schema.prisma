@@ -147,7 +147,7 @@ model User {
   designation           Designation             @relation("Designation-Users", fields: [designationId], references: [id])
   designationsCreated   Designation[]           @relation("createdBy")
   designationsUpdated   Designation[]           @relation("updatedBy")
-  sevaKendraFollowUp    SevaKendraFollowUp[]
+  //sevaKendraFollowUp    SevaKendraFollowUp[]
   userAuditLog          UserAuditLog[]
   divyangServiceMapping DivyangServiceMapping[]  @relation("inchargeUser")
   createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
@@ -342,11 +342,12 @@ model DivyangServiceMapping {
   divyangId                       String
   userId                          String?
   serviceId                       String
-  dateOfService                   DateTime
+  startDate                      DateTime
+  followUpDate                   DateTime
   dueDate                         DateTime
-  isFollowUpRequired              Boolean?
-  isNonSevaKendraFollowUpRequired Boolean
-  isCompleted                     StatusEnum
+  //isFollowUpRequired             Boolean?
+  isNonSevaKendraFollowUpRequired Boolean 
+  isCompleted                     StatusEnum 
   howTheyGotService               HowTheyGotServiceEnum?
   reasonForNonCompletion          String?
   completedDate                   DateTime?
@@ -363,7 +364,7 @@ model DivyangServiceMapping {
   user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
   donor                           Donor?                          @relation(fields: [donorId], references: [id])
   nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
-  sevaKendraFollowUp              SevaKendraFollowUp[]
+  //sevaKendraFollowUp              SevaKendraFollowUp[]
 }
 
 model Donor {
@@ -374,15 +375,15 @@ model Donor {
   divyangServiceMapping DivyangServiceMapping?
 }
 
-model SevaKendraFollowUp {
-  id                      String                @id @default(uuid())
-  date                    DateTime
-  userId                  String
-  divyangServiceMappingId String
-  divyangServiceMapping   DivyangServiceMapping @relation(fields: [divyangServiceMappingId], references: [id])
+// model SevaKendraFollowUp {
+//   id                      String                @id @default(uuid())
+//   date                    DateTime
+//   userId                  String
+//   divyangServiceMappingId String
+//   divyangServiceMapping   DivyangServiceMapping @relation(fields: [divyangServiceMappingId], references: [id])
   
-  user                    User                  @relation(fields: [userId], references: [id])
-}
+//   user                    User                  @relation(fields: [userId], references: [id])
+// }
 
 model NonSevaKendraFollowUp {
   id                      String  @id @default(uuid())

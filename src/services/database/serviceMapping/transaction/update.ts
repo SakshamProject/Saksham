@@ -1,5 +1,5 @@
-import { Donor, Prisma, StatusEnum } from "@prisma/client";
-import { createPostDonorObject, createupdateServiceMappingCompletionDBObject } from "../../../../dto/serviceMapping/put.js";
+import { DivyangServiceMapping, Donor, Prisma, StatusEnum } from "@prisma/client";
+import { createPostDonorObject, createupdateServiceMappingCompletionDBObject, createupdateServiceMappingPendingDBObject } from "../../../../dto/serviceMapping/put.js";
 import { donorSchemaType, putServiceMappingSchemaType } from "../../../../types/serviceMapping/serviceMappingSchema.js";
 import prisma from "../../database.js";
 import { createDonorDB } from "../post.js";
@@ -21,7 +21,7 @@ async function putServiceMappingDBTransaction(
               
               const postDonorDBObject:donorSchemaType = createPostDonorObject(body.donor);
               const donor:Donor|undefined = await createDonorDB(prismaTransaction,postDonorDBObject);
-              const updateServiceMappingDBObject = createupdateServiceMappingDBObject(body,updatedById,donor?.id)
+              const updateServiceMappingDBObject = createupdateServiceMappingCompletionDBObject(body,updatedById,donor?.id)
               const serviceMapping = await updateServiceMappingDB(prismaTransaction,updateServiceMappingDBObject,id)
 
             }else{
@@ -36,10 +36,17 @@ async function putServiceMappingDBTransaction(
           else{
             if(body.isFollowUpRequired){
 
+              const updateServiceMappingDBObject = createUpdateServiceMappingWithFollowUpDBObject(body,updatedById)
+              const serviceMapping :DivyangServiceMapping|undefined= await updateServiceMappingDB(prismaTransaction,updateServiceMappingDBObject,id)
+              
+              const followUpDBObject = createFollowUpDBOject(body,serviceMapping?.id);
+              const followUp = createFollowUpDB(prismaTransaction,followUpDBObject);
+
             }else if (body.isNonSevaKendraFollowUpRequired){
 
             }else{
-              const updateSeviceMappingDBObject = createUpdateServiceMappingDBObject()
+              const updateSeviceMappingDBObject = createupdateServiceMappingPendingDBObject(body,updatedById);
+              const serviceMapping=  await updateServiceMappingDB(prismaTransaction,updateSeviceMappingDBObject,id)
             }
           }
 

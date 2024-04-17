@@ -59,6 +59,11 @@ const donorSchema=z.object({
   address:inputFieldSchema
 })
 
+const followUpSchema=z.object({
+  userId:uuidSchema,
+  date:dateSchema
+})
+
 
 const putServiceMappingSchema =z.object({
 
@@ -67,7 +72,7 @@ const putServiceMappingSchema =z.object({
   howTheyGotService: z.nativeEnum(HowTheyGotServiceEnum).optional(),
   reasonForNonCompletion:inputFieldSchema.optional(),
   isFollowUpRequired:z.boolean().optional(),
-  userId:uuidSchema.optional(),
+  followUp:followUpSchema.optional(),
   isNonSevaKendraFollowUpRequired:z.boolean().optional(),
   nonSevaKendraFollowUp:nonSevaKendraFollowUpSchema.optional(),
   donor:donorSchema.optional()
@@ -79,7 +84,7 @@ const putServiceMappingSchema =z.object({
         data.completedDate !== undefined &&
         data.howTheyGotService!==undefined &&
         data.isFollowUpRequired === undefined &&
-        data.userId === undefined&&
+        data.followUp === undefined&&
         data.isNonSevaKendraFollowUpRequired===undefined &&
         data.nonSevaKendraFollowUp===undefined
   
@@ -89,7 +94,7 @@ const putServiceMappingSchema =z.object({
         return (
        
           data.reasonForNonCompletion !== undefined &&
-          data.userId !== undefined &&
+          data.followUp !== undefined &&
           data.donor===undefined
         );
       }else if(data.isNonSevaKendraFollowUpRequired){
