@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   getSevaKendra,
+  getSevaKendraByDistrictId,
   getSevaKendraById,
 } from "../../controllers/sevaKendra/get.js";
 import putSevaKendra from "../../controllers/sevaKendra/put.js";
@@ -13,5 +14,7 @@ sevaKendraRouter.post("/list/", getSevaKendra);
 sevaKendraRouter.get("/:id", getSevaKendraById);
 sevaKendraRouter.post("/", postSevaKendra);
 sevaKendraRouter.put("/:id", putSevaKendra);
+// sevaKendraRouter.get("/:id/users",)
+// sevaKendraRouter.get("/districts/:districtId", getSevaKendraByDistrictId);
 
 export default sevaKendraRouter;

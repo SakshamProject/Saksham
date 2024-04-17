@@ -10,5 +10,7 @@ enum SevaKendraColumnNamesEnum {
   DISTRICT = "district",
   CONTACTNAME = "contactPersonName",
   CONTACTNUMBER = "contactPersonNumber",
+  CREATED_AT = "createdAt",
+  UPDATED_AT = "updatedAt",
 }
 export { sevaKendraDefaults, SevaKendraColumnNamesEnum };

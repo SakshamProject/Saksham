@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import defaults from "../../../defaults.js";
 import { sortOrderEnum } from "../../../types/getRequestSchema.js";
 import prisma from "../database.js";
@@ -19,6 +19,8 @@ const getSevaKendraDB = async (
       select: {
         id: true,
         name: true,
+        createdAt: true,
+        updatedAt: true,
         district: {
           select: {
             id: true,
@@ -64,8 +66,19 @@ const getSevaKendraByIdDB = async (sevaKendraId: string): Promise<any> => {
         id: sevaKendraId,
       },
       include: {
+        district: {
+          include: { state: true },
+        },
         contactPerson: true,
-        services: true,
+        services: {
+          include: {
+            service: {
+              include: {
+                serviceType: true,
+              },
+            },
+          },
+        },
         auditLog: true,
       },
     });
@@ -97,9 +110,85 @@ const getSevaKendraServicesById = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+const getSevaKendraStatusDB = async (
+  sevaKendraId: string,
+  currentDate: string
+) => {
+  try {
+    const SevaKendraAuditLog = await prisma.sevaKendraAuditLog.findFirstOrThrow(
+      {
+        where: {
+          AND: [
+            { sevaKendraId: sevaKendraId },
+            {
+              date: {
+                lte: currentDate,
+              },
+            },
+          ],
+        },
+        orderBy: {
+          date: "desc",
+        },
+        take: 1,
+        select: {
+          status: true,
+        },
+      }
+    );
+    return SevaKendraAuditLog.status || AuditLogStatusEnum.DEACTIVE;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+const getSevaKendraByDistrictIdDB = async (
+  districtId: string,
+  status: AuditLogStatusEnum | undefined
+) => {
+  try {
+    const currentDate = new Date(Date.now()).toISOString();
+    const sevakendras = await prisma.sevaKendra.findMany({
+      where: {
+        AND: [
+          { districtId: districtId },
+          {
+            auditLog: {
+              every: {
+                status: status,
+              },
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        auditLog: {
+          select: {
+            status: true,
+          },
+          where: {
+            date: {
+              lt: currentDate,
+            },
+          },
+          orderBy: {
+            date: "desc",
+          },
+          take: 1,
+        },
+      },
+    });
+    return sevakendras;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 export {
   getSevaKendraDB,
   getSevaKendraDBTotal,
   getSevaKendraByIdDB,
   getSevaKendraServicesById,
+  getSevaKendraByDistrictIdDB,
+  getSevaKendraStatusDB,
 };
