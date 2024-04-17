@@ -367,7 +367,7 @@ model DivyangServiceMapping {
   divyangId                       String
   userId                          String?
   serviceId                       String
-  startDate                      DateTime
+  dateOfService                     DateTime
   followUpDate                   DateTime
   dueDate                         DateTime
   //isFollowUpRequired             Boolean?
@@ -585,6 +585,7 @@ enum BloodGroupEnum {
 enum StatusEnum {
   PENDING
   COMPLETED
+  STOPPED
 }
 
 enum CertificateIssueAuthorityEnum {
