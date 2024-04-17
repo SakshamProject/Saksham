@@ -391,7 +391,6 @@ model DivyangServiceMapping {
   nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
   //sevaKendraFollowUp              SevaKendraFollowUp[]
 
-  sevaKendraFollowUp    SevaKendraFollowUp[]
 }
 
 model Donor {
