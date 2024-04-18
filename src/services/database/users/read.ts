@@ -60,5 +60,33 @@ const getUserByIdDB = async (id: string) => {
         }
     }
 };
-
-export {getUserDB, getUserTotal, getUserByIdDB}
+const getUserStatusDB = async (
+  prismaTransaction: Prisma.TransactionClient,
+    userId: string,
+    currentDate: string
+  ) => {
+    try {
+      const UserAuditLog = await prismaTransaction.userAuditLog.findFirstOrThrow(
+        {
+          where: {
+            AND: [
+              { userId: userId },
+              {
+                date: {
+                  lte: currentDate,
+                },
+              },
+            ],
+          },
+          orderBy: {
+            date: "desc",
+          },
+          take: 1,
+        }
+      );
+      return UserAuditLog;
+    } catch (error) {
+      if (error instanceof Error) throwDatabaseError(error);
+    }
+  };
+export {getUserDB, getUserTotal, getUserByIdDB,getUserStatusDB}

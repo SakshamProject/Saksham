@@ -3,7 +3,7 @@ import { Request } from "express";
 import {userListType, userPutRequestType} from "../../types/users/usersSchema.js";
 import generateUserListWhereInput from "../../services/database/utils/users/usersFilterMapper.js";
 
-function updateUserDBObject(body:userPutRequestType): Prisma.UserUpdateInput {
+function updateUserDBObject(body:userPutRequestType,updatedBy:string): Prisma.UserUpdateInput {
     const userUpdateObject: Prisma.UserUpdateInput = {
         userId: body.userId,
         firstName: body.firstName,
@@ -18,12 +18,9 @@ function updateUserDBObject(body:userPutRequestType): Prisma.UserUpdateInput {
                 id: body.designationId
             }
         },
-        // userAuditLog: {
-        //     update : {
-        //         description: body.description,
-        //         status: body.status,
-        //         date: body.effectiveDate,
-        //     }
+        updatedBy:{
+            connect:{id:updatedBy}
+        }
         }
     return userUpdateObject;
 }

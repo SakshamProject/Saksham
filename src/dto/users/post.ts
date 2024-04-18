@@ -52,19 +52,21 @@ function listUserWhereInput(body: userListType): Prisma.UserWhereInput {
   const userWhereInput = generateUserListWhereInput(body);
   return userWhereInput;
 }
-function createAuditLogDBObject(body: userPutRequestType,id:string) {
+function createAuditLogDBObject(body: userPutRequestType, id: string) {
   if (body.auditlog) {
     const Auditlog: Prisma.UserAuditLogCreateInput = {
       description: body.auditlog?.description,
       status: body.auditlog?.status,
-        date: body.auditlog?.date,
-        user: {
-            connect: {
-                id:id
-            }
-        }
+      date: body.auditlog?.date,
+      user: {
+        connect: {
+          id: id,
+        },
+      },
     };
+    return Auditlog;
   }
+    
 }
 
-export { createUserDBObject, listUserWhereInput };
+export { createUserDBObject, listUserWhereInput, createAuditLogDBObject };
