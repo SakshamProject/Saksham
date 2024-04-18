@@ -382,7 +382,7 @@ model DivyangServiceMapping {
   user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
   donor                           Donor?                          @relation(fields: [donorId], references: [id])
   sevaKendra                      SevaKendra ?                     @relation(fields: [sevaKendraId],references: [id])
-  //nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
+  nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
 
 }
 
@@ -403,6 +403,16 @@ model Donor {
 
 //   user                    User                  @relation(fields: [userId], references: [id])
 // }
+
+model NonSevaKendraFollowUp{
+  id      String  @id @default(uuid())
+  name     String
+  mobileNumber  String
+  email     String
+  sendMail  Boolean
+  divyangServiceMappingId     String
+  divyangServiceMapping  DivyangServiceMapping @relation(fields: [divyangServiceMappingId],references: [id])
+}
 
 
 model DisabilityOfDivyang {
