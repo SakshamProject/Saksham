@@ -33,11 +33,18 @@ const postServiceMappingRequestSchema = z
           data.userId ===undefined
         );
       } else {
-        return (
-         
-          data.userId !== undefined &&
+        if(data.userId===undefined){
+          return data.sevaKendraId !==undefined&&
           data.nonSevaKendraFollowUp === undefined
-        );
+
+        }else{
+          return (
+         
+            data.userId !== undefined &&
+            data.nonSevaKendraFollowUp === undefined
+          );
+        }
+       
       }
     },
     {
