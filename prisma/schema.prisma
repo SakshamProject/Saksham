@@ -367,7 +367,7 @@ model DivyangDetailsAuditLog {
 model DivyangServiceMapping {
   id                              String                 @id @default(uuid())
   divyangId                       String
-  sevaKendraId                    String
+  sevaKendraId                    String?
   userId                          String?
   serviceId                       String
   dateOfService                     DateTime
