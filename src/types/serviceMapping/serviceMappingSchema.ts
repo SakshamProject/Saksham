@@ -18,6 +18,7 @@ const postServiceMappingRequestSchema = z
   .object({
     divyangId: uuidSchema,
     userId: uuidSchema.optional(),
+    sevaKendraId:uuidSchema.optional(),
     serviceId: uuidSchema,
     dateOfService: dateSchema,
     dueDate: dateSchema,
