@@ -7,7 +7,11 @@ async function createUserDB(userInputObject: Prisma.PersonCreateInput) {
   try {
     const newUser = await prisma.person.create({
       include: {
-        user: true,
+        user: {
+          include: {
+            userAuditLog: true
+          }
+        },
       },
       data: userInputObject,
     });

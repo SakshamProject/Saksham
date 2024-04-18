@@ -9,7 +9,7 @@ import generateUserListWhereInput from "../../services/database/utils/users/user
 function createUserDBObject(request: Request): Prisma.PersonCreateInput {
   const userInputObject: Prisma.PersonCreateInput = {
     loginId: request.body.loginId,
-    pasword: {
+    password: {
       create: {
         password: request.body.password, // TODO: Hash this
       },

@@ -63,8 +63,7 @@ enum userFilterColumnNamesEnum {
 enum userOrderByEnum {
     createdAt = "createdAt",
     updatedAt = "updatedAt",
-    firstName = "firstName",
-    lastName = "lastName",
+    name="name",
     district = "district",
     state = "state",
     sevaKendraName = "sevaKendraName",

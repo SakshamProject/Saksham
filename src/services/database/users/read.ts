@@ -4,6 +4,7 @@ import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 import {AuditLogStatusEnum, Prisma} from "@prisma/client";
 import usersDefaults from "./defaults/usersDefaults.js";
+import usersOrderByColumnMapper from "../utils/users/usersColumnNameMapper.js";
 
 async function getUserDB(
     prismaTransaction: Prisma.TransactionClient,
@@ -14,15 +15,13 @@ async function getUserDB(
     try {
         const results = await prismaTransaction.user.findMany({
             select: usersDefaults.select,
-            orderBy: {
-                firstName: sortOrder,
-            },
+            orderBy: usersOrderByColumnMapper(orderBy, sortOrder),
             where: userWhereInput
         });
         return results;
-    } catch (err) {
-        if (err instanceof Error) {
-            throwDatabaseError(err);
+    } catch (error) {
+        if (error instanceof Error) {
+            throwDatabaseError(error);
         }
     }
 }
