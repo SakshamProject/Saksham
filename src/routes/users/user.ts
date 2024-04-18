@@ -9,6 +9,6 @@ const userRouter = Router();
 // userRouter.post("/", getUsers); list of all user id's and names
 userRouter.post("/list", listUser);
 userRouter.get("/:userId", getUserById);
-userRouter.post("/", authenticate, fileHandler.single("profilePhoto"), postUser);
-userRouter.put("/", authenticate, fileHandler.single("profilePhoto"), putUser);
+userRouter.post("", authenticate, fileHandler.single("profilePhoto"), postUser);
+userRouter.put("/:id", authenticate, fileHandler.single("profilePhoto"), putUser);
 export default userRouter;

@@ -12,14 +12,19 @@ function updateUserDBObject(body:userPutRequestType,updatedBy:string): Prisma.Us
         dateOfBirth: body.dateOfBirth,
         contactNumber: body.contactNumber,
         whatsappNumber: body.whatsappNumber,
-        email: body.mail,
+        email: body.email,
         designation: {
             connect: {
                 id: body.designationId
             }
         },
-        updatedBy:{
-            connect:{id:updatedBy}
+        // updatedBy:{
+        //     connect:{id:updatedBy}
+        // },
+        person: {
+            connect: {
+                id:body.personId
+            }
         }
         }
     return userUpdateObject;
