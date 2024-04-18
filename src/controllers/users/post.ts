@@ -1,5 +1,5 @@
 import {NextFunction, Response, Request} from "express";
-import {userListSchema, usersPostSchema} from "../../types/users/usersSchema.js";
+import {userListSchema, usersPostSchema, usersPutSchema} from "../../types/users/usersSchema.js";
 import log from "../../services/logger/logger.js";
 import { createUserDBObject } from "../../dto/users/post.js";
 import {createUserDB} from "../../services/database/users/create.js";
@@ -7,6 +7,7 @@ import {createResponseOnlyData} from "../../types/createResponseSchema.js";
 import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
 import {listUserWhereInput} from "../../dto/users/post.js";
 import {saveFile, saveFiles} from "../../middlewares/fileHandler/fileHandler.js";
+import { updateUserDBObject } from "../../dto/users/put.js";
 
 
 async function postUser(request: Request, response: Response, next: NextFunction) {
