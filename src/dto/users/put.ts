@@ -18,9 +18,9 @@ function updateUserDBObject(body:userPutRequestType,updatedBy:string): Prisma.Us
                 id: body.designationId
             }
         },
-        // updatedBy:{
-        //     connect:{id:updatedBy}
-        // },
+        updatedBy:{
+            connect:{id:updatedBy}
+        },
         person: {
             connect: {
                 id:body.personId

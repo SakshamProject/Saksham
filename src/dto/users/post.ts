@@ -24,11 +24,11 @@ function createUserDBObject(request: Request): Prisma.PersonCreateInput {
         contactNumber: request.body.contactNumber,
         whatsappNumber: request.body.whatsappNumber,
         email: request.body.email,
-        // createdBy: {
-        //     connect: {
-        //         userId: request.user.id,
-        //     }
-        // },
+        createdBy: {
+            connect: {
+                id: request.user.id,
+            }
+        },
         designation: {
           connect: {
             id: request.body.designationId,

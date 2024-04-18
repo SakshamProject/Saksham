@@ -24,7 +24,7 @@ const updateUserTransactionDB = async (
           id,
           currentDate
         );
-        if (body.auditlog?.status != userAuditLog?.status) {
+        if (body.auditlog?.status !== userAuditLog?.status) {
           const AuditLogDBObject = createAuditLogDBObject(body, id);
           if (AuditLogDBObject) {
             const createdAuditLog = await createUserAuditLogDB(

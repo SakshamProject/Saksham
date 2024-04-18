@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import {
-  createResponseOnlyData,
+  createResponseOnlyData, createResponseWithQuery,
 } from "../../types/createResponseSchema.js"
 import { getUserByIdDB } from "../../services/database/users/read.js";
 import { getUsersBySevaKendraIdDBTransaction } from "../../services/database/users/transaction/read.js";
@@ -24,7 +24,7 @@ async function getUsersBySevaKendra(request: Request, response: Response, next: 
     const status: AuditLogStatusEnum | undefined =
         auditLogStatusEnumSchema.parse(request.query.status);
     const result = await getUsersBySevaKendraIdDBTransaction(sevaKendraId, status);
-    response.json(result);
+    response.json(createResponseOnlyData(result?.users));
   } catch(error) {
     next(error);
   }
