@@ -12,8 +12,8 @@ async function putUser(request: Request, response: Response, next: NextFunction)
     try {
         const id = request.params.id;
         const body = usersPutSchema.parse(request.body);
-        const updatedBy = ""
-        const result = updateUserTransactionDB(body,id,updatedBy)
+        const updatedBy = "55bbfe28-5f62-4829-b8ba-7bf8ae6b8187"
+        const result =await updateUserTransactionDB(body,id,updatedBy)
         const responseData = createResponseOnlyData(result);
         response.json(responseData);
     }
