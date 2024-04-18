@@ -89,7 +89,7 @@ async function createAuditLogIfExists(
       updateRequestSevaKendra.id,
       currentDate
     );
-    if (auditLogDBObject.status != statusOfSevaKendra) {
+    if (auditLogDBObject.status != statusOfSevaKendra?.status) {
       const createdAuditLog = await createSevaKendraAuditLogDB(
         prismaTransaction,
         auditLogDBObject
