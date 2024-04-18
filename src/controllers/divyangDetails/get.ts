@@ -13,6 +13,7 @@ import {
 import {
   getDivyangDetailsByIdDB,
   getDivyangDetailsSearchByColumnDB,
+  getDivyangDetailsStatusDB,
 } from "../../services/database/divyangDetails/read.js";
 import DivyangDetailsGlobalSearchConditions from "../../services/database/utils/divyangDetails/searchConditions.js";
 import { createDivyangDetailsFilterInputObject } from "../../dto/divyangDetails/post.js";
@@ -41,7 +42,7 @@ const getDivyangDetails = async (
       divyangDetailsWhereInput,
       divyangDetailsRequest.pagination?.start,
       divyangDetailsRequest.pagination?.rows,
-      orderByColumnAndSortOrder,
+      orderByColumnAndSortOrder
     );
     const count: number = result?.divyangDetails?.length || 0;
     const total: number = result?.total || 0;
@@ -65,8 +66,17 @@ const getDivyangDetailsbyId = async (
 ) => {
   try {
     const id: string = request.params.id;
-    const result: getDivyangDetailsSchema | undefined =
+    const divyangDetails: getDivyangDetailsSchema | undefined =
       await getDivyangDetailsByIdDB(id);
+    const currentDate = new Date(Date.now()).toISOString();
+    const currentAuditLog = await getDivyangDetailsStatusDB(id, currentDate);
+    const result = {
+      ...divyangDetails,
+      status: currentAuditLog?.status,
+      description: currentAuditLog?.description,
+      effectiveFromDate: currentAuditLog?.date,
+      timestamp: currentDate,
+    };
     const responseData = createResponseOnlyData(result || {});
     response.send(responseData);
   } catch (error) {
@@ -86,7 +96,7 @@ const getDivyangDetailsSearchByColumn = async (
       divyangDetailsSearchRequest
     );
     const responseData = createResponseOnlyData(result);
-    response.send(responseData)
+    response.send(responseData);
   } catch (error) {
     next(error);
   }

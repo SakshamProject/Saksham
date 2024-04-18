@@ -1,31 +1,31 @@
-import { NextFunction, Response, Request } from 'express'
+import { NextFunction, Response, Request } from "express";
 import {
-  updateDivyangDetails,
   updateDivyangDetailsRequest,
   updateDivyangDetailsRequestSchema,
-} from '../../types/divyangDetails/divyangDetailsSchema.js'
-import { createResponseOnlyData } from '../../types/createResponseSchema.js'
-import { createUpdateDTOObject } from '../../dto/divyangDetails/put.js'
-import { updateDivyangDetailsDB } from '../../services/database/divyangDetails/update.js'
-import APIError from '../../services/errors/APIError.js'
-import updateDivyangDetailsTransactionDB from '../../services/database/divyangDetails/transaction/update.js'
+} from "../../types/divyangDetails/divyangDetailsSchema.js";
+import { createResponseOnlyData } from "../../types/createResponseSchema.js";
+import updateDivyangDetailsTransactionDB from "../../services/database/divyangDetails/transaction/update.js";
+import { getDivyangDetailsByIdDB } from "../../services/database/divyangDetails/read.js";
 
 const putDivyangDetails = async (
   request: Request,
   response: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
-    const id: string = request.params.id
-    const divyangDetails: updateDivyangDetailsRequest = updateDivyangDetailsRequestSchema.parse(
-      request.body,
-    )
-    const result = updateDivyangDetailsTransactionDB(divyangDetails, id)
-    const responseData = createResponseOnlyData(result)
-    response.send(responseData)
+    const id: string = request.params.id;
+    const divyangDetails: updateDivyangDetailsRequest =
+      updateDivyangDetailsRequestSchema.parse(request.body);
+    const updatedResult = await updateDivyangDetailsTransactionDB(
+      divyangDetails,
+      id
+    );
+    const result = await getDivyangDetailsByIdDB(id);
+    const responseData = createResponseOnlyData(result);
+    response.send(responseData);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
-export { putDivyangDetails }
+export { putDivyangDetails };
