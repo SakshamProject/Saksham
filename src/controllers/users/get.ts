@@ -15,4 +15,14 @@ async function getUserById (request: Request, response: Response, next: NextFunc
   }
 }
 
-export { getUserById }
+async function getUsersBySevaKendra(request: Request, response: Response, next: NextFunction) {
+  try {
+    const sevaKendraId: string = request.params.id;
+    // const result = await getUsersBySevaKendraIdDBTransaction(sevaKendraId);
+    response.json({ sevaKendraId });
+  } catch(error) {
+
+  }
+}
+
+export { getUserById, getUsersBySevaKendra }

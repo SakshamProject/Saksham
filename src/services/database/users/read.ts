@@ -2,7 +2,7 @@ import defaults from "../../../defaults.js";
 import {sortOrderEnum} from "../../../types/getRequestSchema.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
-import {Prisma} from "@prisma/client";
+import {AuditLogStatusEnum, Prisma} from "@prisma/client";
 import usersDefaults from "./defaults/usersDefaults.js";
 
 async function getUserDB(
@@ -61,4 +61,62 @@ const getUserByIdDB = async (id: string) => {
     }
 };
 
-export {getUserDB, getUserTotal, getUserByIdDB}
+async function getUsersBySevaKendraIdDB(prismaTransaction: Prisma.TransactionClient, sevaKendraId: string, status: AuditLogStatusEnum | undefined) {
+    try {
+        const currentDate = new Date(Date.now()).toISOString();
+        const users = prismaTransaction.person.findMany({
+            select: {
+                id: true,
+                loginId: true,
+                user: {
+                    select: {
+                        id: true,
+                        userAuditLog: {
+                            select: {
+                                status: true,
+                            },
+                            where: {
+                                date: {
+                                    lt: currentDate
+                                }
+                            },
+                            orderBy: {
+                                date: "desc",
+                            },
+                            take: 1,
+                        }
+                    }
+                }
+            },
+            where: {
+                AND: [
+                    {
+                        user: {
+                            designation: {
+                                sevaKendra: {
+                                    id: sevaKendraId,
+                                }
+                            }
+                        }
+                    },
+                    {
+                        user: {
+                            userAuditLog: {
+                                every: {
+                                    status: status
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        });
+        return users;
+    } catch (error) {
+        if (error instanceof Error) {
+            throwDatabaseError(error);
+        }
+    }
+}
+
+export {getUserDB, getUserTotal, getUserByIdDB, getUsersBySevaKendraIdDB}
