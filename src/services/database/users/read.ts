@@ -61,34 +61,34 @@ const getUserByIdDB = async (id: string) => {
     }
 };
 const getUserStatusDB = async (
-  prismaTransaction: Prisma.TransactionClient,
+    prismaTransaction: Prisma.TransactionClient,
     userId: string,
     currentDate: string
-  ) => {
+) => {
     try {
-      const UserAuditLog = await prismaTransaction.userAuditLog.findFirstOrThrow(
-        {
-          where: {
-            AND: [
-              { userId: userId },
-              {
-                date: {
-                  lte: currentDate,
+        const UserAuditLog = await prismaTransaction.userAuditLog.findFirstOrThrow(
+            {
+                where: {
+                    AND: [
+                        {userId: userId},
+                        {
+                            date: {
+                                lte: currentDate,
+                            },
+                        },
+                    ],
                 },
-              },
-            ],
-          },
-          orderBy: {
-            date: "desc",
-          },
-          take: 1,
-        }
-      );
-      return UserAuditLog;
+                orderBy: {
+                    date: "desc",
+                },
+                take: 1,
+            }
+        );
+        return UserAuditLog;
     } catch (error) {
-      if (error instanceof Error) throwDatabaseError(error);
+        if (error instanceof Error) throwDatabaseError(error);
     }
-  };
+};
 
 async function getUsersBySevaKendraIdDB(prismaTransaction: Prisma.TransactionClient, sevaKendraId: string, status: AuditLogStatusEnum | undefined) {
     try {
@@ -148,4 +148,45 @@ async function getUsersBySevaKendraIdDB(prismaTransaction: Prisma.TransactionCli
     }
 }
 
-export {getUserDB, getUserTotal, getUserByIdDB, getUserStatusDB, getUsersBySevaKendraIdDB}
+async function getUsersBySevaKendraIdTotalDB(prismaTransaction: Prisma.TransactionClient, sevaKendraId: string, status: AuditLogStatusEnum | undefined) {
+    try {
+        const total = await prismaTransaction.person.count({
+            where: {
+                AND: [
+                    {
+                        user: {
+                            designation: {
+                                sevaKendra: {
+                                    id: sevaKendraId,
+                                }
+                            }
+                        }
+                    },
+                    {
+                        user: {
+                            userAuditLog: {
+                                every: {
+                                    status: status
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        });
+        return total;
+    } catch (error) {
+        if (error instanceof Error) {
+            throwDatabaseError(error);
+        }
+    }
+}
+
+export {
+    getUserDB,
+    getUserTotal,
+    getUserByIdDB,
+    getUserStatusDB,
+    getUsersBySevaKendraIdDB,
+    getUsersBySevaKendraIdTotalDB
+}

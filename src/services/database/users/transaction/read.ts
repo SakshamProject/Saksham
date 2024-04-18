@@ -4,7 +4,7 @@ import prisma from "../../database.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import {Prisma} from "@prisma/client";
 import { AuditLogStatusEnum } from "@prisma/client";
-import {getUserDB, getUsersBySevaKendraIdDB, getUserTotal} from "../read.js";
+import {getUserDB, getUsersBySevaKendraIdDB, getUsersBySevaKendraIdTotalDB, getUserTotal} from "../read.js";
 import usersDefaults from "../defaults/usersDefaults.js";
 import {userOrderByEnum} from "../../../../types/users/usersSchema.js";
 
@@ -51,7 +51,8 @@ async function getUsersBySevaKendraIdDBTransaction(sevaKendraId: string, status:
         const transaction = await prisma.$transaction(
             async (prismaTransaction) => {
                 const users = await getUsersBySevaKendraIdDB(prismaTransaction, sevaKendraId, status);
-                return {users}
+                const total = await getUsersBySevaKendraIdTotalDB(prismaTransaction, sevaKendraId, status);
+                return {users, total};
             });
         return transaction;
     } catch
@@ -60,4 +61,4 @@ async function getUsersBySevaKendraIdDBTransaction(sevaKendraId: string, status:
     }
 }
 
-export {getUsersDBTransaction}
+export {getUsersDBTransaction, getUsersBySevaKendraIdDBTransaction}
