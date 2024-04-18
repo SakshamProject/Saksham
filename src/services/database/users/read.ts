@@ -100,6 +100,8 @@ async function getUsersBySevaKendraIdDB(prismaTransaction: Prisma.TransactionCli
                 user: {
                     select: {
                         id: true,
+                        firstName: true,
+                        lastName: true,
                         userAuditLog: {
                             select: {
                                 status: true,
@@ -117,6 +119,18 @@ async function getUsersBySevaKendraIdDB(prismaTransaction: Prisma.TransactionCli
                     }
                 }
             },
+            orderBy: [
+                {
+                    user: {
+                        firstName: "asc"
+                    }
+                },
+                {
+                    user: {
+                        lastName: "asc"
+                    }
+                }
+            ],
             where: {
                 AND: [
                     {
