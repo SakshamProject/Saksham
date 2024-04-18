@@ -21,11 +21,15 @@ const disabiltyDetailsRequestSchema = z
     udidEnrollmentNumber: z.string().length(64),
   })
   .refine((data) => {
-    return (
-      data.udidCardNumber !== undefined &&
-      data.udidEnrollmentNumber !== undefined
-    )
-  })
+    if (data.isDisabilitySinceBirth) {
+      return data.disabilitySince === null;
+    } else {
+      return (
+        data.udidCardNumber!== undefined &&
+        data.udidEnrollmentNumber!== undefined
+      );
+    }
+  });
   type DisabilityDetails = z.infer<typeof disabiltyDetailsRequestSchema>
 
 export { disabiltyDetailsRequestSchema, DisabilityDetails }
