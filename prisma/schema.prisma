@@ -407,7 +407,7 @@ model Donor {
 model NonSevaKendraFollowUp{
   id      String  @id @default(uuid())
   name     String
-  contact  String
+  mobileNumber  String
   email     String
   sendMail  Boolean
   divyangServiceMappingId     String
