@@ -10,6 +10,7 @@ const serviceAdditionalWhereSchema = z.object({
   districtId: uuidSchema.optional(),
   startDate: z.string().datetime().optional(),
   endDate: z.string().datetime().optional(),
+  divyangId: uuidSchema.optional(),
 });
 type ServiceAdditionalWhereSchemaType = z.infer<
   typeof serviceAdditionalWhereSchema
