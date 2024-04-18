@@ -26,11 +26,13 @@ async function postServiceMappingDBTransaction(
         const postServiceMappingDBObject: postServiceMappingType =
           createPostServiceMappingDBObject(body, createdByID);
 
+
         const serviceMapping: DivyangServiceMapping | undefined =
           await createServiceMappingDB(
             prismaTransaction,
             postServiceMappingDBObject
           );
+
 
         if (body.isNonSevaKendraFollowUpRequired) {
 

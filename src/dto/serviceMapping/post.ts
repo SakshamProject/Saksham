@@ -18,11 +18,6 @@ const createPostServiceMappingDBObject = (
         }
      },
 
-     sevaKendra:{
-      connect:{
-        id:body.sevaKendraId
-      }
-     },
      dateOfService:body.dateOfService,
      followUpDate:body.dateOfService,
      dueDate:body.dueDate,
@@ -53,9 +48,14 @@ const createPostServiceMappingDBObject = (
         connect:{
           id:createdById
         }
-      }
+      };
+      createServiceMappingDBObject.sevaKendra={
+       connect:{
+         id:body.sevaKendraId
+       }
+    
     }
-  
+    }
     return createServiceMappingDBObject;
   };
 

@@ -6,7 +6,7 @@ import { getServiceMappingByIdDB } from "../../services/database/serviceMapping/
 
 async function postServiceMapping(request:Request,response:Response,next:NextFunction){
     try{
-
+        
         const body:postServiceMappingRequestSchemaType = postServiceMappingRequestSchema.parse(request.body);
         if(request.user){
         const createdById:string |undefined= request.user?.id;
