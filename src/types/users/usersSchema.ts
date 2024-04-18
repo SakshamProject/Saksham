@@ -25,7 +25,7 @@ const usersPostSchema = z.object({
 type userPostRequestType = z.infer<typeof usersPostSchema>;
 
 const usersPutSchema = z.object({
-    sevaKendraId: uuidSchema,
+    sevaKendraId: uuidSchema.optional(),
     personId:uuidSchema,
     userId: z.string(),
     firstName: z.string(),
@@ -33,7 +33,7 @@ const usersPutSchema = z.object({
     gender: z.nativeEnum(GenderEnum).optional(),
     dateOfBirth: dateSchema.optional(),
     designationId: z.string().uuid(),
-    mail: emailSchema,
+    email: emailSchema,
     loginId: inputFieldSchema,
     password: z.string(),
     contactNumber: phoneNumberSchema,
