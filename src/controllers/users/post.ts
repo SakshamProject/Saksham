@@ -3,11 +3,10 @@ import {userListSchema, usersPostSchema, usersPutSchema} from "../../types/users
 import log from "../../services/logger/logger.js";
 import { createUserDBObject } from "../../dto/users/post.js";
 import {createUserDB} from "../../services/database/users/create.js";
-import {createResponseOnlyData} from "../../types/createResponseSchema.js";
+import {createResponseForFilter, createResponseOnlyData} from "../../types/createResponseSchema.js";
 import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
 import {listUserWhereInput} from "../../dto/users/post.js";
-import {saveFile, saveFiles} from "../../middlewares/fileHandler/fileHandler.js";
-import { updateUserDBObject } from "../../dto/users/put.js";
+import {saveFile} from "../../middlewares/fileHandler/fileHandler.js";
 
 
 async function postUser(request: Request, response: Response, next: NextFunction) {
@@ -48,7 +47,14 @@ async function listUser (request: Request, response: Response, next: NextFunctio
             userWhereInput
         );
         log("info", "[controller/listUser]: result: %o", result || {});
-        response.json(result);
+
+        const responseData = createResponseForFilter(
+            result?.users,
+            body,
+            result?.total,
+            (result?.users?.length)
+        )
+        response.json(responseData);
     } catch (error) {
         next(error);
     }

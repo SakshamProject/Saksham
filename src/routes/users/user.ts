@@ -2,7 +2,7 @@ import {Router} from 'express'
 import { getUserById } from '../../controllers/users/get.js'
 import {listUser, postUser} from "../../controllers/users/post.js";
 import fileHandler from "../../middlewares/fileHandler/fileHandler.js";
-import {authenticate} from "../../middlewares/auth/auth.js";
+import {authenticate} from "../../middlewares/authentication/authentication.js";
 import { putUser } from '../../controllers/users/put.js';
 
 const userRouter = Router();

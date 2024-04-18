@@ -1,12 +1,13 @@
 
 import { NextFunction, Request, Response } from "express";
+import log from "../../services/logger/logger.js";
 
 
 function authenticate(request: Request, response: Response, next: NextFunction) {
     const user:User = {
-      id: "a09e0bf1-e9c5-4970-9969-d4c761f12be8",
+      id: "30a3e3de-0242-4998-95f5-79158100bc31",
     };
-    
+    log("info", "[middleware/auth] user: %o", user);
     request.user = user;
     
     next();
