@@ -11,6 +11,7 @@ async function getUsers(request: Request, response: Response, next: NextFunction
 
   }
 }
+
 async function getUserById (request: Request, response: Response, next: NextFunction) {
   try {
     const userId: string = request.params.userId;

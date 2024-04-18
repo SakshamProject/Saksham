@@ -46,14 +46,14 @@ async function getUserTotal(
 
 const getUserByIdDB = async (id: string) => {
     try {
-        const user = await prisma.user.findFirstOrThrow({
+        const person = await prisma.person.findFirstOrThrow({
             // select: usersDefaults.select,
             include: usersDefaults.includeAll,
             where: {
                 id: id,
             },
         });
-        return user;
+        return person;
     } catch (error) {
         if (error instanceof Error) {
             throwDatabaseError(error);
