@@ -1,6 +1,6 @@
 import {z} from "zod";
 import { GenderEnum, AuditLogStatusEnum } from "@prisma/client";
-import inputFieldSchema, {dateSchema, emailSchema, phoneNumberSchema, uuidSchema} from "../inputFieldSchema.js";
+import inputFieldSchema, {auditLogSchema, dateSchema, emailSchema, phoneNumberSchema, uuidSchema} from "../inputFieldSchema.js";
 import {specialCharsRegex} from "../regex.js";
 import {sortOrderEnum} from "../getRequestSchema.js";
 
@@ -26,6 +26,7 @@ type userPostRequestType = z.infer<typeof usersPostSchema>;
 
 const usersPutSchema = z.object({
     sevaKendraId: uuidSchema,
+    personId:uuidSchema,
     userId: z.string(),
     firstName: z.string(),
     lastName: z.string(),
@@ -38,9 +39,7 @@ const usersPutSchema = z.object({
     contactNumber: phoneNumberSchema,
     whatsappNumber: phoneNumberSchema,
     // audit log
-    status: z.nativeEnum(AuditLogStatusEnum),
-    effectiveDate: dateSchema,
-    description: inputFieldSchema.optional()
+    auditlog:auditLogSchema.optional()
 });
 type userPutRequestType = z.infer<typeof usersPutSchema>;
 

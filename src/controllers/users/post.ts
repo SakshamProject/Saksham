@@ -7,6 +7,7 @@ import {createResponseOnlyData} from "../../types/createResponseSchema.js";
 import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
 import {listUserWhereInput} from "../../dto/users/post.js";
 import {saveFile, saveFiles} from "../../middlewares/fileHandler/fileHandler.js";
+import { updateUserDBObject } from "../../dto/users/put.js";
 
 
 async function postUser(request: Request, response: Response, next: NextFunction) {
@@ -32,29 +33,7 @@ async function postUser(request: Request, response: Response, next: NextFunction
         next(error);
     }
 }
-async function putUser(request: Request, response: Response, next: NextFunction) {
-    try {
-        const body = usersPutSchema.parse(request.body);
-        log( "info", `[controller/post]:\n body: %o`, body);
-        log("info", `[controller/post]:\n file: %o`, request.file || {});
 
-        const userInputObject = createUserDBObject(request);
-        log("info", `[controller/post]:\n userInputObject: %o`, userInputObject);
-
-        const newUser = await createUserDB(userInputObject);
-        log("info", `[controller/postUser]:\n newUser: %o`, newUser || {});
-        // TODO createdBy Id
-
-        if (newUser && request.file) {
-            saveFile(newUser.id, request.file);
-        }
-        const responseData = createResponseOnlyData(newUser);
-        response.json(responseData);
-    }
-    catch(error) {
-        next(error);
-    }
-}
 async function listUser (request: Request, response: Response, next: NextFunction) {
     try {
         const body = userListSchema.parse(request.body);
