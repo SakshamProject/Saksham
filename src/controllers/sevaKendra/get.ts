@@ -28,7 +28,6 @@ const getSevaKendra = async (
 ) => {
   try {
     const sevaKendraRequest = getSevaKendraSchema.parse(request.body);
-    console.log(request.body, "   parsed  ", sevaKendraRequest);
     const orderByColumnAndSortOrder = sevaKendraColumnNameMapper(
       sevaKendraRequest.sorting?.orderByColumn,
       sevaKendraRequest.sorting?.sortOrder

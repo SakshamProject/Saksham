@@ -23,6 +23,8 @@ model Person {
 
   divyangsCreated DivyangDetails[] @relation("divyangCreatedBy")
   divyangsUpdated DivyangDetails[] @relation("divyangUpdatedBy")
+  createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
+  updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
 }
 
 model Password {
@@ -52,6 +54,7 @@ model SevaKendra {
   auditLog      SevaKendraAuditLog[]
   createdBy     User?                   @relation("sevaKendraCreatedBy", fields: [createdById], references: [id])
   updatedBy     User?                   @relation("sevaKendraUpdatedBy", fields: [updatedById], references: [id])
+  divyangServiceMapping     DivyangServiceMapping[]
 
   @@unique([name, districtId])
 }
@@ -176,8 +179,7 @@ model User {
 
   // sevaKendraFollowUp            SevaKendraFollowUp[]
 
-  createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
-  updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
+
   createdSevaKendra             SevaKendra[]            @relation("sevaKendraCreatedBy")
   updatedSevaKendra             SevaKendra[]            @relation("sevaKendraUpdatedBy")
 }
@@ -367,14 +369,15 @@ model DivyangDetailsAuditLog {
 model DivyangServiceMapping {
   id                              String                 @id @default(uuid())
   divyangId                       String
+  sevaKendraId                    String?
   userId                          String?
   serviceId                       String
-  startDate                       DateTime
-  followUpDate                    DateTime
+  dateOfService                     DateTime
+  followUpDate                   DateTime
   dueDate                         DateTime
   //isFollowUpRequired             Boolean?
-  isNonSevaKendraFollowUpRequired Boolean
-  isCompleted                     StatusEnum
+  isNonSevaKendraFollowUpRequired  Boolean 
+  isCompleted                     StatusEnum 
   howTheyGotService               HowTheyGotServiceEnum?
   reasonForNonCompletion          String?
   completedDate                   DateTime?
@@ -384,14 +387,15 @@ model DivyangServiceMapping {
   createdById                     String
   updatedById                     String
 
-  divyang               DivyangDetails          @relation(fields: [divyangId], references: [id])
-  createdBy             User                    @relation("serviceMappingCreatedBy", fields: [createdById], references: [id])
-  updatedBy             User                    @relation("serviceMappingUpdatedBy", fields: [updatedById], references: [id])
-  service               Service                 @relation(fields: [serviceId], references: [id])
-  user                  User?                   @relation("inchargeUser", fields: [userId], references: [id])
-  donor                 Donor?                  @relation(fields: [donorId], references: [id])
-  nonSevaKendraFollowUp NonSevaKendraFollowUp[]
-  //sevaKendraFollowUp              SevaKendraFollowUp[]
+  divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
+  createdBy                       Person                            @relation("serviceMappingCreatedBy",fields: [createdById],references: [id])
+  updatedBy                       Person                             @relation("serviceMappingUpdatedBy",fields: [updatedById],references: [id])
+  service                         Service                         @relation(fields: [serviceId], references: [id])
+  user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
+  donor                           Donor?                          @relation(fields: [donorId], references: [id])
+  sevaKendra                      SevaKendra ?                     @relation(fields: [sevaKendraId],references: [id])
+  //nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
+
 }
 
 model Donor {
@@ -412,16 +416,6 @@ model Donor {
 //   user                    User                  @relation(fields: [userId], references: [id])
 // }
 
-model NonSevaKendraFollowUp {
-  id                      String  @id @default(uuid())
-  name                    String
-  mobileNumber            String
-  email                   String // validation?
-  sendMail                Boolean
-  divyangServiceMappingId String
-
-  divyangServiceMapping DivyangServiceMapping @relation(fields: [divyangServiceMappingId], references: [id])
-}
 
 model DisabilityOfDivyang {
   id                         String  @id @default(uuid())
@@ -587,6 +581,7 @@ enum BloodGroupEnum {
 enum StatusEnum {
   PENDING
   COMPLETED
+  STOPPED
 }
 
 enum CertificateIssueAuthorityEnum {
