@@ -386,7 +386,7 @@ model DivyangServiceMapping {
   updatedById                     String
 
   divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
-  createdBy                       Person                             @relation("serviceMappingCreatedBy",fields: [createdById],references: [id])
+  createdBy                       Person                            @relation("serviceMappingCreatedBy",fields: [createdById],references: [id])
   updatedBy                       Person                             @relation("serviceMappingUpdatedBy",fields: [updatedById],references: [id])
   service                         Service                         @relation(fields: [serviceId], references: [id])
   user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
