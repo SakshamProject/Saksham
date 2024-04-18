@@ -16,7 +16,7 @@ const nonSevaKendraFollowUpSchema = z.object({
 
 const postServiceMappingRequestSchema = z
   .object({
-    divyangId: uuidSchema,
+    divyangId: uuidSchema.optional(),
     userId: uuidSchema.optional(),
     sevaKendraId:uuidSchema.optional(),
     serviceId: uuidSchema,
