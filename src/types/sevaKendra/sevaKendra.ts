@@ -8,7 +8,7 @@ import inputFieldSchema, {
   phoneNumberSchema,
   uuidSchema,
 } from "../inputFieldSchema.js";
-import { Prisma } from "@prisma/client";
+import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import { SevaKendraColumnNamesEnum } from "./sevaKendraDefaults.js";
 import { sortOrderEnum } from "../getRequestSchema.js";
 
@@ -91,7 +91,6 @@ const getSevaKendraSchema = z.object({
     })
     .optional(),
 });
-
 
 type SevaKendraFilterType = z.infer<typeof sevaKendraFilter>;
 type GetSevaKendraSchemaType = z.infer<typeof getSevaKendraSchema>;
