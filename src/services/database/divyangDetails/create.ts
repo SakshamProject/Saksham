@@ -3,6 +3,7 @@ import throwDatabaseError from "../utils/errorHandler.js";
 import prisma from "../database.js";
 import { createDivyangDetails } from "../../../types/divyangDetails/divyangDetailsSchema.js";
 import { auditLogSchemaType } from "../../../types/inputFieldSchema.js";
+import { DisabilityOfDivyang } from "../../../types/divyangDetails/disabilityDetailsSchema.js";
 
 const createDivyangDetailsDB = async (
   divyangDetails: createDivyangDetails
@@ -44,4 +45,22 @@ const createDivyangDetailsAuditLogDB = async (
   } catch (error) {}
 };
 
-export { createDivyangDetailsDB, createDivyangDetailsAuditLogDB };
+const createDisabilityOfDivyangDB = async (
+  prismaTransaction: Prisma.TransactionClient,
+  disabilityOfDivyang: Prisma.DisabilityOfDivyangCreateInput
+) => {
+  try {
+    const createdDisabilityOfDivyang =
+      await prismaTransaction.disabilityOfDivyang.create({
+        data: disabilityOfDivyang,
+      });
+    return createdDisabilityOfDivyang;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+export {
+  createDivyangDetailsDB,
+  createDivyangDetailsAuditLogDB,
+  createDisabilityOfDivyangDB,
+};

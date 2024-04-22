@@ -430,7 +430,7 @@ model DisabilityOfDivyang {
   certificateIssueAuthority  CertificateIssueAuthorityEnum?
   disabilityCardUrl          String? // url
 
-  DivyangDetails    DivyangDetails     @relation(fields: [divyangId], references: [id])
+  divyang    DivyangDetails     @relation(fields: [divyangId], references: [id])
   disabilitySubType DisabilitySubType? @relation(fields: [disabilitySubTypeId], references: [id])
   disabilityType    DisabilityType     @relation(fields: [disabilityTypeId], references: [id])
 }

@@ -1,4 +1,6 @@
+import { Prisma } from "@prisma/client";
 import { generateDivyangDetailsFilter } from "../../services/database/utils/divyangDetails/filterMapper.js";
+import { DisabilityOfDivyang } from "../../types/divyangDetails/disabilityDetailsSchema.js";
 import { DivyangDetailsAuditLogDefaults } from "../../types/divyangDetails/divyangDetailsDefaults.js";
 import {
   createDivyangDetails,
@@ -76,4 +78,36 @@ const createDivyangDetailsFilterInputObject = (
   );
   return divyangDetailsWhereInput;
 };
-export { createDivyangDetailsDBObject, createDivyangDetailsFilterInputObject };
+const createDisabilityOfDivyangDBObject = (
+  disabilityDetails: DisabilityOfDivyang
+) => {
+  const disabilityOfDivyangObject: Prisma.DisabilityOfDivyangCreateInput = {
+    isDisabilitySinceBirth: disabilityDetails.isDisabilitySinceBirth,
+    disabilitySince: disabilityDetails.disabilitySince,
+    disabilityArea: disabilityDetails.disabilityArea,
+    disabilityPercentage: disabilityDetails.disabilityPercentage,
+    disabilityDueTo: disabilityDetails.disabilityDueTo,
+    certificateIssueAuthority: disabilityDetails.certificateIssueAuthority,
+    disabilityCardUrl: disabilityDetails.disabilityCardUrl,
+    disabilityType: {
+      connect: {
+        id: disabilityDetails.disabilityTypeId,
+      },
+    },
+    disabilitySubType: {
+      connect: {
+        id: disabilityDetails.disabilitySubTypeId,
+      },
+    },
+    divyang: {
+      connect: { id: disabilityDetails.divyangId },
+    },
+  };
+  return disabilityOfDivyangObject;
+};
+
+export {
+  createDivyangDetailsDBObject,
+  createDisabilityOfDivyangDBObject,
+  createDivyangDetailsFilterInputObject,
+};

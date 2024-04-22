@@ -15,6 +15,7 @@ const updateDivyangDetailsTransactionDB = async (
 ) => {
   try {
     const transaction = await prisma.$transaction(async (prismaTransaction) => {
+//updating audit log
       if (divyangDetails.auditLog != null) {
         const currentDate = new Date(Date.now()).toISOString();
         const auditLog = await getDivyangDetailsStatusDB(id, currentDate);
@@ -26,7 +27,7 @@ const updateDivyangDetailsTransactionDB = async (
           );
         }
       }
-
+// updating divyang details table for corresponding pagenumber
       const pageNumber = divyangDetails.pageNumber;
       const updateDTOObject: updateDivyangDetails =
         (await createUpdateDTOObject(pageNumber, divyangDetails)) || {};

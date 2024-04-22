@@ -1,14 +1,17 @@
-import { Prisma } from '@prisma/client'
-import { updateDivyangDetailsRequest } from '../../types/divyangDetails/divyangDetailsSchema.js'
-import { PersonalDetails } from '../../types/divyangDetails/personalDetailsSchema.js'
-import { Address } from '../../types/divyangDetails/addressSchema.js'
-import { EmploymentDetails } from '../../types/divyangDetails/employmentDetailsSchema.js'
-import { IdProofUploads } from '../../types/divyangDetails/IdProofUploadsSchema.js'
-import { DisabilityDetails } from '../../types/divyangDetails/disabilityDetailsSchema.js'
+import { Prisma } from "@prisma/client";
+import { updateDivyangDetailsRequest } from "../../types/divyangDetails/divyangDetailsSchema.js";
+import { PersonalDetails } from "../../types/divyangDetails/personalDetailsSchema.js";
+import { Address } from "../../types/divyangDetails/addressSchema.js";
+import { EmploymentDetails } from "../../types/divyangDetails/employmentDetailsSchema.js";
+import { IdProofUploads } from "../../types/divyangDetails/IdProofUploadsSchema.js";
+import {
+  DisabilityDetails,
+  DisabilityOfDivyang,
+} from "../../types/divyangDetails/disabilityDetailsSchema.js";
 
 const updatePersonalDetailsDBObject = (
   personalDetails: PersonalDetails,
-  updatedBy: string,
+  updatedBy: string
 ): Prisma.DivyangDetailsUpdateInput => {
   const updatePersonalDetails: Prisma.DivyangDetailsUpdateInput = {
     divyangId: personalDetails.divyangId,
@@ -39,13 +42,13 @@ const updatePersonalDetailsDBObject = (
         id: updatedBy,
       },
     },
-  }
-  return updatePersonalDetails
-}
+  };
+  return updatePersonalDetails;
+};
 
 const updateAddressDBObject = (
   addressRequest: Address,
-  updatedBy: string,
+  updatedBy: string
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateAddress: Prisma.DivyangDetailsUpdateInput = {
     doorNumber: addressRequest.doorNumber,
@@ -100,13 +103,13 @@ const updateAddressDBObject = (
         id: updatedBy,
       },
     },
-  }
-  return updateAddress
-}
+  };
+  return updateAddress;
+};
 
 const updateEmploymentDetailsDBObject = (
   employmentDetails: EmploymentDetails,
-  updatedBy: string,
+  updatedBy: string
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     isEmployed: employmentDetails.isEmployed,
@@ -124,13 +127,13 @@ const updateEmploymentDetailsDBObject = (
         id: updatedBy,
       },
     },
-  }
-  return updateEmploymentDetails
-}
+  };
+  return updateEmploymentDetails;
+};
 
 const updateIdProofUploadsDBObject = (
   IdProofUploads: IdProofUploads,
-  updatedBy: string,
+  updatedBy: string
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     voterId: IdProofUploads.voterId,
@@ -147,22 +150,15 @@ const updateIdProofUploadsDBObject = (
         id: updatedBy,
       },
     },
-  }
-  return updateEmploymentDetails
-}
+  };
+  return updateEmploymentDetails;
+};
 
 const updateDisabilityDetailsDBObject = (
   disabilityDetails: DisabilityDetails,
   updatedBy: string
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
-    isDisabilitySinceBirth: disabilityDetails.isDisabilitySinceBirth,
-    disabilitySince: disabilityDetails.disabilitySince,
-    disabilityArea: disabilityDetails.disabilityArea,
-    disabilityPercentage: disabilityDetails.disabilityPercentage,
-    disabilityDueTo: disabilityDetails.disabilityDueTo,
-    certificateIssueAuthority: disabilityDetails.certificateIssueAuthority,
-    disabilityCardUrl: disabilityDetails.disabilityCardUrl,
     districtCode: disabilityDetails.districtCode,
     stateCode: disabilityDetails.stateCode,
     identityCardNumber: disabilityDetails.identityCardNumber,
@@ -174,25 +170,26 @@ const updateDisabilityDetailsDBObject = (
         id: updatedBy,
       },
     },
-  }
-  return updateEmploymentDetails
-}
+  };
+  return updateEmploymentDetails;
+};
 
 function createUpdateDTOObject(
   pageNumber: number,
-  updateDivyangDetailsRequest: updateDivyangDetailsRequest,
+  updateDivyangDetailsRequest: updateDivyangDetailsRequest
 ) {
-  const updatedBy = updateDivyangDetailsRequest.updatedBy
+  const updatedBy = updateDivyangDetailsRequest.updatedBy;
 
   if (pageNumber === 1 && updateDivyangDetailsRequest.personalDetails) {
     return updatePersonalDetailsDBObject(
       updateDivyangDetailsRequest.personalDetails,
-      updatedBy,
-    )
+      updatedBy
+    );
   } else if (pageNumber === 2 && updateDivyangDetailsRequest.addressRequest) {
     return updateAddressDBObject(
       updateDivyangDetailsRequest.addressRequest,
-      updatedBy)
+      updatedBy
+    );
   } else if (
     pageNumber === 3 &&
     updateDivyangDetailsRequest.employmentDetails
@@ -200,19 +197,19 @@ function createUpdateDTOObject(
     return updateEmploymentDetailsDBObject(
       updateDivyangDetailsRequest.employmentDetails,
       updatedBy
-    )
+    );
   } else if (pageNumber === 4 && updateDivyangDetailsRequest.disabiltyDetails) {
     return updateDisabilityDetailsDBObject(
       updateDivyangDetailsRequest.disabiltyDetails,
       updatedBy
-    )
+    );
   } else if (pageNumber === 5 && updateDivyangDetailsRequest.IdProofUploads) {
     return updateIdProofUploadsDBObject(
       updateDivyangDetailsRequest.IdProofUploads,
       updatedBy
-    )
+    );
   } else {
-    console.log('Error - Enter a valid page number or object not present')
+    console.log("Error - Enter a valid page number or object not present");
   }
 }
 
@@ -223,4 +220,4 @@ export {
   updateIdProofUploadsDBObject,
   updatePersonalDetailsDBObject,
   createUpdateDTOObject,
-}
+};

@@ -21,4 +21,5 @@ const deleteDivyangDetailsDB = async (
   }
 }
 
+
 export { deleteDivyangDetailsDB }
