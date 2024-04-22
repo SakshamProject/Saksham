@@ -131,12 +131,9 @@ const getSevaKendraStatusDB = async (
           date: "desc",
         },
         take: 1,
-        select: {
-          status: true,
-        },
       }
     );
-    return SevaKendraAuditLog.status || AuditLogStatusEnum.DEACTIVE;
+    return SevaKendraAuditLog;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }

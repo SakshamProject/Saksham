@@ -18,11 +18,14 @@ model Person {
   id         String   @id @default(uuid())
   loginId    String   @unique
   passwordId String   @unique
-  password   Password @relation(fields: [passwordId], references: [id])
-  user       User?
+  password    Password @relation(fields: [passwordId], references: [id])
+  user       User?    @relation("person")
+  divyang    DivyangDetails?        @relation("person")
 
   divyangsCreated DivyangDetails[] @relation("divyangCreatedBy")
   divyangsUpdated DivyangDetails[] @relation("divyangUpdatedBy")
+  createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
+  updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
 }
 
 model Password {
@@ -52,6 +55,7 @@ model SevaKendra {
   auditLog      SevaKendraAuditLog[]
   createdBy     User?                   @relation("sevaKendraCreatedBy", fields: [createdById], references: [id])
   updatedBy     User?                   @relation("sevaKendraUpdatedBy", fields: [updatedById], references: [id])
+  divyangServiceMapping     DivyangServiceMapping[]
 
   @@unique([name, districtId])
 }
@@ -161,10 +165,10 @@ model User {
   createdById String @unique
   createdBy   User?  @relation("createdBy", fields: [createdById], references: [id])
 
-  updatedById String?
+  updatedById String? @unique
   updatedBy   User?   @relation("updatedBy", fields: [updatedById], references: [id])
 
-  // password              UserPassword            @relation(fields: [passwordId], references: [id])
+  //password              UserPassword            @relation(fields: [passwordId], references: [id])
   designation           Designation             @relation("Designation-Users", fields: [designationId], references: [id])
   designationsCreated   Designation[]           @relation("createdBy")
   designationsUpdated   Designation[]           @relation("updatedBy")
@@ -176,8 +180,7 @@ model User {
 
   // sevaKendraFollowUp            SevaKendraFollowUp[]
 
-  createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
-  updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
+
   createdSevaKendra             SevaKendra[]            @relation("sevaKendraCreatedBy")
   updatedSevaKendra             SevaKendra[]            @relation("sevaKendraUpdatedBy")
 }
@@ -300,14 +303,6 @@ model DivyangDetails {
   MPConstituancyId        String?
   pincode                 Int?
 
-  isDisabilitySinceBirth    Boolean?
-  disabilitySince           DateTime?
-  disabilityArea            String?
-  disabilityPercentage      Int?
-  disabilityDueTo           String?
-  certificateIssueAuthority CertificateIssueAuthorityEnum?
-  disabilityCardUrl         String? // url
-
   districtCode String?
   stateCode    String?
 
@@ -330,7 +325,8 @@ model DivyangDetails {
   updatedAt        DateTime  @updatedAt
   createdById      String
   updatedById      String
-
+  personId         String @unique
+  person           Person                                @relation("person",fields: [personId],references: [id])
   communityCategory     CommunityCategory                 @relation(fields: [communityCategoryId], references: [id])
   corporation           Corporation?                      @relation(fields: [corporationId], references: [id])
   mlaconstituency       MLAConstituency?                  @relation(fields: [MLAConstituencyId], references: [id])
@@ -363,14 +359,15 @@ model DivyangDetailsAuditLog {
 model DivyangServiceMapping {
   id                              String                 @id @default(uuid())
   divyangId                       String
+  sevaKendraId                    String?
   userId                          String?
   serviceId                       String
-  dateOfService                   DateTime
-  followUpDate                    DateTime
+  dateOfService                     DateTime
+  followUpDate                   DateTime
   dueDate                         DateTime
-  // isFollowUpRequired             Boolean?
-  isNonSevaKendraFollowUpRequired Boolean
-  isCompleted                     StatusEnum
+  //isFollowUpRequired             Boolean?
+  isNonSevaKendraFollowUpRequired  Boolean 
+  isCompleted                     StatusEnum 
   howTheyGotService               HowTheyGotServiceEnum?
   reasonForNonCompletion          String?
   completedDate                   DateTime?
@@ -380,14 +377,15 @@ model DivyangServiceMapping {
   createdById                     String
   updatedById                     String
 
-  divyang               DivyangDetails          @relation(fields: [divyangId], references: [id])
-  createdBy             User                    @relation("serviceMappingCreatedBy", fields: [createdById], references: [id])
-  updatedBy             User                    @relation("serviceMappingUpdatedBy", fields: [updatedById], references: [id])
-  service               Service                 @relation(fields: [serviceId], references: [id])
-  user                  User?                   @relation("inchargeUser", fields: [userId], references: [id])
-  donor                 Donor?                  @relation(fields: [donorId], references: [id])
-  nonSevaKendraFollowUp NonSevaKendraFollowUp[]
-  // sevaKendraFollowUp              SevaKendraFollowUp[]
+  divyang                         DivyangDetails                  @relation(fields: [divyangId], references: [id])
+  createdBy                       Person                            @relation("serviceMappingCreatedBy",fields: [createdById],references: [id])
+  updatedBy                       Person                             @relation("serviceMappingUpdatedBy",fields: [updatedById],references: [id])
+  service                         Service                         @relation(fields: [serviceId], references: [id])
+  user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
+  donor                           Donor?                          @relation(fields: [donorId], references: [id])
+  sevaKendra                      SevaKendra ?                     @relation(fields: [sevaKendraId],references: [id])
+  nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
+
 }
 
 model Donor {
@@ -408,27 +406,33 @@ model Donor {
 //   user                    User                  @relation(fields: [userId], references: [id])
 // }
 
-model NonSevaKendraFollowUp {
-  id                      String  @id @default(uuid())
-  name                    String
-  mobileNumber            String
-  email                   String // validation?
-  sendMail                Boolean
-  divyangServiceMappingId String
-
-  divyangServiceMapping DivyangServiceMapping @relation(fields: [divyangServiceMappingId], references: [id])
+model NonSevaKendraFollowUp{
+  id      String  @id @default(uuid())
+  name     String
+  mobileNumber  String
+  email     String
+  sendMail  Boolean
+  divyangServiceMappingId     String
+  divyangServiceMapping  DivyangServiceMapping @relation(fields: [divyangServiceMappingId],references: [id])
 }
+
 
 model DisabilityOfDivyang {
   id                         String  @id @default(uuid())
   divyangId                  String
   disabilityTypeId           String
   disabilitySubTypeId        String?
-  divyangDisabilityDetailsId String
+  isDisabilitySinceBirth     Boolean?
+  disabilitySince            DateTime?
+  disabilityArea             String?
+  disabilityPercentage       Int?
+  disabilityDueTo            String?
+  certificateIssueAuthority  CertificateIssueAuthorityEnum?
+  disabilityCardUrl          String? // url
 
   DivyangDetails    DivyangDetails     @relation(fields: [divyangId], references: [id])
   disabilitySubType DisabilitySubType? @relation(fields: [disabilitySubTypeId], references: [id])
-  disabilityYType   DisabilityType     @relation(fields: [disabilityTypeId], references: [id])
+  disabilityType    DisabilityType     @relation(fields: [disabilityTypeId], references: [id])
 }
 
 model DisabilitySubType {
@@ -436,8 +440,8 @@ model DisabilitySubType {
   name             String
   disabilityTypeId String
 
-  divyang    DisabilityOfDivyang[]
-  disability DisabilityType        @relation(fields: [disabilityTypeId], references: [id], onDelete: Cascade)
+  divyang        DisabilityOfDivyang[]
+  disability     DisabilityType        @relation(fields: [disabilityTypeId], references: [id], onDelete: Cascade)
 
   @@unique([disabilityTypeId, name])
 }
