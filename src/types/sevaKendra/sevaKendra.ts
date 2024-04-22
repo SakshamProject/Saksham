@@ -26,9 +26,9 @@ const SevaKendraRequestSchema = z.object({
   contactPerson: z.object({
     id: uuidSchema.optional(),
     name: inputFieldSchema.toUpperCase(),
-    email: emailSchema,
+    email: emailSchema.optional(),
     phoneNumber1: phoneNumberSchema,
-    phoneNumber2: phoneNumberSchema,
+    phoneNumber2: phoneNumberSchema.optional(),
   }),
   servicesBySevaKendra: z
     .object({
@@ -49,9 +49,9 @@ const SevaKendraUpdateRequestSchema = z.object({
   contactPerson: z.object({
     id: uuidSchema,
     name: inputFieldSchema.toUpperCase(),
-    email: emailSchema,
+    email: emailSchema.optional(),
     phoneNumber1: phoneNumberSchema,
-    phoneNumber2: phoneNumberSchema,
+    phoneNumber2: phoneNumberSchema.optional(),
   }),
   services: z
     .object({

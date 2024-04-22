@@ -18,8 +18,9 @@ model Person {
   id         String   @id @default(uuid())
   loginId    String   @unique
   passwordId String   @unique
-  pasword    Password @relation(fields: [passwordId], references: [id])
+  password    Password @relation(fields: [passwordId], references: [id])
   user       User?    @relation("person")
+  divyang    DivyangDetails?        @relation("person")
 
   divyangsCreated DivyangDetails[] @relation("divyangCreatedBy")
   divyangsUpdated DivyangDetails[] @relation("divyangUpdatedBy")
@@ -302,16 +303,6 @@ model DivyangDetails {
   MPConstituancyId        String?
   pincode                 Int?
 
-  disabilityTypeId          String
-  disabilitySubTypeId       String?
-  isDisabilitySinceBirth    Boolean?
-  disabilitySince           DateTime?
-  disabilityArea            String?
-  disabilityPercentage      Int?
-  disabilityDueTo           String?
-  certificateIssueAuthority CertificateIssueAuthorityEnum?
-  disabilityCardUrl         String? // url
-
   districtCode String?
   stateCode    String?
 
@@ -334,7 +325,8 @@ model DivyangDetails {
   updatedAt        DateTime  @updatedAt
   createdById      String
   updatedById      String
-
+  personId         String @unique
+  person           Person                                @relation("person",fields: [personId],references: [id])
   communityCategory     CommunityCategory                 @relation(fields: [communityCategoryId], references: [id])
   corporation           Corporation?                      @relation(fields: [corporationId], references: [id])
   mlaconstituency       MLAConstituency?                  @relation(fields: [MLAConstituencyId], references: [id])
@@ -350,8 +342,6 @@ model DivyangDetails {
   districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
   createdBy             Person                            @relation("divyangCreatedBy", fields: [createdById], references: [id])
   updatedBy             Person                            @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
-  disabilitySubType     DisabilitySubType?                @relation(fields: [disabilitySubTypeId], references: [id])
-  disabilityType        DisabilityType                    @relation(fields: [disabilityTypeId], references: [id])
 
   auditLog DivyangDetailsAuditLog[]
 }
@@ -394,7 +384,7 @@ model DivyangServiceMapping {
   user                            User ?                           @relation("inchargeUser",fields: [userId], references: [id])
   donor                           Donor?                          @relation(fields: [donorId], references: [id])
   sevaKendra                      SevaKendra ?                     @relation(fields: [sevaKendraId],references: [id])
-  //nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
+  nonSevaKendraFollowUp           NonSevaKendraFollowUp[]
 
 }
 
@@ -416,13 +406,29 @@ model Donor {
 //   user                    User                  @relation(fields: [userId], references: [id])
 // }
 
+model NonSevaKendraFollowUp{
+  id      String  @id @default(uuid())
+  name     String
+  mobileNumber  String
+  email     String
+  sendMail  Boolean
+  divyangServiceMappingId     String
+  divyangServiceMapping  DivyangServiceMapping @relation(fields: [divyangServiceMappingId],references: [id])
+}
+
 
 model DisabilityOfDivyang {
   id                         String  @id @default(uuid())
   divyangId                  String
   disabilityTypeId           String
   disabilitySubTypeId        String?
-  divyangDisabilityDetailsId String
+  isDisabilitySinceBirth     Boolean?
+  disabilitySince            DateTime?
+  disabilityArea             String?
+  disabilityPercentage       Int?
+  disabilityDueTo            String?
+  certificateIssueAuthority  CertificateIssueAuthorityEnum?
+  disabilityCardUrl          String? // url
 
   DivyangDetails    DivyangDetails     @relation(fields: [divyangId], references: [id])
   disabilitySubType DisabilitySubType? @relation(fields: [disabilitySubTypeId], references: [id])
@@ -436,7 +442,6 @@ model DisabilitySubType {
 
   divyang        DisabilityOfDivyang[]
   disability     DisabilityType        @relation(fields: [disabilityTypeId], references: [id], onDelete: Cascade)
-  DivyangDetails DivyangDetails[]
 
   @@unique([disabilityTypeId, name])
 }
@@ -446,7 +451,6 @@ model DisabilityType {
   name                String                @unique
   disability          DisabilitySubType[]
   disabilityOfDivyang DisabilityOfDivyang[]
-  DivyangDetails      DivyangDetails[]
 }
 
 model MPConstituency {
