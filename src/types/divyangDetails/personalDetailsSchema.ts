@@ -7,6 +7,7 @@ import inputFieldSchema, {
 import { BloodGroupEnum, GenderEnum } from '@prisma/client'
 
 const personalDetailsRequestSchema = z.object({
+  password:inputFieldSchema,
   firstName: inputFieldSchema,
   lastName: inputFieldSchema,
   divyangId: inputFieldSchema,

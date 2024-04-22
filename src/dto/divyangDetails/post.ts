@@ -1,14 +1,14 @@
-import { generateDivyangDetailsFilter } from '../../services/database/utils/divyangDetails/filterMapper.js'
-import { DivyangDetailsAuditLogDefaults } from '../../types/divyangDetails/divyangDetailsDefaults.js'
+import { generateDivyangDetailsFilter } from "../../services/database/utils/divyangDetails/filterMapper.js";
+import { DivyangDetailsAuditLogDefaults } from "../../types/divyangDetails/divyangDetailsDefaults.js";
 import {
   createDivyangDetails,
   DivyangDetailsFilterType,
   DivyangDetailsWhere,
   postDivyangDetailsRequest,
-} from '../../types/divyangDetails/divyangDetailsSchema.js'
+} from "../../types/divyangDetails/divyangDetailsSchema.js";
 
 const createDivyangDetailsDBObject = (
-  divyangDetails: postDivyangDetailsRequest,
+  divyangDetails: postDivyangDetailsRequest
 ): createDivyangDetails => {
   const newDivyangDetails: createDivyangDetails = {
     divyangId: divyangDetails.personalDetails.divyangId,
@@ -52,18 +52,28 @@ const createDivyangDetailsDBObject = (
         description: DivyangDetailsAuditLogDefaults.description, // description value might change
       },
     },
-  }
-  return newDivyangDetails
-}
+    person: {
+      create: {
+        loginId: divyangDetails.personalDetails.divyangId,
+        password: {
+          create: {
+            password: divyangDetails.personalDetails.password,
+          },
+        },
+      },
+    },
+  };
+  return newDivyangDetails;
+};
 
 const createDivyangDetailsFilterInputObject = (
   divyangDetailsFilter: DivyangDetailsFilterType | undefined,
-  globalSearchConditions: DivyangDetailsWhere | null,
+  globalSearchConditions: DivyangDetailsWhere | null
 ): DivyangDetailsWhere => {
   const divyangDetailsWhereInput = generateDivyangDetailsFilter(
     divyangDetailsFilter,
-    globalSearchConditions,
-  )
-  return divyangDetailsWhereInput
-}
-export { createDivyangDetailsDBObject, createDivyangDetailsFilterInputObject }
+    globalSearchConditions
+  );
+  return divyangDetailsWhereInput;
+};
+export { createDivyangDetailsDBObject, createDivyangDetailsFilterInputObject };

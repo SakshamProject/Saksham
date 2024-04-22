@@ -15,13 +15,16 @@ const apiRouter = Router();
 
 apiRouter.use(express.json());
 
-apiRouter.get("/check", async (request: Request, response: Response, next): Promise<void> => {
+apiRouter.get(
+  "/check",
+  async (request: Request, response: Response, next): Promise<void> => {
     try {
-        await pingDB();
-        response.status(StatusCodes.OK).json({"message": "API is up and running!"});
-    }
-    catch (error) {
-        next(error);
+      await pingDB();
+      response
+        .status(StatusCodes.OK)
+        .json({ message: "API is up and running!" });
+    } catch (error) {
+      next(error);
     }
   }
 );
