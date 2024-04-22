@@ -3,7 +3,8 @@ import {  postServiceMappingRequestSchemaType, postServiceMappingType } from "..
 
 const createPostServiceMappingDBObject = (
     body: postServiceMappingRequestSchemaType,
-    createdById: string = ""
+    createdById: string = "",
+    createdByDivyangId:string=""
   ) => {
     const createServiceMappingDBObject : postServiceMappingType
      = {
@@ -46,7 +47,7 @@ const createPostServiceMappingDBObject = (
     if(body.divyangId ===undefined){
       createServiceMappingDBObject.divyang ={
         connect:{
-          id:createdById
+          id:createdByDivyangId
         }
       };
       createServiceMappingDBObject.sevaKendra={
