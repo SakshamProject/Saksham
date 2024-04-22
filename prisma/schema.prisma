@@ -154,7 +154,7 @@ model User {
   // passwordId     String      @unique
 
   personId String @unique
-  person   Person @relation(fields: [personId], references: [id])
+  person   Person @relation("person",fields: [personId], references: [id])
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
