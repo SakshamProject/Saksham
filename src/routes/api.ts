@@ -8,6 +8,7 @@ import { StatusCodes } from "http-status-codes";
 import sevaKendraRouter from "./sevaKendra/sevaKendra.js";
 import errorHandler from "../middlewares/errorHandler/errorHandler.js";
 import designationRouter from "./designation/designation.js";
+import fileRouter from "./file/files.js";
 
 const apiRouter = Router();
 
@@ -32,6 +33,7 @@ apiRouter.use("/sevakendras", sevaKendraRouter);
 apiRouter.use("/typemaster", typeMasterRouter);
 apiRouter.use("/designation", designationRouter);
 apiRouter.use("/users", userRouter);
+apiRouter.use("/files", fileRouter);
 
 apiRouter.use(errorHandler);
 export default apiRouter;
