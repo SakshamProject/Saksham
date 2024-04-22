@@ -20,6 +20,7 @@ function createupdateServiceMappingCompletionDBObject(
     isCompleted: body.isCompleted,
     completedDate: body.completedDate,
     howTheyGotService: body.howTheyGotService,
+    sevaKendra:undefined,
     updatedBy: {
       connect: {
         id: updatedById,
@@ -44,6 +45,7 @@ function createUpdateServiceMappingStoppedDBObject(body:putServiceMappingSchemaT
     const UpdateServiceMappingStoppedDBObject={
         isCompleted:body.isCompleted,
         completedDate:body.completedDate,
+        sevakendra:undefined,
         reasonForNonCompletion:body.reasonForNonCompletion,
         updatedBy:{
           connect:{
@@ -60,6 +62,7 @@ function createUpdateServiceMappingWithNonSevaKendraFollowUpDBObject(body:putSer
     user:undefined,
     isNonSevaKendraFollowUpRequired:body.isNonSevaKendraFollowUpRequired,
     isCompleted:body.isCompleted,
+    sevakendra:undefined,
     reasonForNonCompletion:body.reasonForNonCompletion,
     updatedBy:{
       connect:{
@@ -80,6 +83,7 @@ const UpdateServiceMappingWithSevaKendraFollowUpDBObject={
   followUpDate:body.followUp?.followUpdate,
   isNonSevaKendraFollowUpRequired:body.isNonSevaKendraFollowUpRequired,
   isCompleted:body.isCompleted,
+  sevakendra:undefined,
   updatedBy:{
     connect:{
       id:updatedById

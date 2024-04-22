@@ -20,6 +20,7 @@ model Person {
   passwordId String   @unique
   pasword    Password @relation(fields: [passwordId], references: [id])
   user       User?    @relation("person")
+  divyang    DivyangDetails?        @relation("person")
 
   divyangsCreated DivyangDetails[] @relation("divyangCreatedBy")
   divyangsUpdated DivyangDetails[] @relation("divyangUpdatedBy")
@@ -324,7 +325,8 @@ model DivyangDetails {
   updatedAt        DateTime  @updatedAt
   createdById      String
   updatedById      String
-
+  personId         String @unique
+  person           Person                                @relation("person",fields: [personId],references: [id])
   communityCategory     CommunityCategory                 @relation(fields: [communityCategoryId], references: [id])
   corporation           Corporation?                      @relation(fields: [corporationId], references: [id])
   mlaconstituency       MLAConstituency?                  @relation(fields: [MLAConstituencyId], references: [id])

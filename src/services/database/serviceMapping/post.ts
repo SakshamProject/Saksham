@@ -4,9 +4,9 @@ import { donorSchemaType, postNonSevaKendraFollowUpType, postServiceMappingType 
 
 async function createServiceMappingDB(prismaTransaction:Prisma.TransactionClient,dataObject:postServiceMappingType) {
   try {
-
-    const serviceMapping = prismaTransaction.divyangServiceMapping.create({
-      data:dataObject
+    
+    const serviceMapping = await  prismaTransaction.divyangServiceMapping.create({
+      data: dataObject
     })
     return serviceMapping;
 

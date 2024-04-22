@@ -42,7 +42,20 @@ const createPostServiceMappingDBObject = (
         },
       };
     }
-  
+
+    if(body.divyangId ===undefined){
+      createServiceMappingDBObject.divyang ={
+        connect:{
+          id:createdById
+        }
+      };
+      createServiceMappingDBObject.sevaKendra={
+       connect:{
+         id:body.sevaKendraId
+       }
+    
+    }
+    }
     return createServiceMappingDBObject;
   };
 
@@ -56,6 +69,7 @@ const createPostServiceMappingDBObject = (
         mobileNumber:body.nonSevaKendraFollowUp.mobileNumber,
         email:body.nonSevaKendraFollowUp.email,
         sendMail:body.nonSevaKendraFollowUp.sendMail,
+        sevaKendra:undefined,
         divyangServiceMapping:{
             connect:{
                 id:serviceMappingId

@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 
 function authenticate(request: Request, response: Response, next: NextFunction) {
     const user:User = {
-      id: "a0a1f177-0d76-4896-ac7d-5dc3569cfe9a",
+      id: "73a0addb-309e-41c3-9902-a216e41ca8ff",
     };
     
     request.user = user;
