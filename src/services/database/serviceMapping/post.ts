@@ -45,4 +45,26 @@ try{
 }
 }
 
-export { createServiceMappingDB, createNonSevaKendraFollowUpDB ,createDonorDB};
+async function getDivyangIdFromPersonId(prismaTransaction:Prisma.TransactionClient,personId:string){
+  try{
+    const divyangId = await prismaTransaction.person.findUnique({
+      where: {
+        id: personId,
+      },
+      select: {
+        divyang: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    return divyangId;
+  }catch(err){
+    if (err instanceof Error) {
+      throwDatabaseError(err);
+  }
+}
+}
+
+export { createServiceMappingDB, createNonSevaKendraFollowUpDB ,createDonorDB,getDivyangIdFromPersonId};
