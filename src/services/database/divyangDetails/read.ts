@@ -17,6 +17,7 @@ const getDivyangDetailsDB = async (
     const divyangsDetails = await prismaTransaction.divyangDetails.findMany({
       select: {
         id: true,
+        personId: true,
         firstName: true,
         mailId: true,
         mobileNumber: true,
@@ -51,8 +52,18 @@ const getDivyangDetailsByIdDB = async (id: string) => {
         },
         auditLog: true,
         communityCategory: true,
-        createdBy: true,
-        updatedBy: true,
+        createdBy: {
+          select: {
+            id: true,
+            loginId: true,
+          },
+        },
+        updatedBy: {
+          select: {
+            id: true,
+            loginId: true,
+          },
+        },
         district: true,
         districtCommunication: true,
         disabilities: {
