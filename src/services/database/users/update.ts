@@ -1,7 +1,5 @@
 import { Prisma } from "@prisma/client";
 import throwDatabaseError from "../utils/errorHandler.js";
-import log from "../../logger/logger.js";
-import prisma from "../database.js";
 
 async function updateUserDB(
     prismaTransaction:Prisma.TransactionClient,

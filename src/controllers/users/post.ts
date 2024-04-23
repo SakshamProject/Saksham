@@ -25,6 +25,8 @@ async function postUser(request: Request, response: Response, next: NextFunction
         if (personId && request.file) {
             const fileData = await saveFileBufferToS3(personId, request.file);
             log("info", "[controller/postUser]:\n fileData: %o", fileData);
+
+            await insertProfileDB();
         }
 
         const responseData = createResponseOnlyData(newPerson);

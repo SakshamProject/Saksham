@@ -1,11 +1,11 @@
-import express from "express";
-import getFiles from "../../controllers/files/get.js";
+import express, {Request, Response} from "express";
+import {getFiles, getFileURL} from "../../controllers/files/get.js";
 
 const fileRouter = express.Router();
 
-fileRouter.get('/:key', () => {});
+fileRouter.get('/', getFileURL);
 
 // Dev Only
-fileRouter.get("/", getFiles);
+// fileRouter.get("/list", getFiles);
 
 export default fileRouter;
