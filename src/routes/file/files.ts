@@ -1,9 +1,11 @@
-import express, {response} from "express";
-import {S3Client, ListObjectsV2Command, ListObjectsV2CommandInput} from "@aws-sdk/client-s3";
-import config from "../../../config.js";
+import express from "express";
+import getFiles from "../../controllers/files/get.js";
 
 const fileRouter = express.Router();
 
-fileRouter.get('/:id', () => {});
+fileRouter.get('/:key', () => {});
+
+// Dev Only
+fileRouter.get("/", getFiles);
 
 export default fileRouter;
