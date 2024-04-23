@@ -30,7 +30,7 @@ const getServiceMapping = async (
       serviceMappingRequest.sorting?.sortOrder
     );
     const globalSearchConditions: ServiceMappingWhere | null =
-      serviceMappingRequest.searchText === undefined
+      serviceMappingRequest.searchText === (undefined || "")
         ? null
         : ServiceMappingGlobalSearchConditions(
             serviceMappingRequest.searchText
