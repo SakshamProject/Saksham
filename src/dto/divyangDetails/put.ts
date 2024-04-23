@@ -188,7 +188,7 @@ const updateDisabilityDetailsDBObject = (
 function createUpdateDTOObject(
   pageNumber: number,
   updateDivyangDetailsRequest: updateDivyangDetailsRequest,
-  disabilities: DisabilityOfDivyangList | null,
+  disabilities: DisabilityOfDivyangList | null | undefined,
   updatedBy: string
 ) {
   if (pageNumber === 1 && updateDivyangDetailsRequest.personalDetails) {

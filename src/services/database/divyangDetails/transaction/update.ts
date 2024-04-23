@@ -45,7 +45,7 @@ const updateDivyangDetailsTransactionDB = async (
 
         // update disability of divyang if it exists
 
-        const disabilities: DisabilityOfDivyangList | null =
+        const disabilities: DisabilityOfDivyangList | null | undefined =
           await disabilityOfDivyangUpdate(
             prismaTransaction,
             divyangDetails,
@@ -99,38 +99,41 @@ const disabilityOfDivyangUpdate = async (
   pageNumber: number
 ) => {
   if (pageNumber != 4) return null;
+  try {
+    const existingDisabilities = await getDisabilityOfDivyangByDivyangIdDB(
+      prismaTransaction,
+      divyangId
+    );
+    const existingDisabilityId =
+      existingDisabilities?.map((disability) => disability.id) || [];
 
-  const existingDisabilities = await getDisabilityOfDivyangByDivyangIdDB(
-    prismaTransaction,
-    divyangId
-  );
-  const existingDisabilityId =
-    existingDisabilities?.map((disability) => disability.id) || [];
+    const currentDisabilityId =
+      divyangDetails.disabiltyDetails?.disabilities.map(
+        (disability) => disability.id
+      ) || [];
 
-  const currentDisabilityId =
-    divyangDetails.disabiltyDetails?.disabilities.map(
-      (disability) => disability.id
-    ) || [];
+    const disabilitiesToCreate =
+      divyangDetails.disabiltyDetails?.disabilities.filter(
+        (disabilities) => disabilities.id == undefined
+      ) || [];
 
-  const disabilitiesToCreate =
-    divyangDetails.disabiltyDetails?.disabilities.filter(
-      (disabilities) => disabilities.id == undefined
-    ) || [];
+    const disabilitiesToDelete = existingDisabilityId.filter(
+      (disabilityId) => !currentDisabilityId.includes(disabilityId)
+    );
 
-  const disabilitiesToDelete = existingDisabilityId.filter(
-    (disabilityId) => !currentDisabilityId.includes(disabilityId)
-  );
+    const disabilitiesToUpdate =
+      divyangDetails.disabiltyDetails?.disabilities.filter(
+        (disabilities) => disabilities.id !== undefined
+      ) || [];
 
-  const disabilitiesToUpdate =
-    divyangDetails.disabiltyDetails?.disabilities.filter(
-      (disabilities) => disabilities.id !== undefined
-    ) || [];
-
-  const disabilities: DisabilityOfDivyangList = {
-    disabilitiesToCreate: disabilitiesToCreate,
-    disabilitiesToDelete: disabilitiesToDelete,
-    disabilitiesToUpdate: disabilitiesToUpdate,
-  };
-  return disabilities;
+    const disabilities: DisabilityOfDivyangList = {
+      disabilitiesToCreate: disabilitiesToCreate,
+      disabilitiesToDelete: disabilitiesToDelete,
+      disabilitiesToUpdate: disabilitiesToUpdate,
+    };
+    return disabilities;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
 };
 export default updateDivyangDetailsTransactionDB;

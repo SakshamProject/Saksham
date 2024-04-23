@@ -31,30 +31,34 @@ const updateDisabilityOfDivyangDB = async (
   id: string,
   divyangId: string
 ) => {
-  const updatedDisabilityOfDivyang =
-    await prismaTrasaction.disabilityOfDivyang.update({
-      where: {
-        id: id,
-      },
-      data: {
-        divyang: {
-          connect: { id: divyangId },
+  try {
+    const updatedDisabilityOfDivyang =
+      await prismaTrasaction.disabilityOfDivyang.update({
+        where: {
+          id: id,
         },
-        disabilityType: {
-          connect: { id: disabilities.disabilityTypeId },
+        data: {
+          divyang: {
+            connect: { id: divyangId },
+          },
+          disabilityType: {
+            connect: { id: disabilities.disabilityTypeId },
+          },
+          disabilityDueTo: disabilities.disabilityDueTo,
+          disabilitySubType: {
+            connect: { id: disabilities.disabilitySubTypeId },
+          },
+          isDisabilitySinceBirth: disabilities.isDisabilitySinceBirth,
+          disabilitySince: disabilities.disabilitySince,
+          disabilityArea: disabilities.disabilityArea,
+          disabilityPercentage: disabilities.disabilityPercentage,
+          certificateIssueAuthority: disabilities.certificateIssueAuthority,
+          disabilityCardUrl: disabilities.disabilityCardUrl,
         },
-        disabilityDueTo: disabilities.disabilityDueTo,
-        disabilitySubType: {
-          connect: { id: disabilities.disabilitySubTypeId },
-        },
-        isDisabilitySinceBirth: disabilities.isDisabilitySinceBirth,
-        disabilitySince: disabilities.disabilitySince,
-        disabilityArea: disabilities.disabilityArea,
-        disabilityPercentage: disabilities.disabilityPercentage,
-        certificateIssueAuthority: disabilities.certificateIssueAuthority,
-        disabilityCardUrl: disabilities.disabilityCardUrl,
-      },
-    });
-  return updatedDisabilityOfDivyang;
+      });
+    return updatedDisabilityOfDivyang;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
 };
 export { updateDivyangDetailsDB, updateDisabilityOfDivyangDB };
