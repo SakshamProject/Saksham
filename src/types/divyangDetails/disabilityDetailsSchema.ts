@@ -39,9 +39,12 @@ const disabiltyDetailsRequestSchema = z.object({
 // }
 // );
 type DisabilityDetails = z.infer<typeof disabiltyDetailsRequestSchema>;
+
 type DisabilityOfDivyangList = {
   disabilitiesToCreate: DisabilityOfDivyang[];
   disabilitiesToDelete: string[];
+  disabilitiesToUpdate: DisabilityOfDivyang[];
+  disabilitiesToUpdateIds: string[];
 };
 
 export {

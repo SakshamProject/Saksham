@@ -110,8 +110,7 @@ const updateAddressDBObject = (
 
 const updateEmploymentDetailsDBObject = (
   employmentDetails: EmploymentDetails,
-  updatedBy: string,
-  disabilities: DisabilityOfDivyangList
+  updatedBy: string
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     isEmployed: employmentDetails.isEmployed,
@@ -127,11 +126,6 @@ const updateEmploymentDetailsDBObject = (
     updatedBy: {
       connect: {
         id: updatedBy,
-      },
-    },
-    disabilities: {
-      createMany: {
-        data: disabilities.disabilitiesToCreate,
       },
     },
   };
@@ -163,7 +157,8 @@ const updateIdProofUploadsDBObject = (
 
 const updateDisabilityDetailsDBObject = (
   disabilityDetails: DisabilityDetails,
-  updatedBy: string
+  updatedBy: string,
+  disabilities: DisabilityOfDivyangList
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     districtCode: disabilityDetails.districtCode,
@@ -172,9 +167,19 @@ const updateDisabilityDetailsDBObject = (
     udidCardNumber: disabilityDetails.UDIDCardNumber,
     udidEnrollmentNumber: disabilityDetails.UDIDEnrollmentNumber,
     udidCardUrl: disabilityDetails.UDIDCardUrl,
-    updatedBy: {
-      connect: {
-        id: updatedBy,
+    // updatedBy: {
+    //   connect: {
+    //     id: updatedBy,
+    //   },
+    // },
+    disabilities: {
+      createMany: {
+        data: disabilities.disabilitiesToCreate,
+      },
+      deleteMany: {
+        id: {
+          in: disabilities.disabilitiesToDelete,
+        },
       },
     },
   };
@@ -184,7 +189,7 @@ const updateDisabilityDetailsDBObject = (
 function createUpdateDTOObject(
   pageNumber: number,
   updateDivyangDetailsRequest: updateDivyangDetailsRequest,
-  disabilities: DisabilityOfDivyangList
+  disabilities: DisabilityOfDivyangList | null
 ) {
   const updatedBy = updateDivyangDetailsRequest.updatedBy || "";
 
@@ -193,26 +198,30 @@ function createUpdateDTOObject(
       updateDivyangDetailsRequest.personalDetails,
       updatedBy
     );
-  } else if (pageNumber === 2 && updateDivyangDetailsRequest.addressRequest) {
+  } else if (pageNumber === 3 && updateDivyangDetailsRequest.addressRequest) {
     return updateAddressDBObject(
       updateDivyangDetailsRequest.addressRequest,
       updatedBy
     );
   } else if (
-    pageNumber === 3 &&
+    pageNumber === 5 &&
     updateDivyangDetailsRequest.employmentDetails
   ) {
     return updateEmploymentDetailsDBObject(
       updateDivyangDetailsRequest.employmentDetails,
+      updatedBy
+    );
+  } else if (
+    pageNumber === 4 &&
+    updateDivyangDetailsRequest.disabiltyDetails &&
+    disabilities
+  ) {
+    return updateDisabilityDetailsDBObject(
+      updateDivyangDetailsRequest.disabiltyDetails,
       updatedBy,
       disabilities
     );
-  } else if (pageNumber === 4 && updateDivyangDetailsRequest.disabiltyDetails) {
-    return updateDisabilityDetailsDBObject(
-      updateDivyangDetailsRequest.disabiltyDetails,
-      updatedBy
-    );
-  } else if (pageNumber === 5 && updateDivyangDetailsRequest.IdProofUploads) {
+  } else if (pageNumber === 2 && updateDivyangDetailsRequest.IdProofUploads) {
     return updateIdProofUploadsDBObject(
       updateDivyangDetailsRequest.IdProofUploads,
       updatedBy

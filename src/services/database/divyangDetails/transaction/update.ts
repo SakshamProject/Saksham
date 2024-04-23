@@ -11,8 +11,14 @@ import {
   getDisabilityOfDivyangByDivyangIdDB,
   getDivyangDetailsStatusDB,
 } from "../read.js";
-import { updateDivyangDetailsDB } from "../update.js";
-import { DisabilityOfDivyangList } from "../../../../types/divyangDetails/disabilityDetailsSchema.js";
+import {
+  updateDisabilityOfDivyangDB,
+  updateDivyangDetailsDB,
+} from "../update.js";
+import {
+  DisabilityOfDivyang,
+  DisabilityOfDivyangList,
+} from "../../../../types/divyangDetails/disabilityDetailsSchema.js";
 
 const updateDivyangDetailsTransactionDB = async (
   divyangDetails: updateDivyangDetailsRequest,
@@ -34,14 +40,15 @@ const updateDivyangDetailsTransactionDB = async (
       }
       const pageNumber = divyangDetails.pageNumber;
       // if disability page is edited then handling chipsets
-      if (pageNumber == 3) {
-        const disabilities: DisabilityOfDivyangList =
-          await disabilityOfDivyangUpdate(
-            prismaTransaction,
-            divyangDetails,
-            id
-          );
-      }
+      // if (pageNumber == 3) {
+      const disabilities: DisabilityOfDivyangList | null =
+        await disabilityOfDivyangUpdate(
+          prismaTransaction,
+          divyangDetails,
+          id,
+          pageNumber
+        );
+      // }
 
       // updating divyang details table for corresponding pagenumber
 
@@ -51,7 +58,17 @@ const updateDivyangDetailsTransactionDB = async (
           divyangDetails,
           disabilities
         )) || {};
-
+      if (pageNumber == 4 && disabilities) {
+        for (let disability of disabilities.disabilitiesToUpdate) {
+          const updatedDisabilityOfDivyang = await updateDisabilityOfDivyangDB(
+            prismaTransaction,
+            disability,
+            disability.id!,
+            id
+          );
+          console.log("++ updated", updatedDisabilityOfDivyang);
+        }
+      }
       const updatedDivyangDetails: updateDivyangDetails | undefined =
         await updateDivyangDetailsDB(prismaTransaction, updateDTOObject, id);
       return updatedDivyangDetails;
@@ -64,8 +81,10 @@ const updateDivyangDetailsTransactionDB = async (
 const disabilityOfDivyangUpdate = async (
   prismaTransaction: Prisma.TransactionClient,
   divyangDetails: updateDivyangDetailsRequest,
-  divyangId: string
+  divyangId: string,
+  pageNumber: number
 ) => {
+  if (pageNumber != 4) return null;
   const existingDisabilities = await getDisabilityOfDivyangByDivyangIdDB(
     prismaTransaction,
     divyangId
@@ -79,13 +98,30 @@ const disabilityOfDivyangUpdate = async (
   const disabilitiesToCreate =
     divyangDetails.disabiltyDetails?.disabilities.filter(
       (disabilities) => disabilities.id == undefined
-    );
+    ) || [];
   console.log("disabilities to create", disabilitiesToCreate);
   const disabilitiesToDelete = existingDisabilityId.filter(
     (disabilityId) => !currentDisabilityId.includes(disabilityId)
   );
   console.log("disablities to delete", disabilitiesToDelete);
 
-  return { disabilitiesToCreate, disabilitiesToDelete };
+  const disabilitiesToUpdate =
+    divyangDetails.disabiltyDetails?.disabilities.filter(
+      (disabilities) => disabilities.id !== undefined
+    ) || [];
+  console.log("disability to Update", disabilitiesToUpdate);
+
+  const disabilitiesToUpdateIds: string[] =
+    divyangDetails.disabiltyDetails?.disabilities
+      .filter((disabilities) => disabilities.id !== undefined)
+      .map((disabilities) => disabilities.id!) || [];
+
+  const disabilities: DisabilityOfDivyangList = {
+    disabilitiesToCreate: disabilitiesToCreate,
+    disabilitiesToDelete: disabilitiesToDelete,
+    disabilitiesToUpdate: disabilitiesToUpdate,
+    disabilitiesToUpdateIds: disabilitiesToUpdateIds,
+  };
+  return disabilities;
 };
 export default updateDivyangDetailsTransactionDB;
