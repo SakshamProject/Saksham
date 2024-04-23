@@ -7,7 +7,7 @@ import {
 import generateUserListWhereInput from "../../services/database/utils/users/usersFilterMapper.js";
 import {generateKey} from "node:crypto";
 
-function createUserDBObject(request: Request): Prisma.PersonCreateInput {
+function createPersonDBObject(request: Request): Prisma.PersonCreateInput {
   const userInputObject: Prisma.PersonCreateInput = {
     loginId: request.body.loginId,
     password: {
@@ -70,4 +70,4 @@ function createAuditLogDBObject(body: userPutRequestType, id: string) {
     
 }
 
-export { createUserDBObject, listUserWhereInput, createAuditLogDBObject };
+export { createPersonDBObject, listUserWhereInput, createAuditLogDBObject };

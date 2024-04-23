@@ -1,8 +1,8 @@
 import {NextFunction, Response, Request} from "express";
 import {userListSchema, usersPostSchema, usersPutSchema} from "../../types/users/usersSchema.js";
 import log from "../../services/logger/logger.js";
-import { createUserDBObject } from "../../dto/users/post.js";
-import {createUserDB} from "../../services/database/users/create.js";
+import { createPersonDBObject } from "../../dto/users/post.js";
+import {createPersonDB} from "../../services/database/users/create.js";
 import {createResponseForFilter, createResponseOnlyData} from "../../types/createResponseSchema.js";
 import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
 import {listUserWhereInput} from "../../dto/users/post.js";
@@ -15,19 +15,19 @@ async function postUser(request: Request, response: Response, next: NextFunction
         log( "info", `[controller/post]:\n body: %o`, body);
         log("info", `[controller/post]:\n file: %o`, request.file || {});
 
-        const userInputObject = createUserDBObject(request);
+        const userInputObject = createPersonDBObject(request);
         log("info", `[controller/post]:\n userInputObject: %o`, userInputObject);
 
-        const newUser = await createUserDB(userInputObject);
-        log("info", `[controller/postUser]:\n newUser: %o`, newUser || {});
+        const newPerson = await createPersonDB(userInputObject);
+        log("info", `[controller/postUser]:\n newUser: %o`, newPerson || {});
 
-        const userId = newUser?.id;
-        if (userId && request.file) {
-            const fileData = await saveFileBufferToS3(userId, request.file);
+        const personId = newPerson?.id;
+        if (personId && request.file) {
+            const fileData = await saveFileBufferToS3(personId, request.file);
             log("info", "[controller/postUser]:\n fileData: %o", fileData);
         }
 
-        const responseData = createResponseOnlyData(newUser);
+        const responseData = createResponseOnlyData(newPerson);
         response.json(responseData);
     }
     catch(error) {
