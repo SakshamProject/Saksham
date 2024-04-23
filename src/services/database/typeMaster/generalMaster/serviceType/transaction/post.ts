@@ -28,7 +28,7 @@ async function postServiceTypeDBTransaction(
           postServiceTypeDBObject
         );
 
-        for (let serviceName of body.serviceName) {
+        for (let serviceName of body.serviceType) {
           const postServiceDBObject: postServiceType =
             createPostServiceDBObject(
               prismaTransaction,

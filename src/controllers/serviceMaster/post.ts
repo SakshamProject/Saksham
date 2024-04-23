@@ -41,7 +41,7 @@ async function filterService(
     const serviceWhereInput = createServiceFilterInputObject(body);
     const results = await getFilterServicesDBTransaction(query.start, query.rows, query.orderBy, query.sortOrder, serviceWhereInput);
     const count = results?.services?.length || 0;
-    const responseData = createResponseForFilter(results?.services, query, results?.total, count, body);
+    const responseData = createResponseForFilter(results?.services, query, results?.total, count);
     response.json(responseData);
   } catch (error) {
     next(error);
@@ -60,7 +60,7 @@ async function listService(request: Request, response: Response, next: NextFunct
         body.sorting?.sortOrder,
         serviceWhereInput
     );
-    response.json(createResponseForFilter(results?.services, body, results?.total, results?.services?.length, body.filters));
+    response.json(createResponseForFilter(results?.services, request.body, results?.total, results?.services?.length));
   } catch(error) {
     next(error);
   }
