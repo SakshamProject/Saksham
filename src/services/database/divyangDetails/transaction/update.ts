@@ -12,6 +12,7 @@ import {
   getDivyangDetailsStatusDB,
 } from "../read.js";
 import { updateDivyangDetailsDB } from "../update.js";
+import { DisabilityOfDivyangList } from "../../../../types/divyangDetails/disabilityDetailsSchema.js";
 
 const updateDivyangDetailsTransactionDB = async (
   divyangDetails: updateDivyangDetailsRequest,
@@ -34,13 +35,22 @@ const updateDivyangDetailsTransactionDB = async (
       const pageNumber = divyangDetails.pageNumber;
       // if disability page is edited then handling chipsets
       if (pageNumber == 3) {
-        disabilityOfDivyangUpdate(prismaTransaction, divyangDetails, id);
+        const disabilities: DisabilityOfDivyangList =
+          await disabilityOfDivyangUpdate(
+            prismaTransaction,
+            divyangDetails,
+            id
+          );
       }
 
       // updating divyang details table for corresponding pagenumber
 
       const updateDTOObject: updateDivyangDetails =
-        (await createUpdateDTOObject(pageNumber, divyangDetails)) || {};
+        (await createUpdateDTOObject(
+          pageNumber,
+          divyangDetails,
+          disabilities
+        )) || {};
 
       const updatedDivyangDetails: updateDivyangDetails | undefined =
         await updateDivyangDetailsDB(prismaTransaction, updateDTOObject, id);
@@ -70,11 +80,11 @@ const disabilityOfDivyangUpdate = async (
     divyangDetails.disabiltyDetails?.disabilities.filter(
       (disabilities) => disabilities.id == undefined
     );
-  console.log(disabilitiesToCreate);
+  console.log("disabilities to create", disabilitiesToCreate);
   const disabilitiesToDelete = existingDisabilityId.filter(
     (disabilityId) => !currentDisabilityId.includes(disabilityId)
   );
-  console.log(disabilitiesToDelete);
+  console.log("disablities to delete", disabilitiesToDelete);
 
   return { disabilitiesToCreate, disabilitiesToDelete };
 };

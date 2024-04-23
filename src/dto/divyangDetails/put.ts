@@ -7,6 +7,7 @@ import { IdProofUploads } from "../../types/divyangDetails/IdProofUploadsSchema.
 import {
   DisabilityDetails,
   DisabilityOfDivyang,
+  DisabilityOfDivyangList,
 } from "../../types/divyangDetails/disabilityDetailsSchema.js";
 
 const updatePersonalDetailsDBObject = (
@@ -109,7 +110,8 @@ const updateAddressDBObject = (
 
 const updateEmploymentDetailsDBObject = (
   employmentDetails: EmploymentDetails,
-  updatedBy: string
+  updatedBy: string,
+  disabilities: DisabilityOfDivyangList
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     isEmployed: employmentDetails.isEmployed,
@@ -125,6 +127,11 @@ const updateEmploymentDetailsDBObject = (
     updatedBy: {
       connect: {
         id: updatedBy,
+      },
+    },
+    disabilities: {
+      createMany: {
+        data: disabilities.disabilitiesToCreate,
       },
     },
   };
@@ -176,7 +183,8 @@ const updateDisabilityDetailsDBObject = (
 
 function createUpdateDTOObject(
   pageNumber: number,
-  updateDivyangDetailsRequest: updateDivyangDetailsRequest
+  updateDivyangDetailsRequest: updateDivyangDetailsRequest,
+  disabilities: DisabilityOfDivyangList
 ) {
   const updatedBy = updateDivyangDetailsRequest.updatedBy || "";
 
@@ -196,7 +204,8 @@ function createUpdateDTOObject(
   ) {
     return updateEmploymentDetailsDBObject(
       updateDivyangDetailsRequest.employmentDetails,
-      updatedBy
+      updatedBy,
+      disabilities
     );
   } else if (pageNumber === 4 && updateDivyangDetailsRequest.disabiltyDetails) {
     return updateDisabilityDetailsDBObject(

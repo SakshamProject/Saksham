@@ -4,7 +4,6 @@ import { CertificateIssueAuthorityEnum, Prisma } from "@prisma/client";
 
 const disabilityOfDivyangSchema = z.object({
   id: uuidSchema.optional(),
-  divyangId: uuidSchema,
   disabilityTypeId: uuidSchema,
   disabilitySubTypeId: uuidSchema.optional(),
   isDisabilitySinceBirth: z.boolean().optional(),
@@ -27,6 +26,7 @@ const disabiltyDetailsRequestSchema = z.object({
   UDIDCardUrl: z.string(),
   UDIDEnrollmentNumber: z.string(),
 });
+
 // .refine((data) => {
 //   if (data.isDisabilitySinceBirth) {
 //     return data.disabilitySince === null;
@@ -40,8 +40,8 @@ const disabiltyDetailsRequestSchema = z.object({
 // );
 type DisabilityDetails = z.infer<typeof disabiltyDetailsRequestSchema>;
 type DisabilityOfDivyangList = {
-  servicesToCreate: string[];
-  servicesToDelete: string[];
+  disabilitiesToCreate: DisabilityOfDivyang[];
+  disabilitiesToDelete: string[];
 };
 
 export {
