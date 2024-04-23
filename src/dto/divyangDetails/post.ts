@@ -10,7 +10,8 @@ import {
 } from "../../types/divyangDetails/divyangDetailsSchema.js";
 
 const createDivyangDetailsDBObject = (
-  divyangDetails: postDivyangDetailsRequest
+  divyangDetails: postDivyangDetailsRequest,
+  createdBy: string
 ): createDivyangDetails => {
   const newDivyangDetails: createDivyangDetails = {
     divyangId: divyangDetails.personalDetails.divyangId,
@@ -37,16 +38,16 @@ const createDivyangDetailsDBObject = (
     community: divyangDetails.personalDetails.community,
     extraCurricularActivity:
       divyangDetails.personalDetails.extraCurricularActivity,
-    // createdBy: {
-    //   connect: {
-    //     id: divyangDetails.createdBy,
-    //   },
-    // },
-    // updatedBy: {
-    //   connect: {
-    //     id: divyangDetails.updatedBy,
-    //   },
-    // },
+    createdBy: {
+      connect: {
+        id: createdBy,
+      },
+    },
+    updatedBy: {
+      connect: {
+        id: createdBy,
+      },
+    },
     auditLog: {
       create: {
         date: DivyangDetailsAuditLogDefaults.date,
@@ -54,16 +55,16 @@ const createDivyangDetailsDBObject = (
         description: DivyangDetailsAuditLogDefaults.description, // description value might change
       },
     },
-    // person: {
-    //   create: {
-    //     loginId: divyangDetails.personalDetails.divyangId,
-    //     password: {
-    //       create: {
-    //         password: divyangDetails.personalDetails.password,
-    //       },
-    //     },
-    //   },
-    // },
+    person: {
+      create: {
+        loginId: divyangDetails.personalDetails.divyangId,
+        password: {
+          create: {
+            password: divyangDetails.personalDetails.password,
+          },
+        },
+      },
+    },
   };
   return newDivyangDetails;
 };
@@ -78,36 +79,4 @@ const createDivyangDetailsFilterInputObject = (
   );
   return divyangDetailsWhereInput;
 };
-const createDisabilityOfDivyangDBObject = (
-  disabilityDetails: DisabilityOfDivyang
-) => {
-  const disabilityOfDivyangObject: Prisma.DisabilityOfDivyangCreateInput = {
-    isDisabilitySinceBirth: disabilityDetails.isDisabilitySinceBirth,
-    disabilitySince: disabilityDetails.disabilitySince,
-    disabilityArea: disabilityDetails.disabilityArea,
-    disabilityPercentage: disabilityDetails.disabilityPercentage,
-    disabilityDueTo: disabilityDetails.disabilityDueTo,
-    certificateIssueAuthority: disabilityDetails.certificateIssueAuthority,
-    disabilityCardUrl: disabilityDetails.disabilityCardUrl,
-    disabilityType: {
-      connect: {
-        id: disabilityDetails.disabilityTypeId,
-      },
-    },
-    disabilitySubType: {
-      connect: {
-        id: disabilityDetails.disabilitySubTypeId,
-      },
-    },
-    divyang: {
-      connect: { id: disabilityDetails.divyangId },
-    },
-  };
-  return disabilityOfDivyangObject;
-};
-
-export {
-  createDivyangDetailsDBObject,
-  createDisabilityOfDivyangDBObject,
-  createDivyangDetailsFilterInputObject,
-};
+export { createDivyangDetailsDBObject, createDivyangDetailsFilterInputObject };

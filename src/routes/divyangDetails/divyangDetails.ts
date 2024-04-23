@@ -16,6 +16,7 @@ divyangDetailsRouter.get("/:id", getDivyangDetailsbyId);
 divyangDetailsRouter.get("/", getDivyangDetailsSearchByColumn);
 divyangDetailsRouter.post(
   "/",
+  authenticate,
   fileHandler.single("picture"),
   postDivyangDetails
 );

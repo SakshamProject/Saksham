@@ -15,10 +15,11 @@ async function postDivyangDetails(
   next: NextFunction
 ) {
   try {
+    const createdBy = request.user.id;
     const divyangDetails: postDivyangDetailsRequest =
       postDivyangDetailsRequestSchema.parse(request.body);
     const divyangDetailsDBObject: createDivyangDetails =
-      createDivyangDetailsDBObject(divyangDetails);
+      createDivyangDetailsDBObject(divyangDetails, createdBy);
     const result: DivyangDetails | undefined = await createDivyangDetailsDB(
       divyangDetailsDBObject
     );
