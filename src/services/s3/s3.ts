@@ -1,4 +1,4 @@
-import {S3Client, PutObjectCommand, PutObjectCommandInput} from "@aws-sdk/client-s3";
+import {PutBucketAclCommandOutput, PutObjectCommand, PutObjectCommandInput, S3Client} from "@aws-sdk/client-s3";
 import config from "../../../config.js";
 import path from "path";
 import log from "../logger/logger.js";
@@ -8,7 +8,7 @@ const s3Client = new S3Client({
             accessKeyId: config.s3.access_key,
             secretAccessKey: config.s3.secret_key,
         },
-        region: config.s3.default_region
+        region: config.s3.default_region,
     }
 );
 
@@ -30,14 +30,26 @@ async function saveFileBufferToS3(personId: string, file: Express.Multer.File) {
         const data = await s3Client.send(putObjectCommand);
         log("info", "[saveFileBufferToS3]: data: \n %o", data);
         return data;
-    }
-    catch (error) {
+    } catch (error) {
     }
 }
 
-async function saveFileBufferstoS3() {
+async function saveFileBufferstoS3(personId: string, files: { [fieldname: string]: Express.Multer.File[] }) {
+    try {
+        log("info", "[saveFileBufferstoS3]: files \n %o", files);
+        const data: PutBucketAclCommandOutput[] = [];
+        for (const file in files) {
+            const output = await saveFileBufferToS3(personId, files[file][0]);
+            if (output) {
+                data.push(output);
+            }
+            log("info", "[saveFileBufferstoS3]: data: \n %o", data);
+        }
+        return data;
+    } catch (error) {
 
+    }
 }
 
-export { saveFileBufferstoS3, saveFileBufferToS3, generateKey}
+export {saveFileBufferstoS3, saveFileBufferToS3, generateKey}
 export default s3Client;
