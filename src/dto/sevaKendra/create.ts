@@ -45,9 +45,9 @@ const createSevaKendraDBObject = (
         status: AuditLogStatusEnum.ACTIVE,
       },
     },
-    // createdBy: createdBy,
+    createdBy: { connect: { id: createdBy } },
     createdAt: new Date().toISOString(),
-    // updatedBy: updatedBy,
+    updatedBy: { connect: { id: updatedBy } },
     updatedAt: new Date().toISOString(),
   };
   return sevaKendraDBObject;
