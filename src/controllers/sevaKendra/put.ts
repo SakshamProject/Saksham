@@ -30,7 +30,6 @@ const putSevaKendra = async (
       await getDivyangDetailsByIdDB(id);
     const currentDate = new Date(Date.now()).toISOString();
     const currentAuditLog = await getDivyangDetailsStatusDB(id, currentDate);
-    console.log("current ", currentAuditLog);
     const result = {
       ...divyangDetails,
       status: currentAuditLog?.status,
@@ -38,7 +37,6 @@ const putSevaKendra = async (
       effectiveFromDate: currentAuditLog?.date,
       timestamp: currentDate,
     };
-    console.log("current audit log", currentAuditLog);
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
   } catch (error) {

@@ -45,22 +45,22 @@ const createDivyangDetailsAuditLogDB = async (
   } catch (error) {}
 };
 
-const createDisabilityOfDivyangDB = async (
-  prismaTransaction: Prisma.TransactionClient,
-  disabilityOfDivyang: Prisma.DisabilityOfDivyangCreateInput
-) => {
-  try {
-    const createdDisabilityOfDivyang =
-      await prismaTransaction.disabilityOfDivyang.create({
-        data: disabilityOfDivyang,
-      });
-    return createdDisabilityOfDivyang;
-  } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
-  }
-};
+// const createDisabilityOfDivyangDB = async (
+//   prismaTransaction: Prisma.TransactionClient,
+//   disabilityOfDivyang: Prisma.DisabilityOfDivyangCreateInput
+// ) => {
+//   try {
+//     const createdDisabilityOfDivyang =
+//       await prismaTransaction.disabilityOfDivyang.create({
+//         data: disabilityOfDivyang,
+//       });
+//     return createdDisabilityOfDivyang;
+//   } catch (error) {
+//     if (error instanceof Error) throwDatabaseError(error);
+//   }
+// };
 export {
   createDivyangDetailsDB,
   createDivyangDetailsAuditLogDB,
-  createDisabilityOfDivyangDB,
+  // createDisabilityOfDivyangDB,
 };

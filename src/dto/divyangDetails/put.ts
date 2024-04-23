@@ -162,9 +162,9 @@ const updateDisabilityDetailsDBObject = (
     districtCode: disabilityDetails.districtCode,
     stateCode: disabilityDetails.stateCode,
     identityCardNumber: disabilityDetails.identityCardNumber,
-    udidCardNumber: disabilityDetails.udidCardNumber,
-    udidEnrollmentNumber: disabilityDetails.udidEnrollmentNumber,
-    udidCardUrl: disabilityDetails.udidCardUrl,
+    udidCardNumber: disabilityDetails.UDIDCardNumber,
+    udidEnrollmentNumber: disabilityDetails.UDIDEnrollmentNumber,
+    udidCardUrl: disabilityDetails.UDIDCardUrl,
     updatedBy: {
       connect: {
         id: updatedBy,
@@ -178,7 +178,7 @@ function createUpdateDTOObject(
   pageNumber: number,
   updateDivyangDetailsRequest: updateDivyangDetailsRequest
 ) {
-  const updatedBy = updateDivyangDetailsRequest.updatedBy;
+  const updatedBy = updateDivyangDetailsRequest.updatedBy || "";
 
   if (pageNumber === 1 && updateDivyangDetailsRequest.personalDetails) {
     return updatePersonalDetailsDBObject(

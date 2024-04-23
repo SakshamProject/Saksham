@@ -37,16 +37,16 @@ const createDivyangDetailsDBObject = (
     community: divyangDetails.personalDetails.community,
     extraCurricularActivity:
       divyangDetails.personalDetails.extraCurricularActivity,
-    createdBy: {
-      connect: {
-        id: divyangDetails.createdBy,
-      },
-    },
-    updatedBy: {
-      connect: {
-        id: divyangDetails.updatedBy,
-      },
-    },
+    // createdBy: {
+    //   connect: {
+    //     id: divyangDetails.createdBy,
+    //   },
+    // },
+    // updatedBy: {
+    //   connect: {
+    //     id: divyangDetails.updatedBy,
+    //   },
+    // },
     auditLog: {
       create: {
         date: DivyangDetailsAuditLogDefaults.date,
@@ -54,16 +54,16 @@ const createDivyangDetailsDBObject = (
         description: DivyangDetailsAuditLogDefaults.description, // description value might change
       },
     },
-    person: {
-      create: {
-        loginId: divyangDetails.personalDetails.divyangId,
-        password: {
-          create: {
-            password: divyangDetails.personalDetails.password,
-          },
-        },
-      },
-    },
+    // person: {
+    //   create: {
+    //     loginId: divyangDetails.personalDetails.divyangId,
+    //     password: {
+    //       create: {
+    //         password: divyangDetails.personalDetails.password,
+    //       },
+    //     },
+    //   },
+    // },
   };
   return newDivyangDetails;
 };

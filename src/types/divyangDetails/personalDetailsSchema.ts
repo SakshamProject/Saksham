@@ -1,13 +1,13 @@
-import { z } from 'zod'
+import { z } from "zod";
 import inputFieldSchema, {
   emailSchema,
   phoneNumberSchema,
   uuidSchema,
-} from '../inputFieldSchema.js'
-import { BloodGroupEnum, GenderEnum } from '@prisma/client'
+} from "../inputFieldSchema.js";
+import { BloodGroupEnum, GenderEnum } from "@prisma/client";
 
 const personalDetailsRequestSchema = z.object({
-  password:inputFieldSchema,
+  password: inputFieldSchema,
   firstName: inputFieldSchema,
   lastName: inputFieldSchema,
   divyangId: inputFieldSchema,
@@ -27,6 +27,6 @@ const personalDetailsRequestSchema = z.object({
   communityCategoryId: uuidSchema,
   community: inputFieldSchema,
   extraCurricularActivity: inputFieldSchema.optional(),
-})
-type PersonalDetails = z.infer<typeof personalDetailsRequestSchema>
-export { personalDetailsRequestSchema, PersonalDetails }
+});
+type PersonalDetails = z.infer<typeof personalDetailsRequestSchema>;
+export { personalDetailsRequestSchema, PersonalDetails };

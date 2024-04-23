@@ -60,7 +60,7 @@ const divyangDetailsRequestSchema = z
     addressRequest: addressRequestSchema,
     disabiltyDetails: disabiltyDetailsRequestSchema,
     employmentDetails: employmentDetailsRequestSchema,
-    updatedBy: uuidSchema,
+    updatedBy: uuidSchema.optional(),
     auditLog: auditLogSchema,
   })
   .refine((data) => {
@@ -74,7 +74,7 @@ const updateDivyangDetailsRequestSchema = z
     addressRequest: addressRequestSchema.optional(),
     disabiltyDetails: disabiltyDetailsRequestSchema.optional(),
     employmentDetails: employmentDetailsRequestSchema.optional(),
-    updatedBy: uuidSchema,
+    updatedBy: uuidSchema.optional(),
     auditLog: auditLogSchema.optional(),
     pageNumber: z.number().min(1).max(5),
   })
@@ -84,8 +84,8 @@ const updateDivyangDetailsRequestSchema = z
 
 const postDivyangDetailsRequestSchema = z.object({
   personalDetails: personalDetailsRequestSchema,
-  createdBy: uuidSchema,
-  updatedBy: uuidSchema,
+  createdBy: uuidSchema.optional(),
+  updatedBy: uuidSchema.optional(),
 });
 
 type DivyangDetailsRequest = z.infer<typeof divyangDetailsRequestSchema>;

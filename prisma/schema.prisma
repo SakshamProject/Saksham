@@ -323,10 +323,10 @@ model DivyangDetails {
   spouseIncome     Int?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
-  createdById      String
-  updatedById      String
-  personId         String @unique
-  person           Person                                @relation("person",fields: [personId],references: [id])
+  createdById      String?
+  updatedById      String?
+  personId         String? @unique
+  person           Person?                                @relation("person",fields: [personId],references: [id])
   communityCategory     CommunityCategory                 @relation(fields: [communityCategoryId], references: [id])
   corporation           Corporation?                      @relation(fields: [corporationId], references: [id])
   mlaconstituency       MLAConstituency?                  @relation(fields: [MLAConstituencyId], references: [id])
@@ -340,8 +340,8 @@ model DivyangDetails {
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
   districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
-  createdBy             Person                            @relation("divyangCreatedBy", fields: [createdById], references: [id])
-  updatedBy             Person                            @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
+  createdBy             Person?                            @relation("divyangCreatedBy", fields: [createdById], references: [id])
+  updatedBy             Person?                            @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
 
   auditLog DivyangDetailsAuditLog[]
 }

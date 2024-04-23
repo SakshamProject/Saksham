@@ -3,6 +3,7 @@ import inputFieldSchema, { uuidSchema } from "../inputFieldSchema.js";
 import { CertificateIssueAuthorityEnum, Prisma } from "@prisma/client";
 
 const disabilityOfDivyangSchema = z.object({
+  id: uuidSchema.optional(),
   divyangId: uuidSchema,
   disabilityTypeId: uuidSchema,
   disabilitySubTypeId: uuidSchema.optional(),
@@ -21,10 +22,10 @@ const disabiltyDetailsRequestSchema = z.object({
   disabilities: disabilityOfDivyangSchema.array(),
   districtCode: z.string(),
   stateCode: z.string(),
-  identityCardNumber: z.string().length(64),
-  udidCardNumber: z.string().length(64),
-  udidCardUrl: z.string(),
-  udidEnrollmentNumber: z.string().length(64),
+  identityCardNumber: z.string(),
+  UDIDCardNumber: z.string(),
+  UDIDCardUrl: z.string(),
+  UDIDEnrollmentNumber: z.string(),
 });
 // .refine((data) => {
 //   if (data.isDisabilitySinceBirth) {

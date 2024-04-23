@@ -94,70 +94,6 @@ async function getDivyangDetailsTotalDB(
   }
 }
 
-const getDiyangDetailsByDivyangIdDB = async (divyangId: string) => {
-  try {
-    const divyangDetails = await prisma.divyangDetails.findMany({
-      where: {
-        divyangId: divyangId,
-      },
-      orderBy: {
-        firstName: "asc",
-      },
-    });
-    return divyangDetails;
-  } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
-  }
-};
-
-const getDivyangDetailsByMobileNumberDB = async (mobileNumber: string) => {
-  try {
-    const divyangDetails = await prisma.divyangDetails.findMany({
-      where: {
-        mobileNumber: mobileNumber,
-      },
-      orderBy: {
-        firstName: "asc",
-      },
-    });
-    return divyangDetails;
-  } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
-  }
-};
-
-const getDivyangDetailsByAadharNumberDB = async (aadharNumber: string) => {
-  try {
-    const divyangDetails = await prisma.divyangDetails.findMany({
-      where: {
-        aadharCardNumber: aadharNumber,
-      },
-      orderBy: {
-        firstName: "asc",
-      },
-    });
-    return divyangDetails;
-  } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
-  }
-};
-
-const getDivyangDetailsByUDIDNumberDB = async (UDIDNumber: string) => {
-  try {
-    const divyangDetails = await prisma.divyangDetails.findMany({
-      where: {
-        udidCardNumber: UDIDNumber,
-      },
-      orderBy: {
-        firstName: "asc",
-      },
-    });
-    return divyangDetails;
-  } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
-  }
-};
-
 const getDivyangDetailsSearchByColumnDB = async (
   divyangDetailsSearch: DivyangDetailsSearchType
 ) => {
@@ -203,14 +139,27 @@ const getDivyangDetailsStatusDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+const getDisabilityOfDivyangByDivyangIdDB = async (
+  prismaTransaction: Prisma.TransactionClient,
+  divyangId: string
+) => {
+  try {
+    const disabilityOfDivyang =
+      await prismaTransaction.disabilityOfDivyang.findMany({
+        where: {
+          divyangId: divyangId,
+        },
+      });
+    return disabilityOfDivyang;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 export {
   getDivyangDetailsDB,
   getDivyangDetailsTotalDB,
   getDivyangDetailsByIdDB,
-  getDivyangDetailsByAadharNumberDB,
-  getDivyangDetailsByMobileNumberDB,
-  getDivyangDetailsByUDIDNumberDB,
-  getDiyangDetailsByDivyangIdDB,
   getDivyangDetailsSearchByColumnDB,
   getDivyangDetailsStatusDB,
+  getDisabilityOfDivyangByDivyangIdDB,
 };
