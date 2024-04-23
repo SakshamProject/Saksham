@@ -5,6 +5,7 @@ import {
   userPutRequestType,
 } from "../../types/users/usersSchema.js";
 import generateUserListWhereInput from "../../services/database/utils/users/usersFilterMapper.js";
+import {generateKey} from "node:crypto";
 
 function createUserDBObject(request: Request): Prisma.PersonCreateInput {
   const userInputObject: Prisma.PersonCreateInput = {

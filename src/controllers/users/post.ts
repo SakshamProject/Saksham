@@ -6,7 +6,7 @@ import {createUserDB} from "../../services/database/users/create.js";
 import {createResponseForFilter, createResponseOnlyData} from "../../types/createResponseSchema.js";
 import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
 import {listUserWhereInput} from "../../dto/users/post.js";
-import {saveFile} from "../../middlewares/fileHandler/fileHandler.js";
+import {saveFileBufferToS3} from "../../services/s3/s3.js";
 
 
 async function postUser(request: Request, response: Response, next: NextFunction) {
@@ -20,11 +20,13 @@ async function postUser(request: Request, response: Response, next: NextFunction
 
         const newUser = await createUserDB(userInputObject);
         log("info", `[controller/postUser]:\n newUser: %o`, newUser || {});
-        // TODO createdBy Id
 
-        if (newUser && request.file) {
-            saveFile(newUser.id, request.file);
+        const userId = newUser?.id;
+        if (userId && request.file) {
+            const fileData = await saveFileBufferToS3(userId, request.file);
+            log("info", "[controller/postUser]:\n fileData: %o", fileData);
         }
+
         const responseData = createResponseOnlyData(newUser);
         response.json(responseData);
     }
@@ -53,7 +55,7 @@ async function listUser (request: Request, response: Response, next: NextFunctio
             body,
             result?.total,
             (result?.users?.length)
-        )
+        );
         response.json(responseData);
     } catch (error) {
         next(error);
