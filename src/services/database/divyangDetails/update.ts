@@ -8,7 +8,7 @@ const updateDivyangDetailsDB = async (
   prismaTransaction: Prisma.TransactionClient,
   divyangDetails: updateDivyangDetails,
   id: string
-): Promise<updateDivyangDetails | undefined> => {
+) => {
   try {
     const updatedDivyangDetails = await prismaTransaction.divyangDetails.update(
       {

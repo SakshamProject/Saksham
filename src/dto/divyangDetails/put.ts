@@ -167,11 +167,11 @@ const updateDisabilityDetailsDBObject = (
     udidCardNumber: disabilityDetails.UDIDCardNumber,
     udidEnrollmentNumber: disabilityDetails.UDIDEnrollmentNumber,
     udidCardUrl: disabilityDetails.UDIDCardUrl,
-    // updatedBy: {
-    //   connect: {
-    //     id: updatedBy,
-    //   },
-    // },
+    updatedBy: {
+      connect: {
+        id: updatedBy,
+      },
+    },
     disabilities: {
       createMany: {
         data: disabilities.disabilitiesToCreate,
@@ -189,10 +189,9 @@ const updateDisabilityDetailsDBObject = (
 function createUpdateDTOObject(
   pageNumber: number,
   updateDivyangDetailsRequest: updateDivyangDetailsRequest,
-  disabilities: DisabilityOfDivyangList | null
+  disabilities: DisabilityOfDivyangList | null,
+  updatedBy: string
 ) {
-  const updatedBy = updateDivyangDetailsRequest.updatedBy || "";
-
   if (pageNumber === 1 && updateDivyangDetailsRequest.personalDetails) {
     return updatePersonalDetailsDBObject(
       updateDivyangDetailsRequest.personalDetails,

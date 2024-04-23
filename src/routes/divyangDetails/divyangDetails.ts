@@ -7,6 +7,7 @@ import {
 import { postDivyangDetails } from "../../controllers/divyangDetails/post.js";
 import { putDivyangDetails } from "../../controllers/divyangDetails/put.js";
 import fileHandler from "../../middlewares/fileHandler/fileHandler.js";
+import { authenticate } from "../../middlewares/authentication/authentication.js";
 
 const divyangDetailsRouter = express.Router();
 
@@ -20,6 +21,7 @@ divyangDetailsRouter.post(
 );
 divyangDetailsRouter.put(
   "/:id",
+  authenticate,
   fileHandler.fields([
     { name: "picture", maxCount: 1 },
     { name: "voterId", maxCount: 1 },

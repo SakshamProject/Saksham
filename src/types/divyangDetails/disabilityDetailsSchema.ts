@@ -44,7 +44,6 @@ type DisabilityOfDivyangList = {
   disabilitiesToCreate: DisabilityOfDivyang[];
   disabilitiesToDelete: string[];
   disabilitiesToUpdate: DisabilityOfDivyang[];
-  disabilitiesToUpdateIds: string[];
 };
 
 export {

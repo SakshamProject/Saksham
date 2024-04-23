@@ -22,57 +22,71 @@ import {
 
 const updateDivyangDetailsTransactionDB = async (
   divyangDetails: updateDivyangDetailsRequest,
+  updatedBy: string,
   id: string
 ) => {
   try {
-    const transaction = await prisma.$transaction(async (prismaTransaction) => {
-      //updating audit log
-      if (divyangDetails.auditLog != null) {
-        const currentDate = new Date(Date.now()).toISOString();
-        const auditLog = await getDivyangDetailsStatusDB(id, currentDate);
-        if (divyangDetails.auditLog.status != auditLog?.status) {
-          await createDivyangDetailsAuditLogDB(
-            prismaTransaction,
-            divyangDetails.auditLog,
-            id
-          );
+    const transaction = await prisma.$transaction(
+      async (prismaTransaction) => {
+        const pageNumber = divyangDetails.pageNumber;
+
+        //updating audit log
+        if (divyangDetails.auditLog != null) {
+          const currentDate = new Date(Date.now()).toISOString();
+          const auditLog = await getDivyangDetailsStatusDB(id, currentDate);
+          if (divyangDetails.auditLog.status != auditLog?.status) {
+            await createDivyangDetailsAuditLogDB(
+              prismaTransaction,
+              divyangDetails.auditLog,
+              id
+            );
+          }
         }
-      }
-      const pageNumber = divyangDetails.pageNumber;
-      // if disability page is edited then handling chipsets
-      // if (pageNumber == 3) {
-      const disabilities: DisabilityOfDivyangList | null =
-        await disabilityOfDivyangUpdate(
+
+        // update disability of divyang if it exists
+
+        const disabilities: DisabilityOfDivyangList | null =
+          await disabilityOfDivyangUpdate(
+            prismaTransaction,
+            divyangDetails,
+            id,
+            pageNumber
+          );
+        if (pageNumber == 4 && disabilities) {
+          for (let disability of disabilities.disabilitiesToUpdate) {
+            const updatedDisabilityOfDivyang =
+              await updateDisabilityOfDivyangDB(
+                prismaTransaction,
+                disability,
+                disability.id!,
+                id
+              );
+          }
+        }
+
+        // updating divyang details table for corresponding pagenumber
+
+        const updateDTOObject: updateDivyangDetails =
+          (await createUpdateDTOObject(
+            pageNumber,
+            divyangDetails,
+            disabilities,
+            updatedBy
+          )) || {};
+
+        const updatedDivyangDetails = await updateDivyangDetailsDB(
           prismaTransaction,
-          divyangDetails,
-          id,
-          pageNumber
+          updateDTOObject,
+          id
         );
-      // }
-
-      // updating divyang details table for corresponding pagenumber
-
-      const updateDTOObject: updateDivyangDetails =
-        (await createUpdateDTOObject(
-          pageNumber,
-          divyangDetails,
-          disabilities
-        )) || {};
-      if (pageNumber == 4 && disabilities) {
-        for (let disability of disabilities.disabilitiesToUpdate) {
-          const updatedDisabilityOfDivyang = await updateDisabilityOfDivyangDB(
-            prismaTransaction,
-            disability,
-            disability.id!,
-            id
-          );
-          console.log("++ updated", updatedDisabilityOfDivyang);
-        }
+        return updatedDivyangDetails;
+      },
+      {
+        isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+        maxWait: 50000,
+        timeout: 10000,
       }
-      const updatedDivyangDetails: updateDivyangDetails | undefined =
-        await updateDivyangDetailsDB(prismaTransaction, updateDTOObject, id);
-      return updatedDivyangDetails;
-    });
+    );
     return transaction;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
@@ -85,42 +99,37 @@ const disabilityOfDivyangUpdate = async (
   pageNumber: number
 ) => {
   if (pageNumber != 4) return null;
+
   const existingDisabilities = await getDisabilityOfDivyangByDivyangIdDB(
     prismaTransaction,
     divyangId
   );
   const existingDisabilityId =
     existingDisabilities?.map((disability) => disability.id) || [];
+
   const currentDisabilityId =
     divyangDetails.disabiltyDetails?.disabilities.map(
       (disability) => disability.id
     ) || [];
+
   const disabilitiesToCreate =
     divyangDetails.disabiltyDetails?.disabilities.filter(
       (disabilities) => disabilities.id == undefined
     ) || [];
-  console.log("disabilities to create", disabilitiesToCreate);
+
   const disabilitiesToDelete = existingDisabilityId.filter(
     (disabilityId) => !currentDisabilityId.includes(disabilityId)
   );
-  console.log("disablities to delete", disabilitiesToDelete);
 
   const disabilitiesToUpdate =
     divyangDetails.disabiltyDetails?.disabilities.filter(
       (disabilities) => disabilities.id !== undefined
     ) || [];
-  console.log("disability to Update", disabilitiesToUpdate);
-
-  const disabilitiesToUpdateIds: string[] =
-    divyangDetails.disabiltyDetails?.disabilities
-      .filter((disabilities) => disabilities.id !== undefined)
-      .map((disabilities) => disabilities.id!) || [];
 
   const disabilities: DisabilityOfDivyangList = {
     disabilitiesToCreate: disabilitiesToCreate,
     disabilitiesToDelete: disabilitiesToDelete,
     disabilitiesToUpdate: disabilitiesToUpdate,
-    disabilitiesToUpdateIds: disabilitiesToUpdateIds,
   };
   return disabilities;
 };
