@@ -6,7 +6,6 @@ import { EmploymentDetails } from "../../types/divyangDetails/employmentDetailsS
 import { IdProofUploads } from "../../types/divyangDetails/IdProofUploadsSchema.js";
 import {
   DisabilityDetails,
-  DisabilityOfDivyang,
   DisabilityOfDivyangList,
 } from "../../types/divyangDetails/disabilityDetailsSchema.js";
 
