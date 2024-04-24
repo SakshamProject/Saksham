@@ -159,22 +159,35 @@ async function getFeaturesIdByDesignationIdDB(
   }
 }
 
-
-async function getFeaturesDB(){
-  try{
+async function getFeaturesDB() {
+  try {
     const features = await prisma.feature.findMany();
     return features;
-  }catch(err){
+  } catch (err) {
     if (err instanceof Error) {
       throwDatabaseError(err);
     }
   }
 }
 
+const getDesignationsBySevaKendraIdDB = async (sevaKendraId: string) => {
+  try {
+    const designations = await prisma.designation.findMany({
+      where: {
+        sevaKendraId: sevaKendraId,
+      },
+    });
+    return designations;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+
 export {
   getDesignationDB,
   getDesignationByIDDB,
   getDesignationDBTotal,
   getFeaturesIdByDesignationIdDB,
-  getFeaturesDB
+  getFeaturesDB,
+  getDesignationsBySevaKendraIdDB,
 };

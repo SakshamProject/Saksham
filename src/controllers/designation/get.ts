@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import {
   getDesignationByIDDB,
+  getDesignationsBySevaKendraIdDB,
   getFeaturesDB,
 } from "../../services/database/designation/read.js";
 import {
@@ -93,4 +94,24 @@ async function getFeatures(
   }
 }
 
-export { getDesignationById, getDesignation, getFeatures };
+const getDesignationsBySevaKendraId = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  try {
+    const sevaKendraId = request.params.id;
+    const result = await getDesignationsBySevaKendraIdDB(sevaKendraId);
+    const responseData = createResponseOnlyData(result);
+    response.send(responseData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export {
+  getDesignationById,
+  getDesignation,
+  getFeatures,
+  getDesignationsBySevaKendraId,
+};
