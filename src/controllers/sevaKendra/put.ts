@@ -5,11 +5,6 @@ import {
 } from "../../types/sevaKendra/sevaKendra.js";
 import { createResponseOnlyData } from "../../types/createResponseSchema.js";
 import updateSevaKendraDBTransaction from "../../services/database/sevaKendra/transaction/update.js";
-import { getDivyangDetailsSchema } from "../../types/divyangDetails/divyangDetailsSchema.js";
-import {
-  getDivyangDetailsByIdDB,
-  getDivyangDetailsStatusDB,
-} from "../../services/database/divyangDetails/read.js";
 
 const putSevaKendra = async (
   request: Request,
