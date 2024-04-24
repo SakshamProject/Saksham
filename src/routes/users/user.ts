@@ -4,9 +4,10 @@ import { listUser, postUser } from "../../controllers/users/post.js";
 import fileHandler from "../../middlewares/fileHandler/fileHandler.js";
 import {authenticate} from "../../middlewares/authentication/authentication.js";
 import { putUser } from '../../controllers/users/put.js';
+import login from "../../controllers/users/authentication/logIn.js";
 
 const userRouter = Router();
-// userRouter.post("/", getUsers); list of all user id's and names
+userRouter.post("/login", login);
 userRouter.post("/list", listUser);
 userRouter.get("/:userId", getUserById);
 userRouter.post("", authenticate, fileHandler.single("profilePhoto"), postUser);

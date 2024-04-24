@@ -13,6 +13,7 @@ type Defaults = {
         timeout: number
     },
     MAX_FILE_SIZE: number,
+   hashingAlgorithm:string
 }
 const defaults: Defaults = {
     MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
@@ -24,7 +25,8 @@ const defaults: Defaults = {
         isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
         maxWait: 50000,
         timeout: 10000,
-    }
+    },
+    hashingAlgorithm:'sha256'
 }
 
 

@@ -1,7 +1,7 @@
 import {z} from "zod";
 import { GenderEnum, AuditLogStatusEnum } from "@prisma/client";
 import inputFieldSchema, {auditLogSchema, dateSchema, emailSchema, phoneNumberSchema, uuidSchema} from "../inputFieldSchema.js";
-import {specialCharsRegex} from "../regex.js";
+import {passwordRegex, specialCharsRegex, userNameRegex} from "../regex.js";
 import {sortOrderEnum} from "../getRequestSchema.js";
 
 const usersPostSchema = z.object({
@@ -90,8 +90,17 @@ const userListSchema = z.object({
         sortOrder: z.nativeEnum(sortOrderEnum),
     }).optional()
 });
+
+
 type userListType = z.infer<typeof userListSchema>;
 
+const loginSchema = z.object({
+    userName:z.string().regex(userNameRegex),
+    password:z.string().regex(passwordRegex)
+
+})
+type loginSchemaType = z.infer<typeof loginSchema>;
+
 export { userOrderByEnum };
-export { usersPostSchema, usersPutSchema, userListSchema};
-export { userPostRequestType, userPutRequestType, userListType };
+export { usersPostSchema, usersPutSchema, userListSchema,loginSchema};
+export { userPostRequestType, userPutRequestType, userListType ,loginSchemaType};

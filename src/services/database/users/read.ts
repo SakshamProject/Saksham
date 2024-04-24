@@ -2,7 +2,7 @@ import defaults from "../../../defaults.js";
 import {sortOrderEnum} from "../../../types/getRequestSchema.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
-import {AuditLogStatusEnum, Prisma} from "@prisma/client";
+import {AuditLogStatusEnum, Person, Prisma, User} from "@prisma/client";
 import usersDefaults from "./defaults/usersDefaults.js";
 import usersOrderByColumnMapper from "../utils/users/usersColumnNameMapper.js";
 
@@ -195,11 +195,31 @@ async function getUsersBySevaKendraIdTotalDB(prismaTransaction: Prisma.Transacti
     }
 }
 
+async function verifyUserName(userName:string){
+try{
+    const person = await prisma.person.findUnique({
+        where:{
+         loginId:userName
+        },
+        include:{
+            user:true,
+            password:true
+        }
+    })
+    return person;
+}catch(error){
+    if (error instanceof Error) {
+        throwDatabaseError(error);
+    }
+}
+}
+
 export {
     getUserDB,
     getUserTotal,
     getUserByIdDB,
     getUserStatusDB,
     getUsersBySevaKendraIdDB,
-    getUsersBySevaKendraIdTotalDB
+    getUsersBySevaKendraIdTotalDB,
+    verifyUserName
 }

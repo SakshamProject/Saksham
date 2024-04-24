@@ -16,9 +16,7 @@ const accessLogStream = fs.createWriteStream(path.join(config.__dirname, 'access
 server.use(morgan('combined', { stream: accessLogStream }));
 
 server.use("/api", apiRouter);
-// server.use("/api",(req,res)=>{
-//     res.send("jdvniw")
-// })
+
 
 server.listen(config.PORT, () => {
     console.log(`Server is listening at PORT: ${config.PORT}`);
