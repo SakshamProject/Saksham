@@ -21,22 +21,11 @@ const putSevaKendra = async (
       SevaKendraUpdateRequestSchema.parse(request.body);
     const id = request.params.id;
     const updatedBy = request.user.id;
-    const results = await updateSevaKendraDBTransaction(
+    const result = await updateSevaKendraDBTransaction(
       id,
       updateRequestSevaKendra,
       updatedBy
     );
-    const divyangDetails: getDivyangDetailsSchema | undefined =
-      await getDivyangDetailsByIdDB(id);
-    const currentDate = new Date(Date.now()).toISOString();
-    const currentAuditLog = await getDivyangDetailsStatusDB(id, currentDate);
-    const result = {
-      ...divyangDetails,
-      status: currentAuditLog?.status,
-      description: currentAuditLog?.description,
-      effectiveFromDate: currentAuditLog?.date,
-      timestamp: currentDate,
-    };
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
   } catch (error) {
