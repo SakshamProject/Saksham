@@ -16,8 +16,9 @@ const nonSevaKendraFollowUpSchema = z.object({
 
 const postServiceMappingRequestSchema = z
   .object({
-    divyangId: uuidSchema,
+    divyangId: uuidSchema.optional(),
     userId: uuidSchema.optional(),
+    sevaKendraId:uuidSchema.optional(),
     serviceId: uuidSchema,
     dateOfService: dateSchema,
     dueDate: dateSchema,
@@ -32,11 +33,18 @@ const postServiceMappingRequestSchema = z
           data.userId ===undefined
         );
       } else {
-        return (
-         
-          data.userId !== undefined &&
+        if(data.userId===undefined){
+          return data.sevaKendraId !==undefined&&
           data.nonSevaKendraFollowUp === undefined
-        );
+
+        }else{
+          return (
+         
+            data.userId !== undefined &&
+            data.nonSevaKendraFollowUp === undefined
+          );
+        }
+       
       }
     },
     {

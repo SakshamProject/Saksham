@@ -7,14 +7,17 @@ import {
 } from "../../controllers/sevaKendra/get.js";
 import putSevaKendra from "../../controllers/sevaKendra/put.js";
 import postSevaKendra from "../../controllers/sevaKendra/post.js";
+import { getUsersBySevaKendra } from "../../controllers/users/get.js";
+import { authenticate } from "../../middlewares/authentication/authentication.js";
 
 const sevaKendraRouter = express.Router();
 
 sevaKendraRouter.post("/list/", getSevaKendra);
 sevaKendraRouter.get("/:id", getSevaKendraById);
-sevaKendraRouter.post("/", postSevaKendra);
-sevaKendraRouter.put("/:id", putSevaKendra);
-// sevaKendraRouter.get("/:id/users",)
+sevaKendraRouter.post("/", authenticate, postSevaKendra);
+sevaKendraRouter.put("/:id", authenticate, putSevaKendra);
+sevaKendraRouter.get("/:id/users", getUsersBySevaKendra);
+
 // sevaKendraRouter.get("/districts/:districtId", getSevaKendraByDistrictId);
 
 export default sevaKendraRouter;

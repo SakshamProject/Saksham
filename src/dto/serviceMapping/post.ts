@@ -3,7 +3,8 @@ import {  postServiceMappingRequestSchemaType, postServiceMappingType } from "..
 
 const createPostServiceMappingDBObject = (
     body: postServiceMappingRequestSchemaType,
-    createdById: string = ""
+    createdById: string = "",
+    createdByDivyangId:string=""
   ) => {
     const createServiceMappingDBObject : postServiceMappingType
      = {
@@ -42,7 +43,20 @@ const createPostServiceMappingDBObject = (
         },
       };
     }
-  
+
+    if(body.divyangId ===undefined){
+      createServiceMappingDBObject.divyang ={
+        connect:{
+          id:createdByDivyangId
+        }
+      };
+      createServiceMappingDBObject.sevaKendra={
+       connect:{
+         id:body.sevaKendraId
+       }
+    
+    }
+    }
     return createServiceMappingDBObject;
   };
 
@@ -56,6 +70,7 @@ const createPostServiceMappingDBObject = (
         mobileNumber:body.nonSevaKendraFollowUp.mobileNumber,
         email:body.nonSevaKendraFollowUp.email,
         sendMail:body.nonSevaKendraFollowUp.sendMail,
+        sevaKendra:undefined,
         divyangServiceMapping:{
             connect:{
                 id:serviceMappingId

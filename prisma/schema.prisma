@@ -140,7 +140,7 @@ model State {
 
 model User {
   id             String      @id @default(uuid())
-  userId         String      @unique // check datatype
+  userId         String      @unique
   firstName      String
   lastName       String
   gender         GenderEnum?
@@ -154,7 +154,7 @@ model User {
   // passwordId     String      @unique
 
   personId String @unique
-  person   Person @relation("person", references: [passwordId], fields: [id])
+  person   Person @relation("person",fields: [personId], references: [id])
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
@@ -162,8 +162,8 @@ model User {
   usersCreated User[] @relation("createdBy")
   usersUpdated User[] @relation("updatedBy")
 
-  createdById String?
-  createdBy   User?   @relation("createdBy", fields: [createdById], references: [id])
+  createdById String @unique
+  createdBy   User?  @relation("createdBy", fields: [createdById], references: [id])
 
   updatedById String? @unique
   updatedBy   User?   @relation("updatedBy", fields: [updatedById], references: [id])
@@ -172,7 +172,7 @@ model User {
   designation           Designation             @relation("Designation-Users", fields: [designationId], references: [id])
   designationsCreated   Designation[]           @relation("createdBy")
   designationsUpdated   Designation[]           @relation("updatedBy")
-  //sevaKendraFollowUp    SevaKendraFollowUp[]
+  // sevaKendraFollowUp    SevaKendraFollowUp[]
   userAuditLog          UserAuditLog[]
   divyangServiceMapping DivyangServiceMapping[] @relation("inchargeUser")
 

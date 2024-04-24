@@ -2,6 +2,7 @@ import throwDatabaseError from "../../utils/errorHandler.js";
 import {
   createNonSevaKendraFollowUpDB,
   createServiceMappingDB,
+  getDivyangIdFromPersonId,
 } from "../post.js";
 import defaults from "../../../../defaults.js";
 import {
@@ -18,19 +19,29 @@ import {
 
 async function postServiceMappingDBTransaction(
   body: postServiceMappingRequestSchemaType,
-  createdByID: string
+  createdByPersonId: string
 ) {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
       try {
+
+        let createdByDivyangId:string|undefined="";
+        if(body.divyangId===undefined){
+          const createdByDivyangIdObject = await getDivyangIdFromPersonId(prismaTransaction,createdByPersonId);
+          createdByDivyangId = createdByDivyangIdObject?.divyang?.id
+        }
+
         const postServiceMappingDBObject: postServiceMappingType =
-          createPostServiceMappingDBObject(body, createdByID);
+          createPostServiceMappingDBObject(body, createdByPersonId,createdByDivyangId);
+
+
 
         const serviceMapping: DivyangServiceMapping | undefined =
           await createServiceMappingDB(
             prismaTransaction,
             postServiceMappingDBObject
           );
+
 
         if (body.isNonSevaKendraFollowUpRequired) {
 

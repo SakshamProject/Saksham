@@ -153,6 +153,12 @@ const generateServiceMappingFilter = (
     };
     ServiceMappingWhereInput.AND.push(additionalWhere);
   }
+  if (serviceAdditionalWhere.divyangId != undefined) {
+    const additionalWhere: ServiceMappingWhere = {
+      divyangId: serviceAdditionalWhere.divyangId,
+    };
+    ServiceMappingWhereInput.AND.push(additionalWhere);
+  }
   return ServiceMappingWhereInput;
 };
 

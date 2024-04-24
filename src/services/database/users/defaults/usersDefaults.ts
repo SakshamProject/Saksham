@@ -4,14 +4,18 @@ import {userOrderByEnum} from "../../../../types/users/usersSchema.js";
 const usersDefaults = {
     currentStatus: AuditLogStatusEnum.ACTIVE,
     orderBy: userOrderByEnum.createdAt,
-    includeAll: Prisma.validator<Prisma.UserInclude>()({
-        designation: {
+    includeAll: Prisma.validator<Prisma.PersonInclude>()({
+        user: {
             include: {
-                sevaKendra: {
+                designation: {
                     include: {
-                        district: {
+                        sevaKendra: {
                             include: {
-                                state: true,
+                                district: {
+                                    include: {
+                                        state: true,
+                                    }
+                                }
                             }
                         }
                     }

@@ -11,6 +11,7 @@ import inputFieldSchema, {
 import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import { SevaKendraColumnNamesEnum } from "./sevaKendraDefaults.js";
 import { sortOrderEnum } from "../getRequestSchema.js";
+import {AuditLogStatusEnum} from "@prisma/client";
 
 const SevaKendraColumnNameSchema = z
   .nativeEnum(SevaKendraColumnNamesEnum)

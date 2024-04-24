@@ -20,8 +20,8 @@ const putSevaKendra = async (
     const updateRequestSevaKendra: SevaKendraUpdateRequestSchemaType =
       SevaKendraUpdateRequestSchema.parse(request.body);
     const id = request.params.id;
-    const updatedBy = "";
-    const updatedResult = await updateSevaKendraDBTransaction(
+    const updatedBy = request.user.id;
+    const results = await updateSevaKendraDBTransaction(
       id,
       updateRequestSevaKendra,
       updatedBy

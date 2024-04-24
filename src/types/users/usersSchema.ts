@@ -1,6 +1,6 @@
 import {z} from "zod";
 import { GenderEnum, AuditLogStatusEnum } from "@prisma/client";
-import inputFieldSchema, {dateSchema, emailSchema, phoneNumberSchema, uuidSchema} from "../inputFieldSchema.js";
+import inputFieldSchema, {auditLogSchema, dateSchema, emailSchema, phoneNumberSchema, uuidSchema} from "../inputFieldSchema.js";
 import {specialCharsRegex} from "../regex.js";
 import {sortOrderEnum} from "../getRequestSchema.js";
 
@@ -13,10 +13,10 @@ const usersPostSchema = z.object({
     dateOfBirth: dateSchema.optional(),
     designationId: z.string().uuid(),
     email: emailSchema,
+    loginId: inputFieldSchema,
+    password: z.string(),
     contactNumber: phoneNumberSchema,
     whatsappNumber: phoneNumberSchema,
-    loginId: phoneNumberSchema,
-    password: z.string().regex(specialCharsRegex),
     // audit log
     status: z.nativeEnum(AuditLogStatusEnum),
     effectiveDate: dateSchema, // effective date
@@ -25,22 +25,21 @@ const usersPostSchema = z.object({
 type userPostRequestType = z.infer<typeof usersPostSchema>;
 
 const usersPutSchema = z.object({
-    sevaKendraId: uuidSchema,
+    sevaKendraId: uuidSchema.optional(),
+    personId:uuidSchema,
     userId: z.string(),
     firstName: z.string(),
     lastName: z.string(),
     gender: z.nativeEnum(GenderEnum).optional(),
     dateOfBirth: dateSchema.optional(),
     designationId: z.string().uuid(),
-    mail: emailSchema,
+    email: emailSchema,
+    loginId: inputFieldSchema,
+    password: z.string(),
     contactNumber: phoneNumberSchema,
     whatsappNumber: phoneNumberSchema,
-    loginId: phoneNumberSchema,
-    password: z.string().regex(specialCharsRegex),
     // audit log
-    status: z.nativeEnum(AuditLogStatusEnum),
-    effectiveDate: dateSchema,
-    description: inputFieldSchema.optional()
+    auditlog:auditLogSchema.optional()
 });
 type userPutRequestType = z.infer<typeof usersPutSchema>;
 
@@ -64,8 +63,7 @@ enum userFilterColumnNamesEnum {
 enum userOrderByEnum {
     createdAt = "createdAt",
     updatedAt = "updatedAt",
-    firstName = "firstName",
-    lastName = "lastName",
+    name="name",
     district = "district",
     state = "state",
     sevaKendraName = "sevaKendraName",

@@ -1,46 +1,72 @@
 import { Prisma } from "@prisma/client";
-import {userListType, userPostRequestType} from "../../types/users/usersSchema.js";
-import {createHmac} from "node:crypto";
-import config from "../../../config.js";
-import usersDefaults from "../../services/database/users/defaults/usersDefaults.js";
+import { Request } from "express";
+import {
+  userListType,
+  userPutRequestType,
+} from "../../types/users/usersSchema.js";
 import generateUserListWhereInput from "../../services/database/utils/users/usersFilterMapper.js";
 
-function createUserDBObject(body: userPostRequestType): Prisma.UserCreateInput {
-    const userInputObject: Prisma.UserCreateInput = {
-        userId: body.userId,
-        firstName: body.firstName,
-        lastName: body.lastName,
-        gender: body.gender,
-        dateOfBirth: body.dateOfBirth,
-        currentStatus: usersDefaults.currentStatus,
-        contactNumber: body.contactNumber,
-        whatsappNumber: body.whatsappNumber,
-        email: body.email,
-        loginId: body.loginId,
-        designation: {
+function createUserDBObject(request: Request): Prisma.PersonCreateInput {
+  const userInputObject: Prisma.PersonCreateInput = {
+    loginId: request.body.loginId,
+    password: {
+      create: {
+        password: request.body.password, // TODO: Hash this
+      },
+    },
+    user: {
+      create: {
+        userId: request.body.userId,
+        firstName: request.body.firstName,
+        lastName: request.body.lastName,
+        gender: request.body.gender,
+        dateOfBirth: request.body.dateOfBirth,
+        contactNumber: request.body.contactNumber,
+        whatsappNumber: request.body.whatsappNumber,
+        email: request.body.email,
+        createdBy: {
             connect: {
-                id: body.designationId
+                id: request.user.id,
             }
         },
-        password: {
-            create: {
-                hashedPassword: createHmac('sha256', config.SECRET).update('I love cupcakes').digest('hex')
-            }
+        designation: {
+          connect: {
+            id: request.body.designationId,
+          },
         },
         userAuditLog: {
-            create: {
-                description: body.description,
-                status: body.status,
-                date: body.effectiveDate,
-            }
-        }
-    }
-    return userInputObject;
+          create: {
+            description: request.body.description,
+            status: request.body.status,
+            date: request.body.effectiveDate,
+          },
+        },
+      },
+    },
+  };
+
+  return userInputObject;
 }
 
 function listUserWhereInput(body: userListType): Prisma.UserWhereInput {
-    const userWhereInput = generateUserListWhereInput(body);
-    return userWhereInput;
+  const userWhereInput = generateUserListWhereInput(body);
+  return userWhereInput;
+}
+function createAuditLogDBObject(body: userPutRequestType, id: string) {
+  if (body.auditlog) {
+    const Auditlog: Prisma.UserAuditLogCreateInput = {
+      description: body.auditlog?.description,
+      status: body.auditlog?.status,
+      date: body.auditlog?.date,
+      user: {
+        connect: {
+          id: id,
+        },
+      },
+    };
+    return Auditlog;
+  }
+    
 }
 
-export { createUserDBObject, listUserWhereInput };
+export { createUserDBObject, listUserWhereInput, createAuditLogDBObject };

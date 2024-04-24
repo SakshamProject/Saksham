@@ -38,9 +38,9 @@ async function getServicesDB(
             query.take = take;
         }
 
-        if (searchText !== "") {
-            // query.where = serviceSearchTextMapper("ServiceType", searchText);
-        }
+        // if (searchText !== "") {
+        //     query.where = searchTextMapper("ServiceType", searchText);
+        // }
 
         const services = await prismaTransaction.service.findMany(query);
         return services;
@@ -54,8 +54,8 @@ async function getServicesDB(
 
 async function getServiceTotalDB(prismaTransaction: Prisma.TransactionClient, searchText = "") {
         try {
-            const total = prismaTransaction.serviceType.count({
-                where: serviceSearchTextMapper("ServiceType", searchText),
+            const total = prismaTransaction.service.count({
+                // where: searchTextMapper("ServiceType", searchText),
             });
             return total;
         }

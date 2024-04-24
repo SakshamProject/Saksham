@@ -14,10 +14,10 @@ const inputFieldSchema = z
     );
 
 enum filterOperationsEnum {
-    EQUALS = "equals",
-    NOTEQUALS = "notEquals",
-    STARTSWITH = "startsWith",
-    BEGINSWITH = "endsWith",
+  EQUALS = "equals",
+  NOTEQUALS = "notEquals",
+  STARTSWITH = "startsWith",
+  BEGINSWITH = "endsWith",
 }
 
 const filter = z.object({
@@ -30,28 +30,29 @@ const emailSchema = z.string().email();
 const landLineNumberSchema = z.string().min(6);
 const uuidSchema = z.string().uuid();
 const queryParamsSchema = z.string().optional();
-const dateSchema = z.string().refine(isISODate, {message: "Not a valid ISO 8601 string date."});
+const dateSchema = z
+  .string()
+  .refine(isISODate, { message: "Not a valid ISO 8601 string date " });
 
 const auditLogSchema = z.object({
-    id: uuidSchema.optional(),
-    status: z.nativeEnum(AuditLogStatusEnum),
-    date: z.string().datetime(),
-    description: inputFieldSchema,
+  id: uuidSchema.optional(),
+  status: z.nativeEnum(AuditLogStatusEnum),
+  date: z.string().datetime(),
+  description: inputFieldSchema.optional(),
 });
-type auditLogSchemaType = z.infer<typeof auditLogSchema>
 const auditLogStatusEnumSchema = z.nativeEnum(AuditLogStatusEnum).optional();
+
 export {
-    dateSchema,
-    auditLogSchema,
-    auditLogSchemaType,
-    queryParamsSchema,
-    filter,
-    filterOperationsEnum,
-    inputFieldSchema,
-    phoneNumberSchema,
-    emailSchema,
-    landLineNumberSchema,
-    uuidSchema,
-    auditLogStatusEnumSchema
+  auditLogStatusEnumSchema,
+  dateSchema,
+  auditLogSchema,
+  queryParamsSchema,
+  filter,
+  filterOperationsEnum,
+  inputFieldSchema,
+  phoneNumberSchema,
+  emailSchema,
+  landLineNumberSchema,
+  uuidSchema,
 };
 export default inputFieldSchema;
