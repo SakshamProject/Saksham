@@ -44,7 +44,7 @@ async function login(request: Request, response: Response, next: NextFunction) {
       );
     }
     const token = jwt.sign(
-      { sub: person.id, designation: person.user?.designationId, user: true },
+      { sub: person.id, designationId: person.user?.designationId, user: true },
       config.SECRET,
       { expiresIn: "1h" }
     );

@@ -103,6 +103,12 @@ const loginSchema = z.object({
 })
 type loginSchemaType = z.infer<typeof loginSchema>;
 
+type customPayloadType = {
+    sub:string,
+    designationId:string,
+    user:boolean
+}
+
 export { userOrderByEnum };
 export { usersPostSchema, usersPutSchema, userListSchema,loginSchema};
-export { userPostRequestType, userPutRequestType, userListType ,loginSchemaType};
+export { userPostRequestType, userPutRequestType, userListType ,loginSchemaType,customPayloadType};
