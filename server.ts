@@ -5,8 +5,10 @@ import morgan from "morgan";
 import path from "path";
 import fs from "fs";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const server = express();
+server.use(cookieParser(config.SECRET));
 
 server.use(cors({
     origin: "*"

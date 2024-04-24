@@ -96,7 +96,9 @@ type userListType = z.infer<typeof userListSchema>;
 
 const loginSchema = z.object({
     userName:z.string().regex(userNameRegex),
-    password:z.string().regex(passwordRegex)
+   // password:z.string().regex(passwordRegex)
+   password:z.string()
+
 
 })
 type loginSchemaType = z.infer<typeof loginSchema>;
