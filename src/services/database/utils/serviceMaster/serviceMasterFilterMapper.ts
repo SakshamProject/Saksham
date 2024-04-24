@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import {filterServiceMasterType, listServiceMasterType} from "../../../../types/serviceMaster/serviceMasterSchema.js";
-import searchTextMapper from "./searchTextMapper.js";
+import searchTextMapper from "./serviceSearchTextMapper.js";
 
 function filterServiceMasterMapper(
   columnName: string,

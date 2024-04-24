@@ -11,9 +11,11 @@ type Defaults = {
         isolationLevel: Prisma.TransactionIsolationLevel,
         maxWait: number,
         timeout: number
-    }
+    },
+    MAX_FILE_SIZE: number,
 }
 const defaults: Defaults = {
+    MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
     skip : 0,
     take : 10,
     minFieldLength: 3,

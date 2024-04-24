@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import getRequestSchema from "../../types/getRequestSchema.js";
 import { sevaKendraColumnNameMapper } from "../../services/database/utils/sevaKendra/sevaKendraMapper.js";
 import {
   SevaKendraWhere,
@@ -8,7 +7,6 @@ import {
 import {
   createResponseForFilter,
   createResponseOnlyData,
-  createResponseWithQuery,
 } from "../../types/createResponseSchema.js";
 import { getSevaKendraDBTransaction } from "../../services/database/sevaKendra/transaction/read.js";
 import {
@@ -18,8 +16,8 @@ import {
 } from "../../services/database/sevaKendra/read.js";
 import { createSevaKendraFilterInputObject } from "../../dto/sevaKendra/create.js";
 import SevaKendraGlobalSearchConditions from "../../services/database/utils/sevaKendra/searchConditions.js";
-import { AuditLogStatusEnum } from "@prisma/client";
 import { auditLogStatusEnumSchema } from "../../types/inputFieldSchema.js";
+import { AuditLogStatusEnum } from "@prisma/client";
 
 const getSevaKendra = async (
   request: Request,

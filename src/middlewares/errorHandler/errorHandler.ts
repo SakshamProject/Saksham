@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 import { StatusCodes } from "http-status-codes";
 
 function errorHandler(
-  error: APIError,
+  error: Error,
   request: Request,
   response: Response,
   next: NextFunction
@@ -21,5 +21,6 @@ function errorHandler(
       },
     });
   }
+  next();
 }
 export default errorHandler;

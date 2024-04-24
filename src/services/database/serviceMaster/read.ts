@@ -2,7 +2,7 @@ import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 import {Prisma} from "@prisma/client";
 import {serviceMasterColumnNameMapper} from "../utils/serviceMaster/serviceMasterColumnNameMapper.js";
-import searchTextMapper from "../utils/serviceMaster/searchTextMapper.js";
+import serviceSearchTextMapper from "../utils/serviceMaster/serviceSearchTextMapper.js";
 import defaults from "../../../defaults.js";
 import serviceMasterDefaults from "./defaults/defaults.js";
 import {sortOrderEnum} from "../../../types/getRequestSchema.js";
