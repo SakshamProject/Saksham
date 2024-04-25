@@ -1,17 +1,23 @@
 import { Prisma } from "@prisma/client";
+import * as crypto from "crypto";
 import { Request } from "express";
 import {
   userListType,
   userPutRequestType,
 } from "../../types/users/usersSchema.js";
 import generateUserListWhereInput from "../../services/database/utils/users/usersFilterMapper.js";
+import config from "../../../config.js";
+import defaults from "../../defaults.js";
 
 function createUserDBObject(request: Request): Prisma.PersonCreateInput {
   const userInputObject: Prisma.PersonCreateInput = {
     loginId: request.body.loginId,
     password: {
       create: {
-        password: request.body.password, // TODO: Hash this
+        password: crypto
+          .createHmac(defaults.hashingAlgorithm, config.SECRET)
+          .update(request.body.password)
+          .digest("hex"),
       },
     },
     user: {
@@ -25,9 +31,9 @@ function createUserDBObject(request: Request): Prisma.PersonCreateInput {
         whatsappNumber: request.body.whatsappNumber,
         email: request.body.email,
         createdBy: {
-            connect: {
-                id: request.user.id,
-            }
+          connect: {
+            id: request.user.id,
+          },
         },
         designation: {
           connect: {
@@ -66,7 +72,6 @@ function createAuditLogDBObject(body: userPutRequestType, id: string) {
     };
     return Auditlog;
   }
-    
 }
 
 export { createUserDBObject, listUserWhereInput, createAuditLogDBObject };

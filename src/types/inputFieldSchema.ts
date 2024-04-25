@@ -1,17 +1,22 @@
-import {z} from "zod";
+import { z } from "zod";
 import defaults from "../defaults.js";
-import {passwordRegex, phoneNumberRegex, specialCharsRegex, userNameRegex} from "./regex.js";
+import {
+  passwordRegex,
+  phoneNumberRegex,
+  specialCharsRegex,
+  userNameRegex,
+} from "./regex.js";
 import isISODate from "is-iso-date";
-import {AuditLogStatusEnum} from "@prisma/client";
+import { AuditLogStatusEnum } from "@prisma/client";
 
 const inputFieldSchema = z
-    .string()
-    .min(defaults.minFieldLength)
-    .trim()
-    .regex(
-        specialCharsRegex,
-        `No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, ', ", _]`
-    );
+  .string()
+  .min(defaults.minFieldLength)
+  .trim()
+  .regex(
+    specialCharsRegex,
+    `No Special Characters. Allowed: [A-Z, a-z, 0-9, ., -, ', ", _]`
+  );
 
 enum filterOperationsEnum {
   EQUALS = "equals",
@@ -21,8 +26,8 @@ enum filterOperationsEnum {
 }
 
 const filter = z.object({
-    operation: z.nativeEnum(filterOperationsEnum),
-    value: z.string(),
+  operation: z.nativeEnum(filterOperationsEnum),
+  value: z.string(),
 });
 
 const phoneNumberSchema = z.string().length(10);

@@ -1,15 +1,43 @@
 import { NextFunction, Request, Response } from "express";
-import log from "../../services/logger/logger.js";
+import APIError from "../../services/errors/APIError.js";
+import { StatusCodes } from "http-status-codes";
+import jwt from "jsonwebtoken";
+import config from "../../../config.js";
+import { getUserByIdDB } from "../../services/database/users/read.js";
 
+async function authenticate(
+  request: Request,
+  response: Response,
+  next: NextFunction
+) {
+  try {
+    const token = request.cookies.token;
 
-function authenticate(request: Request, response: Response, next: NextFunction) {
-    const user:User = {
-      id: "f4e1ab7c-f5e8-46f6-afc5-02063030f62d",
-    };
-    log("info", "[middleware/auth] user: %o", user);
-    request.user = user;
-    
+    if (!token) {
+      throw new APIError(
+        "Unauthorized",
+        StatusCodes.UNAUTHORIZED,
+        "UnauthorizationError",
+        "S"
+      );
+    }
+    const decodedToken = jwt.verify(token, config.SECRET) as Token;
+    request.token = decodedToken;
+    const userId = decodedToken.userId;
+
+    const user = await getUserByIdDB(userId);
+
+    if (!user) {
+      throw new APIError(
+        "user not found",
+        StatusCodes.UNAUTHORIZED,
+        "UserNotFoundError",
+        "S"
+      );
+    }
     next();
+  } catch (err) {
+    next(err);
   }
-
-  export { authenticate };
+}
+export { authenticate };
