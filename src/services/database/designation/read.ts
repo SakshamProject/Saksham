@@ -63,7 +63,7 @@ async function getDesignationDBTotal(
   }
 }
 
-async function getDesignationByIDDB(id: string | undefined) :Promise<{}|undefined>{
+async function getDesignationByIDDB(id: string | undefined) {
   try {
     const currentDate = new Date(Date.now()).toISOString();
     const designation = await prisma.designation.findUnique({
@@ -136,7 +136,9 @@ async function getDesignationByIDDB(id: string | undefined) :Promise<{}|undefine
 
     return designation;
   } catch (err) {
-    return err;
+    if (err instanceof Error) {
+      throwDatabaseError(err);
+    }
   }
 }
 

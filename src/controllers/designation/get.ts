@@ -72,8 +72,8 @@ async function getDesignationById(
 ) {
   try {
     const id: string = request.params.id;
-    
-    const result:{}|undefined = await getDesignationByIDDB(id);
+
+    const result = await getDesignationByIDDB(id);
 
     const currentDate = new Date().toISOString();
 
