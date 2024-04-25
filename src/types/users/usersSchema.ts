@@ -7,7 +7,7 @@ import inputFieldSchema, {
   phoneNumberSchema,
   uuidSchema,
 } from "../inputFieldSchema.js";
-import { specialCharsRegex } from "../regex.js";
+import { specialCharsRegex, userNameRegex } from "../regex.js";
 import { sortOrderEnum } from "../getRequestSchema.js";
 
 const usersPostSchema = z.object({

@@ -6,7 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import {
   AuthorizationEnum,
 } from "../../types/authentication/authorizationEnum.js";
-import { getUserByIdDB, verifyUserName } from "../../services/database/users/read.js";
+import { getUserByIdDB } from "../../services/database/users/read.js";
 
  function authorization(currentFeature: AuthorizationEnum) {
   return async (request: Request, response: Response, next: NextFunction) => {
@@ -15,7 +15,7 @@ import { getUserByIdDB, verifyUserName } from "../../services/database/users/rea
     if (request.token?.userId) {
 
       const user = await getUserByIdDB(request.token.userId);
-      //const designationId = user.
+      const designationId = user?.designationId;
       const designation: designationGetByIdType | undefined =
         await getDesignationByIDDB(designationId);
 
@@ -24,12 +24,12 @@ import { getUserByIdDB, verifyUserName } from "../../services/database/users/rea
           (feature) => feature.feature.name === currentFeature
         )
       ) {
-        throw new APIError(
+        next(new APIError(
           "Permission denied",
           StatusCodes.UNAUTHORIZED,
           "AccessDenied",
           "S"
-        );
+        )) 
       }
     } else {
       if (
@@ -39,12 +39,12 @@ import { getUserByIdDB, verifyUserName } from "../../services/database/users/rea
           currentFeature === AuthorizationEnum.POST_SERVICE_MAPPING
         )
       ) {
-        throw new APIError(
+        next(new APIError(
           "Permission denied",
           StatusCodes.UNAUTHORIZED,
           "AccessDenied",
           "S"
-        );
+        )) 
       }
     }
 
