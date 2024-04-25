@@ -8,7 +8,7 @@ import {
 const createServiceMappingFilterInputObject = (
   serviceMappingFilter: serviceMappingFilterType | undefined,
   globalSearchConditions: ServiceMappingWhere | null,
-  serviceAdditionalWhere: ServiceAdditionalWhereSchemaType
+  serviceAdditionalWhere: ServiceAdditionalWhereSchemaType |undefined
 ): ServiceMappingWhere => {
   const serviceMappingWhereInput = generateServiceMappingFilter(
     serviceMappingFilter,

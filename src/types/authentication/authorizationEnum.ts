@@ -6,14 +6,15 @@ enum AuthorizationEnum {
   DIVYANG_DETAILS = "DIVYANG_DETAILS",
   SERVICE_MASTER = "SERVICE_MASTER",
   SERVICE_MAPPING = "SERVICE_MAPPING",
-  POST_SERVICE_MAPPING = "POST_SERVICE_MAPPING",
-  GET_SERVICE_MAPPING = "GET_SERVICE_MAPPING",
 }
 
-enum DivyangAuthorizationEnum {
-  DIVYANG_DETAILS = "DIVYANG_DETAILS",
-  POST_SERVICE_MAPPING = "POST_SERVICE_MAPPING",
-  GET_SERVICE_MAPPING = "GET_SERVICE_MAPPING",
+enum MethodsEnum {
+  DEFAULT = "",
+  GET = "GET",
+  GET_BY_ID = "GET_BY_ID",
+  POST = "POST",
+  PUT = "PUT",
+  DELETE = "DELETE",
 }
 
-export { AuthorizationEnum, DivyangAuthorizationEnum };
+export { AuthorizationEnum, MethodsEnum };
