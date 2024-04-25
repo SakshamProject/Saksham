@@ -1,6 +1,6 @@
 import {z} from "zod";
 import defaults from "../defaults.js";
-import {phoneNumberRegex, specialCharsRegex} from "./regex.js";
+import {passwordRegex, phoneNumberRegex, specialCharsRegex, userNameRegex} from "./regex.js";
 import isISODate from "is-iso-date";
 import {AuditLogStatusEnum} from "@prisma/client";
 
@@ -42,6 +42,9 @@ const auditLogSchema = z.object({
 });
 const auditLogStatusEnumSchema = z.nativeEnum(AuditLogStatusEnum).optional();
 
+const passwordSchema = z.string().regex(passwordRegex);
+const userNameSchema = z.string().regex(userNameRegex);
+
 export {
   auditLogStatusEnumSchema,
   dateSchema,
@@ -54,5 +57,7 @@ export {
   emailSchema,
   landLineNumberSchema,
   uuidSchema,
+  passwordSchema,
+  userNameSchema,
 };
 export default inputFieldSchema;

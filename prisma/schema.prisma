@@ -257,19 +257,19 @@ model DivyangDetails {
   divyangId               String
   picture                 String? // url
   gender                  GenderEnum?
-  bloodGroup              BloodGroupEnum
+  bloodGroup              BloodGroupEnum?
   dateOfBirth             DateTime
   age                     Int?
   mailId                  String
   mobileNumber            String
-  fatherName              String
-  motherName              String
+  fatherName              String?
+  motherName              String?
   isMarried               Boolean?
   spouseName              String?
   spouseNumber            String?
-  religion                String
-  community               String
-  communityCategoryId     String
+  religion                String?
+  community               String?
+  communityCategoryId     String?
   extraCurricularActivity String?
   // all below here are in next page
   voterId                 String?
@@ -326,7 +326,7 @@ model DivyangDetails {
   updatedById           String
   personId              String                            @unique
   person                Person                            @relation("person", fields: [personId], references: [id])
-  communityCategory     CommunityCategory                 @relation(fields: [communityCategoryId], references: [id])
+  communityCategory     CommunityCategory?                 @relation(fields: [communityCategoryId], references: [id])
   corporation           Corporation?                      @relation(fields: [corporationId], references: [id])
   mlaconstituency       MLAConstituency?                  @relation(fields: [MLAConstituencyId], references: [id])
   mpconstituency        MPConstituency?                   @relation(fields: [MPConstituancyId], references: [id])

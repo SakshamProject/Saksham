@@ -1,43 +1,29 @@
-import { Prisma } from "@prisma/client";
-import { generateDivyangDetailsFilter } from "../../services/database/utils/divyangDetails/filterMapper.js";
-import { DisabilityOfDivyang } from "../../types/divyangDetails/disabilityDetailsSchema.js";
-import { DivyangDetailsAuditLogDefaults } from "../../types/divyangDetails/divyangDetailsDefaults.js";
+import { Prisma } from '@prisma/client'
+import { generateDivyangDetailsFilter } from '../../services/database/utils/divyangDetails/filterMapper.js'
+import { DisabilityOfDivyang } from '../../types/divyangDetails/disabilityDetailsSchema.js'
+import { DivyangDetailsAuditLogDefaults } from '../../types/divyangDetails/divyangDetailsDefaults.js'
 import {
   createDivyangDetails,
   DivyangDetailsFilterType,
   DivyangDetailsWhere,
   postDivyangDetailsRequest,
-} from "../../types/divyangDetails/divyangDetailsSchema.js";
+} from '../../types/divyangDetails/divyangDetailsSchema.js'
+import { DivyangSignUp } from '../../types/divyangDetails/personalDetailsSchema.js'
 
 const createDivyangDetailsDBObject = (
-  divyangDetails: postDivyangDetailsRequest,
-  createdBy: string
+  divyangDetails: DivyangSignUp,
+  createdBy: string,
 ): createDivyangDetails => {
   const newDivyangDetails: createDivyangDetails = {
-    divyangId: divyangDetails.personalDetails.divyangId,
-    firstName: divyangDetails.personalDetails.firstName,
-    lastName: divyangDetails.personalDetails.lastName,
-    picture: divyangDetails.personalDetails.picture,
-    bloodGroup: divyangDetails.personalDetails.bloodGroup,
-    gender: divyangDetails.personalDetails.gender,
-    dateOfBirth: divyangDetails.personalDetails.dateOfBirth,
-    age: divyangDetails.personalDetails.age,
-    mailId: divyangDetails.personalDetails.mailId,
-    mobileNumber: divyangDetails.personalDetails.mobileNumber,
-    fatherName: divyangDetails.personalDetails.fatherName,
-    motherName: divyangDetails.personalDetails.motherName,
-    isMarried: divyangDetails.personalDetails.isMarried,
-    spouseName: divyangDetails.personalDetails.spouseName,
-    spouseNumber: divyangDetails.personalDetails.spouseNumber,
-    religion: divyangDetails.personalDetails.religion,
-    communityCategory: {
-      connect: {
-        id: divyangDetails.personalDetails.communityCategoryId,
-      },
-    },
-    community: divyangDetails.personalDetails.community,
-    extraCurricularActivity:
-      divyangDetails.personalDetails.extraCurricularActivity,
+    divyangId: divyangDetails.divyangId,
+    firstName: divyangDetails.firstName,
+    lastName: divyangDetails.lastName,
+    picture: divyangDetails.picture,
+    gender: divyangDetails.gender,
+    dateOfBirth: divyangDetails.dateOfBirth,
+    age: divyangDetails.age,
+    mailId: divyangDetails.mailId,
+    mobileNumber: divyangDetails.mobileNumber,
     createdBy: {
       connect: {
         id: createdBy,
@@ -57,26 +43,26 @@ const createDivyangDetailsDBObject = (
     },
     person: {
       create: {
-        loginId: divyangDetails.personalDetails.divyangId,
+        loginId: divyangDetails.username,
         password: {
           create: {
-            password: divyangDetails.personalDetails.password,
+            password: divyangDetails.password,
           },
         },
       },
     },
-  };
-  return newDivyangDetails;
-};
+  }
+  return newDivyangDetails
+}
 
 const createDivyangDetailsFilterInputObject = (
   divyangDetailsFilter: DivyangDetailsFilterType | undefined,
-  globalSearchConditions: DivyangDetailsWhere | null
+  globalSearchConditions: DivyangDetailsWhere | null,
 ): DivyangDetailsWhere => {
   const divyangDetailsWhereInput = generateDivyangDetailsFilter(
     divyangDetailsFilter,
-    globalSearchConditions
-  );
-  return divyangDetailsWhereInput;
-};
-export { createDivyangDetailsDBObject, createDivyangDetailsFilterInputObject };
+    globalSearchConditions,
+  )
+  return divyangDetailsWhereInput
+}
+export { createDivyangDetailsDBObject, createDivyangDetailsFilterInputObject }
