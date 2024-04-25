@@ -26,16 +26,15 @@ async function authenticate(
     const userId = decodedToken.userId;
     const user = await getUserByIdDB(userId);
     if (!user) {
-
       const divyang = await verifyDivyang(decodedToken.personId);
-      if(!divyang){
-      throw new APIError(
-        "Not a valid user or divyang",
-        StatusCodes.UNAUTHORIZED,
-        "UserNotFoundError",
-        "S"
-      );
-    }
+      if (!divyang) {
+        throw new APIError(
+          "Not a valid user or divyang",
+          StatusCodes.UNAUTHORIZED,
+          "UserNotFoundError",
+          "S"
+        );
+      }
     }
     next();
   } catch (err) {

@@ -3,10 +3,10 @@ import throwDatabaseError from "../utils/errorHandler.js";
 
 async function verifyDivyang(personId: string) {
   try {
-    const divyang = await prisma.divyangDetails.findUnique({
+    const divyang = await prisma.divyangDetails.findFirst({
       where: {
         personId: personId,
-      }
+      },
     });
     return divyang;
   } catch (error) {
@@ -16,4 +16,4 @@ async function verifyDivyang(personId: string) {
   }
 }
 
-export{verifyDivyang};
+export { verifyDivyang };
