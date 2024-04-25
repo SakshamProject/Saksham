@@ -7,7 +7,6 @@ import {
   loginSchemaType,
   loginSchema,
 } from '../../types/authentication/authenticationSchema.js'
-import userLogin from './userLogIn.js'
 import config from '../../../config.js'
 import * as crypto from 'crypto'
 import jwt from 'jsonwebtoken'
@@ -34,7 +33,6 @@ async function divyangLogin(
       .digest('hex')
 
     if (givenPassword !== person.password.password) {
-      console.log(`[+]password wrong`)
 
       throw new APIError(
         'Username or password is incorrect',
@@ -44,7 +42,7 @@ async function divyangLogin(
       )
     }
     const token = jwt.sign(
-      { sub: person.id, designationId: person.user?.designationId, user: true },
+      { sub: person.id },
       config.SECRET,
       { expiresIn: '1h' },
     )
