@@ -8,8 +8,8 @@ const authRouter = Router();
 
 authRouter.use(express.json());
 
-authRouter.post("/divynag/login",divyangLogin);
-authRouter.post("/divynag/signup",postDivyangDetails );
+authRouter.post("/divyang/login",divyangLogin);
+authRouter.post("/divyang/signup",postDivyangDetails );
 authRouter.post("/divyang/logout",divyangLogout)
 authRouter.post("/user/login", userLogin);
 authRouter.post("/user/logout", userLogout);

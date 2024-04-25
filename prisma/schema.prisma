@@ -339,8 +339,8 @@ model DivyangDetails {
   eductionQualification DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
   districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
-  createdBy             Person                            @relation("divyangCreatedBy", fields: [createdById], references: [id])
-  updatedBy             Person                            @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
+  createdBy             Person?                            @relation("divyangCreatedBy", fields: [createdById], references: [id])
+  updatedBy             Person?                            @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
 
   auditLog DivyangDetailsAuditLog[]
 }

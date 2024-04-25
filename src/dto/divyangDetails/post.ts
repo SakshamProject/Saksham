@@ -24,16 +24,16 @@ const createDivyangDetailsDBObject = (
     age: divyangDetails.age,
     mailId: divyangDetails.mailId,
     mobileNumber: divyangDetails.mobileNumber,
-    createdBy: {
-      connect: {
-        id: createdBy,
-      },
-    },
-    updatedBy: {
-      connect: {
-        id: createdBy,
-      },
-    },
+    // createdBy: {
+    //   connect: {
+    //     id: createdBy,
+    //   },
+    // },
+    // updatedBy: {
+    //   connect: {
+    //     id: createdBy,
+    //   },
+    // },
     auditLog: {
       create: {
         date: DivyangDetailsAuditLogDefaults.date,
