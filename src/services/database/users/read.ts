@@ -47,6 +47,8 @@ const getUserByIdDB = async (id: string) => {
     const user = await prisma.user.findFirstOrThrow({
       // select: usersDefaults.select,
       include: {
+        createdBy: true,
+        updatedBy: true,
         person: {
           select: {
             loginId: true,
