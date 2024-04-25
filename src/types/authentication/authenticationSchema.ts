@@ -1,13 +1,10 @@
 import { z } from "zod";
-import { passwordRegex, userNameRegex } from "../regex.js";
-
+import { passwordSchema, userNameSchema } from "../inputFieldSchema.js";
 
 const loginSchema = z.object({
-    userName:z.string().regex(userNameRegex),
-   password:z.string().regex(passwordRegex)
-
-
-})
+  userName: userNameSchema,
+  password: passwordSchema,
+});
 type loginSchemaType = z.infer<typeof loginSchema>;
 
-export{loginSchema,loginSchemaType}
+export { loginSchema, loginSchemaType };
