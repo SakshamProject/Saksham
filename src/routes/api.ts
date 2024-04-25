@@ -32,13 +32,13 @@ apiRouter.get(
     }
   }
 );
-apiRouter.use("/divyangdetails",divyangDetailsRouter);
-apiRouter.use("/services", serviceMasterRouter);
-apiRouter.use("/sevakendras", sevaKendraRouter);
-apiRouter.use("/typemaster", typeMasterRouter);
+apiRouter.use("/divyangdetails",authorization(AuthorizationEnum.DIVYANG_DETAILS),divyangDetailsRouter);
+apiRouter.use("/services",authorization(AuthorizationEnum.SERVICE_MASTER), serviceMasterRouter);
+apiRouter.use("/sevakendras",authorization(AuthorizationEnum.SEVAKENDRA_SETUP), sevaKendraRouter);
+apiRouter.use("/typemaster", authorization(AuthorizationEnum.TYPE_MASTERS),typeMasterRouter);
 apiRouter.use("/designation",authorization(AuthorizationEnum.SEVAKENDRA_SETUP), designationRouter);
 apiRouter.use("/servicemapping", serviceMappingRouter);
-apiRouter.use("/users", userRouter);
+apiRouter.use("/users",authorization(AuthorizationEnum.SEVAKENDRA_USERS), userRouter);
 
 apiRouter.use(errorHandler);
 export default apiRouter;
