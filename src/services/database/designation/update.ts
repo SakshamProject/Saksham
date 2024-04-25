@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { updateDesignationObjectType, updateDesignationRequestSchemaType } from "../../../types/designation/designationSchema.js";
 import throwDatabaseError from "../utils/errorHandler.js";
+import prisma from "../database.js";
 
 async function updateDesignationDB(prismaTransaction:Prisma.TransactionClient, updateObject:updateDesignationObjectType,id:string|undefined){
  
@@ -23,9 +24,9 @@ async function updateDesignationDB(prismaTransaction:Prisma.TransactionClient, u
      
   }
 
-async function getDesignationStatus(prismaTransaction:Prisma.TransactionClient,designationId:string){
-  const currentDate = new Date().toISOString();
-  const status =await prismaTransaction.designation.findFirst({
+async function getDesignationStatus(designationId:string,currentDate:string){
+ 
+  const status =await prisma.designation.findFirst({
     where:{
       id:designationId
     },
@@ -43,7 +44,7 @@ async function getDesignationStatus(prismaTransaction:Prisma.TransactionClient,d
       }
   }
   })
-  return status?.designationAuditLog[0].status;
+  return status?.designationAuditLog[0];
 }
 
   export {updateDesignationDB,getDesignationStatus};

@@ -42,6 +42,8 @@ const auditLogSchema = z.object({
 });
 const auditLogStatusEnumSchema = z.nativeEnum(AuditLogStatusEnum).optional();
 
+type auditLogSchemaType =z.infer<typeof auditLogSchema>
+
 export {
   auditLogStatusEnumSchema,
   dateSchema,
@@ -54,5 +56,6 @@ export {
   emailSchema,
   landLineNumberSchema,
   uuidSchema,
+  auditLogSchemaType
 };
 export default inputFieldSchema;

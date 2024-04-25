@@ -14,11 +14,19 @@ import {
   retrieveFeatureIds,
 } from "../../../utils/designation/designation.js";
 import { createDesignationAuditLogDB } from "../create.js";
+import { auditLogSchemaType } from "../../../../types/inputFieldSchema.js";
 
 async function putDesignationDBTransaction(
   body: updateDesignationRequestSchemaType,
   id: string,
-  updatedById: string | undefined
+  updatedById: string | undefined,
+  auditLog: {
+    id: string;
+    designationId: string;
+    status: AuditLogStatusEnum;
+    date: Date;
+    description: string | null;
+} | undefined
 ) {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
@@ -62,10 +70,9 @@ async function putDesignationDBTransaction(
           checkedFeaturesId,
           id
         );
+       
 
-        const status = await getDesignationStatus(prismaTransaction,id)
-
-       if (status !== body.auditLog.status){
+       if (auditLog?.status !== body.auditLog.status){
 
         const designationAuditLogObject = createDesignationAuditLog(
           id,
