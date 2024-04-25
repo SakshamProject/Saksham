@@ -322,8 +322,8 @@ model DivyangDetails {
   spouseIncome          Int?
   createdAt             DateTime                          @default(now())
   updatedAt             DateTime                          @updatedAt
-  createdById           String
-  updatedById           String
+  createdById           String?
+  updatedById           String?
   personId              String                            @unique
   person                Person                            @relation("person", fields: [personId], references: [id])
   communityCategory     CommunityCategory?                 @relation(fields: [communityCategoryId], references: [id])

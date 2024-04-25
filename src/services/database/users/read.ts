@@ -44,7 +44,7 @@ async function getUserTotal(
 
 const getUserByIdDB = async (id: string) => {
   try {
-    const user = await prisma.user.findFirstOrThrow({
+    const user = await prisma.user.findFirst({
       // select: usersDefaults.select,
       include: {
         userAuditLog: true,
@@ -240,5 +240,4 @@ export {
   getUserStatusDB,
   getUsersBySevaKendraIdDB,
   getUsersBySevaKendraIdTotalDB,
-  
 };

@@ -12,7 +12,6 @@ async function authenticate(
 ) {
   try {
     const token = request.cookies.token;
-
     if (!token) {
       throw new APIError(
         "Unauthorized",
@@ -24,9 +23,7 @@ async function authenticate(
     const decodedToken = jwt.verify(token, config.SECRET) as Token;
     request.token = decodedToken;
     const userId = decodedToken.userId;
-
     const user = await getUserByIdDB(userId);
-
     if (!user) {
       throw new APIError(
         "user not found",

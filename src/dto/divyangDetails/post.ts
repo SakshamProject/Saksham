@@ -1,18 +1,20 @@
-import { Prisma } from '@prisma/client'
-import { generateDivyangDetailsFilter } from '../../services/database/utils/divyangDetails/filterMapper.js'
-import { DisabilityOfDivyang } from '../../types/divyangDetails/disabilityDetailsSchema.js'
-import { DivyangDetailsAuditLogDefaults } from '../../types/divyangDetails/divyangDetailsDefaults.js'
+import { Prisma } from "@prisma/client";
+import { generateDivyangDetailsFilter } from "../../services/database/utils/divyangDetails/filterMapper.js";
+import { DisabilityOfDivyang } from "../../types/divyangDetails/disabilityDetailsSchema.js";
+import { DivyangDetailsAuditLogDefaults } from "../../types/divyangDetails/divyangDetailsDefaults.js";
 import {
   createDivyangDetails,
   DivyangDetailsFilterType,
   DivyangDetailsWhere,
   postDivyangDetailsRequest,
-} from '../../types/divyangDetails/divyangDetailsSchema.js'
-import { DivyangSignUp } from '../../types/divyangDetails/personalDetailsSchema.js'
-
+} from "../../types/divyangDetails/divyangDetailsSchema.js";
+import { DivyangSignUp } from "../../types/divyangDetails/personalDetailsSchema.js";
+import config from "../../../config.js";
+import defaults from "../../defaults.js";
+import * as crypto from "crypto";
 const createDivyangDetailsDBObject = (
   divyangDetails: DivyangSignUp,
-  createdBy: string,
+  createdBy: string
 ): createDivyangDetails => {
   const newDivyangDetails: createDivyangDetails = {
     divyangId: divyangDetails.divyangId,
@@ -46,23 +48,26 @@ const createDivyangDetailsDBObject = (
         loginId: divyangDetails.username,
         password: {
           create: {
-            password: divyangDetails.password,
+            password: crypto
+              .createHmac(defaults.hashingAlgorithm, config.SECRET)
+              .update(divyangDetails.password)
+              .digest("hex"),
           },
         },
       },
     },
-  }
-  return newDivyangDetails
-}
+  };
+  return newDivyangDetails;
+};
 
 const createDivyangDetailsFilterInputObject = (
   divyangDetailsFilter: DivyangDetailsFilterType | undefined,
-  globalSearchConditions: DivyangDetailsWhere | null,
+  globalSearchConditions: DivyangDetailsWhere | null
 ): DivyangDetailsWhere => {
   const divyangDetailsWhereInput = generateDivyangDetailsFilter(
     divyangDetailsFilter,
-    globalSearchConditions,
-  )
-  return divyangDetailsWhereInput
-}
-export { createDivyangDetailsDBObject, createDivyangDetailsFilterInputObject }
+    globalSearchConditions
+  );
+  return divyangDetailsWhereInput;
+};
+export { createDivyangDetailsDBObject, createDivyangDetailsFilterInputObject };
