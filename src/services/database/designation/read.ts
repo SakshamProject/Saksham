@@ -4,6 +4,7 @@ import { designationColumnNameMapper } from "../utils/designation/designation.js
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 import { Prisma } from "@prisma/client";
+import { designationGetByIdType } from "../../../types/designation/designationSchema.js";
 
 async function getDesignationDB(
   prismaTransaction: Prisma.TransactionClient,
@@ -63,7 +64,7 @@ async function getDesignationDBTotal(
   }
 }
 
-async function getDesignationByIDDB(id: string | undefined) {
+async function getDesignationByIDDB(id: string | undefined):Promise<designationGetByIdType|undefined> {
   try {
     const currentDate = new Date(Date.now()).toISOString();
     const designation = await prisma.designation.findUnique({
@@ -136,7 +137,9 @@ async function getDesignationByIDDB(id: string | undefined) {
 
     return designation;
   } catch (err) {
-    return err;
+    if (err instanceof Error) {
+      throwDatabaseError(err);
+    }
   }
 }
 

@@ -16,9 +16,7 @@ async function login(request: Request, response: Response, next: NextFunction) {
   try {
     const body: loginSchemaType = loginSchema.parse(request.body);
     const person = await verifyUserName(body.userName);
-    console.log(`[+]password`,person?.password.password)
     if (!person) {
-      console.log(`[+]username wrong`)
       throw new APIError(
         "Username or password is incorrect",
         StatusCodes.UNAUTHORIZED,
@@ -31,7 +29,6 @@ async function login(request: Request, response: Response, next: NextFunction) {
       .update(body.password)
       .digest("hex");
 
-      console.log(`[+]hashedpasword`,givenPassword)
 
     if (givenPassword !== person.password.password) {
       console.log(`[+]password wrong`)

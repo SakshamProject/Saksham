@@ -6,7 +6,6 @@ import {
 import {
   createResponseForFilter,
   createResponseOnlyData,
-  createResponseWithQuery,
 } from "../../types/createResponseSchema.js";
 import { getDesignationDBTransaction } from "../../services/database/designation/transaction/read.js";
 import {

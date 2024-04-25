@@ -10,10 +10,14 @@ import sevaKendraRouter from "./sevaKendra/sevaKendra.js";
 import errorHandler from "../middlewares/errorHandler/errorHandler.js";
 import designationRouter from "./designation/designation.js";
 import serviceMappingRouter from "./serviceMapping/serviceMapping.js";
+import authorization from "../middlewares/authentication/authorization.js";
+import { AuthorizationEnum } from "../types/authentication/authorizationEnum.js";
+import { authenticate } from "../middlewares/authentication/authentication.js";
 
 const apiRouter = Router();
 
 apiRouter.use(express.json());
+apiRouter.use(authenticate);
 
 apiRouter.get(
   "/check",
@@ -28,11 +32,11 @@ apiRouter.get(
     }
   }
 );
-apiRouter.use("/divyangdetails", divyangDetailsRouter);
+apiRouter.use("/divyangdetails",divyangDetailsRouter);
 apiRouter.use("/services", serviceMasterRouter);
 apiRouter.use("/sevakendras", sevaKendraRouter);
 apiRouter.use("/typemaster", typeMasterRouter);
-apiRouter.use("/designation", designationRouter);
+apiRouter.use("/designation",authorization(AuthorizationEnum.SEVAKENDRA_SETUP), designationRouter);
 apiRouter.use("/servicemapping", serviceMappingRouter);
 apiRouter.use("/users", userRouter);
 

@@ -11,7 +11,7 @@ import { putDesignation } from "../../controllers/designation/put.js";
 
 const designationRouter = Router();
 
-designationRouter.use(authenticate);
+//designationRouter.use(authenticate);
 
 designationRouter.get("/features",getFeatures)
 designationRouter.post("/list", getDesignation);

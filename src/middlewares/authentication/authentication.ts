@@ -1,12 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import log from "../../services/logger/logger.js";
 import APIError from "../../services/errors/APIError.js";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import config from "../../../config.js";
-import { customPayloadType } from "../../types/users/usersSchema.js";
-import prisma from "../../services/database/database.js";
-import { getUserById } from "../../controllers/users/get.js";
 import { getUserByIdDB } from "../../services/database/users/read.js";
 
 
@@ -28,8 +24,9 @@ async function authenticate(request: Request, response: Response, next: NextFunc
     if (!token) {
      throw new APIError("Unauthorized",StatusCodes.UNAUTHORIZED,"UnauthorizationError","S")
   }
-  const decodedToken = jwt.verify(token,config.SECRET) as customPayloadType;
-    const userId = decodedToken.sub;
+  const decodedToken = jwt.verify(token,config.SECRET) as Token;
+  request.token =decodedToken;
+    const userId = decodedToken.userId;
     console.log(`[+]userId`,userId)
 
     const user = await getUserByIdDB(userId);
