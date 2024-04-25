@@ -33,7 +33,7 @@ async function authenticate(
       const divyang = await verifyDivyang(decodedToken.personId);
       if(!divyang){
       throw new APIError(
-        "user not found",
+        "Not a valid user or divyang",
         StatusCodes.UNAUTHORIZED,
         "UserNotFoundError",
         "S"
