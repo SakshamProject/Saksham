@@ -19,6 +19,7 @@ const getDivyangDetailsDB = async (
         id: true,
         personId: true,
         firstName: true,
+        lastName:true,
         mailId: true,
         mobileNumber: true,
         divyangId: true,
