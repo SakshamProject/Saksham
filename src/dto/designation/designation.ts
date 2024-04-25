@@ -1,7 +1,4 @@
-import {
-  AuditLogStatusEnum,
-  
-} from "@prisma/client";
+import { AuditLogStatusEnum } from "@prisma/client";
 import {
   DesignationWhere,
   designationFilterType,
@@ -63,7 +60,6 @@ function createUpdateDesignationObject(
     sevaKendra: {
       connect: {
         id: body.sevaKendraId,
-    
       },
     },
     updatedBy: {
@@ -127,8 +123,7 @@ function createDesignationFilterInputObject(
       );
     }
   }
-  if (searchCondition != null)
-    designationWhereInput.AND.push(searchCondition);
+  if (searchCondition != null) designationWhereInput.AND.push(searchCondition);
   return designationWhereInput;
 }
 
