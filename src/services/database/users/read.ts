@@ -233,25 +233,6 @@ async function getUsersBySevaKendraIdTotalDB(
   }
 }
 
-async function verifyUserName(userName:string){
-  try{
-      const person = await prisma.person.findUnique({
-          where:{
-           loginId:userName
-          },
-          include:{
-              user:true,
-              password:true
-          }
-      })
-      return person;
-  }catch(error){
-      if (error instanceof Error) {
-          throwDatabaseError(error);
-      }
-  }
-  }
-
 export {
   getUserDB,
   getUserTotal,
@@ -259,5 +240,5 @@ export {
   getUserStatusDB,
   getUsersBySevaKendraIdDB,
   getUsersBySevaKendraIdTotalDB,
-  verifyUserName
+  
 };

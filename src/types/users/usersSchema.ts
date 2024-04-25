@@ -109,16 +109,9 @@ const userListSchema = z.object({
 
 type userListType = z.infer<typeof userListSchema>;
 
-const loginSchema = z.object({
-    userName:z.string().regex(userNameRegex),
-   // password:z.string().regex(passwordRegex)
-   password:z.string()
 
-
-})
-type loginSchemaType = z.infer<typeof loginSchema>;
 
 
 export { userOrderByEnum };
-export { usersPostSchema, usersPutSchema, userListSchema,loginSchema};
-export { userPostRequestType, userPutRequestType, userListType ,loginSchemaType};
+export { usersPostSchema, usersPutSchema, userListSchema};
+export { userPostRequestType, userPutRequestType, userListType };

@@ -1,18 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import * as crypto from "crypto";
-import defaults from "../../../defaults.js";
-import config from "../../../../config.js";
+import defaults from "../../defaults.js";
+import config from "../../../config.js";
 import jwt from "jsonwebtoken";
-import cookieParser from "cookie-parser";
-import APIError from "../../../services/errors/APIError.js";
+import APIError from "../../services/errors/APIError.js";
 import { StatusCodes } from "http-status-codes";
-import { verifyUserName } from "../../../services/database/users/read.js";
+import { verifyUserName } from "../../services/database/authentication/verifyUserName.js";
 import {
   loginSchema,
   loginSchemaType,
-} from "../../../types/users/usersSchema.js";
+} from "../../types/authentication/authenticationSchema.js";
 
-async function login(request: Request, response: Response, next: NextFunction) {
+async function userLogin(
+  request: Request,
+  response: Response,
+  next: NextFunction
+) {
   try {
     const body: loginSchemaType = loginSchema.parse(request.body);
     const person = await verifyUserName(body.userName);
@@ -29,9 +32,8 @@ async function login(request: Request, response: Response, next: NextFunction) {
       .update(body.password)
       .digest("hex");
 
-
     if (givenPassword !== person.password.password) {
-      console.log(`[+]password wrong`)
+      console.log(`[+]password wrong`);
 
       throw new APIError(
         "Username or password is incorrect",
@@ -59,4 +61,4 @@ async function login(request: Request, response: Response, next: NextFunction) {
   }
 }
 
-export default login;
+export default userLogin;
