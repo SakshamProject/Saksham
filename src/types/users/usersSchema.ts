@@ -40,10 +40,10 @@ const usersPutSchema = z.object({
   dateOfBirth: dateSchema.optional(),
   designationId: z.string().uuid(),
   email: emailSchema,
-  loginId: inputFieldSchema,
-  password: z.string(),
+  // loginId: inputFieldSchema.optional(),
+  // password: z.string().optional(),
   contactNumber: phoneNumberSchema,
-  whatsappNumber: phoneNumberSchema,
+  whatsappNumber: phoneNumberSchema.optional(),
   // audit log
   auditlog: auditLogSchema.optional(),
 });
