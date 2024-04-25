@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import config from "../../../config.js";
 import { getUserByIdDB } from "../../services/database/users/read.js";
+import { verifyDivyang } from "../../services/database/authentication/verifydivyang.js";
 
 async function authenticate(
   request: Request,
@@ -25,12 +26,16 @@ async function authenticate(
     const userId = decodedToken.userId;
     const user = await getUserByIdDB(userId);
     if (!user) {
+
+      const divyang = await verifyDivyang(decodedToken.personId);
+      if(!divyang){
       throw new APIError(
-        "user not found",
+        "Not a valid user or divyang",
         StatusCodes.UNAUTHORIZED,
         "UserNotFoundError",
         "S"
       );
+    }
     }
     next();
   } catch (err) {
