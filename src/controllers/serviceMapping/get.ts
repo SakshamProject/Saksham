@@ -92,7 +92,6 @@ const getServiceMappingByDivyangId = async (
       serviceMappingRequest.sorting?.orderByColumn,
       serviceMappingRequest.sorting?.sortOrder
     );
-    console.log("search Text", serviceMappingRequest.searchText);
     const globalSearchConditions: ServiceMappingWhere | null =
       serviceMappingRequest.searchText === undefined ||
       serviceMappingRequest.searchText === ""
@@ -100,7 +99,6 @@ const getServiceMappingByDivyangId = async (
         : ServiceMappingGlobalSearchConditions(
             serviceMappingRequest.searchText
           );
-    console.log("global ", globalSearchConditions);
     const serviceMappingWhereInput = createServiceMappingFilterInputObject(
       serviceMappingRequest.filters,
       globalSearchConditions,

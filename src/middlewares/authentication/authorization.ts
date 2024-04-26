@@ -36,13 +36,7 @@ function authorization(
         }
       } else {
         //divyang
-        console.log(currentFeature);
-        console.log("method: ", method);
-        console.log(
-          "title thaan ithu",
-          currentFeature === AuthorizationEnum.DIVYANG_DETAILS &&
-            method === MethodsEnum.GET_BY_ID
-        );
+
         if (
           !(
             (currentFeature === AuthorizationEnum.DIVYANG_DETAILS &&
