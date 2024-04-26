@@ -7,7 +7,7 @@ import {
   AuthorizationEnum,
   MethodsEnum,
 } from "../../types/authentication/authorizationEnum.js";
-import { getUserByIdDB } from "../../services/database/users/read.js";
+import { getUserByIdAuthDB } from "../../services/database/authentication/verifyUserName.js";
 
 function authorization(
   currentFeature: AuthorizationEnum,
@@ -16,7 +16,7 @@ function authorization(
   return async (request: Request, response: Response, next: NextFunction) => {
     try {
       if (request.token?.userId) {
-        const user = await getUserByIdDB(request.token.userId);
+        const user = await getUserByIdAuthDB(request.token.userId);
         const designationId = user?.designationId;
         const designation: designationGetByIdType | undefined =
           await getDesignationByIDDB(designationId);

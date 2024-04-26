@@ -19,5 +19,53 @@ async function verifyUserName(userName: string) {
     }
   }
 }
-
-export{verifyUserName};
+const getUserByIdAuthDB = async (id: string) => {
+  try {
+    const user = await prisma.user.findFirstOrThrow({
+      // select: usersDefaults.select,
+      include: {
+        userAuditLog: true,
+        createdBy: true,
+        updatedBy: true,
+        person: {
+          select: {
+            loginId: true,
+          },
+        },
+        designation: {
+          select: {
+            id: true,
+            name: true,
+            sevaKendra: {
+              select: {
+                id: true,
+                name: true,
+                district: {
+                  select: {
+                    id: true,
+                    name: true,
+                    state: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      where: {
+        id: id,
+      },
+    });
+    return user;
+  } catch (error) {
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
+  }
+};
+export { verifyUserName, getUserByIdAuthDB };
