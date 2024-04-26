@@ -10,7 +10,6 @@ import {
 
 const serviceMappingRouter = Router();
 
-serviceMappingRouter.use(authenticate);
 serviceMappingRouter.post("/", postServiceMapping);
 serviceMappingRouter.put("/:id", putServiceMapping);
 serviceMappingRouter.get("/:id", getServiceMappingById);

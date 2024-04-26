@@ -16,13 +16,11 @@ divyangDetailsRouter.get("/:id", getDivyangDetailsbyId);
 divyangDetailsRouter.get("/", getDivyangDetailsSearchByColumn);
 divyangDetailsRouter.post(
   "/",
-  authenticate,
   fileHandler.single("picture"),
   postDivyangDetails
 );
 divyangDetailsRouter.put(
   "/:id",
-  authenticate,
   fileHandler.fields([
     { name: "picture", maxCount: 1 },
     { name: "voterId", maxCount: 1 },
