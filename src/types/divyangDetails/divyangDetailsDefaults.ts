@@ -1,8 +1,8 @@
 import { AuditLogStatusEnum } from "@prisma/client";
 
 enum DivyangDetailsColumnNamesEnum {
-  DIVYANG_FIRST_NAME = "divyangFirstName',
-  DIVYANG_LAST_NAME= 'divyangLastName",
+  DIVYANG_FIRST_NAME = "divyangFirstName",
+  DIVYANG_LAST_NAME= "divyangLastName",
   DIVYANG_ID = "divyangId",
   EMAIL_ID = "emailID",
   MOBILE_NUMBER = "mobileNumber",
