@@ -52,7 +52,11 @@ async function divyangLogin(
       sameSite: true,
     });
 
-    response.json({ message: "Logged in successfully", token: token });
+    response.json({
+      message: "Logged in successfully",
+      token: token,
+      person: person,
+    });
   } catch (err) {
     next(err);
   }
