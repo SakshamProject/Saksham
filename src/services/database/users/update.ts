@@ -21,4 +21,7 @@ async function updateUserDB(
   }
 }
 
-export { updateUserDB };
+async function updateUserProfileKeyDB(key: string = "") {
+}
+
+export { updateUserDB, updateUserProfileKeyDB };

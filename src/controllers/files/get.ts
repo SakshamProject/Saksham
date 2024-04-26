@@ -50,7 +50,7 @@ async function getFileURL(request: Request, response: Response) {
         response.json( {
             key,
             url,
-            // validUpto: addToCurrentTimeISO(defaults.s3.expiresIn)
+            validUpto: addToCurrentTimeISO(defaults.s3.expiresIn),
             expiresInSeconds: defaults.s3.expiresIn
         });
     }
