@@ -43,7 +43,7 @@ const usersPutSchema = z.object({
   userName: inputFieldSchema,
   password: z.string(),
   contactNumber: phoneNumberSchema,
-  whatsappNumber: phoneNumberSchema,
+  whatsappNumber: phoneNumberSchema.optional(),
   // audit log
   auditlog: auditLogSchema.optional(),
 });

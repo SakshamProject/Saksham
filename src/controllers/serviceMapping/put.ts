@@ -19,7 +19,7 @@ async function putServiceMapping(
     const id: string = request.params.id;
 
     if (request.user) {
-      const updatedById: string = request.user?.id;
+      const updatedById: string = request.token.personId;
 
       const result = await putServiceMappingDBTransaction(
         body,

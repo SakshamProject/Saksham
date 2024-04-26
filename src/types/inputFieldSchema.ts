@@ -47,6 +47,8 @@ const auditLogSchema = z.object({
 });
 const auditLogStatusEnumSchema = z.nativeEnum(AuditLogStatusEnum).optional();
 
+type auditLogSchemaType =z.infer<typeof auditLogSchema>
+
 const passwordSchema = z.string().regex(passwordRegex);
 const userNameSchema = z.string().regex(userNameRegex);
 
@@ -62,6 +64,7 @@ export {
   emailSchema,
   landLineNumberSchema,
   uuidSchema,
+  auditLogSchemaType
   passwordSchema,
   userNameSchema,
 };

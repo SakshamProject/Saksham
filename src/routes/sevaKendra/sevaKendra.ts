@@ -15,8 +15,8 @@ const sevaKendraRouter = express.Router();
 
 sevaKendraRouter.post("/list/", getSevaKendra);
 sevaKendraRouter.get("/:id", getSevaKendraById);
-sevaKendraRouter.post("/", authenticate, postSevaKendra);
-sevaKendraRouter.put("/:id", authenticate, putSevaKendra);
+sevaKendraRouter.post("/", postSevaKendra);
+sevaKendraRouter.put("/:id", putSevaKendra);
 sevaKendraRouter.get("/:id/users", getUsersBySevaKendra);
 sevaKendraRouter.get("/:id/designations", getDesignationsBySevaKendraId);
 

@@ -18,6 +18,7 @@ import {
   designationsearchCondition,
 } from "../../services/database/utils/designation/designation.js";
 import { createDesignationFilterInputObject } from "../../dto/designation/designation.js";
+import { getDesignationStatus } from "../../services/database/designation/update.js";
 
 async function getDesignation(
   request: Request,
@@ -70,9 +71,20 @@ async function getDesignationById(
 ) {
   try {
     const id: string = request.params.id;
+
     const result = await getDesignationByIDDB(id);
 
-    const responseData = createResponseOnlyData(result || {});
+    const currentDate = new Date().toISOString();
+
+    const auditLog = await getDesignationStatus(id,currentDate)
+
+    const responseData = createResponseOnlyData({
+      ...result,
+      status: auditLog?.status,
+      description: auditLog?.description,
+      effectiveFromDate: auditLog?.date,
+      timestamp: currentDate,
+    } );
     response.send(responseData);
   } catch (err) {
     next(err);

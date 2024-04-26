@@ -40,7 +40,7 @@ function createUserDBObject(request: Request): Prisma.PersonCreateInput {
             id: request.body.designationId,
           },
         },
-        userAuditLog: {
+        auditLog: {
           create: {
             description: request.body.description,
             status: request.body.status,

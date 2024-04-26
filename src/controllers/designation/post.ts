@@ -8,16 +8,15 @@ async function postDesignation(request: Request, response: Response,next:NextFun
 
     try{
       const body = postDesignationRequestSchema.parse(request.body);
-
-    if(request.token){
-      const createdById:string = request.token.userId;
+      const createdById:string = request.token?.userId;
       const result = await postDesignationDBTransaction(body,createdById);
-
       const responseResult = await getDesignationByIDDB(result?.id);
       const responseData = createResponseOnlyData(responseResult ||{});
-      response.send(responseData);}
+      response.send(responseData);
       
-    }catch(err){
+    }
+    
+    catch (err) {
       next(err);
     }    
 

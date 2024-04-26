@@ -12,7 +12,7 @@ import defaults from "../../defaults.js";
 import * as crypto from "crypto";
 const createDivyangDetailsDBObject = (
   divyangDetails: postDivyangDetailsRequest,
-  createdBy: string = "defaultCreatedBy"
+  createdBy: string = defaults.createdById
 ): createDivyangDetails => {
   const newDivyangDetails: createDivyangDetails = {
     divyangId: divyangDetails.personalDetails.divyangId,

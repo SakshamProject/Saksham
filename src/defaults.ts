@@ -13,6 +13,8 @@ type Defaults = {
         timeout: number
     },
     MAX_FILE_SIZE: number,
+    createdById: string,
+    updatedById: string
    hashingAlgorithm:string
 }
 const defaults: Defaults = {
@@ -26,6 +28,8 @@ const defaults: Defaults = {
         maxWait: 50000,
         timeout: 10000,
     },
+    createdById: "defaultCreatedById",
+    updatedById: "defaultUpdatedById",,
     hashingAlgorithm:'sha256'
 }
 

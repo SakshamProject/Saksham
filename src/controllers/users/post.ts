@@ -15,6 +15,7 @@ async function postUser(request: Request, response: Response, next: NextFunction
         log( "info", `[controller/post]:\n body: %o`, body);
         log("info", `[controller/post]:\n file: %o`, request.file || {});
 
+
         const userInputObject = createUserDBObject(request);
         log("info", `[controller/post]:\n userInputObject: %o`, userInputObject);
 

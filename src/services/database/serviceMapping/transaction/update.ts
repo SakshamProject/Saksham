@@ -21,11 +21,12 @@ import { createDonorDB, createNonSevaKendraFollowUpDB } from "../post.js";
 import { updateServiceMappingDB } from "../put.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import { createPostNonSevaKendraFollowUpDBObject } from "../../../../dto/serviceMapping/post.js";
+import defaults from "../../../../defaults.js";
 
 async function putServiceMappingDBTransaction(
   body: putServiceMappingSchemaType,
   id: string,
-  updatedById: string
+  updatedById: string = defaults.updatedById
 ) {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {

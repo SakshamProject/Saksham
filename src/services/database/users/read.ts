@@ -47,7 +47,7 @@ const getUserByIdDB = async (id: string) => {
     const user = await prisma.user.findFirstOrThrow({
       // select: usersDefaults.select,
       include: {
-        userAuditLog: true,
+        auditLog: true,
         createdBy: true,
         updatedBy: true,
         person: {
@@ -84,6 +84,7 @@ const getUserByIdDB = async (id: string) => {
         id: id,
       },
     });
+    console.log(`[+]user`,user)
     return user;
   } catch (error) {
     if (error instanceof Error) {
@@ -135,7 +136,7 @@ async function getUsersBySevaKendraIdDB(
             id: true,
             firstName: true,
             lastName: true,
-            userAuditLog: {
+            auditLog: {
               select: {
                 status: true,
               },
@@ -177,7 +178,7 @@ async function getUsersBySevaKendraIdDB(
           },
           {
             user: {
-              userAuditLog: {
+              auditLog: {
                 every: {
                   status: status,
                 },
@@ -215,7 +216,7 @@ async function getUsersBySevaKendraIdTotalDB(
           },
           {
             user: {
-              userAuditLog: {
+              auditLog: {
                 every: {
                   status: status,
                 },
