@@ -49,12 +49,12 @@ async function divyangLogin(
       expiresIn: "1h",
     });
 
-    response.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 3600000,
-      sameSite: true,
-    });
+    // response.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   maxAge: 3600000,
+    //   sameSite: true,
+    // });
 
     response.json({
       message: "Logged in successfully",

@@ -46,14 +46,23 @@ async function userLogin(
       { expiresIn: "1h" }
     );
 
-    response.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 3600000,
-      sameSite: true,
-    });
+    person.password = {
+      id: "PROTECTED",
+      password: "PROTECTED",
+    };
 
-    response.json({ message: "Logged in successfully", person });
+    // response.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   maxAge: 3600000,
+    //   sameSite: true,
+    // });
+
+    response.json({
+      message: "Logged in successfully",
+      person: person,
+      token: token,
+    });
   } catch (err) {
     next(err);
   }
