@@ -7,9 +7,36 @@ async function verifyUserName(userName: string) {
       where: {
         userName: userName,
       },
-      include: {
-        user: true,
+      select: {
         password: true,
+        divyang: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        id: true,
+        userName: true,
+        user: {
+          select: {
+            id: true,
+            designation: {
+              select: {
+                features: {
+                  select: {
+                    feature: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
     return person;

@@ -41,6 +41,10 @@ async function divyangLogin(
         "S"
       );
     }
+    person.password = {
+      id: "PROTECTED",
+      password: "PROTECTED",
+    };
     const token = jwt.sign({ personId: person.id }, config.SECRET, {
       expiresIn: "1h",
     });
