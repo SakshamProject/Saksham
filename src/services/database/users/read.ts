@@ -52,7 +52,7 @@ const getUserByIdDB = async (id: string) => {
         updatedBy: true,
         person: {
           select: {
-            loginId: true,
+            userName: true,
           },
         },
         designation: {
@@ -129,7 +129,7 @@ async function getUsersBySevaKendraIdDB(
     const users = prismaTransaction.person.findMany({
       select: {
         id: true,
-        loginId: true,
+        userName: true,
         user: {
           select: {
             id: true,

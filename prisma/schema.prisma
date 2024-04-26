@@ -16,7 +16,7 @@ datasource db {
 
 model Person {
   id         String          @id @default(uuid())
-  loginId    String          @unique
+  userName    String          @unique
   passwordId String          @unique
   password   Password        @relation(fields: [passwordId], references: [id])
   user       User?           @relation("person")
@@ -150,8 +150,6 @@ model User {
   designationId  String
   picture        String? // url
   email          String
-  // loginId        String      @unique
-  // passwordId     String      @unique
 
   personId String @unique
   person   Person @relation("person", fields: [personId], references: [id])

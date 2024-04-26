@@ -11,7 +11,7 @@ import defaults from "../../defaults.js";
 
 function createUserDBObject(request: Request): Prisma.PersonCreateInput {
   const userInputObject: Prisma.PersonCreateInput = {
-    loginId: request.body.loginId,
+    userName: request.body.userName,
     password: {
       create: {
         password: crypto

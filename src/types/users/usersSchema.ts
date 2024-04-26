@@ -19,7 +19,7 @@ const usersPostSchema = z.object({
   dateOfBirth: dateSchema.optional(),
   designationId: z.string().uuid(),
   email: emailSchema,
-  loginId: inputFieldSchema,
+  userName: inputFieldSchema,
   password: z.string(),
   contactNumber: phoneNumberSchema,
   whatsappNumber: phoneNumberSchema.optional(),
@@ -40,7 +40,7 @@ const usersPutSchema = z.object({
   dateOfBirth: dateSchema.optional(),
   designationId: z.string().uuid(),
   email: emailSchema,
-  loginId: inputFieldSchema,
+  userName: inputFieldSchema,
   password: z.string(),
   contactNumber: phoneNumberSchema,
   whatsappNumber: phoneNumberSchema,
@@ -106,12 +106,8 @@ const userListSchema = z.object({
     .optional(),
 });
 
-
 type userListType = z.infer<typeof userListSchema>;
 
-
-
-
 export { userOrderByEnum };
-export { usersPostSchema, usersPutSchema, userListSchema};
+export { usersPostSchema, usersPutSchema, userListSchema };
 export { userPostRequestType, userPutRequestType, userListType };

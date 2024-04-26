@@ -48,7 +48,7 @@ const getDivyangDetailsByIdDB = async (id: string) => {
         person: {
           select: {
             id: true,
-            loginId: true,
+            userName: true,
           },
         },
         auditLog: true,
@@ -56,13 +56,13 @@ const getDivyangDetailsByIdDB = async (id: string) => {
         createdBy: {
           select: {
             id: true,
-            loginId: true,
+            userName: true,
           },
         },
         updatedBy: {
           select: {
             id: true,
-            loginId: true,
+            userName: true,
           },
         },
         district: true,

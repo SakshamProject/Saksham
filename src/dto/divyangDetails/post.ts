@@ -58,7 +58,7 @@ const createDivyangDetailsDBObject = (
     },
     person: {
       create: {
-        loginId: divyangDetails.personalDetails.username,
+        userName: divyangDetails.personalDetails.userName,
         password: {
           create: {
             password: crypto
@@ -109,7 +109,7 @@ const createDivyangDBObject = (
     },
     person: {
       create: {
-        loginId: divyangDetails.username,
+        userName: divyangDetails.userName,
         password: {
           create: {
             password: crypto

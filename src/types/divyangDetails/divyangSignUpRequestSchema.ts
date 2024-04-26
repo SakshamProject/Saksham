@@ -9,7 +9,7 @@ import { GenderEnum } from "@prisma/client";
 
 const divyangSignUpRequestSchema = z
   .object({
-    username: userNameSchema,
+    userName: userNameSchema,
     password: passwordSchema,
     confirmPassword: passwordSchema,
     firstName: inputFieldSchema,

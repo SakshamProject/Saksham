@@ -5,7 +5,7 @@ async function verifyUserName(userName: string) {
   try {
     const person = await prisma.person.findUnique({
       where: {
-        loginId: userName,
+        userName: userName,
       },
       include: {
         user: true,
@@ -29,7 +29,7 @@ const getUserByIdAuthDB = async (id: string) => {
         updatedBy: true,
         person: {
           select: {
-            loginId: true,
+            userName: true,
           },
         },
         designation: {

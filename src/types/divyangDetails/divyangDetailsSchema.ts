@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { personalDetailsRequestSchema } from "./personalDetailsSchema.js";
+import {
+  personalDetailsRequestSchema,
+  updatePersonalDetailsRequestSchema,
+} from "./personalDetailsSchema.js";
 import { IdProofUploadsRequestSchema } from "./IdProofUploadsSchema.js";
 import { addressRequestSchema } from "./addressSchema.js";
 import { disabiltyDetailsRequestSchema } from "./disabilityDetailsSchema.js";
@@ -55,7 +58,7 @@ type DivyangDetailsSchemaType = z.infer<typeof getDivyangDetailsSchema>;
 
 const divyangDetailsRequestSchema = z
   .object({
-    personalDetails: personalDetailsRequestSchema,
+    personalDetails: updatePersonalDetailsRequestSchema,
     IdProofUploads: IdProofUploadsRequestSchema,
     addressRequest: addressRequestSchema,
     disabiltyDetails: disabiltyDetailsRequestSchema,
@@ -69,7 +72,7 @@ const divyangDetailsRequestSchema = z
 
 const updateDivyangDetailsRequestSchema = z
   .object({
-    personalDetails: personalDetailsRequestSchema.optional(),
+    personalDetails: updatePersonalDetailsRequestSchema.optional(),
     IdProofUploads: IdProofUploadsRequestSchema.optional(),
     addressRequest: addressRequestSchema.optional(),
     disabiltyDetails: disabiltyDetailsRequestSchema.optional(),
@@ -83,7 +86,7 @@ const updateDivyangDetailsRequestSchema = z
   }, "At least one of the five schemas must be provided.");
 
 const postDivyangDetailsRequestSchema = z.object({
-  personalDetails: personalDetailsRequestSchema
+  personalDetails: personalDetailsRequestSchema,
 });
 
 type DivyangDetailsRequest = z.infer<typeof divyangDetailsRequestSchema>;

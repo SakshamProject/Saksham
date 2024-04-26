@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { updateDivyangDetailsRequest } from "../../types/divyangDetails/divyangDetailsSchema.js";
-import { PersonalDetails } from "../../types/divyangDetails/personalDetailsSchema.js";
+import { PersonalDetails, UpdatePersonalDetails } from "../../types/divyangDetails/personalDetailsSchema.js";
 import { Address } from "../../types/divyangDetails/addressSchema.js";
 import { EmploymentDetails } from "../../types/divyangDetails/employmentDetailsSchema.js";
 import { IdProofUploads } from "../../types/divyangDetails/IdProofUploadsSchema.js";
@@ -10,7 +10,7 @@ import {
 } from "../../types/divyangDetails/disabilityDetailsSchema.js";
 
 const updatePersonalDetailsDBObject = (
-  personalDetails: PersonalDetails,
+  personalDetails: UpdatePersonalDetails,
   updatedBy: string
 ): Prisma.DivyangDetailsUpdateInput => {
   const updatePersonalDetails: Prisma.DivyangDetailsUpdateInput = {
