@@ -21,10 +21,10 @@ async function verifyUserName(userName: string) {
 }
 const getUserByIdAuthDB = async (id: string) => {
   try {
-    const user = await prisma.user.findFirstOrThrow({
+    const user = await prisma.user.findFirst({
       // select: usersDefaults.select,
       include: {
-        userAuditLog: true,
+        auditLog: true,
         createdBy: true,
         updatedBy: true,
         person: {
