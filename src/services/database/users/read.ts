@@ -120,14 +120,17 @@ const getUserStatusDB = async (
   }
 };
 
+
+
+
 async function getUsersBySevaKendraIdDB(
   prismaTransaction: Prisma.TransactionClient,
-  sevaKendraId: string,
-  status: AuditLogStatusEnum | undefined
-) {
+  sevaKendraId: string) {
   try {
+
+  
     const currentDate = new Date(Date.now()).toISOString();
-    const users = prismaTransaction.person.findMany({
+    const allPerson = await prismaTransaction.person.findMany({
       select: {
         id: true,
         loginId: true,
@@ -176,19 +179,11 @@ async function getUsersBySevaKendraIdDB(
               },
             },
           },
-          {
-            user: {
-              auditLog: {
-                every: {
-                  status: status,
-                },
-              },
-            },
-          },
+          
         ],
       },
     });
-    return users;
+    return allPerson;
   } catch (error) {
     if (error instanceof Error) {
       throwDatabaseError(error);
@@ -196,43 +191,9 @@ async function getUsersBySevaKendraIdDB(
   }
 }
 
-async function getUsersBySevaKendraIdTotalDB(
-  prismaTransaction: Prisma.TransactionClient,
-  sevaKendraId: string,
-  status: AuditLogStatusEnum | undefined
-) {
-  try {
-    const total = await prismaTransaction.person.count({
-      where: {
-        AND: [
-          {
-            user: {
-              designation: {
-                sevaKendra: {
-                  id: sevaKendraId,
-                },
-              },
-            },
-          },
-          {
-            user: {
-              auditLog: {
-                every: {
-                  status: status,
-                },
-              },
-            },
-          },
-        ],
-      },
-    });
-    return total;
-  } catch (error) {
-    if (error instanceof Error) {
-      throwDatabaseError(error);
-    }
-  }
-}
+
+
+
 
 export {
   getUserDB,
@@ -240,5 +201,4 @@ export {
   getUserByIdDB,
   getUserStatusDB,
   getUsersBySevaKendraIdDB,
-  getUsersBySevaKendraIdTotalDB,
 };
