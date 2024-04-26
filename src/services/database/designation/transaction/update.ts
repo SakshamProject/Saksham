@@ -15,11 +15,12 @@ import {
 } from "../../../utils/designation/designation.js";
 import { createDesignationAuditLogDB } from "../create.js";
 import { auditLogSchemaType } from "../../../../types/inputFieldSchema.js";
+import defaults from "../../../../defaults.js";
 
 async function putDesignationDBTransaction(
   body: updateDesignationRequestSchemaType,
   id: string,
-  updatedById: string | undefined,
+  updatedById: string = defaults.updatedById,
   auditLog: {
     id: string;
     designationId: string;

@@ -19,10 +19,11 @@ import {
   DisabilityOfDivyang,
   DisabilityOfDivyangList,
 } from "../../../../types/divyangDetails/disabilityDetailsSchema.js";
+import defaults from "../../../../defaults.js";
 
 const updateDivyangDetailsTransactionDB = async (
   divyangDetails: updateDivyangDetailsRequest,
-  updatedBy: string,
+  updatedBy: string = defaults.updatedById,
   id: string
 ) => {
   try {

@@ -8,10 +8,11 @@ import {
   DivyangDetailsWhere,
   postDivyangDetailsRequest,
 } from "../../types/divyangDetails/divyangDetailsSchema.js";
+import defaults from "../../defaults.js";
 
 const createDivyangDetailsDBObject = (
   divyangDetails: postDivyangDetailsRequest,
-  createdBy: string
+  createdBy: string = defaults.createdById
 ): createDivyangDetails => {
   const newDivyangDetails: createDivyangDetails = {
     divyangId: divyangDetails.personalDetails.divyangId,

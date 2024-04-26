@@ -15,7 +15,7 @@ async function putDesignation(
         updateDesignationRequestSchema.parse(request.body);
 
 
-      const updatedById :string|undefined = request.user?.id;
+      const updatedById :string|undefined = request.token?.userId;
   
       const id :string = request.params.id;
       const currentDate = new Date().toISOString();
