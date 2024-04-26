@@ -19,13 +19,21 @@ const filterDivyangDetailsMapper = (
       ? filterOperationsEnum.EQUALS
       : filterOperation;
 
-  filterDivyangDetailsMap.set(DivyangDetailsColumnNamesEnum.DIVYANG_NAME, {
-    firstName: {
+  filterDivyangDetailsMap.set(
+    DivyangDetailsColumnNamesEnum.DIVYANG_FIRST_NAME,
+    {
+      firstName: {
+        [operation]: value,
+        mode: "insensitive",
+      },
+    }
+  );
+  filterDivyangDetailsMap.set(DivyangDetailsColumnNamesEnum.DIVYANG_LAST_NAME, {
+    lastName: {
       [operation]: value,
       mode: "insensitive",
     },
   });
-
   filterDivyangDetailsMap.set(DivyangDetailsColumnNamesEnum.DIVYANG_ID, {
     divyangId: {
       [operation]: value,

@@ -9,7 +9,12 @@ const DivyangDetailsGlobalSearchConditions = (searchText: string = '') => {
           mode: 'insensitive',
         },
       },
-      {},
+      {
+        lastName: {
+          contains: searchText,
+          mode: 'insensitive',
+        },
+      },
       {
         mailId: {
           contains: searchText,
