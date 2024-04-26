@@ -83,9 +83,7 @@ const updateDivyangDetailsRequestSchema = z
   }, "At least one of the five schemas must be provided.");
 
 const postDivyangDetailsRequestSchema = z.object({
-  personalDetails: personalDetailsRequestSchema,
-  createdBy: uuidSchema.optional(),
-  updatedBy: uuidSchema.optional(),
+  personalDetails: personalDetailsRequestSchema
 });
 
 type DivyangDetailsRequest = z.infer<typeof divyangDetailsRequestSchema>;
