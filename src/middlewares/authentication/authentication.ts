@@ -22,7 +22,6 @@ async function authenticate(
       );
     }
     const decodedToken = jwt.verify(token, config.SECRET) as Token;
-    console.log("token", decodedToken);
     request.token = decodedToken;
     const userId = decodedToken.userId;
     const user = await getUserByIdAuthDB(userId);
