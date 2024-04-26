@@ -2,7 +2,6 @@ import { Router } from "express";
 import { postServiceMapping } from "../../controllers/serviceMapping/post.js";
 import {
   getServiceMapping,
-  getServiceMappingByDivyangId,
   getServiceMappingById,
 } from "../../controllers/serviceMapping/get.js";
 import { putServiceMapping } from "../../controllers/serviceMapping/put.js";
