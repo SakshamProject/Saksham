@@ -148,16 +148,7 @@ const getSevaKendraByDistrictIdDB = async (
     const currentDate = new Date(Date.now()).toISOString();
     const sevakendras = await prisma.sevaKendra.findMany({
       where: {
-        AND: [
-          { districtId: districtId },
-          {
-            auditLog: {
-              every: {
-                status: status,
-              },
-            },
-          },
-        ],
+        AND: [{ districtId: districtId }],
       },
       select: {
         id: true,

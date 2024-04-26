@@ -20,6 +20,8 @@ import {
 } from "../../services/database/utils/designation/designation.js";
 import { createDesignationFilterInputObject } from "../../dto/designation/designation.js";
 import { getDesignationStatus } from "../../services/database/designation/update.js";
+import { AuditLogStatusEnum } from "@prisma/client";
+import { auditLogStatusEnumSchema } from "../../types/inputFieldSchema.js";
 
 async function getDesignation(
   request: Request,
@@ -77,7 +79,7 @@ async function getDesignationById(
 
     const currentDate = new Date().toISOString();
 
-    const auditLog = await getDesignationStatus(id,currentDate)
+    const auditLog = await getDesignationStatus(id, currentDate);
 
     const responseData = createResponseOnlyData({
       ...result,
@@ -85,7 +87,7 @@ async function getDesignationById(
       description: auditLog?.description,
       effectiveFromDate: auditLog?.date,
       timestamp: currentDate,
-    } );
+    });
     response.send(responseData);
   } catch (err) {
     next(err);
@@ -113,8 +115,19 @@ const getDesignationsBySevaKendraId = async (
 ) => {
   try {
     const sevaKendraId = request.params.id;
+    const status: AuditLogStatusEnum | undefined =
+      auditLogStatusEnumSchema.parse(request.query.status);
     const result = await getDesignationsBySevaKendraIdDB(sevaKendraId);
-    const responseData = createResponseOnlyData(result);
+    let filteredDesignations;
+    if (status) {
+      filteredDesignations = result?.filter(
+        (designation) => designation.auditLog[0].status === status
+      );
+    } else {
+      filteredDesignations = result;
+    }
+
+    const responseData = createResponseOnlyData(filteredDesignations);
     response.send(responseData);
   } catch (err) {
     next(err);
