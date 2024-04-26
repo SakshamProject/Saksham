@@ -23,6 +23,8 @@ async function verifyUserName(userName: string) {
             id: true,
             designation: {
               select: {
+                id: true,
+                name: true,
                 features: {
                   select: {
                     feature: {
