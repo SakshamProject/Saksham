@@ -84,6 +84,7 @@ const getUserByIdDB = async (id: string) => {
         id: id,
       },
     });
+    console.log(`[+]user`,user)
     return user;
   } catch (error) {
     if (error instanceof Error) {

@@ -41,9 +41,11 @@ async function getUsersBySevaKendra(
   next: NextFunction
 ) {
   try {
+    console.log(`[+]enters`);
     const sevaKendraId: string = request.params.id;
     const status: AuditLogStatusEnum | undefined =
       auditLogStatusEnumSchema.parse(request.query.status);
+      console.log(`[+]status`,status);
     const result = await getUsersBySevaKendraIdDBTransaction(
       sevaKendraId,
       status
