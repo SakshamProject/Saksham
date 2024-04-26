@@ -15,7 +15,7 @@ async function postDivyangDetails(
   next: NextFunction
 ) {
   try {
-    const createdBy = request.user.id;
+    const createdBy = request.token.personId;
     const divyangDetails: postDivyangDetailsRequest =
       postDivyangDetailsRequestSchema.parse(request.body);
     const divyangDetailsDBObject: createDivyangDetails =

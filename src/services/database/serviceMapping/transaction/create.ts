@@ -19,7 +19,7 @@ import {
 
 async function postServiceMappingDBTransaction(
   body: postServiceMappingRequestSchemaType,
-  createdByPersonId: string
+  createdByPersonId: string = defaults.createdById
 ) {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {

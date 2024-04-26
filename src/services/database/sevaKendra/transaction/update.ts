@@ -19,11 +19,12 @@ import {
 import throwDatabaseError from "../../utils/errorHandler.js";
 import APIError from "../../../errors/APIError.js";
 import { StatusCodes } from "http-status-codes";
+import defaults from "../../../../defaults.js";
 
 const updateSevaKendraDBTransaction = async (
   id: string,
   updateRequestSevaKendra: SevaKendraUpdateRequestSchemaType,
-  updatedBy: string
+  updatedBy: string = defaults.updatedById
 ) => {
   try {
     const transaction = await prisma.$transaction(
