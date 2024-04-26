@@ -166,18 +166,11 @@ model User {
   updatedById String?
   updatedBy   User?   @relation("updatedBy", fields: [updatedById], references: [id])
 
-  //password              UserPassword            @relation(fields: [passwordId], references: [id])
   designation           Designation             @relation("Designation-Users", fields: [designationId], references: [id])
   designationsCreated   Designation[]           @relation("createdBy")
   designationsUpdated   Designation[]           @relation("updatedBy")
-  // sevaKendraFollowUp    SevaKendraFollowUp[]
   auditLog          UserAuditLog[]
   divyangServiceMapping DivyangServiceMapping[] @relation("inchargeUser")
-
-  // password                      UserPassword            @relation(fields: [passwordId], references: [id])
-
-  // sevaKendraFollowUp            SevaKendraFollowUp[]
-
   createdSevaKendra SevaKendra[] @relation("sevaKendraCreatedBy")
   updatedSevaKendra SevaKendra[] @relation("sevaKendraUpdatedBy")
 }
@@ -191,12 +184,6 @@ model UserAuditLog {
 
   user User @relation(fields: [userId], references: [id])
 }
-
-// model UserPassword {
-//   id             String @id @default(uuid())
-//   hashedPassword String
-//   user           User?
-// }
 
 // side bars seva kendra master, service master
 model Feature {
@@ -362,7 +349,6 @@ model DivyangServiceMapping {
   dateOfService                   DateTime
   followUpDate                    DateTime
   dueDate                         DateTime
-  //isFollowUpRequired             Boolean?
   isNonSevaKendraFollowUpRequired Boolean
   isCompleted                     StatusEnum
   howTheyGotService               HowTheyGotServiceEnum?
@@ -391,16 +377,6 @@ model Donor {
   address               String
   divyangServiceMapping DivyangServiceMapping?
 }
-
-// model SevaKendraFollowUp {
-//   id                      String                @id @default(uuid())
-//   date                    DateTime
-//   userId                  String
-//   divyangServiceMappingId String
-//   divyangServiceMapping   DivyangServiceMapping @relation(fields: [divyangServiceMappingId], references: [id])
-
-//   user                    User                  @relation(fields: [userId], references: [id])
-// }
 
 model NonSevaKendraFollowUp {
   id                      String                @id @default(uuid())
