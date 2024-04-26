@@ -9,6 +9,7 @@ import { updateUserDB } from "../update.js";
 import { getUserStatusDB } from "../read.js";
 import { createUserAuditLogDB } from "../create.js";
 import { createAuditLogDBObject } from "../../../../dto/users/post.js";
+import defaults from "../../../../defaults.js";
 
 const updateUserTransactionDB = async (
   body: userPutRequestType,
@@ -16,41 +17,46 @@ const updateUserTransactionDB = async (
   updatedBy: string
 ) => {
   try {
-    const transaction = await prisma.$transaction(async (prismaTransaction) => {
-      if (body.auditlog) {
-        const currentDate = new Date(Date().toLocaleString()).toISOString();
-        const userAuditLog = await getUserStatusDB(
-          prismaTransaction,
-          id,
-          currentDate
-        );
-        if (body.auditlog?.status !== userAuditLog?.status) {
-          const AuditLogDBObject = createAuditLogDBObject(body, id);
-          if (AuditLogDBObject) {
-            const createdAuditLog = await createUserAuditLogDB(
-              prismaTransaction,
-              AuditLogDBObject
-            );
+    const transaction = await prisma.$transaction(
+      async (prismaTransaction) => {
+        if (body.auditlog) {
+          const currentDate = new Date(Date().toLocaleString()).toISOString();
+          const userAuditLog = await getUserStatusDB(
+            prismaTransaction,
+            id,
+            currentDate
+          );
+          if (body.auditlog?.status !== userAuditLog?.status) {
+            
+            const AuditLogDBObject = createAuditLogDBObject(body, id);
+            if (AuditLogDBObject) {
+              const createdAuditLog = await createUserAuditLogDB(
+                prismaTransaction,
+                AuditLogDBObject
+              );
+            }
+           
           }
         }
-      }
 
-      const userUpdateObject = updateUserDBObject(body, updatedBy);
-      const updatedUser = await updateUserDB(
-        prismaTransaction,
-        userUpdateObject,
-        id
-      );
+        const userUpdateObject = updateUserDBObject(body, updatedBy);
+        const updatedUser = await updateUserDB(
+          prismaTransaction,
+          userUpdateObject,
+          id
+        );
 
-      if (updatedUser && request.file) {
-        saveFile(updatedUser.id, request.file);
+        if (updatedUser && request.file) {
+          saveFile(updatedUser.id, request.file);
+        }
+        return updatedUser;
+      },
+      {
+        isolationLevel:defaults.transactionOptions.isolationLevel, 
+        maxWait: defaults.transactionOptions.maxWait, 
+        timeout: defaults.transactionOptions.timeout, 
       }
-      return updatedUser;
-    },   {
-        isolationLevel: Prisma.TransactionIsolationLevel.Serializable, // optional, default defined by database configuration
-        maxWait: 500000, // default: 2000
-        timeout: 100000, // default: 5000
-      });
+    );
     return transaction;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);

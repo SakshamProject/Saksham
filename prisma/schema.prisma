@@ -162,7 +162,7 @@ model User {
   usersCreated User[] @relation("createdBy")
   usersUpdated User[] @relation("updatedBy")
 
-  createdById String 
+  createdById String ?
   createdBy   User?  @relation("createdBy", fields: [createdById], references: [id])
 
   updatedById String?
