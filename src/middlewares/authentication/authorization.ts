@@ -15,6 +15,7 @@ function authorization(
 ) {
   return async (request: Request, response: Response, next: NextFunction) => {
     try {
+      //user
       if (request.token?.userId) {
         const user = await getUserByIdAuthDB(request.token.userId);
         const designationId = user?.designationId;
@@ -35,6 +36,13 @@ function authorization(
         }
       } else {
         //divyang
+        console.log(currentFeature);
+        console.log("method: ", method);
+        console.log(
+          "title thaan ithu",
+          currentFeature === AuthorizationEnum.DIVYANG_DETAILS &&
+            method === MethodsEnum.GET_BY_ID
+        );
         if (
           !(
             (currentFeature === AuthorizationEnum.DIVYANG_DETAILS &&
@@ -42,7 +50,7 @@ function authorization(
                 method === MethodsEnum.POST ||
                 method === MethodsEnum.PUT)) ||
             (currentFeature === AuthorizationEnum.SERVICE_MAPPING &&
-              (method === MethodsEnum.POST || method === MethodsEnum.GET))
+              (method === MethodsEnum.POST || method === MethodsEnum.GET_BY_ID))
           )
         ) {
           throw new APIError(

@@ -33,7 +33,6 @@ async function userLogin(
       .digest("hex");
 
     if (givenPassword !== person.password.password) {
-
       throw new APIError(
         "Username or password is incorrect",
         StatusCodes.UNAUTHORIZED,
@@ -42,7 +41,7 @@ async function userLogin(
       );
     }
     const token = jwt.sign(
-      { personId: person.id, userId:person.user?.id },
+      { personId: person.id, userId: person.user?.id },
       config.SECRET,
       { expiresIn: "1h" }
     );

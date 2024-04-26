@@ -90,16 +90,6 @@ const createDivyangDBObject = (
     mobileNumber: divyangDetails.mobileNumber,
     aadharCardNumber: divyangDetails.aadharCardNumber,
     udidCardNumber: divyangDetails.UDIDCardNumber,
-    createdBy: {
-      connect: {
-        id: id,
-      },
-    },
-    updatedBy: {
-      connect: {
-        id: id,
-      },
-    },
     auditLog: {
       create: {
         date: DivyangDetailsAuditLogDefaults.date,

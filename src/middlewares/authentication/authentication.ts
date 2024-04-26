@@ -22,16 +22,26 @@ async function authenticate(
       );
     }
     const decodedToken = jwt.verify(token, config.SECRET) as Token;
+    console.log("token", decodedToken);
     request.token = decodedToken;
     const userId = decodedToken.userId;
     const user = await getUserByIdAuthDB(userId);
     if (!user) {
-      const divyang = await verifyDivyang(decodedToken.personId);
-      if (!divyang) {
+      if (decodedToken.personId) {
+        const divyang = await verifyDivyang(decodedToken.personId);
+        if (!divyang) {
+          throw new APIError(
+            "Not a valid user or divyang",
+            StatusCodes.UNAUTHORIZED,
+            "UserNotFoundError",
+            "S"
+          );
+        }
+      } else {
         throw new APIError(
           "Not a valid user or divyang",
           StatusCodes.UNAUTHORIZED,
-          "UserNotFoundError",
+          "PersonNotFound",
           "S"
         );
       }

@@ -26,7 +26,7 @@ divyangDetailsRouter.get(
 divyangDetailsRouter.get("/", getDivyangDetailsSearchByColumn);
 divyangDetailsRouter.post(
   "/",
-  authorization(AuthorizationEnum.DIVYANG_DETAILS, MethodsEnum.POST),
+  authorization(AuthorizationEnum.DIVYANG_DETAILS),
   fileHandler.single("picture"),
   postDivyangDetails
 );
@@ -50,7 +50,7 @@ divyangDetailsRouter.put(
   putDivyangDetails
 );
 divyangDetailsRouter.post(
-  ":divyangId/services",
+  "/:divyangId/services",
   authorization(AuthorizationEnum.SERVICE_MAPPING, MethodsEnum.GET_BY_ID),
   getServiceMappingByDivyangId
 );
