@@ -223,7 +223,7 @@ model Designation {
 
   users               User[]                   @relation("Designation-Users")
   features            FeaturesOnDesignations[]
-  designationAuditLog DesignationAuditLog[]
+  auditLog DesignationAuditLog[]
 
   @@unique([sevaKendraId, name])
 }

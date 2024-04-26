@@ -91,7 +91,15 @@ const getSevaKendraByDistrictId = async (
     const districtId = request.params.districtId;
     const status: AuditLogStatusEnum | undefined =
       auditLogStatusEnumSchema.parse(request.query.status);
-    const result = await getSevaKendraByDistrictIdDB(districtId, status);
+    const sevaKendras = await getSevaKendraByDistrictIdDB(districtId, status);
+    let result;
+    if (status) {
+      result = sevaKendras?.filter(
+        (sevaKendra) => sevaKendra.auditLog[0].status === status
+      );
+    } else {
+      result = sevaKendras;
+    }
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
   } catch (error) {

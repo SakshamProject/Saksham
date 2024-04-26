@@ -41,16 +41,23 @@ async function getUsersBySevaKendra(
   next: NextFunction
 ) {
   try {
-    console.log(`[+]enters`);
     const sevaKendraId: string = request.params.id;
     const status: AuditLogStatusEnum | undefined =
       auditLogStatusEnumSchema.parse(request.query.status);
-      console.log(`[+]status`,status);
     const result = await getUsersBySevaKendraIdDBTransaction(
       sevaKendraId,
       status
     );
-    response.json(createResponseOnlyData(result?.users));
+    let filteresUsers;
+    if (status) {
+      filteresUsers = result?.allPerson?.filter(
+        (person) => person.user?.auditLog[0].status === status
+      );
+    } else {
+      filteresUsers = result?.allPerson;
+    }
+
+    response.json(createResponseOnlyData(filteresUsers));
   } catch (error) {
     next(error);
   }

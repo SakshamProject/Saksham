@@ -118,7 +118,7 @@ async function getDesignationByIDDB(id: string | undefined):Promise<designationG
             lastName: true,
           },
         },
-        designationAuditLog: {
+        auditLog: {
           select: {
             status: true,
           },
@@ -175,10 +175,30 @@ async function getFeaturesDB() {
 
 const getDesignationsBySevaKendraIdDB = async (sevaKendraId: string) => {
   try {
+    const currentDate = new Date(Date.now()).toISOString();
     const designations = await prisma.designation.findMany({
       where: {
         sevaKendraId: sevaKendraId,
       },
+      select:{
+        auditLog:{
+          select:{
+            status:true,
+          },
+          where: {
+            date: {
+              lt: currentDate,
+            },
+          },
+          orderBy: {
+            date: "desc",
+          },
+          take: 1,
+        }
+      },
+      orderBy:{
+        name:"asc"
+      }
     });
     return designations;
   } catch (error) {
