@@ -4,17 +4,20 @@ import {
     GetObjectCommand,
     GetObjectCommandInput,
     ListObjectsV2Command,
-    ListObjectsV2CommandInput,
+    ListObjectsV2CommandInput, NoSuchBucket, NoSuchKey,
     PutObjectCommand,
     PutObjectCommandInput,
     PutObjectCommandOutput,
-    S3Client
+    S3Client,
+    S3ServiceException
 } from "@aws-sdk/client-s3";
 import config from "../../../config.js";
 import path from "path";
 import log from "../logger/logger.js";
 import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 import defaults from "../../defaults.js";
+import APIError from "../errors/APIError.js";
+import {StatusCodes} from "http-status-codes";
 
 type S3Result = { fieldName: string, key: string, output: PutObjectCommandOutput }
 const s3Client = new S3Client({
@@ -29,24 +32,24 @@ const s3Client = new S3Client({
 // Check if a file already exists with an identical name sans extension
 async function fileExists(personId: string, file: Express.Multer.File) {
     try {
-        log("info", "[fileExists]: Checking if file exists...");
-        const fileNameWithoutExtension = generateKeyWithoutExtension(personId, file);
-        const params: ListObjectsV2CommandInput = {
-            Bucket: config.s3.bucket_name,
-            Prefix: fileNameWithoutExtension,
-            MaxKeys: 1
-        }
+            log("info", "[fileExists]: Checking if file exists...");
+            const fileNameWithoutExtension = generateKeyWithoutExtension(personId, file);
+            const params: ListObjectsV2CommandInput = {
+                Bucket: config.s3.bucket_name,
+                Prefix: fileNameWithoutExtension,
+                MaxKeys: 1
+            }
 
-        const listObjectsV2Command = new ListObjectsV2Command(params);
+            const listObjectsV2Command = new ListObjectsV2Command(params);
 
-        const response = await s3Client.send(listObjectsV2Command);
-        log("info", "[fileExists]: Response Contents: %o", response.Contents?.[0]);
+            const response = await s3Client.send(listObjectsV2Command);
+            log("info", "[fileExists]: Response Contents: %o", response.Contents?.[0]);
 
-        if (response.Contents && response.Contents.length > 0) {
-            return response.Contents[0].Key
-        }
+            if (response.Contents && response.Contents.length > 0) {
+                return response.Contents[0].Key
+            }
     } catch (error) {
-
+        throwS3Error(error);
     }
 }
 
@@ -69,7 +72,7 @@ async function generateFileURLResponseFromKey(key: string) {
         });
 
     } catch (error) {
-
+        throwS3Error(error);
     }
 }
 
@@ -92,7 +95,7 @@ async function generateFileURLsResponseFromResult(s3Result: S3Result[]) {
         }
         return files
     } catch (error) {
-
+        throwS3Error(error);
     }
 
 }
@@ -106,7 +109,7 @@ async function generateFileURLResponseFromResult(s3Result: S3Result) {
             }
         )
     } catch (error) {
-
+        throwS3Error(error);
     }
 }
 
@@ -135,7 +138,7 @@ async function deleteFile(key: string) {
 
         return response;
     } catch (error) {
-
+        throwS3Error(error);
     }
 }
 
@@ -168,11 +171,11 @@ async function saveFileBufferToS3(personId: string, file: Express.Multer.File): 
         return {fieldName: file.fieldname, key, output: output};
 
     } catch (error) {
-
+        throwS3Error(error);
     }
 }
 
-async function saveFileBufferstoS3(personId: string, files: { [fieldname: string]: Express.Multer.File[] }) {
+async function saveFileBuffersToS3(personId: string, files: { [fieldname: string]: Express.Multer.File[] }) {
     try {
         log("info", "[saveFileBufferstoS3]: files \n %o", files);
         const data: S3Result[] = [];
@@ -185,16 +188,46 @@ async function saveFileBufferstoS3(personId: string, files: { [fieldname: string
         }
         return data;
     } catch (error) {
-
+        throwS3Error(error);
     }
 }
 
+function throwS3Error(error: any) {
+    if (error instanceof Error) {
+        if (error instanceof S3ServiceException) {
+            if (error instanceof NoSuchBucket) {
+                throw new APIError(
+                    "There is no such S3 Bucket!",
+                    StatusCodes.UNPROCESSABLE_ENTITY,
+                    "NoSuchBucketError",
+                    "S"
+                )
+            }
+
+            if (error instanceof NoSuchKey) {
+                throw new APIError(
+                    "Request object not found. There is no such key!",
+                    StatusCodes.NOT_FOUND,
+                    "NoSuchKey",
+                    "E"
+                )
+            }
+        }
+    }
+
+    throw new APIError(
+        "There was error uploading the file!",
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        "FileUpload"
+    )
+}
+
 export {
-    saveFileBufferstoS3,
     saveFileBufferToS3,
     generateKey,
     generateFileURLResponseFromKey,
     generateFileURLResponseFromResult,
-    generateFileURLsResponseFromResult
+    generateFileURLsResponseFromResult,
+    saveFileBuffersToS3,
 }
 export default s3Client;
