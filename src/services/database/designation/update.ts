@@ -31,7 +31,7 @@ async function getDesignationStatus(designationId:string,currentDate:string){
       id:designationId
     },
     include: {
-      designationAuditLog: {
+      auditLog: {
           where: {
               date:{
                 lt :currentDate
@@ -44,7 +44,7 @@ async function getDesignationStatus(designationId:string,currentDate:string){
       }
   }
   })
-  return status?.designationAuditLog[0];
+  return status?.auditLog[0];
 }
 
   export {updateDesignationDB,getDesignationStatus};
