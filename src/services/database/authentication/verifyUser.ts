@@ -1,3 +1,4 @@
+import { userForgetPasswordSchemaType } from "../../../types/authentication/authenticationSchema.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 
@@ -97,4 +98,33 @@ const getUserByIdAuthDB = async (id: string) => {
     }
   }
 };
-export { verifyUserName, getUserByIdAuthDB };
+const verifyUserForForgetPassword = async (
+  body: userForgetPasswordSchemaType
+) => {
+  try {
+    const user = await prisma.person.findFirst({
+      where: {
+        userName: body.userName,
+      },
+      select: {
+        id: true,
+        userName: true,
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            contactNumber: true,
+          },
+          where: {
+            contactNumber: body.contactNumber,
+          },
+        },
+      },
+    });
+    return user;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+
+export { verifyUserName, getUserByIdAuthDB, verifyUserForForgetPassword };

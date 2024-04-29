@@ -7,7 +7,7 @@ import {
   AuthorizationEnum,
   MethodsEnum,
 } from "../../types/authentication/authorizationEnum.js";
-import { getUserByIdAuthDB } from "../../services/database/authentication/verifyUserName.js";
+import { getUserByIdAuthDB } from "../../services/database/authentication/verifyUser.js";
 
 function authorization(
   currentFeature: AuthorizationEnum,

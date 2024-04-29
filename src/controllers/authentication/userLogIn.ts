@@ -5,7 +5,7 @@ import config from "../../../config.js";
 import jwt from "jsonwebtoken";
 import APIError from "../../services/errors/APIError.js";
 import { StatusCodes } from "http-status-codes";
-import { verifyUserName } from "../../services/database/authentication/verifyUserName.js";
+import { verifyUserName } from "../../services/database/authentication/verifyUser.js";
 import {
   loginSchema,
   loginSchemaType,

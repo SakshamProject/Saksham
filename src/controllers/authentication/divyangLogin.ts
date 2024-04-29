@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from "express";
 import { StatusCodes } from "http-status-codes";
 import defaults from "../../defaults.js";
-import { verifyUserName } from "../../services/database/authentication/verifyUserName.js";
+import { verifyUserName } from "../../services/database/authentication/verifyUser.js";
 import APIError from "../../services/errors/APIError.js";
 import {
   loginSchemaType,

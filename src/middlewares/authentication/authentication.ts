@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import config from "../../../config.js";
 import { verifyDivyang } from "../../services/database/authentication/verifydivyang.js";
-import { getUserByIdAuthDB } from "../../services/database/authentication/verifyUserName.js";
+import { getUserByIdAuthDB } from "../../services/database/authentication/verifyUser.js";
 
 async function authenticate(
   request: Request,
