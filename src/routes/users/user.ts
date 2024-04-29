@@ -3,10 +3,19 @@ import { getUserById } from "../../controllers/users/get.js";
 import { listUser, postUser } from "../../controllers/users/post.js";
 import fileHandler from "../../middlewares/fileHandler/fileHandler.js";
 import { putUser } from "../../controllers/users/put.js";
-import { AuthorizationEnum } from "../../types/authentication/authorizationEnum.js";
+import {
+  AuthorizationEnum,
+  MethodsEnum,
+} from "../../types/authentication/authorizationEnum.js";
 import authorization from "../../middlewares/authentication/authorization.js";
+import resetPassword from "../../controllers/authentication/resetPasssword.js";
 
 const userRouter = Router();
+userRouter.post(
+  "/resetpassword",
+  authorization(AuthorizationEnum.SEVAKENDRA_USERS, MethodsEnum.USER_DROPDOWN),
+  resetPassword
+);
 userRouter.post(
   "/list",
   authorization(AuthorizationEnum.SEVAKENDRA_USERS),
@@ -14,7 +23,7 @@ userRouter.post(
 );
 userRouter.get(
   "/:userId",
-  authorization(AuthorizationEnum.SEVAKENDRA_USERS),
+  authorization(AuthorizationEnum.SEVAKENDRA_USERS, MethodsEnum.USER_DROPDOWN),
   getUserById
 );
 userRouter.post(

@@ -13,9 +13,18 @@ import {
   MethodsEnum,
 } from "../../types/authentication/authorizationEnum.js";
 import { getServiceMappingByDivyangId } from "../../controllers/serviceMapping/get.js";
+import resetPassword from "../../controllers/authentication/resetPasssword.js";
 
 const divyangDetailsRouter = express.Router();
 
+divyangDetailsRouter.post(
+  "/resetpassword",
+  authorization(
+    AuthorizationEnum.DIVYANG_DETAILS,
+    MethodsEnum.DIVYANG_DROPDOWN
+  ),
+  resetPassword
+);
 divyangDetailsRouter.post(
   "/list/",
   authorization(AuthorizationEnum.DIVYANG_DETAILS),

@@ -32,6 +32,17 @@ const updatePasswordSchema = z
   .refine((data) => data.confirmPassword === data.password, {
     message: "Passwords don't match",
   });
+
+const resetPasswordSchema = z
+  .object({
+    oldPassword: passwordSchema,
+    newPassword: passwordSchema,
+    confirmPassword: passwordSchema,
+  })
+  .refine((data) => data.confirmPassword === data.newPassword, {
+    message: "Passwords don't match",
+  });
+type resetPasswordSchemaType = z.infer<typeof resetPasswordSchema>;
 type updatePasswordSchemaType = z.infer<typeof updatePasswordSchema>;
 export {
   loginSchema,
@@ -42,4 +53,6 @@ export {
   userForgetPasswordSchemaType,
   updatePasswordSchema,
   updatePasswordSchemaType,
+  resetPasswordSchema,
+  resetPasswordSchemaType,
 };
