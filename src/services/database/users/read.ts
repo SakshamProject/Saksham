@@ -192,7 +192,25 @@ async function getUsersBySevaKendraIdDB(
 }
 
 
-
+async function getUserDependencyStatusDB(prismaTransaction:Prisma.TransactionClient,userId:string){
+try {
+  const user = await prismaTransaction.user.findUniqueOrThrow({
+    where:{
+      id:userId
+    },
+    include:{
+      divyangServiceMapping:true
+    }
+  });
+  const dependencyStatus = !(user.divyangServiceMapping.length===0);
+  return dependencyStatus;
+  
+} catch (error) {
+  if (error instanceof Error) {
+    throwDatabaseError(error);
+  }
+}
+}
 
 
 export {
@@ -201,4 +219,5 @@ export {
   getUserByIdDB,
   getUserStatusDB,
   getUsersBySevaKendraIdDB,
+  getUserDependencyStatusDB
 };

@@ -53,7 +53,7 @@ try {
 }
 }
 
-async function getDesignationDependencyStatus(prismaTransaction:Prisma.TransactionClient,designationId:string){
+async function getDesignationDependencyStatusDB(prismaTransaction:Prisma.TransactionClient,designationId:string){
 try {
   const designation = await prismaTransaction.designation.findUniqueOrThrow({
     where:{
@@ -63,8 +63,8 @@ try {
       users:true
     }
   });
-  const dependency  =designation.users.length===0? false:true;
-  return dependency;
+  const dependencyStatus  = designation.users.length===0? false:true;
+  return dependencyStatus;
 } catch (error) {
   if (error instanceof Error) {
     throwDatabaseError(error);
@@ -73,4 +73,4 @@ try {
 
 }
 
-  export {updateDesignationDB,getDesignationStatus,getDesignationDependencyStatus};
+  export {updateDesignationDB,getDesignationStatus,getDesignationDependencyStatusDB};
