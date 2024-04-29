@@ -7,7 +7,6 @@ import {
 import { postDivyangDetails } from "../../controllers/divyangDetails/post.js";
 import { putDivyangDetails } from "../../controllers/divyangDetails/put.js";
 import fileHandler from "../../middlewares/fileHandler/fileHandler.js";
-import { authenticate } from "../../middlewares/authentication/authentication.js";
 import authorization from "../../middlewares/authentication/authorization.js";
 import {
   AuthorizationEnum,
@@ -17,13 +16,21 @@ import { getServiceMappingByDivyangId } from "../../controllers/serviceMapping/g
 
 const divyangDetailsRouter = express.Router();
 
-divyangDetailsRouter.post("/list/", getDivyangDetails);
+divyangDetailsRouter.post(
+  "/list/",
+  authorization(AuthorizationEnum.DIVYANG_DETAILS),
+  getDivyangDetails
+);
 divyangDetailsRouter.get(
   "/:id",
   authorization(AuthorizationEnum.DIVYANG_DETAILS, MethodsEnum.GET_BY_ID),
   getDivyangDetailsbyId
 );
-divyangDetailsRouter.get("/", getDivyangDetailsSearchByColumn);
+divyangDetailsRouter.get(
+  "/",
+  authorization(AuthorizationEnum.DIVYANG_DETAILS, MethodsEnum.USER_DROPDOWN),
+  getDivyangDetailsSearchByColumn
+);
 divyangDetailsRouter.post(
   "/",
   authorization(AuthorizationEnum.DIVYANG_DETAILS),

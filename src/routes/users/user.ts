@@ -2,20 +2,30 @@ import { Router } from "express";
 import { getUserById } from "../../controllers/users/get.js";
 import { listUser, postUser } from "../../controllers/users/post.js";
 import fileHandler from "../../middlewares/fileHandler/fileHandler.js";
-import { authenticate } from "../../middlewares/authentication/authentication.js";
 import { putUser } from "../../controllers/users/put.js";
-import login from "../../controllers/authentication/userLogIn.js";
-import logout from "../../controllers/authentication/userLogout.js";
+import { AuthorizationEnum } from "../../types/authentication/authorizationEnum.js";
+import authorization from "../../middlewares/authentication/authorization.js";
 
 const userRouter = Router();
-userRouter.post("/login", login);
-userRouter.post("/logout", logout);
-userRouter.post("/list", listUser);
-userRouter.get("/:userId", getUserById);
-userRouter.post("", authenticate, fileHandler.single("profilePhoto"), postUser);
+userRouter.post(
+  "/list",
+  authorization(AuthorizationEnum.SEVAKENDRA_USERS),
+  listUser
+);
+userRouter.get(
+  "/:userId",
+  authorization(AuthorizationEnum.SEVAKENDRA_USERS),
+  getUserById
+);
+userRouter.post(
+  "",
+  authorization(AuthorizationEnum.SEVAKENDRA_USERS),
+  fileHandler.single("profilePhoto"),
+  postUser
+);
 userRouter.put(
   "/:id",
-  authenticate,
+  authorization(AuthorizationEnum.SEVAKENDRA_USERS),
   fileHandler.single("profilePhoto"),
   putUser
 );

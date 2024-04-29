@@ -16,7 +16,7 @@ import { StatusCodes } from "http-status-codes";
 const updateUserTransactionDB = async (
   body: userPutRequestType,
   id: string,
-  updatedBy: string
+  updatedBy: string = defaults.updatedById
 ) => {
   try {
     const transaction = await prisma.$transaction(
@@ -41,9 +41,8 @@ const updateUserTransactionDB = async (
                   "S"
                 );
               }
-            
             }
-            
+
             const AuditLogDBObject = createAuditLogDBObject(body, id);
             if (AuditLogDBObject) {
               const createdAuditLog = await createUserAuditLogDB(
@@ -51,7 +50,6 @@ const updateUserTransactionDB = async (
                 AuditLogDBObject
               );
             }
-           
           }
         }
 
@@ -68,9 +66,9 @@ const updateUserTransactionDB = async (
         return updatedUser;
       },
       {
-        isolationLevel:defaults.transactionOptions.isolationLevel, 
-        maxWait: defaults.transactionOptions.maxWait, 
-        timeout: defaults.transactionOptions.timeout, 
+        isolationLevel: defaults.transactionOptions.isolationLevel,
+        maxWait: defaults.transactionOptions.maxWait,
+        timeout: defaults.transactionOptions.timeout,
       }
     );
     return transaction;

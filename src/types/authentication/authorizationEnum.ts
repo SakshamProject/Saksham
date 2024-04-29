@@ -15,6 +15,8 @@ enum MethodsEnum {
   POST = "POST",
   PUT = "PUT",
   DELETE = "DELETE",
+  USER_DROPDOWN = "USER_DROPDOWN",
+  DIVYANG_DROPDOWN = "DIVYANG_DROPDOWN",
 }
 
 export { AuthorizationEnum, MethodsEnum };

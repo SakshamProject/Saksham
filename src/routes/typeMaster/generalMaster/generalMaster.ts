@@ -8,6 +8,11 @@ import { communityCategoryRouter } from "./communityCategory.js";
 import districtRouter from "./district.js";
 import stateRouter from "./state.js";
 import { getGeneralMaster } from "../../../controllers/typeMaster/generalMaster/get.js";
+import {
+  AuthorizationEnum,
+  MethodsEnum,
+} from "../../../types/authentication/authorizationEnum.js";
+import authorization from "../../../middlewares/authentication/authorization.js";
 
 const generalMasterRouter = express.Router();
 
@@ -19,6 +24,7 @@ generalMasterRouter.use("/servicetype", serviceTypeRouter);
 generalMasterRouter.use("/disabilitytype", disabilityTypeRouter);
 generalMasterRouter.get(
   "/generalmasterseed",
+  authorization(AuthorizationEnum.TYPE_MASTERS, MethodsEnum.DIVYANG_DROPDOWN),
   getGeneralMaster
 );
 generalMasterRouter.use("/communitycategory", communityCategoryRouter);

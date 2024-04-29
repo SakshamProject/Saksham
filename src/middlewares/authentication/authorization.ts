@@ -17,6 +17,12 @@ function authorization(
     try {
       //user
       if (request.token?.userId) {
+        if (
+          MethodsEnum.USER_DROPDOWN === method ||
+          method === MethodsEnum.DIVYANG_DROPDOWN
+        ) {
+          next();
+        }
         const user = await getUserByIdAuthDB(request.token.userId);
         const designationId = user?.designationId;
         const designation = await getDesignationByIDDB(designationId);
@@ -36,7 +42,9 @@ function authorization(
         }
       } else {
         //divyang
-
+        if (method === MethodsEnum.DIVYANG_DROPDOWN) {
+          next();
+        }
         if (
           !(
             (currentFeature === AuthorizationEnum.DIVYANG_DETAILS &&

@@ -8,18 +8,43 @@ import {
 } from "../../controllers/designation/get.js";
 import { deleteDesignation } from "../../controllers/designation/delete.js";
 import { putDesignation } from "../../controllers/designation/put.js";
+import authorization from "../../middlewares/authentication/authorization.js";
+import {
+  AuthorizationEnum,
+  MethodsEnum,
+} from "../../types/authentication/authorizationEnum.js";
 
 const designationRouter = Router();
 
-
-designationRouter.get("/features",getFeatures)
-designationRouter.post("/list", getDesignation);
-designationRouter.get("/:id", getDesignationById);
-designationRouter.post("/", postDesignation);
-designationRouter.delete("/:id", deleteDesignation);
-designationRouter.put("/:id", putDesignation);
-
-
-
+designationRouter.get(
+  "/features",
+  authorization(AuthorizationEnum.SEVAKENDRA_SETUP, MethodsEnum.USER_DROPDOWN),
+  getFeatures
+);
+designationRouter.post(
+  "/list",
+  authorization(AuthorizationEnum.SEVAKENDRA_SETUP),
+  getDesignation
+);
+designationRouter.get(
+  "/:id",
+  authorization(AuthorizationEnum.SEVAKENDRA_SETUP),
+  getDesignationById
+);
+designationRouter.post(
+  "/",
+  authorization(AuthorizationEnum.SEVAKENDRA_SETUP),
+  postDesignation
+);
+designationRouter.delete(
+  "/:id",
+  authorization(AuthorizationEnum.SEVAKENDRA_SETUP),
+  deleteDesignation
+);
+designationRouter.put(
+  "/:id",
+  authorization(AuthorizationEnum.SEVAKENDRA_SETUP),
+  putDesignation
+);
 
 export default designationRouter;

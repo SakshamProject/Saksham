@@ -9,7 +9,10 @@ import generateUserListWhereInput from "../../services/database/utils/users/user
 import config from "../../../config.js";
 import defaults from "../../defaults.js";
 
-function createUserDBObject(request: Request): Prisma.PersonCreateInput {
+function createUserDBObject(
+  request: Request,
+  createdBy: string = defaults.createdById
+): Prisma.PersonCreateInput {
   const userInputObject: Prisma.PersonCreateInput = {
     userName: request.body.userName,
     password: {
@@ -32,12 +35,17 @@ function createUserDBObject(request: Request): Prisma.PersonCreateInput {
         email: request.body.email,
         createdBy: {
           connect: {
-            id: request.user.id,
+            id: createdBy,
           },
         },
         designation: {
           connect: {
             id: request.body.designationId,
+          },
+        },
+        updatedBy: {
+          connect: {
+            id: createdBy,
           },
         },
         auditLog: {

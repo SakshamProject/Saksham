@@ -14,8 +14,8 @@ MLAConstituencyRouter.get("/", getMLAConstituency);
 MLAConstituencyRouter.get("/:id", getMLAConstituencyById);
 MLAConstituencyRouter.put("/:id", putMLAConstituency);
 MLAConstituencyRouter.delete("/:id", deleteMLAConstituency);
-MLAConstituencyRouter.get(
-  "/districts/:districtId",
-  getMLAConstituencyByDistrictId
-);
+// MLAConstituencyRouter.get(
+//   "/districts/:districtId",
+//   getMLAConstituencyByDistrictId
+// );
 export default MLAConstituencyRouter;
