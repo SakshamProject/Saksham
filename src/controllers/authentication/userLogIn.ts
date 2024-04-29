@@ -22,7 +22,7 @@ async function userLogin(
     if (!person) {
       throw new APIError(
         "Username or password is incorrect",
-        StatusCodes.UNAUTHORIZED,
+        StatusCodes.BAD_REQUEST,
         "CreditialError",
         "S"
       );
@@ -35,7 +35,7 @@ async function userLogin(
     if (givenPassword !== person.password.password) {
       throw new APIError(
         "Username or password is incorrect",
-        StatusCodes.UNAUTHORIZED,
+        StatusCodes.BAD_REQUEST,
         "CreditialError",
         "S"
       );

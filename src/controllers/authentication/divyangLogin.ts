@@ -22,7 +22,7 @@ async function divyangLogin(
     if (!person) {
       throw new APIError(
         "Username or password is incorrect",
-        StatusCodes.UNAUTHORIZED,
+        StatusCodes.BAD_REQUEST,
         "CreditialError",
         "S"
       );
@@ -34,7 +34,7 @@ async function divyangLogin(
     if (givenPassword !== person.password.password) {
       throw new APIError(
         "Username or password is incorrect",
-        StatusCodes.UNAUTHORIZED,
+        StatusCodes.BAD_REQUEST,
         "CreditialError",
         "S"
       );
