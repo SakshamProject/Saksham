@@ -18,6 +18,7 @@ import { createSevaKendraFilterInputObject } from "../../dto/sevaKendra/create.j
 import SevaKendraGlobalSearchConditions from "../../services/database/utils/sevaKendra/searchConditions.js";
 import { auditLogStatusEnumSchema } from "../../types/inputFieldSchema.js";
 import { AuditLogStatusEnum } from "@prisma/client";
+import prisma from "../../services/database/database.js";
 
 const getSevaKendra = async (
   request: Request,
@@ -68,7 +69,7 @@ const getSevaKendraById = async (
     const id = request.params.id;
     const result = await getSevaKendraByIdDB(id);
     const currentDate = new Date(Date.now()).toISOString();
-    const auditLog = await getSevaKendraStatusDB(id, currentDate);
+    const auditLog = await getSevaKendraStatusDB(prisma, id, currentDate);
     const responseData = createResponseOnlyData({
       ...result,
       status: auditLog?.status,

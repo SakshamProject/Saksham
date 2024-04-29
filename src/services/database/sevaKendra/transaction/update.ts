@@ -1,6 +1,10 @@
-import { Prisma } from "@prisma/client";
+import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import prisma from "../../database.js";
-import { getSevaKendraServicesById, getSevaKendraStatusDB } from "../read.js";
+import {
+  getSevaKendraDependencyStatusDB,
+  getSevaKendraServicesById,
+  getSevaKendraStatusDB,
+} from "../read.js";
 import {
   ContactPerson,
   SevaKendraAuditLog,
@@ -82,25 +86,42 @@ async function createAuditLogIfExists(
   updateRequestSevaKendra: SevaKendraUpdateRequestSchemaType,
   id: string
 ) {
-  const auditLogDBObject: SevaKendraAuditLog | null =
-    createSevaKendraAuditLogDBObject(updateRequestSevaKendra, id);
-  if (auditLogDBObject) {
-    const currentDate = new Date(Date().toLocaleString()).toISOString();
-    const statusOfSevaKendra = await getSevaKendraStatusDB(
-      updateRequestSevaKendra.id,
-      currentDate
-    );
-    if (auditLogDBObject.status != statusOfSevaKendra?.status) {
-      const createdAuditLog = await createSevaKendraAuditLogDB(
+  try {
+    const auditLogDBObject: SevaKendraAuditLog | null =
+      createSevaKendraAuditLogDBObject(updateRequestSevaKendra, id);
+    if (auditLogDBObject) {
+      const currentDate = new Date(Date().toLocaleString()).toISOString();
+      const statusOfSevaKendra = await getSevaKendraStatusDB(
         prismaTransaction,
-        auditLogDBObject
+        updateRequestSevaKendra.id,
+        currentDate
       );
-      return createdAuditLog;
+      if (auditLogDBObject.status != statusOfSevaKendra?.status) {
+        if ((auditLogDBObject.status = AuditLogStatusEnum.DEACTIVE)) {
+          const dependencyStatus = await getSevaKendraDependencyStatusDB(
+            prismaTransaction,
+            updateRequestSevaKendra.id
+          );
+          if (dependencyStatus) {
+            throw new APIError(
+              "SevaKendra is already in use. Cannot be deactivated",
+              StatusCodes.BAD_REQUEST
+            );
+          }
+        }
+        const createdAuditLog = await createSevaKendraAuditLogDB(
+          prismaTransaction,
+          auditLogDBObject
+        );
+        return createdAuditLog;
+      } else {
+        console.log("!!!  SevaKendra status is not changed . Update Failed!");
+      }
     } else {
-      console.log("!!!  SevaKendra status is not changed . Update Failed!");
+      console.log("!!!  auditlog object is null");
     }
-  } else {
-    console.log("!!!  auditlog object is null");
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
   }
 }
 
