@@ -16,7 +16,7 @@ const putDivyangDetails = async (
     const id: string = request.params.id;
     const divyangDetails: updateDivyangDetailsRequest =
       updateDivyangDetailsRequestSchema.parse(request.body);
-    const updatedBy = request.token.personId;
+    const updatedBy = request.token?.personId;
     const updatedResult = await updateDivyangDetailsTransactionDB(
       divyangDetails,
       updatedBy,

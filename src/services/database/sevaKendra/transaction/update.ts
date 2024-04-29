@@ -104,7 +104,7 @@ async function createAuditLogIfExists(
           );
           if (dependencyStatus) {
             throw new APIError(
-              "SevaKendra is already in use. Cannot be deactivated",
+              "SevaKendra might be mapped with services by divyang or with some designations . Cannot be deactivated",
               StatusCodes.BAD_REQUEST
             );
           }

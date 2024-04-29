@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import { createUpdateDTOObject } from "../../../../dto/divyangDetails/put.js";
 import {
   updateDivyangDetails,
@@ -9,6 +9,7 @@ import throwDatabaseError from "../../utils/errorHandler.js";
 import { createDivyangDetailsAuditLogDB } from "../create.js";
 import {
   getDisabilityOfDivyangByDivyangIdDB,
+  getDivyangDetailsDependencyStatusDB,
   getDivyangDetailsStatusDB,
 } from "../read.js";
 import {
@@ -20,6 +21,9 @@ import {
   DisabilityOfDivyangList,
 } from "../../../../types/divyangDetails/disabilityDetailsSchema.js";
 import defaults from "../../../../defaults.js";
+import { auditLogStatusEnumSchema } from "../../../../types/inputFieldSchema.js";
+import APIError from "../../../errors/APIError.js";
+import { StatusCodes } from "http-status-codes";
 
 const updateDivyangDetailsTransactionDB = async (
   divyangDetails: updateDivyangDetailsRequest,
@@ -34,8 +38,27 @@ const updateDivyangDetailsTransactionDB = async (
         //updating audit log
         if (divyangDetails.auditLog != null) {
           const currentDate = new Date(Date.now()).toISOString();
-          const auditLog = await getDivyangDetailsStatusDB(id, currentDate);
+          const auditLog = await getDivyangDetailsStatusDB(
+            prismaTransaction,
+            id,
+            currentDate
+          );
           if (divyangDetails.auditLog.status != auditLog?.status) {
+            if (
+              divyangDetails.auditLog.status === AuditLogStatusEnum.DEACTIVE
+            ) {
+              const dependencyStatus =
+                await getDivyangDetailsDependencyStatusDB(
+                  prismaTransaction,
+                  id
+                );
+              if (dependencyStatus) {
+                throw new APIError(
+                  "Divyang might be added mapped with incomplete services. Cannot be deactivated",
+                  StatusCodes.BAD_REQUEST
+                );
+              }
+            }
             await createDivyangDetailsAuditLogDB(
               prismaTransaction,
               divyangDetails.auditLog,

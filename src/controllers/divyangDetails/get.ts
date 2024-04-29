@@ -18,6 +18,7 @@ import {
 import DivyangDetailsGlobalSearchConditions from "../../services/database/utils/divyangDetails/searchConditions.js";
 import { createDivyangDetailsFilterInputObject } from "../../dto/divyangDetails/post.js";
 import { divyangDetailsColumnNameMapper } from "../../services/database/utils/divyangDetails/divyangDetailsMapper.js";
+import prisma from "../../services/database/database.js";
 
 const getDivyangDetails = async (
   request: Request,
@@ -69,7 +70,11 @@ const getDivyangDetailsbyId = async (
     const divyangDetails: getDivyangDetailsSchema | undefined =
       await getDivyangDetailsByIdDB(id);
     const currentDate = new Date(Date.now()).toISOString();
-    const currentAuditLog = await getDivyangDetailsStatusDB(id, currentDate);
+    const currentAuditLog = await getDivyangDetailsStatusDB(
+      prisma,
+      id,
+      currentDate
+    );
     const result = {
       ...divyangDetails,
       status: currentAuditLog?.status,

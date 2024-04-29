@@ -8,7 +8,7 @@ async function postServiceMapping(request:Request,response:Response,next:NextFun
     try{
         
         const body:postServiceMappingRequestSchemaType = postServiceMappingRequestSchema.parse(request.body);
-        const createdById:string |undefined = request.token.personId;
+        const createdById:string |undefined = request.token?.personId;
         const result =await postServiceMappingDBTransaction(body,createdById);
         if(result){
             const responseResult = await getServiceMappingByIdDB(result.id);

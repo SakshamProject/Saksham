@@ -180,19 +180,17 @@ const getSevaKendraDependencyStatusDB = async (
   sevaKendraId: string
 ) => {
   try {
-    const sevaKendra = await prisma.sevaKendra.findFirstOrThrow({
+    const sevaKendra = await prismaTransaction.sevaKendra.findFirstOrThrow({
       where: {
         id: sevaKendraId,
       },
       include: {
-        services: true,
         divyangServiceMapping: true,
         designations: true,
       },
     });
 
     const dependencyStatus = !(
-      sevaKendra.services.length === 0 &&
       sevaKendra.divyangServiceMapping.length === 0 &&
       sevaKendra.designations.length === 0
     );

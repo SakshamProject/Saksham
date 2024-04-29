@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, StatusEnum } from "@prisma/client";
 import {
   DivyangDetailsSearchType,
   DivyangDetailsWhere,
@@ -125,12 +125,13 @@ const getDivyangDetailsSearchByColumnDB = async (
 };
 
 const getDivyangDetailsStatusDB = async (
+  prismaTransaction: Prisma.TransactionClient,
   divyangDetailsId: string,
   currentDate: string
 ) => {
   try {
     const divyangDetailsAuditLog =
-      await prisma.divyangDetailsAuditLog.findFirstOrThrow({
+      await prismaTransaction.divyangDetailsAuditLog.findFirstOrThrow({
         where: {
           AND: [
             { divyangDetailsId: divyangDetailsId },
@@ -167,6 +168,31 @@ const getDisabilityOfDivyangByDivyangIdDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+const getDivyangDetailsDependencyStatusDB = async (
+  prismaTransaction: Prisma.TransactionClient,
+  divyangId: string
+) => {
+  try {
+    const divyang = await prismaTransaction.divyangDetails.findFirst({
+      where: {
+        id: divyangId,
+      },
+      include: {
+        services: {
+          where: {
+            isCompleted: StatusEnum.PENDING,
+          },
+        },
+      },
+    });
+    const dependencyStatus = !(
+      divyang?.services.length === 0 || divyang === null
+    );
+    return dependencyStatus;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 export {
   getDivyangDetailsDB,
   getDivyangDetailsTotalDB,
@@ -174,4 +200,5 @@ export {
   getDivyangDetailsSearchByColumnDB,
   getDivyangDetailsStatusDB,
   getDisabilityOfDivyangByDivyangIdDB,
+  getDivyangDetailsDependencyStatusDB,
 };
