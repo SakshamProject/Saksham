@@ -2,7 +2,7 @@ import defaults from "../../../defaults.js";
 import { sortOrderEnum } from "../../../types/getRequestSchema.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
-import { AuditLogStatusEnum, Prisma } from "@prisma/client";
+import { AuditLogStatusEnum, Prisma, StatusEnum } from "@prisma/client";
 import usersDefaults from "./defaults/usersDefaults.js";
 import usersOrderByColumnMapper from "../utils/users/usersColumnNameMapper.js";
 
@@ -194,15 +194,21 @@ async function getUsersBySevaKendraIdDB(
 
 async function getUserDependencyStatusDB(prismaTransaction:Prisma.TransactionClient,userId:string){
 try {
-  const user = await prismaTransaction.user.findUniqueOrThrow({
+  const user = await prismaTransaction.user.findUnique({
     where:{
       id:userId
     },
     include:{
-      divyangServiceMapping:true
+      divyangServiceMapping:{
+        where:{
+          isCompleted:StatusEnum.PENDING
+        }
+      },
+    
+    
     }
   });
-  const dependencyStatus = !(user.divyangServiceMapping.length===0);
+  const dependencyStatus = !(user?.divyangServiceMapping.length===0||user?.divyangServiceMapping===null);
   return dependencyStatus;
   
 } catch (error) {
