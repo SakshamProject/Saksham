@@ -19,7 +19,7 @@ function authorization(
       if (request.token?.userId) {
         const user = await getUserByIdAuthDB(request.token.userId);
         const designationId = user?.designationId;
-        const designation: designationGetByIdType | undefined =
+        const designation =
           await getDesignationByIDDB(designationId);
 
         if (

@@ -26,25 +26,51 @@ async function updateDesignationDB(prismaTransaction:Prisma.TransactionClient, u
 
 async function getDesignationStatus(designationId:string,currentDate:string){
  
-  const status =await prisma.designation.findFirst({
+try {
+    const status =await prisma.designation.findFirst({
+      where:{
+        id:designationId
+      },
+      include: {
+        auditLog: {
+            where: {
+                date:{
+                  lt :currentDate
+                } 
+            },
+            orderBy: {
+                date:'desc'
+            },
+            take: 1
+        }
+    }
+    })
+    return status?.auditLog[0];
+} catch (error) {
+  if (error instanceof Error) {
+    throwDatabaseError(error);
+  }
+}
+}
+
+async function getDesignationDependencyStatus(prismaTransaction:Prisma.TransactionClient,designationId:string){
+try {
+  const designation = await prismaTransaction.designation.findUniqueOrThrow({
     where:{
       id:designationId
     },
-    include: {
-      auditLog: {
-          where: {
-              date:{
-                lt :currentDate
-              } 
-          },
-          orderBy: {
-              date:'desc'
-          },
-          take: 1
-      }
+    include:{
+      users:true
+    }
+  });
+  const dependency  =designation.users.length===0? false:true;
+  return dependency;
+} catch (error) {
+  if (error instanceof Error) {
+    throwDatabaseError(error);
   }
-  })
-  return status?.auditLog[0];
 }
 
-  export {updateDesignationDB,getDesignationStatus};
+}
+
+  export {updateDesignationDB,getDesignationStatus,getDesignationDependencyStatus};

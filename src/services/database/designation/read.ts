@@ -181,6 +181,8 @@ const getDesignationsBySevaKendraIdDB = async (sevaKendraId: string) => {
         sevaKendraId: sevaKendraId,
       },
       select:{
+        id:true,
+        name:true,
         auditLog:{
           select:{
             status:true,
