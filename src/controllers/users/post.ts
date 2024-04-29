@@ -24,10 +24,10 @@ async function postUser(request: Request, response: Response, next: NextFunction
         const newPerson = await createPersonDB(userInputObject);
         log("info", `[controller/postUser]:\n newUser: %o`, newPerson || {});
 
-        let file: object = {};
+        let file: object | undefined = {};
         const personId = newPerson?.id;
         if (personId && request.file) {
-            file = saveProfilePhotoToS3andDB(personId, request.file);
+            file = await saveProfilePhotoToS3andDB(personId, request.file);
         }
 
         const responseData = createResponseWithFile(newPerson, file);

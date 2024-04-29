@@ -27,7 +27,7 @@ async function saveProfilePhotoToS3andDB(personId: string,file: Express.Multer.F
                 }
             }
         );
-        // return transaction;
+        return transaction;
     } catch (error) {
         throw new APIError(
             "There was an error uploading your files. Please try again.",
@@ -52,7 +52,7 @@ async function saveDivyangDetailsFilestoS3andDB(personId: string, files: { [fiel
                 }
             }
         );
-        // return transaction;
+        return transaction;
     } catch (error) {
         throw new APIError(
             "There was an error uploading your files. Please try again.",

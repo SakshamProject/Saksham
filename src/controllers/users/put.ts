@@ -3,6 +3,7 @@ import { NextFunction, Response, Request } from "express";
 import {createResponseOnlyData, createResponseWithFile} from "../../types/createResponseSchema.js";
 import updateUserTransactionDB from "../../services/database/users/transaction/update.js";
 import {generateFileURLResponseFromResult, saveFileBufferToS3} from "../../services/s3/s3.js";
+import {saveProfilePhotoToS3andDB} from "../../services/files/files.js";
 async function putUser(request: Request, response: Response, next: NextFunction) {
     try {
         const id = request.params.id;
@@ -11,12 +12,9 @@ async function putUser(request: Request, response: Response, next: NextFunction)
         const result = await updateUserTransactionDB(body,id,request.user.id);
 
         let file: object | undefined = {}
-        if (request.file && result?.id) {
-            const s3Result = await saveFileBufferToS3(result?.id, request.file);
-
-            if (s3Result) {
-                file = await generateFileURLResponseFromResult(s3Result)
-            }
+        const personId = result?.id;
+        if (request.file && personId) {
+            file = await saveProfilePhotoToS3andDB(personId, request.file);
         }
         const responseData = createResponseWithFile(result, file);
         response.json(responseData);
