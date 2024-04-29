@@ -12,7 +12,7 @@ async function authenticate(
   next: NextFunction
 ) {
   try {
-    const token = request.cookies.token;
+    const token = request.headers?.["authorization"];
     if (!token) {
       throw new APIError(
         "Unauthorized",

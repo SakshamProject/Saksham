@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import prisma from "../../database.js";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import { updateUserDBObject } from "../../../../dto/users/put.js";
@@ -6,10 +6,12 @@ import { request } from "express";
 import { saveFile } from "../../../../middlewares/fileHandler/fileHandler.js";
 import { userPutRequestType } from "../../../../types/users/usersSchema.js";
 import { updateUserDB } from "../update.js";
-import { getUserStatusDB } from "../read.js";
+import { getUserDependencyStatusDB, getUserStatusDB } from "../read.js";
 import { createUserAuditLogDB } from "../create.js";
 import { createAuditLogDBObject } from "../../../../dto/users/post.js";
 import defaults from "../../../../defaults.js";
+import APIError from "../../../errors/APIError.js";
+import { StatusCodes } from "http-status-codes";
 
 const updateUserTransactionDB = async (
   body: userPutRequestType,
@@ -27,6 +29,20 @@ const updateUserTransactionDB = async (
             currentDate
           );
           if (body.auditlog?.status !== userAuditLog?.status) {
+            if (body.auditlog.status === AuditLogStatusEnum.DEACTIVE) {
+              const dependencyStatus = await getUserDependencyStatusDB(
+                prismaTransaction,
+                id
+              );
+              if (dependencyStatus) {
+                throw new APIError(
+                  "Cannot deactivate the user due to the dependent services assigned to the user",
+                  StatusCodes.BAD_REQUEST,
+                  "S"
+                );
+              }
+            
+            }
             
             const AuditLogDBObject = createAuditLogDBObject(body, id);
             if (AuditLogDBObject) {

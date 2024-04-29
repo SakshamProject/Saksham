@@ -13,7 +13,8 @@ import {
   createUpdateDesignationObject,
 } from "../../../../dto/designation/designation.js";
 import {
-  getDesignationDependencyStatus,
+
+  getDesignationDependencyStatusDB,
   getDesignationStatus,
   updateDesignationDB,
 } from "../update.js";
@@ -87,11 +88,11 @@ async function putDesignationDBTransaction(
 
         if (auditLog?.status !== body.auditLog.status) {
           if (body.auditLog.status === AuditLogStatusEnum.DEACTIVE) {
-            const dependency = await getDesignationDependencyStatus(
+            const dependencyStatus = await getDesignationDependencyStatusDB(
               prismaTransaction,
               id
             );
-            if (dependency) {
+            if (dependencyStatus) {
               throw new APIError(
                 "Cannot deactivate the designation due to the dependent Users assigned to the designation",
                 StatusCodes.BAD_REQUEST,
