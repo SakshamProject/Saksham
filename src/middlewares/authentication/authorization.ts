@@ -19,14 +19,14 @@ function authorization(
       if (request.token?.userId) {
         const user = await getUserByIdAuthDB(request.token.userId);
         const designationId = user?.designationId;
-        const designation =
-          await getDesignationByIDDB(designationId);
+        const designation = await getDesignationByIDDB(designationId);
 
         if (
           !designation?.features.some(
             (feature) => feature.feature.name === currentFeature
           )
         ) {
+          // this can also be thrown when designation is changed after current login session
           throw new APIError(
             "Permission denied",
             StatusCodes.UNAUTHORIZED,

@@ -43,7 +43,7 @@ async function userLogin(
     const token = jwt.sign(
       { personId: person.id, userId: person.user?.id },
       config.SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "7d" }
     );
 
     person.password = {

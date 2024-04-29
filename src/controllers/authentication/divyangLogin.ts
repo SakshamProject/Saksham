@@ -20,7 +20,6 @@ async function divyangLogin(
     const body: loginSchemaType = loginSchema.parse(request.body);
     const person = await verifyUserName(body.userName);
     if (!person) {
-      console.log("person not found");
       throw new APIError(
         "Username or password is incorrect",
         StatusCodes.UNAUTHORIZED,
@@ -32,7 +31,6 @@ async function divyangLogin(
       .createHmac(defaults.hashingAlgorithm, config.SECRET)
       .update(body.password)
       .digest("hex");
-    console.log("[+] pass ", givenPassword);
     if (givenPassword !== person.password.password) {
       throw new APIError(
         "Username or password is incorrect",
@@ -46,7 +44,7 @@ async function divyangLogin(
       password: "PROTECTED",
     };
     const token = jwt.sign({ personId: person.id }, config.SECRET, {
-      expiresIn: "1h",
+      expiresIn: "7d",
     });
 
     // response.cookie("token", token, {

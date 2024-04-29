@@ -46,8 +46,18 @@ async function authenticate(
       }
     }
     next();
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      next(
+        new APIError(
+          "Token expired",
+          StatusCodes.UNAUTHORIZED,
+          "TokenExpiredError",
+          "S"
+        )
+      );
+    }
+    next(error);
   }
 }
 export { authenticate };
