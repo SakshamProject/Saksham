@@ -37,7 +37,7 @@ const createDivyangDetailsDBObject = (
         id: divyangDetails.personalDetails.communityCategoryId,
       },
     },
-    eductionQualification: {
+    educationQualifications: {
       createMany: {
         data: divyangDetails.personalDetails.educationQualifications,
       },

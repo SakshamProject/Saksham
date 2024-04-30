@@ -321,7 +321,7 @@ model DivyangDetails {
   panchayatUnion        PanchayatUnion?                   @relation(fields: [panchayatUnionId], references: [id])
   district              District?                         @relation("disability", fields: [districtId], references: [id])
   disabilities          DisabilityOfDivyang[]
-  eductionQualifications DivyangEducationalQualification[]
+  educationQualifications DivyangEducationalQualification[]
   services              DivyangServiceMapping[]
   districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
   createdBy             Person?                            @relation("divyangCreatedBy", fields: [createdById], references: [id])
