@@ -24,7 +24,6 @@ const userForgetPassword = async (
     const responseData = createResponseOnlyData(user);
     response.send(responseData);
   } catch (error) {
-    console.log(`[+]error`,error)
     next(error);
   }
 };
