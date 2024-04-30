@@ -8,6 +8,13 @@ import inputFieldSchema, {
 } from "../inputFieldSchema.js";
 import { BloodGroupEnum, GenderEnum } from "@prisma/client";
 
+const educationQualificationsSchema = z.object({
+  educationQualificationTypeId: uuidSchema,
+  educationQualificationId: uuidSchema.optional(),
+});
+type EducationQualificationsType = z.infer<
+  typeof educationQualificationsSchema
+>;
 const personalDetailsRequestSchema = z.object({
   userName: userNameSchema,
   password: passwordSchema,
@@ -31,6 +38,7 @@ const personalDetailsRequestSchema = z.object({
   communityCategoryId: uuidSchema,
   community: inputFieldSchema,
   extraCurricularActivity: inputFieldSchema.optional(),
+  educationQualifications: educationQualificationsSchema.array(),
 });
 
 const updatePersonalDetailsRequestSchema = z.object({
@@ -53,7 +61,9 @@ const updatePersonalDetailsRequestSchema = z.object({
   communityCategoryId: uuidSchema,
   community: inputFieldSchema,
   extraCurricularActivity: inputFieldSchema.optional(),
+  educationQualifications: educationQualificationsSchema.array(),
 });
+
 type PersonalDetails = z.infer<typeof personalDetailsRequestSchema>;
 type UpdatePersonalDetails = z.infer<typeof updatePersonalDetailsRequestSchema>;
 
@@ -62,4 +72,6 @@ export {
   PersonalDetails,
   UpdatePersonalDetails,
   updatePersonalDetailsRequestSchema,
+  EducationQualificationsType,
+  educationQualificationsSchema,
 };
