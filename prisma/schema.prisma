@@ -508,7 +508,7 @@ model DivyangEducationalQualification {
   educationQualificationTypeId String
 
   educationQualificationType EducationQualificationType        @relation(fields: [educationQualificationTypeId], references: [id], onDelete: Cascade)
-  educationQualification EducationQualification? @relation(fields: [educationalQualificationId], references: [id])
+  educationQualification EducationQualification? @relation(fields: [educationQualificationId], references: [id])
   divyang   DivyangDetails         @relation(fields: [DivyangDetailsId], references: [id])
 }
 
