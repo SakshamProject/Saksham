@@ -504,7 +504,7 @@ model CommunityCategory {
 model DivyangEducationalQualification {
   id                         String @id @default(uuid())
   DivyangDetailsId           String
-  educationalQualificationId String?
+  educationQualificationId String?
   educationQualificationTypeId String
 
   educationQualificationType EducationQualificationType        @relation(fields: [educationQualificationTypeId], references: [id], onDelete: Cascade)

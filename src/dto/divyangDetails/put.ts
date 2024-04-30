@@ -47,7 +47,7 @@ const updatePersonalDetailsDBObject = (
         id: updatedBy,
       },
     },
-    eductionQualification: {
+    educationQualifications: {
       createMany: {
         data: educationQualification.educationQualificationsToCreate,
       },
