@@ -504,9 +504,11 @@ model CommunityCategory {
 model DivyangEducationalQualification {
   id                         String @id @default(uuid())
   DivyangDetailsId           String
-  educationalQualificationId String
+  educationalQualificationId String?
+  educationQualificationTypeId String
 
-  education EducationQualification @relation(fields: [educationalQualificationId], references: [id])
+  educationQualificationType EducationQualificationType        @relation(fields: [educationQualificationTypeId], references: [id], onDelete: Cascade)
+  educationQualification EducationQualification? @relation(fields: [educationalQualificationId], references: [id])
   divyang   DivyangDetails         @relation(fields: [DivyangDetailsId], references: [id])
 }
 
@@ -526,6 +528,7 @@ model EducationQualificationType {
   id                     String                   @id @default(uuid())
   name                   String                   @unique
   educationQualification EducationQualification[]
+  divyangEducationQualification DivyangEducationalQualification[]
 }
 
 model generalMasters {

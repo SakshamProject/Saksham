@@ -10,6 +10,7 @@ import { DivyangSignUp } from "../../types/divyangDetails/divyangSignUpRequestSc
 import config from "../../../config.js";
 import defaults from "../../defaults.js";
 import * as crypto from "crypto";
+
 const createDivyangDetailsDBObject = (
   divyangDetails: postDivyangDetailsRequest,
   createdBy: string = defaults.createdById
@@ -34,6 +35,11 @@ const createDivyangDetailsDBObject = (
     communityCategory: {
       connect: {
         id: divyangDetails.personalDetails.communityCategoryId,
+      },
+    },
+    eductionQualification: {
+      createMany: {
+        data: divyangDetails.personalDetails.educationQualifications,
       },
     },
     community: divyangDetails.personalDetails.community,
