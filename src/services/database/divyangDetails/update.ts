@@ -1,8 +1,8 @@
 import { Prisma } from "@prisma/client";
 import { updateDivyangDetails } from "../../../types/divyangDetails/divyangDetailsSchema.js";
-import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 import { DisabilityOfDivyang } from "../../../types/divyangDetails/disabilityDetailsSchema.js";
+import { EducationQualificationsSchemaType } from "../../../types/divyangDetails/personalDetailsSchema.js";
 
 const updateDivyangDetailsDB = async (
   prismaTransaction: Prisma.TransactionClient,
@@ -61,4 +61,39 @@ const updateDisabilityOfDivyangDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-export { updateDivyangDetailsDB, updateDisabilityOfDivyangDB };
+
+const updateEducationQualificationOfDivyangDB = async (
+  prismaTransaction: Prisma.TransactionClient,
+  educationQualification: EducationQualificationsSchemaType,
+  id: string,
+  divyangId: string
+) => {
+  try {
+    const updatedEducationQualificationOfDivyang =
+      await prismaTransaction.divyangEducationalQualification.update({
+        where: { id: id },
+        data: {
+          divyang: {
+            connect: { id: divyangId },
+          },
+          educationQualification: {
+            connect: { id: educationQualification.educationQualificationId },
+          },
+          educationQualificationType: {
+            connect: {
+              id: educationQualification.educationQualificationTypeId,
+            },
+          },
+        },
+      });
+    return updatedEducationQualificationOfDivyang;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+
+export {
+  updateDivyangDetailsDB,
+  updateDisabilityOfDivyangDB,
+  updateEducationQualificationOfDivyangDB,
+};

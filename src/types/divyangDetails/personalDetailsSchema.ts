@@ -9,10 +9,11 @@ import inputFieldSchema, {
 import { BloodGroupEnum, GenderEnum } from "@prisma/client";
 
 const educationQualificationsSchema = z.object({
+  id: uuidSchema.optional(),
   educationQualificationTypeId: uuidSchema,
   educationQualificationId: uuidSchema.optional(),
 });
-type EducationQualificationsType = z.infer<
+type EducationQualificationsSchemaType = z.infer<
   typeof educationQualificationsSchema
 >;
 const personalDetailsRequestSchema = z.object({
@@ -72,6 +73,6 @@ export {
   PersonalDetails,
   UpdatePersonalDetails,
   updatePersonalDetailsRequestSchema,
-  EducationQualificationsType,
+  EducationQualificationsSchemaType,
   educationQualificationsSchema,
 };

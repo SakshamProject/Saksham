@@ -1,6 +1,7 @@
 import { z } from "zod";
 import inputFieldSchema, { uuidSchema } from "../inputFieldSchema.js";
 import { CertificateIssueAuthorityEnum, Prisma } from "@prisma/client";
+import { EducationQualificationsSchemaType } from "./personalDetailsSchema.js";
 
 const disabilityOfDivyangSchema = z.object({
   id: uuidSchema.optional(),
@@ -45,9 +46,14 @@ type DisabilityOfDivyangList = {
   disabilitiesToDelete: string[];
   disabilitiesToUpdate: DisabilityOfDivyang[];
 };
-
+type EducationQualificationOfDivyangList = {
+  educationQualificationsToCreate: EducationQualificationsSchemaType[];
+  educationQualificationsToDelete: string[];
+  educationQualificationsToUpdate: EducationQualificationsSchemaType[];
+};
 export {
   disabiltyDetailsRequestSchema,
+  EducationQualificationOfDivyangList,
   disabilityOfDivyangSchema,
   DisabilityDetails,
   DisabilityOfDivyang,
