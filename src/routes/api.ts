@@ -9,8 +9,6 @@ import { StatusCodes } from "http-status-codes";
 import sevaKendraRouter from "./sevaKendra/sevaKendra.js";
 import designationRouter from "./designation/designation.js";
 import serviceMappingRouter from "./serviceMapping/serviceMapping.js";
-import authorization from "../middlewares/authentication/authorization.js";
-import { AuthorizationEnum } from "../types/authentication/authorizationEnum.js";
 import { authenticate } from "../middlewares/authentication/authentication.js";
 
 const apiRouter = Router();
