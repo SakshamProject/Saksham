@@ -11,14 +11,17 @@ import {
   getDisabilityOfDivyangByDivyangIdDB,
   getDivyangDetailsDependencyStatusDB,
   getDivyangDetailsStatusDB,
+  getEducationQualificationOfDivyangByDivyangIdDB,
 } from "../read.js";
 import {
   updateDisabilityOfDivyangDB,
   updateDivyangDetailsDB,
+  updateEducationQualificationOfDivyangDB,
 } from "../update.js";
 import {
   DisabilityOfDivyang,
   DisabilityOfDivyangList,
+  EducationQualificationOfDivyangList,
 } from "../../../../types/divyangDetails/disabilityDetailsSchema.js";
 import defaults from "../../../../defaults.js";
 import { auditLogStatusEnumSchema } from "../../../../types/inputFieldSchema.js";
@@ -66,7 +69,25 @@ const updateDivyangDetailsTransactionDB = async (
             );
           }
         }
-
+        //update educationQualification if it exists
+        const educationQualification =
+          await educationQualificationOfDivyangUpdate(
+            prismaTransaction,
+            divyangDetails,
+            id,
+            pageNumber
+          );
+        if (pageNumber === 1 && educationQualification) {
+          for (let education of educationQualification.educationQualificationsToUpdate) {
+            const updatedEducationQualificationOfDivyang =
+              await updateEducationQualificationOfDivyangDB(
+                prismaTransaction,
+                education,
+                education.id!,
+                id
+              );
+          }
+        }
         // update disability of divyang if it exists
 
         const disabilities: DisabilityOfDivyangList | null | undefined =
@@ -76,7 +97,7 @@ const updateDivyangDetailsTransactionDB = async (
             id,
             pageNumber
           );
-        if (pageNumber == 4 && disabilities) {
+        if (pageNumber === 4 && disabilities) {
           for (let disability of disabilities.disabilitiesToUpdate) {
             const updatedDisabilityOfDivyang =
               await updateDisabilityOfDivyangDB(
@@ -95,6 +116,7 @@ const updateDivyangDetailsTransactionDB = async (
             pageNumber,
             divyangDetails,
             disabilities,
+            educationQualification,
             updatedBy
           )) || {};
 
@@ -156,6 +178,56 @@ const disabilityOfDivyangUpdate = async (
       disabilitiesToUpdate: disabilitiesToUpdate,
     };
     return disabilities;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+
+const educationQualificationOfDivyangUpdate = async (
+  prismaTransaction: Prisma.TransactionClient,
+  divyangDetails: updateDivyangDetailsRequest,
+  divyangId: string,
+  pageNumber: number
+) => {
+  if (pageNumber != 1) return null;
+  try {
+    const existingEducationQualificationsOfDivyang =
+      await getEducationQualificationOfDivyangByDivyangIdDB(
+        prismaTransaction,
+        divyangId
+      );
+    const existingEducationQualificationsOfDivyangId =
+      existingEducationQualificationsOfDivyang?.map(
+        (educationQualification) => educationQualification.id
+      ) || [];
+
+    const currentEducationQualificationId =
+      divyangDetails.personalDetails?.educationQualifications.map(
+        (educationQualification) => educationQualification.id
+      ) || [];
+
+    const educationQualificationsToCreate =
+      divyangDetails.personalDetails?.educationQualifications.filter(
+        (educationQualifications) => educationQualifications.id == undefined
+      ) || [];
+
+    const educationQualificationsToDelete =
+      existingEducationQualificationsOfDivyangId.filter(
+        (educationQualificationId) =>
+          !currentEducationQualificationId.includes(educationQualificationId)
+      );
+
+    const educationQualificationsToUpdate =
+      divyangDetails.personalDetails?.educationQualifications.filter(
+        (educationQualifications) => educationQualifications.id !== undefined
+      ) || [];
+
+    const educationQualifications: EducationQualificationOfDivyangList = {
+      educationQualificationsToCreate: educationQualificationsToCreate,
+      educationQualificationsToDelete: educationQualificationsToDelete,
+      educationQualificationsToUpdate: educationQualificationsToUpdate,
+    };
+    return educationQualifications;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }

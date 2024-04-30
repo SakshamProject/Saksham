@@ -1,16 +1,21 @@
 import { Prisma } from "@prisma/client";
 import { updateDivyangDetailsRequest } from "../../types/divyangDetails/divyangDetailsSchema.js";
-import { PersonalDetails, UpdatePersonalDetails } from "../../types/divyangDetails/personalDetailsSchema.js";
+import {
+  PersonalDetails,
+  UpdatePersonalDetails,
+} from "../../types/divyangDetails/personalDetailsSchema.js";
 import { Address } from "../../types/divyangDetails/addressSchema.js";
 import { EmploymentDetails } from "../../types/divyangDetails/employmentDetailsSchema.js";
 import { IdProofUploads } from "../../types/divyangDetails/IdProofUploadsSchema.js";
 import {
   DisabilityDetails,
   DisabilityOfDivyangList,
+  EducationQualificationOfDivyangList,
 } from "../../types/divyangDetails/disabilityDetailsSchema.js";
 
 const updatePersonalDetailsDBObject = (
   personalDetails: UpdatePersonalDetails,
+  educationQualification: EducationQualificationOfDivyangList,
   updatedBy: string
 ): Prisma.DivyangDetailsUpdateInput => {
   const updatePersonalDetails: Prisma.DivyangDetailsUpdateInput = {
@@ -40,6 +45,16 @@ const updatePersonalDetailsDBObject = (
     updatedBy: {
       connect: {
         id: updatedBy,
+      },
+    },
+    eductionQualification: {
+      createMany: {
+        data: educationQualification.educationQualificationsToCreate,
+      },
+      deleteMany: {
+        id: {
+          in: educationQualification.educationQualificationsToDelete,
+        },
       },
     },
   };
@@ -189,11 +204,20 @@ function createUpdateDTOObject(
   pageNumber: number,
   updateDivyangDetailsRequest: updateDivyangDetailsRequest,
   disabilities: DisabilityOfDivyangList | null | undefined,
+  educationQualification:
+    | EducationQualificationOfDivyangList
+    | null
+    | undefined,
   updatedBy: string
 ) {
-  if (pageNumber === 1 && updateDivyangDetailsRequest.personalDetails) {
+  if (
+    pageNumber === 1 &&
+    updateDivyangDetailsRequest.personalDetails &&
+    educationQualification
+  ) {
     return updatePersonalDetailsDBObject(
       updateDivyangDetailsRequest.personalDetails,
+      educationQualification,
       updatedBy
     );
   } else if (pageNumber === 3 && updateDivyangDetailsRequest.addressRequest) {

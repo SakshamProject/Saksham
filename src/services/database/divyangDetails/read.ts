@@ -75,7 +75,8 @@ const getDivyangDetailsByIdDB = async (id: string) => {
         },
         eductionQualification: {
           include: {
-            education: true,
+            educationQualification: true,
+            educationQualificationType: true,
           },
         },
       },
@@ -193,6 +194,23 @@ const getDivyangDetailsDependencyStatusDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+
+const getEducationQualificationOfDivyangByDivyangIdDB = async (
+  prismaTransaction: Prisma.TransactionClient,
+  divyangId: string
+) => {
+  try {
+    const educationQualificationOfDivyang =
+      await prismaTransaction.divyangEducationalQualification.findMany({
+        where: {
+          DivyangDetailsId: divyangId,
+        },
+      });
+    return educationQualificationOfDivyang;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 export {
   getDivyangDetailsDB,
   getDivyangDetailsTotalDB,
@@ -201,4 +219,5 @@ export {
   getDivyangDetailsStatusDB,
   getDisabilityOfDivyangByDivyangIdDB,
   getDivyangDetailsDependencyStatusDB,
+  getEducationQualificationOfDivyangByDivyangIdDB,
 };
