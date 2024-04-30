@@ -1,4 +1,10 @@
-import { AuditLogStatusEnum, Designation, FeaturesOnDesignations, Prisma } from "@prisma/client";
+import {
+  AuditLogStatusEnum,
+  Designation,
+  FeaturesOnDesignations,
+  Prisma,
+  StatusEnum,
+} from "@prisma/client";
 import throwDatabaseError from "../../utils/errorHandler.js";
 import { updateDesignationRequestSchemaType } from "../../../../types/designation/designationSchema.js";
 import prisma from "../../database.js";
@@ -6,7 +12,12 @@ import {
   createDesignationAuditLog,
   createUpdateDesignationObject,
 } from "../../../../dto/designation/designation.js";
-import { getDesignationStatus, updateDesignationDB } from "../update.js";
+import {
+
+  getDesignationDependencyStatusDB,
+  getDesignationStatus,
+  updateDesignationDB,
+} from "../update.js";
 import { getFeaturesIdByDesignationIdDB } from "../read.js";
 import {
   createCheckedFeaturesOnDesignations,
@@ -14,11 +25,24 @@ import {
   retrieveFeatureIds,
 } from "../../../utils/designation/designation.js";
 import { createDesignationAuditLogDB } from "../create.js";
+import { auditLogSchemaType } from "../../../../types/inputFieldSchema.js";
+import defaults from "../../../../defaults.js";
+import APIError from "../../../errors/APIError.js";
+import { StatusCodes } from "http-status-codes";
 
 async function putDesignationDBTransaction(
   body: updateDesignationRequestSchemaType,
   id: string,
-  updatedById: string | undefined
+  updatedById: string = defaults.updatedById,
+  auditLog:
+    | {
+        id: string;
+        designationId: string;
+        status: AuditLogStatusEnum;
+        date: Date;
+        description: string | null;
+      }
+    | undefined
 ) {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
@@ -34,7 +58,6 @@ async function putDesignationDBTransaction(
             updateDesignationObject,
             id
           );
-
 
         const exisitingFeatures = await getFeaturesIdByDesignationIdDB(
           prismaTransaction,
@@ -63,22 +86,33 @@ async function putDesignationDBTransaction(
           id
         );
 
-        const status = await getDesignationStatus(prismaTransaction,id)
+        if (auditLog?.status !== body.auditLog.status) {
+          if (body.auditLog.status === AuditLogStatusEnum.DEACTIVE) {
+            const dependencyStatus = await getDesignationDependencyStatusDB(
+              prismaTransaction,
+              id
+            );
+            if (dependencyStatus) {
+              throw new APIError(
+                "Cannot deactivate the designation due to the dependent Users assigned to the designation",
+                StatusCodes.BAD_REQUEST,
+                "S"
+              );
+            }
+          
+          }
 
-       if (status !== body.auditLog.status){
-
-        const designationAuditLogObject = createDesignationAuditLog(
-          id,
-          body.auditLog.status,
-          body.auditLog.date,
-          body.auditLog.description
-        );
-        const designationAuditLog = await createDesignationAuditLogDB(
-          prismaTransaction,
-          designationAuditLogObject
-        );
-
-       }
+          const designationAuditLogObject = createDesignationAuditLog(
+            id,
+            body.auditLog.status,
+            body.auditLog.date,
+            body.auditLog.description
+          );
+          const designationAuditLog = await createDesignationAuditLogDB(
+            prismaTransaction,
+            designationAuditLogObject
+          );
+        }
 
         return id;
       } catch (error) {

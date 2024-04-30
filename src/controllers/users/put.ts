@@ -1,6 +1,6 @@
 import { usersPutSchema } from "../../types/users/usersSchema.js";
 import { NextFunction, Response, Request } from "express";
-import {createResponseOnlyData, createResponseWithFile} from "../../types/createResponseSchema.js";
+import {createResponseWithFile} from "../../types/createResponseSchema.js";
 import updateUserTransactionDB from "../../services/database/users/transaction/update.js";
 import {saveProfilePhotoToS3andDB} from "../../services/files/files.js";
 async function putUser(request: Request, response: Response, next: NextFunction) {
@@ -23,4 +23,4 @@ async function putUser(request: Request, response: Response, next: NextFunction)
     }
 }
 
-export{putUser}
+export { putUser };

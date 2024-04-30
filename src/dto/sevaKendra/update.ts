@@ -23,7 +23,9 @@ const updateSevaKendraDBObject = (
     mobileNumber: sevaKendra.mobileNumber,
     landLineNumber: sevaKendra.landLineNumber,
     startDate: sevaKendra.startDate,
-    // updatedBy: updatedBy,
+    updatedBy: {
+      connect: { id: updatedBy },
+    },
     updatedAt: new Date().toISOString(),
     services: {
       createMany: {

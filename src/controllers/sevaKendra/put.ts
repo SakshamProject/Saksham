@@ -15,13 +15,12 @@ const putSevaKendra = async (
     const updateRequestSevaKendra: SevaKendraUpdateRequestSchemaType =
       SevaKendraUpdateRequestSchema.parse(request.body);
     const id = request.params.id;
-    const updatedBy = "";
+    const updatedBy = request.token?.userId;
     const result = await updateSevaKendraDBTransaction(
       id,
       updateRequestSevaKendra,
       updatedBy
     );
-
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
   } catch (error) {

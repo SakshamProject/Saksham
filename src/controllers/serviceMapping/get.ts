@@ -6,7 +6,10 @@ import {
   serviceAdditionalWhereSchema,
   serviceMappingFilter,
 } from "../../types/serviceMapping/serviceMappingScreens.js";
-import { getServiceMappingByIdDB } from "../../services/database/serviceMapping/read.js";
+import {
+  getServiceMappingByDivyangIdDB,
+  getServiceMappingByIdDB,
+} from "../../services/database/serviceMapping/read.js";
 import {
   createResponseForFilter,
   createResponseOnlyData,
@@ -14,7 +17,9 @@ import {
 import { serviceMappingColumnNameMapper } from "../../services/database/utils/serviceMapping/serviceMappingMapper.js";
 import ServiceMappingGlobalSearchConditions from "../../services/database/utils/serviceMapping/globalSearchCondition.js";
 import { createServiceMappingFilterInputObject } from "../../dto/serviceMapping/get.js";
-import getServiceMappingDBTransaction from "../../services/database/serviceMapping/transaction/read.js";
+import getServiceMappingDBTransaction, {
+  getServiceMappingByDivyangIdDBTransaction,
+} from "../../services/database/serviceMapping/transaction/read.js";
 
 const getServiceMapping = async (
   request: Request,
@@ -30,7 +35,8 @@ const getServiceMapping = async (
       serviceMappingRequest.sorting?.sortOrder
     );
     const globalSearchConditions: ServiceMappingWhere | null =
-      serviceMappingRequest.searchText === undefined
+      serviceMappingRequest.searchText === undefined ||
+      serviceMappingRequest.searchText === ""
         ? null
         : ServiceMappingGlobalSearchConditions(
             serviceMappingRequest.searchText
@@ -75,4 +81,52 @@ const getServiceMappingById = async (
   }
 };
 
-export { getServiceMapping, getServiceMappingById };
+const getServiceMappingByDivyangId = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  try {
+    const serviceMappingRequest = getServiceMappingSchema.parse(request.body);
+    const orderByColumnAndSortOrder = serviceMappingColumnNameMapper(
+      serviceMappingRequest.sorting?.orderByColumn,
+      serviceMappingRequest.sorting?.sortOrder
+    );
+    const globalSearchConditions: ServiceMappingWhere | null =
+      serviceMappingRequest.searchText === undefined ||
+      serviceMappingRequest.searchText === ""
+        ? null
+        : ServiceMappingGlobalSearchConditions(
+            serviceMappingRequest.searchText
+          );
+    const serviceMappingWhereInput = createServiceMappingFilterInputObject(
+      serviceMappingRequest.filters,
+      globalSearchConditions,
+      undefined
+    );
+    const divyangId = request.params.divyangId;
+    const result = await getServiceMappingByDivyangIdDBTransaction(
+      divyangId,
+      serviceMappingRequest.pagination?.start,
+      serviceMappingRequest.pagination?.rows,
+      serviceMappingWhereInput,
+      orderByColumnAndSortOrder
+    );
+    const total = result?.total || 0;
+    const count = result?.serviceMappings?.length || 0;
+    const responseData = createResponseForFilter(
+      result?.serviceMappings,
+      request.body,
+      total,
+      count
+    );
+    response.send(responseData);
+  } catch (error) {
+    next(error);
+  }
+};
+export {
+  getServiceMapping,
+  getServiceMappingById,
+  getServiceMappingByDivyangId,
+};

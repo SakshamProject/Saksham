@@ -116,8 +116,86 @@ const getServiceMappingByIdDB = async (id: string) => {
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+const getServiceMappingByDivyangIdDB = async (
+  prismaTransaction: Prisma.TransactionClient,
+  divyangId: string,
+  skip: number = defaults.skip,
+  take: number = defaults.take,
+  searchConditions: ServiceMappingWhere,
+  orderByColumnAndSortOrder: Object = { dateOfService: "asc" }
+) => {
+  try {
+    const serviceMapping =
+      await prismaTransaction.divyangServiceMapping.findMany({
+        where: {
+          AND: [{ divyangId: divyangId }, searchConditions],
+        },
+        orderBy: orderByColumnAndSortOrder,
+        skip: skip,
+        take: take,
+        select: {
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+          user: {
+            select: {
+              designation: {
+                select: {
+                  sevaKendra: {
+                    select: {
+                      id: true,
+                      name: true,
+                      district: {
+                        select: {
+                          id: true,
+                          name: true,
+                          state: {
+                            select: { id: true, name: true },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          dateOfService: true,
+          isCompleted: true,
+          service: {
+            select: { id: true, name: true },
+          },
+          divyang: {
+            select: { id: true, firstName: true },
+          },
+        },
+      });
+    return serviceMapping;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
+
+const getServiceMappingByDivyangIdDBTotal = async (
+  prismaTransaction: Prisma.TransactionClient,
+  divyangId: string,
+  searchConditions: ServiceMappingWhere
+) => {
+  try {
+    const serviceMapping = await prismaTransaction.divyangServiceMapping.count({
+      where: {
+        AND: [{ divyangId: divyangId }, searchConditions],
+      },
+    });
+    return serviceMapping;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 export {
   getServiceMappingDB,
   getServiceMappingDBTotal,
   getServiceMappingByIdDB,
+  getServiceMappingByDivyangIdDB,
+  getServiceMappingByDivyangIdDBTotal,
 };

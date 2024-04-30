@@ -14,6 +14,6 @@ MunicipalityRouter.get("/", getMunicipality);
 MunicipalityRouter.get("/:id", getMunicipalityById);
 MunicipalityRouter.put("/:id", putMunicipality);
 MunicipalityRouter.delete("/:id", deleteMunicipality);
-MunicipalityRouter.get("/districts/:id", getMunicipalityByDistrictId);
+// MunicipalityRouter.get("/districts/:id", getMunicipalityByDistrictId);
 
 export default MunicipalityRouter;

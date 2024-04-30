@@ -109,7 +109,7 @@ const filterServiceMappingMapper = (
 const generateServiceMappingFilter = (
   serviceMappingfilter: serviceMappingFilterType | undefined,
   globalSearchConditions: ServiceMappingWhere | null,
-  serviceAdditionalWhere: ServiceAdditionalWhereSchemaType
+  serviceAdditionalWhere: ServiceAdditionalWhereSchemaType | undefined
 ) => {
   const ServiceMappingWhereInput: any = {
     AND: [],
@@ -123,6 +123,9 @@ const generateServiceMappingFilter = (
   }
   if (globalSearchConditions != null)
     ServiceMappingWhereInput.AND.push(globalSearchConditions);
+  if (serviceAdditionalWhere === undefined) {
+    return ServiceMappingWhereInput;
+  }
   if (serviceAdditionalWhere.districtId != undefined) {
     const additionalWhere: ServiceMappingWhere = {
       user: {
