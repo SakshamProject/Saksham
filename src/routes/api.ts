@@ -9,6 +9,7 @@ import sevaKendraRouter from "./sevaKendra/sevaKendra.js";
 import errorHandler from "../middlewares/errorHandler/errorHandler.js";
 import designationRouter from "./designation/designation.js";
 import fileRouter from "./file/files.js";
+import serviceMappingRouter from "./serviceMapping/serviceMapping.js";
 
 const apiRouter = Router();
 
@@ -32,8 +33,9 @@ apiRouter.use("/services", serviceMasterRouter);
 apiRouter.use("/sevakendras", sevaKendraRouter);
 apiRouter.use("/typemaster", typeMasterRouter);
 apiRouter.use("/designation", designationRouter);
+apiRouter.use("/servicemapping", serviceMappingRouter);
 apiRouter.use("/users", userRouter);
-apiRouter.use("/files", fileRouter);
+// apiRouter.use("/files", fileRouter);
 
 apiRouter.use(errorHandler);
 export default apiRouter;
