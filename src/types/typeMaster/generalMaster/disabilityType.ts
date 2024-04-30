@@ -24,7 +24,7 @@ const disabilitySchema = z.object({
 const updateDisabilityTypeRequestSchema = z.object({
   id: inputFieldSchema.optional(),
   disabilityType: inputFieldSchema.transform((value) => value.toUpperCase()),
-  disabilitySubType: z.array(disabilitySchema),
+  disabilitySubType: z.array(disabilitySchema).optional(),
 });
 
 type updateDisabilityTypeRequestSchemaType = z.infer<

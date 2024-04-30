@@ -102,25 +102,34 @@ const verifyUserForForgetPassword = async (
   body: userForgetPasswordSchemaType
 ) => {
   try {
-    const user = await prisma.person.findFirst({
-      where: {
-        userName: body.userName,
-      },
-      select: {
-        id: true,
-        userName: true,
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            contactNumber: true,
+
+
+
+    const user  = await prisma.person.findFirst({
+      where:{
+        AND:[
+          {
+            userName:body.userName
           },
-          where: {
-            contactNumber: body.contactNumber,
-          },
-        },
+          {
+            user:{
+              contactNumber:body.contactNumber
+            }
+          }
+        ]
       },
-    });
+      select:{
+        id:true,
+        userName:true,
+        user:{
+          select:{
+            id:true,
+            firstName:true,
+            contactNumber:true
+          }
+        }
+      }
+    })
     return user;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
