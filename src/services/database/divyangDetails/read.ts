@@ -73,7 +73,7 @@ const getDivyangDetailsByIdDB = async (id: string) => {
             disabilityType: true,
           },
         },
-        eductionQualification: {
+        eductionQualifications: {
           include: {
             educationQualification: true,
             educationQualificationType: true,
