@@ -3,7 +3,7 @@ import throwDatabaseError from "../utils/errorHandler.js";
 import log from "../../logger/logger.js";
 import prisma from "../database.js";
 
-async function createPersonDB(userInputObject: Prisma.PersonCreateInput) {
+async function createUserDB(userInputObject: Prisma.PersonCreateInput) {
   try {
     const newUser = await prisma.person.create({
       include: {
@@ -37,4 +37,4 @@ const createUserAuditLogDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
-export { createPersonDB, createUserAuditLogDB };
+export { createUserDB, createUserAuditLogDB };

@@ -6,11 +6,10 @@ import {
   userPutRequestType,
 } from "../../types/users/usersSchema.js";
 import generateUserListWhereInput from "../../services/database/utils/users/usersFilterMapper.js";
-import {generateKey} from "node:crypto";
 import config from "../../../config.js";
 import defaults from "../../defaults.js";
 
-function createPersonDBObject(request: Request): Prisma.PersonCreateInput {
+function createUserDBObject(request: Request): Prisma.PersonCreateInput {
   const userInputObject: Prisma.PersonCreateInput = {
     userName: request.body.userName,
     password: {
@@ -75,4 +74,4 @@ function createAuditLogDBObject(body: userPutRequestType, id: string) {
   }
 }
 
-export { createPersonDBObject, listUserWhereInput, createAuditLogDBObject };
+export { createUserDBObject, listUserWhereInput, createAuditLogDBObject };

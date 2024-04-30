@@ -108,10 +108,6 @@ const userListSchema = z.object({
 
 type userListType = z.infer<typeof userListSchema>;
 
-const fileSchema = z.object({
-    key: z.string()
-});
-
 export { userOrderByEnum };
-export { usersPostSchema, usersPutSchema, userListSchema , fileSchema};
+export { usersPostSchema, usersPutSchema, userListSchema };
 export { userPostRequestType, userPutRequestType, userListType };

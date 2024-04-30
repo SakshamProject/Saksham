@@ -15,7 +15,9 @@ async function updateServiceDB(
         });
         return service;
     } catch (error) {
+        if (error instanceof Error) {
             throwDatabaseError(error);
+        }
     }
 }
 

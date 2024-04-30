@@ -13,7 +13,6 @@ import serviceMappingRouter from "./serviceMapping/serviceMapping.js";
 import authorization from "../middlewares/authentication/authorization.js";
 import { AuthorizationEnum } from "../types/authentication/authorizationEnum.js";
 import { authenticate } from "../middlewares/authentication/authentication.js";
-import fileRouter from "./file/files.js";
 
 const apiRouter = Router();
 
@@ -39,7 +38,6 @@ apiRouter.use("/sevakendras",authorization(AuthorizationEnum.SEVAKENDRA_SETUP), 
 apiRouter.use("/typemaster", authorization(AuthorizationEnum.TYPE_MASTERS),typeMasterRouter);
 apiRouter.use("/designation",authorization(AuthorizationEnum.SEVAKENDRA_SETUP), designationRouter);
 apiRouter.use("/servicemapping", serviceMappingRouter);
-apiRouter.use("/files", fileRouter);
 apiRouter.use("/users",authorization(AuthorizationEnum.SEVAKENDRA_USERS), userRouter);
 
 export default apiRouter;

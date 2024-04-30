@@ -26,9 +26,6 @@ const defaults: Defaults = {
     isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
     maxWait: 50000,
     timeout: 10000,
-    },
-    s3: {
-        expiresIn: 60 * 60 // 1hr in seconds
   },
   createdById: "defaultCreatedById",
   updatedById: "defaultUpdatedById",

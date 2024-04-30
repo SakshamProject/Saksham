@@ -7,24 +7,6 @@ const createResponseOnlyData = (result: Object = {}) => {
   return createdResponse;
 };
 
-function createResponseWithFile(result: Object = {}, file: Object = {}) {
-  return (
-      {
-        data: result,
-        file: file
-      }
-  )
-}
-
-function createResponseWithFiles(result: Object = {}, files: Object[] = []) {
-  return (
-      {
-        data: result,
-        files: files
-      }
-  )
-}
-
 const createResponseWithQuery = (
   result: Object = {},
   request: getRequestType,
@@ -65,6 +47,4 @@ export {
   createResponseOnlyData,
   createResponseWithQuery,
   createResponseForFilter,
-    createResponseWithFiles,
-    createResponseWithFile
 };

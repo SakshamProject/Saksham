@@ -9,25 +9,20 @@ const PrismaKnownErrors = {
   ForeignKeyError: "P2003",
 };
 
-function throwDatabaseError(error: any) {
-  if (error instanceof Error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      throw prismaKnownErrors(error);
-    }
-
-    if (error instanceof Prisma.PrismaClientUnknownRequestError) {
-      throw new APIError(
-          "Oh No! Some Unknown Database Error Occurred. Please Try Again.",
-          StatusCodes.INTERNAL_SERVER_ERROR,
-          "DatabaseUnknownError",
-          "E"
-      );
-    }
+function throwDatabaseError(error: Error) {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    throw prismaKnownErrors(error);
   }
 
-  if (error instanceof APIError) {
-    throw error;
+  if (error instanceof Prisma.PrismaClientUnknownRequestError) {
+    throw new APIError(
+      "Oh No! Some Unknown Database Error Occurred. Please Try Again.",
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      "DatabaseUnknownError",
+      "E"
+    );
   }
+  if (error instanceof APIError) throw error;
 
   throw new APIError(
     "Some Database Error Occurred",
