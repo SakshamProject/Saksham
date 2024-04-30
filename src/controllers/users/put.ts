@@ -12,7 +12,7 @@ async function putUser(request: Request, response: Response, next: NextFunction)
         const result = await updateUserTransactionDB(body,id,request.user.id);
 
         let file: object | undefined = {}
-        const personId = result?.id;
+        const personId = result?.personId;
         if (request.file && personId) {
             file = await saveProfilePhotoToS3andDB(personId, request.file);
         }
