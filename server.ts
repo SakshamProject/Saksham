@@ -26,6 +26,7 @@ server.use(morgan("combined", { stream: accessLogStream }));
 
 server.use("/api", apiRouter);
 server.use("/auth", authRouter);
+
 apiRouter.use(errorHandler);
 
 server.listen(config.PORT, () => {

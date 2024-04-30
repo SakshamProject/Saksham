@@ -43,21 +43,25 @@ async function putDisabilityTypeDBTransaction(
         const exisitingDisabilitySubTypesId: string[] | undefined =
           retrieveDisabilitySubTypesId(exisitingDisabilitySubTypes);
 
-        const services = body.disabilitySubType;
+          if(body.disabilitySubType){
+            const disabilitySubTypes = body.disabilitySubType;
 
-        const checkedDisabilitySubTypesId: string[] =
-          await createCheckedDisabilitySubTypes(
-            prismaTransaction,
-            services,
-            id
-          );
+            const checkedDisabilitySubTypesId: string[] =
+              await createCheckedDisabilitySubTypes(
+                prismaTransaction,
+                disabilitySubTypes,
+                id
+              );
+    
+            await deleteUncheckedDisabilitySubTypes(
+              prismaTransaction,
+              exisitingDisabilitySubTypesId,
+              checkedDisabilitySubTypesId
+            );
+    
+          }
 
-        await deleteUncheckedDisabilitySubTypes(
-          prismaTransaction,
-          exisitingDisabilitySubTypesId,
-          checkedDisabilitySubTypesId
-        );
-
+      
         return id;
       } catch (error) {
         if (error instanceof Error) throwDatabaseError(error);
