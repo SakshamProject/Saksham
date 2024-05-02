@@ -18,6 +18,7 @@ import {
 } from '../create.js'
 import { getEducationQualificationTypeByIdDB } from '../read.js'
 import throwDatabaseError from '../../../../utils/errorHandler.js'
+import defaults from '../../../../../../defaults.js'
 
 async function postEducationQualificationTypeDBTransaction(
   body: postEducationalQualificationBodyType,
@@ -62,7 +63,7 @@ async function postEducationQualificationTypeDBTransaction(
       }
     },
     {
-      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+      isolationLevel: defaults.transactionOptions.isolationLevel,
       maxWait: 5000,
       timeout: 10000,
     },
