@@ -11,13 +11,22 @@ function errorHandler(
 ) {
   if (error instanceof ZodError) {
     return response.status(StatusCodes.BAD_REQUEST).json(error);
-  }
-  if (error instanceof APIError) {
+  } else if (error instanceof APIError) {
     return response.status(error.statusCode).json({
       error: {
         message: error.message,
         severity: error.severity,
         name: error.name,
+      },
+    });
+  } else {
+    return response.status(StatusCodes.BAD_REQUEST).json({
+      error: {
+        message: error.message,
+        name: "unknownError",
+        severity: "E",
+        path: error.stack,
+        errorName: error.name,
       },
     });
   }
