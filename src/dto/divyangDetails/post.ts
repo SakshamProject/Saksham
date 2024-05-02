@@ -28,6 +28,7 @@ const createDivyangDetailsDBObject = (
     mobileNumber: divyangDetails.personalDetails.mobileNumber,
     fatherName: divyangDetails.personalDetails.fatherName,
     motherName: divyangDetails.personalDetails.motherName,
+    udidCardNumber: divyangDetails.personalDetails.UDIDCardNumber,
     isMarried: divyangDetails.personalDetails.isMarried,
     spouseName: divyangDetails.personalDetails.spouseName,
     spouseNumber: divyangDetails.personalDetails.spouseNumber,
