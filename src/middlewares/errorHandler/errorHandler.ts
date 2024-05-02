@@ -10,10 +10,10 @@ function errorHandler(
   next: NextFunction
 ) {
   if (error instanceof ZodError) {
-    response.status(StatusCodes.BAD_REQUEST).json(error);
+    return response.status(StatusCodes.BAD_REQUEST).json(error);
   }
   if (error instanceof APIError) {
-    response.status(error.statusCode).json({
+    return response.status(error.statusCode).json({
       error: {
         message: error.message,
         severity: error.severity,
@@ -21,6 +21,5 @@ function errorHandler(
       },
     });
   }
-  next();
 }
 export default errorHandler;
