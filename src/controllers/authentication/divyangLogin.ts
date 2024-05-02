@@ -1,7 +1,6 @@
 import { NextFunction, Response, Request } from "express";
 import { StatusCodes } from "http-status-codes";
 import defaults from "../../defaults.js";
-import { verifyUserName } from "../../services/database/authentication/verifyUser.js";
 import APIError from "../../services/errors/APIError.js";
 import {
   loginSchemaType,
@@ -10,6 +9,7 @@ import {
 import config from "../../../config.js";
 import * as crypto from "crypto";
 import jwt from "jsonwebtoken";
+import { verifyDivyang } from "../../services/database/authentication/verifyUser.js";
 
 async function divyangLogin(
   request: Request,
@@ -18,8 +18,8 @@ async function divyangLogin(
 ) {
   try {
     const body: loginSchemaType = loginSchema.parse(request.body);
-    const person = await verifyUserName(body.userName);
-    if (!person) {
+    const divyang = await verifyDivyang(body.userName);
+    if (!divyang) {
       throw new APIError(
         "Username or password is incorrect",
         StatusCodes.BAD_REQUEST,
@@ -31,7 +31,7 @@ async function divyangLogin(
       .createHmac(defaults.hashingAlgorithm, config.SECRET)
       .update(body.password)
       .digest("hex");
-    if (givenPassword !== person.password.password) {
+    if (givenPassword !== divyang.person.password.password) {
       throw new APIError(
         "Username or password is incorrect",
         StatusCodes.BAD_REQUEST,
@@ -39,11 +39,11 @@ async function divyangLogin(
         "S"
       );
     }
-    person.password = {
+    divyang.person.password = {
       id: "PROTECTED",
       password: "PROTECTED",
     };
-    const token = jwt.sign({ personId: person.id }, config.SECRET, {
+    const token = jwt.sign({ personId: divyang.person.id }, config.SECRET, {
       expiresIn: "7d",
     });
 
@@ -57,7 +57,7 @@ async function divyangLogin(
     response.json({
       message: "Logged in successfully",
       token: token,
-      person: person,
+      divyang: divyang,
     });
   } catch (err) {
     next(err);

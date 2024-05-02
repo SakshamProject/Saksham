@@ -10,17 +10,25 @@ function errorHandler(
   next: NextFunction
 ) {
   if (error instanceof ZodError) {
-    response.status(StatusCodes.BAD_REQUEST).json(error);
-  }
-  if (error instanceof APIError) {
-    response.status(error.statusCode).json({
+    return response.status(StatusCodes.BAD_REQUEST).json(error);
+  } else if (error instanceof APIError) {
+    return response.status(error.statusCode).json({
       error: {
         message: error.message,
         severity: error.severity,
         name: error.name,
       },
     });
+  } else {
+    return response.status(StatusCodes.BAD_REQUEST).json({
+      error: {
+        message: error.message,
+        name: "unknownError",
+        severity: "E",
+        path: error.stack,
+        errorName: error.name,
+      },
+    });
   }
-  next();
 }
 export default errorHandler;

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import APIError from "../../services/errors/APIError.js";
 import { StatusCodes } from "http-status-codes";
-import jwt from "jsonwebtoken";
+import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import config from "../../../config.js";
 import { verifyDivyang } from "../../services/database/authentication/verifydivyang.js";
 import { getUserByIdAuthDB } from "../../services/database/authentication/verifyUser.js";
@@ -47,6 +47,16 @@ async function authenticate(
     }
     next();
   } catch (error) {
+    if (error instanceof jwt.NotBeforeError) {
+      next(
+        new APIError(error.message, StatusCodes.BAD_REQUEST, "TokenError", "S")
+      );
+    }
+    if (error instanceof jwt.JsonWebTokenError) {
+      next(
+        new APIError(error.message, StatusCodes.BAD_REQUEST, "TokenError", "S")
+      );
+    }
     if (error instanceof jwt.TokenExpiredError) {
       next(
         new APIError(

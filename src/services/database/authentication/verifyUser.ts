@@ -2,44 +2,59 @@ import { userForgetPasswordSchemaType } from "../../../types/authentication/auth
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 
-async function verifyUserName(userName: string) {
+async function verifyUser(userName: string) {
   try {
-    const person = await prisma.person.findUnique({
+    const person = await prisma.user.findFirst({
       where: {
-        userName: userName,
+        person: { userName: userName },
       },
       select: {
-        password: true,
-        divyang: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-          },
+        person: {
+          select: { id: true, userName: true, password: true },
         },
         id: true,
-        userName: true,
-        user: {
+        designation: {
           select: {
             id: true,
-            designation: {
+            name: true,
+            features: {
               select: {
-                id: true,
-                name: true,
-                features: {
+                feature: {
                   select: {
-                    feature: {
-                      select: {
-                        id: true,
-                        name: true,
-                      },
-                    },
+                    id: true,
+                    name: true,
                   },
                 },
               },
             },
           },
         },
+      },
+    });
+    return person;
+  } catch (error) {
+    if (error instanceof Error) {
+      throwDatabaseError(error);
+    }
+  }
+}
+async function verifyDivyang(userName: string) {
+  try {
+    const person = await prisma.divyangDetails.findFirst({
+      where: {
+        person: { userName: userName },
+      },
+      select: {
+        person: {
+          select: {
+            password: true,
+            id: true,
+            userName: true,
+          },
+        },
+        id: true,
+        firstName: true,
+        lastName: true,
       },
     });
     return person;
@@ -102,38 +117,40 @@ const verifyUserForForgetPassword = async (
   body: userForgetPasswordSchemaType
 ) => {
   try {
-
-
-
-    const user  = await prisma.person.findFirst({
-      where:{
-        AND:[
+    const user = await prisma.person.findFirst({
+      where: {
+        AND: [
           {
-            userName:body.userName
+            userName: body.userName,
           },
           {
-            user:{
-              contactNumber:body.contactNumber
-            }
-          }
-        ]
+            user: {
+              contactNumber: body.contactNumber,
+            },
+          },
+        ],
       },
-      select:{
-        id:true,
-        userName:true,
-        user:{
-          select:{
-            id:true,
-            firstName:true,
-            contactNumber:true
-          }
-        }
-      }
-    })
+      select: {
+        id: true,
+        userName: true,
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            contactNumber: true,
+          },
+        },
+      },
+    });
     return user;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
 
-export { verifyUserName, getUserByIdAuthDB, verifyUserForForgetPassword };
+export {
+  verifyUser,
+  getUserByIdAuthDB,
+  verifyUserForForgetPassword,
+  verifyDivyang,
+};
