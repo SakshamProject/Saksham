@@ -5,7 +5,7 @@ import config from "../../../config.js";
 import jwt from "jsonwebtoken";
 import APIError from "../../services/errors/APIError.js";
 import { StatusCodes } from "http-status-codes";
-import { verifyUserName } from "../../services/database/authentication/verifyUser.js";
+import { verifyUser } from "../../services/database/authentication/verifyUser.js";
 import {
   loginSchema,
   loginSchemaType,
@@ -18,8 +18,8 @@ async function userLogin(
 ) {
   try {
     const body: loginSchemaType = loginSchema.parse(request.body);
-    const person = await verifyUserName(body.userName);
-    if (!person) {
+    const user = await verifyUser(body.userName);
+    if (!user) {
       throw new APIError(
         "Username or password is incorrect",
         StatusCodes.BAD_REQUEST,
@@ -32,7 +32,7 @@ async function userLogin(
       .update(body.password)
       .digest("hex");
 
-    if (givenPassword !== person.password.password) {
+    if (givenPassword !== user.person.password.password) {
       throw new APIError(
         "Username or password is incorrect",
         StatusCodes.BAD_REQUEST,
@@ -41,12 +41,12 @@ async function userLogin(
       );
     }
     const token = jwt.sign(
-      { personId: person.id, userId: person.user?.id },
+      { personId: user.person.id, userId: user.id },
       config.SECRET,
       { expiresIn: "7d" }
     );
 
-    person.password = {
+    user.person.password = {
       id: "PROTECTED",
       password: "PROTECTED",
     };
@@ -60,7 +60,7 @@ async function userLogin(
 
     response.json({
       message: "Logged in successfully",
-      person: person,
+      user: user,
       token: token,
     });
   } catch (err) {
