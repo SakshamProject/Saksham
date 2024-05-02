@@ -25,10 +25,9 @@ async function updateUserDB(
 // change to person
 async function updateProfileKeyDB(prisma: Prisma.TransactionClient, personId: string, data: Prisma.UserUpdateInput) {
   try {
-    // TODO: change to user once db is updated
     const result = await prisma.user.update({
       where: {
-        id: personId
+        personId: personId
       },
       data: data
     });

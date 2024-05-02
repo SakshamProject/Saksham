@@ -5,14 +5,19 @@ import {
   userPutRequestType,
 } from "../../types/users/usersSchema.js";
 import generateUserListWhereInput from "../../services/database/utils/users/usersFilterMapper.js";
-import {generateKey} from "node:crypto";
+import config from "../../../config.js";
+import {createHmac} from "node:crypto";
+import defaults from "../../defaults.js";
 
 function createPersonDBObject(request: Request): Prisma.PersonCreateInput {
   const userInputObject: Prisma.PersonCreateInput = {
-    loginId: request.body.loginId,
+    userName: request.body.userName,
     password: {
       create: {
-        password: request.body.password, // TODO: Hash this
+        password:
+          createHmac(defaults.hashingAlgorithm, config.SECRET)
+          .update(request.body.password)
+          .digest("hex"),
       },
     },
     user: {
@@ -35,7 +40,12 @@ function createPersonDBObject(request: Request): Prisma.PersonCreateInput {
             id: request.body.designationId,
           },
         },
-        userAuditLog: {
+        updatedBy: {
+          connect: {
+            id: request.user.id,
+          },
+        },
+        auditLog: {
           create: {
             description: request.body.description,
             status: request.body.status,
@@ -67,7 +77,6 @@ function createAuditLogDBObject(body: userPutRequestType, id: string) {
     };
     return Auditlog;
   }
-    
 }
 
 export { createPersonDBObject, listUserWhereInput, createAuditLogDBObject };

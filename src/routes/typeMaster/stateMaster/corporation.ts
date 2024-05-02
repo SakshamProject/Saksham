@@ -14,6 +14,6 @@ CorporationRouter.get("/", getCorporation);
 CorporationRouter.get("/:id", getCorporationById);
 CorporationRouter.put("/:id", putCorporation);
 CorporationRouter.delete("/:id", deleteCorporation);
-CorporationRouter.get("/districts/:districtId", getCorporationByDistrictId);
+// CorporationRouter.get("/districts/:districtId", getCorporationByDistrictId);
 
 export default CorporationRouter;

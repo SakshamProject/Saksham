@@ -8,10 +8,9 @@ import inputFieldSchema, {
   phoneNumberSchema,
   uuidSchema,
 } from "../inputFieldSchema.js";
-import { Prisma } from "@prisma/client";
+import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import { SevaKendraColumnNamesEnum } from "./sevaKendraDefaults.js";
 import { sortOrderEnum } from "../getRequestSchema.js";
-import {AuditLogStatusEnum} from "@prisma/client";
 
 const SevaKendraColumnNameSchema = z
   .nativeEnum(SevaKendraColumnNamesEnum)
@@ -27,9 +26,9 @@ const SevaKendraRequestSchema = z.object({
   contactPerson: z.object({
     id: uuidSchema.optional(),
     name: inputFieldSchema.toUpperCase(),
-    email: emailSchema,
+    email: emailSchema.optional(),
     phoneNumber1: phoneNumberSchema,
-    phoneNumber2: phoneNumberSchema,
+    phoneNumber2: phoneNumberSchema.optional(),
   }),
   servicesBySevaKendra: z
     .object({
@@ -50,9 +49,9 @@ const SevaKendraUpdateRequestSchema = z.object({
   contactPerson: z.object({
     id: uuidSchema,
     name: inputFieldSchema.toUpperCase(),
-    email: emailSchema,
+    email: emailSchema.optional(),
     phoneNumber1: phoneNumberSchema,
-    phoneNumber2: phoneNumberSchema,
+    phoneNumber2: phoneNumberSchema.optional(),
   }),
   services: z
     .object({
@@ -92,7 +91,6 @@ const getSevaKendraSchema = z.object({
     })
     .optional(),
 });
-
 
 type SevaKendraFilterType = z.infer<typeof sevaKendraFilter>;
 type GetSevaKendraSchemaType = z.infer<typeof getSevaKendraSchema>;

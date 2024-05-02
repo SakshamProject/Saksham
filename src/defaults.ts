@@ -15,7 +15,10 @@ type Defaults = {
     MAX_FILE_SIZE: number,
     s3: {
         expiresIn: number // in seconds
-    }
+    },
+    createdById: string;
+    updatedById: string;
+    hashingAlgorithm: string;
 }
 const defaults: Defaults = {
     MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
@@ -30,17 +33,17 @@ const defaults: Defaults = {
     },
     s3: {
         expiresIn: 60 * 60 // 1hr in seconds
-    }
+    },
+    createdById: "defaultCreatedById",
+    updatedById: "defaultUpdatedById",
+    hashingAlgorithm: "sha256",
 }
 
+const auditLogDefaults = {
+  status: AuditLogStatusEnum.ACTIVE,
+  date: new Date().toISOString(),
+  description: "NEW RECORD CREATED",
+};
 
- const auditLogDefaults = {
-
-  status:AuditLogStatusEnum.ACTIVE,
-  date :new Date().toISOString(),
-  description: "NEW RECORD CREATED"
-}
-
-
-export {auditLogDefaults}
+export { auditLogDefaults };
 export default defaults;

@@ -69,6 +69,8 @@ const getSevaKendraByIdDB = async (sevaKendraId: string): Promise<any> => {
         district: {
           include: { state: true },
         },
+        updatedBy: true,
+        createdBy: true,
         contactPerson: true,
         services: {
           include: {
@@ -111,12 +113,13 @@ const getSevaKendraServicesById = async (
   }
 };
 const getSevaKendraStatusDB = async (
+  prismaTransaction: Prisma.TransactionClient,
   sevaKendraId: string,
   currentDate: string
 ) => {
   try {
-    const SevaKendraAuditLog = await prisma.sevaKendraAuditLog.findFirstOrThrow(
-      {
+    const SevaKendraAuditLog =
+      await prismaTransaction.sevaKendraAuditLog.findFirstOrThrow({
         where: {
           AND: [
             { sevaKendraId: sevaKendraId },
@@ -131,12 +134,8 @@ const getSevaKendraStatusDB = async (
           date: "desc",
         },
         take: 1,
-        select: {
-          status: true,
-        },
-      }
-    );
-    return SevaKendraAuditLog.status || AuditLogStatusEnum.DEACTIVE;
+      });
+    return SevaKendraAuditLog;
   } catch (error) {
     if (error instanceof Error) throwDatabaseError(error);
   }
@@ -149,16 +148,7 @@ const getSevaKendraByDistrictIdDB = async (
     const currentDate = new Date(Date.now()).toISOString();
     const sevakendras = await prisma.sevaKendra.findMany({
       where: {
-        AND: [
-          { districtId: districtId },
-          {
-            auditLog: {
-              every: {
-                status: status,
-              },
-            },
-          },
-        ],
+        AND: [{ districtId: districtId }],
       },
       select: {
         id: true,
@@ -184,6 +174,32 @@ const getSevaKendraByDistrictIdDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+
+const getSevaKendraDependencyStatusDB = async (
+  prismaTransaction: Prisma.TransactionClient,
+  sevaKendraId: string
+) => {
+  try {
+    const sevaKendra = await prismaTransaction.sevaKendra.findFirstOrThrow({
+      where: {
+        id: sevaKendraId,
+      },
+      include: {
+        divyangServiceMapping: true,
+        designations: true,
+      },
+    });
+
+    const dependencyStatus = !(
+      sevaKendra.divyangServiceMapping.length === 0 &&
+      sevaKendra.designations.length === 0
+    );
+
+    return dependencyStatus;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+};
 export {
   getSevaKendraDB,
   getSevaKendraDBTotal,
@@ -191,4 +207,5 @@ export {
   getSevaKendraServicesById,
   getSevaKendraByDistrictIdDB,
   getSevaKendraStatusDB,
+  getSevaKendraDependencyStatusDB,
 };

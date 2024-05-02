@@ -14,6 +14,6 @@ PanchayatUnionRouter.get("/", getPanchayatUnion);
 PanchayatUnionRouter.get("/:id", getPanchayatUnionById);
 PanchayatUnionRouter.put("/:id", putPanchayatUnion);
 PanchayatUnionRouter.delete("/:id", deletePanchayatUnion);
-PanchayatUnionRouter.get("/districts/:id", getPanchayatUnionByDistrictId);
+// PanchayatUnionRouter.get("/districts/:id", getPanchayatUnionByDistrictId);
 
 export default PanchayatUnionRouter;

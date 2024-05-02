@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import {
   getDesignationByIDDB,
+  getDesignationsBySevaKendraIdDB,
   getFeaturesDB,
 } from "../../services/database/designation/read.js";
 import {
   createResponseForFilter,
   createResponseOnlyData,
-  createResponseWithQuery,
 } from "../../types/createResponseSchema.js";
 import { getDesignationDBTransaction } from "../../services/database/designation/transaction/read.js";
 import {
@@ -18,6 +18,9 @@ import {
   designationsearchCondition,
 } from "../../services/database/utils/designation/designation.js";
 import { createDesignationFilterInputObject } from "../../dto/designation/designation.js";
+import { getDesignationStatus } from "../../services/database/designation/update.js";
+import { AuditLogStatusEnum } from "@prisma/client";
+import { auditLogStatusEnumSchema } from "../../types/inputFieldSchema.js";
 
 async function getDesignation(
   request: Request,
@@ -70,9 +73,20 @@ async function getDesignationById(
 ) {
   try {
     const id: string = request.params.id;
+
     const result = await getDesignationByIDDB(id);
 
-    const responseData = createResponseOnlyData(result || {});
+    const currentDate = new Date().toISOString();
+
+    const auditLog = await getDesignationStatus(id, currentDate);
+
+    const responseData = createResponseOnlyData({
+      ...result,
+      status: auditLog?.status,
+      description: auditLog?.description,
+      effectiveFromDate: auditLog?.date,
+      timestamp: currentDate,
+    });
     response.send(responseData);
   } catch (err) {
     next(err);
@@ -93,4 +107,35 @@ async function getFeatures(
   }
 }
 
-export { getDesignationById, getDesignation, getFeatures };
+const getDesignationsBySevaKendraId = async (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => {
+  try {
+    const sevaKendraId = request.params.id;
+    const status: AuditLogStatusEnum | undefined =
+      auditLogStatusEnumSchema.parse(request.query.status);
+    const result = await getDesignationsBySevaKendraIdDB(sevaKendraId);
+    let filteredDesignations;
+    if (status) {
+      filteredDesignations = result?.filter(
+        (designation) => designation.auditLog[0].status === status
+      );
+    } else {
+      filteredDesignations = result;
+    }
+
+    const responseData = createResponseOnlyData(filteredDesignations);
+    response.send(responseData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export {
+  getDesignationById,
+  getDesignation,
+  getFeatures,
+  getDesignationsBySevaKendraId,
+};

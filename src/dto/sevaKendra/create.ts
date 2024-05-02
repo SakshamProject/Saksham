@@ -7,11 +7,12 @@ import {
 import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import { sevaKendraDefaults } from "../../types/sevaKendra/sevaKendraDefaults.js";
 import { generateSevaKendraFilter } from "../../services/database/utils/sevaKendra/filterMapper.js";
+import defaults from "../../defaults.js";
 
 const createSevaKendraDBObject = (
   sevaKendra: SevaKendraRequestSchemaType,
-  createdBy: string,
-  updatedBy: string
+  createdBy: string = defaults.createdById,
+  updatedBy: string = defaults.updatedById
 ) => {
   const sevaKendraDBObject: SevaKendra = {
     name: sevaKendra.name,
@@ -40,14 +41,14 @@ const createSevaKendraDBObject = (
     },
     auditLog: {
       create: {
-        // date: sevaKendraDefaults.date,
+        date: sevaKendraDefaults.date,
         description: sevaKendraDefaults.description,
         status: AuditLogStatusEnum.ACTIVE,
       },
     },
-    // createdBy: createdBy,
+    createdBy: { connect: { id: createdBy } },
     createdAt: new Date().toISOString(),
-    // updatedBy: updatedBy,
+    updatedBy: { connect: { id: updatedBy } },
     updatedAt: new Date().toISOString(),
   };
   return sevaKendraDBObject;

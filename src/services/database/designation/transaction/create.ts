@@ -16,10 +16,11 @@ import {
   createDesignationDB,
   createFeaturesOnDesignationDB,
 } from "../create.js";
+import defaults from "../../../../defaults.js";
 
 async function postDesignationDBTransaction(
   body: postDesignationRequestSchemaType,
-  createdByID: string
+  createdByID: string = defaults.createdById
 ) {
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {

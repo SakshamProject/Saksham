@@ -60,6 +60,38 @@ const getDesignationSchema = z.object({
     })
     .optional(),
 });
+
+
+type designationGetByIdType ={
+  id: string;
+  name: string;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  createdBy: {
+      id: string;
+      firstName: string;
+      lastName: string;
+  } | null;
+  updatedBy: {
+      id: string;
+      firstName: string;
+      lastName: string;
+  } | null;
+  sevaKendra: {
+      id:string;
+      name:string;
+  };
+  features: {
+      feature:{
+        id:string;
+        name:string;
+      }
+  }[];
+  designationAuditLog: {
+      status:string;
+  }[];
+} | null
+
 type designationFilterType = z.infer<typeof designationFilter>;
 type getDesignationSchemaType = z.infer<typeof getDesignationSchema>;
 
@@ -85,5 +117,6 @@ export {
   designationFilterType,
   getDesignationSchemaType,
   getDesignationSchema,
-  DesignationWhere
+  DesignationWhere,
+  designationGetByIdType
 };

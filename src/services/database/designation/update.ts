@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { updateDesignationObjectType, updateDesignationRequestSchemaType } from "../../../types/designation/designationSchema.js";
 import throwDatabaseError from "../utils/errorHandler.js";
+import prisma from "../database.js";
 
 async function updateDesignationDB(prismaTransaction:Prisma.TransactionClient, updateObject:updateDesignationObjectType,id:string|undefined){
  
@@ -23,27 +24,53 @@ async function updateDesignationDB(prismaTransaction:Prisma.TransactionClient, u
      
   }
 
-async function getDesignationStatus(prismaTransaction:Prisma.TransactionClient,designationId:string){
-  const currentDate = new Date().toISOString();
-  const status =await prismaTransaction.designation.findFirst({
+async function getDesignationStatus(designationId:string,currentDate:string){
+ 
+try {
+    const status =await prisma.designation.findFirst({
+      where:{
+        id:designationId
+      },
+      include: {
+        auditLog: {
+            where: {
+                date:{
+                  lt :currentDate
+                } 
+            },
+            orderBy: {
+                date:'desc'
+            },
+            take: 1
+        }
+    }
+    })
+    return status?.auditLog[0];
+} catch (error) {
+  if (error instanceof Error) {
+    throwDatabaseError(error);
+  }
+}
+}
+
+async function getDesignationDependencyStatusDB(prismaTransaction:Prisma.TransactionClient,designationId:string){
+try {
+  const designation = await prismaTransaction.designation.findUniqueOrThrow({
     where:{
       id:designationId
     },
-    include: {
-      designationAuditLog: {
-          where: {
-              date:{
-                lt :currentDate
-              } 
-          },
-          orderBy: {
-              date:'desc'
-          },
-          take: 1
-      }
+    include:{
+      users:true
+    }
+  });
+  const dependencyStatus  = designation.users.length===0? false:true;
+  return dependencyStatus;
+} catch (error) {
+  if (error instanceof Error) {
+    throwDatabaseError(error);
   }
-  })
-  return status?.designationAuditLog[0].status;
 }
 
-  export {updateDesignationDB,getDesignationStatus};
+}
+
+  export {updateDesignationDB,getDesignationStatus,getDesignationDependencyStatusDB};

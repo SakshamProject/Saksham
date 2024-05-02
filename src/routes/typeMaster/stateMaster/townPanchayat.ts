@@ -14,6 +14,6 @@ TownPanchayatRouter.get("/", getTownPanchayat);
 TownPanchayatRouter.get("/:id", getTownPanchayatById);
 TownPanchayatRouter.put("/:id", putTownPanchayat);
 TownPanchayatRouter.delete("/:id", deleteTownPanchayat);
-TownPanchayatRouter.get("/districts/:id", getTownPanchayatByDistrictId);
+// TownPanchayatRouter.get("/districts/:id", getTownPanchayatByDistrictId);
 
 export default TownPanchayatRouter;

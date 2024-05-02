@@ -14,5 +14,5 @@ MPConstituencyRouter.get("/", getMPConstituency);
 MPConstituencyRouter.get("/:id", getMPConstituencyById);
 MPConstituencyRouter.put("/:id", putMPConstituency);
 MPConstituencyRouter.delete("/:id", deleteMPConstituency);
-MPConstituencyRouter.get("/districts/:id", getMPConstituencyByDistrictId);
+// MPConstituencyRouter.get("/districts/:id", getMPConstituencyByDistrictId);
 export default MPConstituencyRouter;

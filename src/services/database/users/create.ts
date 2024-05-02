@@ -9,7 +9,7 @@ async function createPersonDB(userInputObject: Prisma.PersonCreateInput) {
       include: {
         user: {
           include: {
-            userAuditLog: true
+            auditLog: true
           }
         },
       },

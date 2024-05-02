@@ -14,6 +14,6 @@ TalukRouter.get("/", getTaluk);
 TalukRouter.get("/:id", getTalukById);
 TalukRouter.put("/:id", putTaluk);
 TalukRouter.delete("/:id", deleteTaluk);
-TalukRouter.get("/districts/:id", getTalukByDistrictId);
+// TalukRouter.get("/districts/:id", getTalukByDistrictId);
 
 export default TalukRouter;
