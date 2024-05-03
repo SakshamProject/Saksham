@@ -8,7 +8,7 @@ import { StatusCodes } from "http-status-codes";
 
 import sevaKendraRouter from "./sevaKendra/sevaKendra.js";
 import designationRouter from "./designation/designation.js";
-import fileRouter from "./file/files.js";
+// import fileRouter from "./file/files.js";
 import serviceMappingRouter from "./serviceMapping/serviceMapping.js";
 import { authenticate } from "../middlewares/authentication/authentication.js";
 

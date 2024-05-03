@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import * as crypto from "crypto";
-import defaults from "../../defaults.js";
 import config from "../../../config.js";
 import jwt from "jsonwebtoken";
 import APIError from "../../services/errors/APIError.js";
@@ -10,6 +8,8 @@ import {
   loginSchema,
   loginSchemaType,
 } from "../../types/authentication/authenticationSchema.js";
+import log from "../../services/logger/logger.js";
+import {hashPassword} from "../../dto/users/post.js";
 
 async function userLogin(
   request: Request,
@@ -18,7 +18,9 @@ async function userLogin(
 ) {
   try {
     const body: loginSchemaType = loginSchema.parse(request.body);
-    const user = await verifyUser(body.userName);
+    log("info", "[post/userLogin] body: %o", body);
+    const user = await verifyUser(body.userName) as {id: string, person: {password?: {id: string, password: string}, id: string, userName: string}, designation: {id: string, name: string, features: {feature: {id: string, name: string}}[]}}
+    log("info", "[post/userLogin] user: %o", user);
     if (!user) {
       throw new APIError(
         "Username or password is incorrect",
@@ -27,12 +29,11 @@ async function userLogin(
         "S"
       );
     }
-    const givenPassword = crypto
-      .createHmac(defaults.hashingAlgorithm, config.SECRET)
-      .update(body.password)
-      .digest("hex");
 
-    if (givenPassword !== user.person.password.password) {
+    const givenPassword = hashPassword(body.password);
+
+    log("info", "[post/userLogin] given password: %o", givenPassword);
+    if (givenPassword !== user.person.password?.password) {
       throw new APIError(
         "Username or password is incorrect",
         StatusCodes.BAD_REQUEST,
@@ -46,10 +47,7 @@ async function userLogin(
       { expiresIn: "7d" }
     );
 
-    user.person.password = {
-      id: "PROTECTED",
-      password: "PROTECTED",
-    };
+    delete user.person.password;
 
     // response.cookie("token", token, {
     //   httpOnly: true,
