@@ -9,7 +9,7 @@ import {
 } from "../../types/createResponseSchema.js";
 import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
 import {listUserWhereInput} from "../../dto/users/post.js";
-import {saveProfilePhotoToS3andDB} from "../../services/files/files.js";
+import {saveUserProfilePhotoToS3andDB} from "../../services/files/files.js";
 
 
 async function postUser(request: Request, response: Response, next: NextFunction) {
@@ -27,7 +27,7 @@ async function postUser(request: Request, response: Response, next: NextFunction
         let file: object | undefined = {};
         const personId = newPerson?.id;
         if (personId && request.file) {
-            file = await saveProfilePhotoToS3andDB(personId, request.file);
+            file = await saveUserProfilePhotoToS3andDB(personId, request.file);
         }
 
         const responseData = createResponseWithFile(newPerson, file);

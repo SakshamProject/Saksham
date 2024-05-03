@@ -23,7 +23,7 @@ async function updateUserDB(
 }
 
 // change to person
-async function updateProfileKeyDB(prisma: Prisma.TransactionClient, personId: string, data: Prisma.UserUpdateInput) {
+async function updateUserProfileKeyDB(prisma: Prisma.TransactionClient, personId: string, data: Prisma.UserUpdateInput) {
   try {
     const result = await prisma.user.update({
       where: {
@@ -37,4 +37,4 @@ async function updateProfileKeyDB(prisma: Prisma.TransactionClient, personId: st
   }
 }
 
-export { updateUserDB, updateProfileKeyDB };
+export { updateUserDB, updateUserProfileKeyDB };

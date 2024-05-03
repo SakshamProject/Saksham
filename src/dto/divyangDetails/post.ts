@@ -89,7 +89,7 @@ const createDivyangDBObject = (
     divyangId: divyangDetails.divyangId,
     firstName: divyangDetails.firstName,
     lastName: divyangDetails.lastName,
-    picture: divyangDetails.picture,
+    // picture: divyangDetails.picture,
     gender: divyangDetails.gender,
     dateOfBirth: divyangDetails.dateOfBirth,
     age: divyangDetails.age,

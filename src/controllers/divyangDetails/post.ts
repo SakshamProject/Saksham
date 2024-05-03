@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import { createResponseOnlyData } from "../../types/createResponseSchema.js";
+import {createResponseOnlyData, createResponseWithFile} from "../../types/createResponseSchema.js";
 import { DivyangDetails } from "@prisma/client";
 import {
   createDivyangDetails,
@@ -15,6 +15,8 @@ import {
   DivyangSignUp,
   divyangSignUpRequestSchema,
 } from "../../types/divyangDetails/divyangSignUpRequestSchema.js";
+import {saveDivyangProfilePhotoToS3andDB, saveUserProfilePhotoToS3andDB} from "../../services/files/files.js";
+import log from "../../services/logger/logger.js";
 
 async function postDivyangDetails(
   request: Request,
@@ -51,7 +53,15 @@ const postDivyang = async (
     const result: DivyangDetails | undefined = await createDivyangDetailsDB(
       divyangDetailsDBObject
     );
-    const responseData = createResponseOnlyData(result || {});
+    log("info", "[postDivyang]: Divyang: %o", result);
+
+    let file: object | undefined = {};
+    const personId = result?.personId;
+    if (personId && request.file) {
+      file = await saveDivyangProfilePhotoToS3andDB(personId, request.file);
+    }
+
+    const responseData = createResponseWithFile(result, file);
     response.send(responseData);
   } catch (error) {
     next(error);

@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 import prisma from '../database/database.js'
-import { updateProfileKeyDB } from '../database/users/update.js'
+import { updateUserProfileKeyDB } from '../database/users/update.js'
 import {
   generateFileURLResponseFromResult,
   generateFileURLsResponseFromResult,
@@ -10,15 +10,42 @@ import {
 } from '../s3/s3.js'
 import APIError from '../errors/APIError.js'
 import { StatusCodes } from 'http-status-codes'
+import {updateDivyangProfileKeyDB} from "../database/divyangDetails/update.js";
 
-async function saveProfilePhotoToS3andDB(
+async function saveDivyangProfilePhotoToS3andDB(
+    personId: string,
+    file: Express.Multer.File,
+) {
+  try {
+    const transaction = prisma.$transaction(async (prisma) => {
+      const key = generateKey(personId, file)
+      const result = await updateDivyangProfileKeyDB(prisma, personId, {
+        picture: key,
+      })
+      const s3Result = await saveFileBufferToS3(personId, file)
+      if (s3Result) {
+        return await generateFileURLResponseFromResult(s3Result)
+      }
+    })
+    return transaction
+  } catch (error) {
+    throw new APIError(
+        'There was an error uploading your files. Please try again.',
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        'FileUploadError',
+        'E',
+    )
+  }
+}
+
+async function saveUserProfilePhotoToS3andDB(
   personId: string,
   file: Express.Multer.File,
 ) {
   try {
     const transaction = prisma.$transaction(async (prisma) => {
       const key = generateKey(personId, file)
-      const result = await updateProfileKeyDB(prisma, personId, {
+      const result = await updateUserProfileKeyDB(prisma, personId, {
         picture: key,
       })
       const s3Result = await saveFileBufferToS3(personId, file)
@@ -62,4 +89,4 @@ async function saveDivyangDetailsFilestoS3andDB(
   }
 }
 
-export { saveProfilePhotoToS3andDB, saveDivyangDetailsFilestoS3andDB }
+export { saveUserProfilePhotoToS3andDB, saveDivyangDetailsFilestoS3andDB, saveDivyangProfilePhotoToS3andDB }

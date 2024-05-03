@@ -15,7 +15,7 @@ const divyangSignUpRequestSchema = z
     firstName: inputFieldSchema,
     lastName: inputFieldSchema,
     divyangId: inputFieldSchema,
-    picture: inputFieldSchema.optional(),
+    // picture: inputFieldSchema.optional(),
     gender: z.nativeEnum(GenderEnum), // is optional in sheet
     dateOfBirth: z.string().datetime(),
     age: z.number().optional(),

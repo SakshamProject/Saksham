@@ -2,7 +2,7 @@ import { usersPutSchema } from "../../types/users/usersSchema.js";
 import { NextFunction, Response, Request } from "express";
 import {createResponseWithFile} from "../../types/createResponseSchema.js";
 import updateUserTransactionDB from "../../services/database/users/transaction/update.js";
-import {saveProfilePhotoToS3andDB} from "../../services/files/files.js";
+import {saveUserProfilePhotoToS3andDB} from "../../services/files/files.js";
 async function putUser(request: Request, response: Response, next: NextFunction) {
     try {
         const id = request.params.id;
@@ -13,7 +13,7 @@ async function putUser(request: Request, response: Response, next: NextFunction)
         let file: object | undefined = {}
         const personId = result?.personId;
         if (request.file && personId) {
-            file = await saveProfilePhotoToS3andDB(personId, request.file);
+            file = await saveUserProfilePhotoToS3andDB(personId, request.file);
         }
         const responseData = createResponseWithFile(result, file);
         response.json(responseData);

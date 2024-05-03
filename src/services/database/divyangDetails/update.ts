@@ -91,9 +91,23 @@ const updateEducationQualificationOfDivyangDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+async function updateDivyangProfileKeyDB(prisma: Prisma.TransactionClient, personId: string, data: Prisma.DivyangDetailsUpdateInput) {
+  try {
+    const result = await prisma.divyangDetails.update({
+      where: {
+        personId: personId
+      },
+      data: data
+    });
+    return result
+  } catch(error) {
+    throwDatabaseError(error);
+  }
+}
 
 export {
   updateDivyangDetailsDB,
   updateDisabilityOfDivyangDB,
   updateEducationQualificationOfDivyangDB,
+    updateDivyangProfileKeyDB
 };
