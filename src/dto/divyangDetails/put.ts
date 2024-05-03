@@ -31,6 +31,7 @@ const updatePersonalDetailsDBObject = (
     mobileNumber: personalDetails.mobileNumber,
     fatherName: personalDetails.fatherName,
     motherName: personalDetails.motherName,
+    udidCardNumber: personalDetails.UDIDCardNumber,
     isMarried: personalDetails.isMarried,
     spouseName: personalDetails.spouseName,
     spouseNumber: personalDetails.spouseNumber,
@@ -47,7 +48,7 @@ const updatePersonalDetailsDBObject = (
         id: updatedBy,
       },
     },
-    eductionQualifications: {
+    educationQualifications: {
       createMany: {
         data: educationQualification.educationQualificationsToCreate,
       },
@@ -178,7 +179,6 @@ const updateDisabilityDetailsDBObject = (
     districtCode: disabilityDetails.districtCode,
     stateCode: disabilityDetails.stateCode,
     identityCardNumber: disabilityDetails.identityCardNumber,
-    udidCardNumber: disabilityDetails.UDIDCardNumber,
     udidEnrollmentNumber: disabilityDetails.UDIDEnrollmentNumber,
     udidCardUrl: disabilityDetails.UDIDCardUrl,
     updatedBy: {

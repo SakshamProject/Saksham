@@ -68,8 +68,13 @@ async function getEducationQualificationByEducationQualificationTypeIdDBTransact
                 throwDatabaseError(error)
             }
         }
-    })
-
+    },
+    {
+      isolationLevel: defaults.transactionOptions.isolationLevel,
+      maxWait: 5000,
+      timeout: 10000,
+    },
+  )
     return transaction
 }
 
