@@ -1,14 +1,15 @@
-declare module 'is-iso-date';
+declare module 'is-iso-date'
 
 interface User {
-    id: string;
+  id: string
 }
 
 declare namespace Express {
-    export interface Request {
-        user: User;
-    }
-    export interface Response {
-        user: User
-    }
+  export interface Request {
+    user: User
+    serviceMappingDefault: Boolean
+  }
+  export interface Response {
+    user: User
+  }
 }

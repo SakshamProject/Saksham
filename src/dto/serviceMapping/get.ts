@@ -5,15 +5,19 @@ import {
   serviceMappingFilterType,
 } from "../../types/serviceMapping/serviceMappingScreens.js";
 
-const createServiceMappingFilterInputObject = (
+const createServiceMappingFilterInputObject = async (
   serviceMappingFilter: serviceMappingFilterType | undefined,
   globalSearchConditions: ServiceMappingWhere | null,
-  serviceAdditionalWhere: ServiceAdditionalWhereSchemaType |undefined
-): ServiceMappingWhere => {
+  serviceAdditionalWhere: ServiceAdditionalWhereSchemaType | undefined,
+  serviceMappingDefault: Boolean | undefined,
+  userId: string = "default"
+): Promise<ServiceMappingWhere> => {
   const serviceMappingWhereInput = generateServiceMappingFilter(
     serviceMappingFilter,
     globalSearchConditions,
-    serviceAdditionalWhere
+    serviceAdditionalWhere, 
+    serviceMappingDefault,
+    userId
   );
   return serviceMappingWhereInput;
 };

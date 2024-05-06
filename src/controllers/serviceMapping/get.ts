@@ -41,10 +41,12 @@ const getServiceMapping = async (
         : ServiceMappingGlobalSearchConditions(
             serviceMappingRequest.searchText
           );
-    const serviceMappingWhereInput = createServiceMappingFilterInputObject(
+    const serviceMappingWhereInput = await createServiceMappingFilterInputObject(
       serviceMappingRequest.filters,
       globalSearchConditions,
-      serviceAdditionalWhere
+      serviceAdditionalWhere,
+      request.serviceMappingDefault,
+      request.token?.userId
     );
     const result = await getServiceMappingDBTransaction(
       serviceMappingWhereInput,
@@ -99,9 +101,11 @@ const getServiceMappingByDivyangId = async (
         : ServiceMappingGlobalSearchConditions(
             serviceMappingRequest.searchText
           );
-    const serviceMappingWhereInput = createServiceMappingFilterInputObject(
+    const serviceMappingWhereInput = await createServiceMappingFilterInputObject(
       serviceMappingRequest.filters,
       globalSearchConditions,
+      undefined,
+      undefined,
       undefined
     );
     const divyangId = request.params.divyangId;

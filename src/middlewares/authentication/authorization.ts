@@ -26,7 +26,12 @@ function authorization(
         const user = await getUserByIdAuthDB(request.token.userId);
         const designationId = user?.designationId;
         const designation = await getDesignationByIDDB(designationId);
-
+        if (currentFeature === AuthorizationEnum.SERVICE_MAPPING &&!(designation?.features.some(
+          (feature) => feature.feature.name === currentFeature
+        ))) {
+          request.serviceMappingDefault = true;
+          next()
+        }
         if (
           !designation?.features.some(
             (feature) => feature.feature.name === currentFeature

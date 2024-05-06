@@ -200,7 +200,27 @@ const getSevaKendraDependencyStatusDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+ const getSevaKendraOfUserDB = async (userId:string) => {
+  try {
+    const sevaKendra = await prisma.user.findFirst({
+      where: {
+      id:userId
+      },
+      select: {
+        designation:{
+          select: {
+            sevaKendraId:true
+          }
+        }
+      }
+    });
+    return sevaKendra?.designation.sevaKendraId;
+  } catch (error) {
+    if (error instanceof Error) throwDatabaseError(error);
+  }
+}
 export {
+  getSevaKendraOfUserDB,
   getSevaKendraDB,
   getSevaKendraDBTotal,
   getSevaKendraByIdDB,
