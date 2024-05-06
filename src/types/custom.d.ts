@@ -7,7 +7,7 @@ interface User {
 declare namespace Express {
   export interface Request {
     user: User
-    serviceMappingDefault: Boolean
+    admin: Boolean
   }
   export interface Response {
     user: User

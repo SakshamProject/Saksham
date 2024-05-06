@@ -123,11 +123,15 @@ const createDivyangDBObject = (
 
 const createDivyangDetailsFilterInputObject = (
   divyangDetailsFilter: DivyangDetailsFilterType | undefined,
-  globalSearchConditions: DivyangDetailsWhere | null
+  globalSearchConditions: DivyangDetailsWhere | null,
+  personId: string = "default",
+  admin: Boolean
 ): DivyangDetailsWhere => {
   const divyangDetailsWhereInput = generateDivyangDetailsFilter(
     divyangDetailsFilter,
-    globalSearchConditions
+    globalSearchConditions,
+    personId,
+    admin
   );
   return divyangDetailsWhereInput;
 };

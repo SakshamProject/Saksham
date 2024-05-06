@@ -111,7 +111,7 @@ const generateServiceMappingFilter = async (
   serviceMappingfilter: serviceMappingFilterType | undefined,
   globalSearchConditions: ServiceMappingWhere | null,
   serviceAdditionalWhere: ServiceAdditionalWhereSchemaType | undefined,
-  serviceMappingDefault: Boolean | undefined,
+  admin: Boolean | undefined,
   user: string,
 ) => {
   const ServiceMappingWhereInput: any = {
@@ -165,10 +165,15 @@ const generateServiceMappingFilter = async (
     }
     ServiceMappingWhereInput.AND.push(additionalWhere)
   }
-  if (serviceMappingDefault === true && user !== "default") {
+  if (admin === false && user !== 'default') {
     const additionalWhere: ServiceMappingWhere = {
       userId: user,
-      sevaKendraId : (await getSevaKendraOfUserDB(user) || ""),
+    }
+    ServiceMappingWhereInput.AND.push(additionalWhere)
+  }
+  if (admin !== true && user !== 'default') {
+    const additionalWhere: ServiceMappingWhere = {
+      sevaKendraId: (await getSevaKendraOfUserDB(user)) || '',
     }
     ServiceMappingWhereInput.AND.push(additionalWhere)
   }

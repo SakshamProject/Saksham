@@ -39,6 +39,8 @@ const getDivyangDetails = async (
     const divyangDetailsWhereInput = createDivyangDetailsFilterInputObject(
       divyangDetailsRequest.filters,
       globalSearchConditions,
+      request.token?.personId,
+      request.admin
     )
     const result = await getDivyangDetailsDBTransaction(
       divyangDetailsWhereInput,

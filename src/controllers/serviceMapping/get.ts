@@ -45,7 +45,7 @@ const getServiceMapping = async (
       serviceMappingRequest.filters,
       globalSearchConditions,
       serviceAdditionalWhere,
-      request.serviceMappingDefault,
+      request.admin,
       request.token?.userId
     );
     const result = await getServiceMappingDBTransaction(
