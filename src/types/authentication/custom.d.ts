@@ -1,16 +1,16 @@
 interface User {
-  id: string;
+  id: string
 }
 
 interface Token {
-  personId: string;
-  userId: string;
-
+  personId: string
+  userId: string
+  superAdmin: string
 }
 
 declare namespace Express {
   export interface Request {
-    user?: User;
-    token?: Token;
+    user?: User
+    token?: Token
   }
 }

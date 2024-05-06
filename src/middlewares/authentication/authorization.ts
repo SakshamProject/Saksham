@@ -15,6 +15,9 @@ function authorization(
 ) {
   return async (request: Request, response: Response, next: NextFunction) => {
     try {
+      if(request.token?.superAdmin){
+        next()
+      }
       //user
       if (request.token?.userId) {
         if (
