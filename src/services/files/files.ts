@@ -13,7 +13,7 @@ import APIError from "../errors/APIError.js"
 import {StatusCodes} from "http-status-codes"
 import {divayangDetailsUpdateFileKeysDB, updateDivyangProfileKeyDB} from "../database/divyangDetails/update.js";
 import log from "../logger/logger.js";
-import {getDivyangDetailsByIdDB, getDivyangDetailsByPersonIdDB} from "../database/divyangDetails/read.js";
+import {getDivyangDetailsByPersonIdDB} from "../database/divyangDetails/read.js";
 import {getUserByPersonIdDB} from "../database/users/read.js";
 
 async function getDivyangDetailsFileURLs(personId: string) {
@@ -206,7 +206,7 @@ function IdProofFieldNameColumnNameMapper(files: { [fieldName: string]: Express.
             if (files[field]) {
                 data[columnName] = generateKey(personId, files[field][0]);
             } else {
-                data[columnName] = undefined; // Soft Delete the File
+                data[columnName] = null; // Soft Delete the File
             }
         }
     }
