@@ -4,7 +4,9 @@ import {
     GetObjectCommand,
     GetObjectCommandInput,
     ListObjectsV2Command,
-    ListObjectsV2CommandInput, NoSuchBucket, NoSuchKey,
+    ListObjectsV2CommandInput,
+    NoSuchBucket,
+    NoSuchKey,
     PutObjectCommand,
     PutObjectCommandInput,
     PutObjectCommandOutput,
@@ -18,6 +20,7 @@ import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 import defaults from "../../defaults.js";
 import APIError from "../errors/APIError.js";
 import {StatusCodes} from "http-status-codes";
+import {filesResponse} from "../files/files.js";
 
 type S3Result = { fieldName: string, key: string, output: PutObjectCommandOutput }
 const s3Client = new S3Client({
@@ -30,50 +33,52 @@ const s3Client = new S3Client({
 );
 
 // Check if a file already exists with an identical name sans extension
-async function fileExists(personId: string, file: Express.Multer.File) {
+async function fileWithDiffExtensionExists(personId: string, file: Express.Multer.File) {
     try {
-            log("info", "[fileExists]: Checking if file exists...");
-            const fileNameWithoutExtension = generateKeyWithoutExtension(personId, file);
-            const params: ListObjectsV2CommandInput = {
-                Bucket: config.s3.bucket_name,
-                Prefix: fileNameWithoutExtension,
-                MaxKeys: 1
+        log("info", "[fileExists]: Checking if file exists...");
+        const fileNameWithoutExtension = generateKeyWithoutExtension(personId, file);
+        const params: ListObjectsV2CommandInput = {
+            Bucket: config.s3.bucket_name,
+            Prefix: fileNameWithoutExtension,
+            MaxKeys: 1
+        }
+        const listObjectsV2Command = new ListObjectsV2Command(params);
+
+        const response = await s3Client.send(listObjectsV2Command);
+        log("info", "[fileExists]: Response Contents: %o", response.Contents?.[0]);
+
+        if (response.Contents && response.Contents.length > 0) {
+            if (response.Contents[0].Key) {
+                const existingExtension = path.extname(response.Contents[0].Key);
+                const currentExtension = path.extname(file.originalname);
+                if (existingExtension !== currentExtension) {
+                    return response.Contents[0].Key
+                }
             }
-
-            const listObjectsV2Command = new ListObjectsV2Command(params);
-
-            const response = await s3Client.send(listObjectsV2Command);
-            log("info", "[fileExists]: Response Contents: %o", response.Contents?.[0]);
-
-            if (response.Contents && response.Contents.length > 0) {
-                return response.Contents[0].Key
-            }
+        }
     } catch (error) {
         throwS3Error(error);
     }
 }
 
 async function generateFileURLResponseFromKey(key: string) {
-    try {
-        const params: GetObjectCommandInput = {
-            Bucket: config.s3.bucket_name,
-            Key: key
-        }
-        const command = new GetObjectCommand(params);
-        const url = await getSignedUrl(s3Client, command, {
-            expiresIn: defaults.s3.expiresIn
-        });
-        log("info", "[generateFileURL]: url: \n %o", url);
-        return ({
+    const params: GetObjectCommandInput = {
+        Bucket: config.s3.bucket_name,
+        Key: key
+    }
+    const command = new GetObjectCommand(params);
+    const url = await getSignedUrl(s3Client, command, {
+        expiresIn: defaults.s3.expiresIn
+    });
+    log("info", "[generateFileURL]: url: \n %o", url);
+    return (
+        {
             key,
             url,
             validUpto: addToCurrentTimeISO(defaults.s3.expiresIn),
             expiresInSeconds: defaults.s3.expiresIn
-        });
-
-    } catch (error) {
-        throwS3Error(error);
-    }
+        }
+    );
 }
 
 
@@ -86,12 +91,15 @@ function addToCurrentTimeISO(seconds: number) {
 
 async function generateFileURLsResponseFromResult(s3Result: S3Result[]) {
     try {
-        const files: {}[] = []
+        const files: filesResponse = []
         for (const index in s3Result) {
             const field = s3Result[index].fieldName
-            files.push({
+            const result = {
                 [field]: await generateFileURLResponseFromKey(s3Result[index].key)
-            })
+            }
+            if (result) {
+                files.push(result)
+            }
         }
         return files
     } catch (error) {
@@ -145,7 +153,7 @@ async function deleteFile(key: string) {
 async function saveFileBufferToS3(personId: string, file: Express.Multer.File): Promise<S3Result | undefined> {
     try {
 
-        const oldFile = await fileExists(personId, file);
+        const oldFile = await fileWithDiffExtensionExists(personId, file);
         if (oldFile) {
             // delete it
             log("info", "[saveFileBufferToS3]: File already exists. Deleting it.");

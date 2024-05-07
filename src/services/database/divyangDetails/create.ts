@@ -11,6 +11,9 @@ const createDivyangDetailsDB = async (
   try {
     const createdDivyangDetails = await prisma.divyangDetails.create({
       data: divyangDetails,
+      include: {
+        person: true
+      }
     });
 
     return createdDivyangDetails;

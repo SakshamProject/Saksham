@@ -1,7 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { Request } from "express";
-import {userListType, userPutRequestType} from "../../types/users/usersSchema.js";
-import generateUserListWhereInput from "../../services/database/utils/users/usersFilterMapper.js";
+import {userPutRequestType} from "../../types/users/usersSchema.js";
 
 function updateUserDBObject(body:userPutRequestType,updatedBy:string): Prisma.UserUpdateInput {
     const userUpdateObject: Prisma.UserUpdateInput = {

@@ -16,7 +16,7 @@ function createResponseWithFile(result: Object = {}, file: Object = {}) {
   )
 }
 
-function createResponseWithFiles(result: Object = {}, files: Object[] = []) {
+function createResponseWithFiles(result: Object = {}, files: Object = []) {
   return (
       {
         data: result,
