@@ -1,22 +1,21 @@
-import prisma from '../database/database.js'
-import {updateUserProfileKeyDB} from '../database/users/update.js'
+import prisma from "../database/database.js"
+import {updateUserProfileKeyDB} from "../database/users/update.js"
 import {
+    deleteFile,
     generateFileURLResponseFromKey,
     generateFileURLResponseFromResult,
     generateFileURLsResponseFromResult,
     generateKey,
     saveFileBuffersToS3,
     saveFileBufferToS3,
-} from '../s3/s3.js'
-import APIError from '../errors/APIError.js'
-import {StatusCodes} from 'http-status-codes'
+} from "../s3/s3.js"
+import APIError from "../errors/APIError.js"
+import {StatusCodes} from "http-status-codes"
 import {divayangDetailsUpdateFileKeysDB, updateDivyangProfileKeyDB} from "../database/divyangDetails/update.js";
 import log from "../logger/logger.js";
-import {getDivyangDetailsByPersonIdDB} from "../database/divyangDetails/read.js";
+import {getDivyangDetailsByIdDB, getDivyangDetailsByPersonIdDB} from "../database/divyangDetails/read.js";
+import {getUserByPersonIdDB} from "../database/users/read.js";
 
-async function getUserProfilePhotoURL(personId: string) {
-
-}
 async function getDivyangDetailsFileURLs(personId: string) {
     try {
         const divyangDetails = await getDivyangDetailsByPersonIdDB(personId) as {[key: string]: any};
@@ -98,11 +97,66 @@ async function saveDivyangProfilePhotoToS3andDB(
     } catch (error) {
 
         throw new APIError(
-            'There was an error uploading your files. Please try again.',
+            "There was an error uploading your files. Please try again.",
             StatusCodes.INTERNAL_SERVER_ERROR,
-            'FileUploadError',
-            'E',
+            "FileUploadError",
+            "E",
         )
+    }
+}
+
+async function deleteDivyangDetailsProfilePhotoFromS3andDB(personId: string) {
+    try {
+        const transaction = prisma.$transaction(async (prisma) => {
+            const user = await getDivyangDetailsByPersonIdDB(personId);
+            const key = user?.picture;
+            const result = await updateDivyangProfileKeyDB(prisma, personId, {
+                picture: null,
+            });
+            log("info", "[deleteDivyangDetailsProfilePhotoFromS3andDB]: result: %o", result);
+            if (key) {
+                const s3Result = await deleteFile(key);
+                if (s3Result) {
+                    return s3Result;
+                }
+            }
+        })
+        return transaction
+
+    } catch (error) {
+        throw new APIError(
+            "There was an error uploading your files. Please try again.",
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "FileUploadError",
+            "E",
+        );
+    }
+}
+async function deleteUserProfilePhotoFromS3andDB(personId: string) {
+    try {
+        const transaction = prisma.$transaction(async (prisma) => {
+            const user = await getUserByPersonIdDB(personId);
+            const key = user?.picture;
+            const result = await updateUserProfileKeyDB(prisma, personId, {
+                picture: null,
+            });
+            log("info", "[deleteUserProfilePhotoFromS3andDB]: result: %o", result);
+            if (key) {
+                const s3Result = await deleteFile(key);
+                if (s3Result) {
+                    return s3Result;
+                }
+            }
+        })
+        return transaction
+
+    } catch (error) {
+        throw new APIError(
+            "There was an error uploading your files. Please try again.",
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "FileUploadError",
+            "E",
+        );
     }
 }
 
@@ -115,7 +169,8 @@ async function saveUserProfilePhotoToS3andDB(
             const key = generateKey(personId, file)
             const result = await updateUserProfileKeyDB(prisma, personId, {
                 picture: key,
-            })
+            });
+            log("info", "[saveUserProfilePhotoToS3AndDB]: result: %o", result);
             const s3Result = await saveFileBufferToS3(personId, file)
             if (s3Result) {
                 return await generateFileURLResponseFromResult(s3Result);
@@ -124,10 +179,10 @@ async function saveUserProfilePhotoToS3andDB(
         return transaction
     } catch (error) {
         throw new APIError(
-            'There was an error uploading your files. Please try again.',
+            "There was an error uploading your files. Please try again.",
             StatusCodes.INTERNAL_SERVER_ERROR,
-            'FileUploadError',
-            'E',
+            "FileUploadError",
+            "E",
         )
     }
 }
@@ -143,7 +198,7 @@ function IdProofFieldNameColumnNameMapper(files: { [fieldName: string]: Express.
     IdProofFieldNameColumnNameMap.set("disabilitySchemeCard", "disabilitySchemeCardFile");
     IdProofFieldNameColumnNameMap.set("BPL_OR_APL_Number", "BPL_OR_APL_CardFile");
 
-    const data: any = {}; // I can't do this! Cries~ Without using `any` *sobs*
+    const data: any = {}; // I can"t do this! Cries~ Without using `any` *sobs*
     log("info", "[IdProofFieldNameColumnNameMapper]: Keys: %o", IdProofFieldNameColumnNameMap.keys());
     for (const field of IdProofFieldNameColumnNameMap.keys()) {
         const columnName = IdProofFieldNameColumnNameMap.get(field);
@@ -177,10 +232,10 @@ async function saveDivyangDetailsIdProofFilestoS3andDB(
         return transaction
     } catch (error) {
         throw new APIError(
-            'There was an error uploading your files. Please try again.',
+            "There was an error uploading your files. Please try again.",
             StatusCodes.INTERNAL_SERVER_ERROR,
-            'FileUploadError',
-            'E',
+            "FileUploadError",
+            "E",
         )
     }
 }
@@ -189,5 +244,7 @@ export {
     saveUserProfilePhotoToS3andDB,
     getDivyangDetailsFileURLs,
     saveDivyangDetailsIdProofFilestoS3andDB,
-    saveDivyangProfilePhotoToS3andDB
+    saveDivyangProfilePhotoToS3andDB,
+    deleteUserProfilePhotoFromS3andDB,
+    deleteDivyangDetailsProfilePhotoFromS3andDB
 }

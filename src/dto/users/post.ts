@@ -35,7 +35,7 @@ function createPersonDBObject(request: Request): Prisma.PersonCreateInput {
                 email: request.body.email,
                 createdBy: {
                     connect: {
-                        id: request.user.id,
+                        id: request.token?.userId,
                     }
                 },
                 designation: {
@@ -45,7 +45,7 @@ function createPersonDBObject(request: Request): Prisma.PersonCreateInput {
                 },
                 updatedBy: {
                     connect: {
-                        id: request.user.id,
+                        id: request.token?.userId,
                     },
                 },
                 auditLog: {

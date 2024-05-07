@@ -25,6 +25,7 @@ async function authenticate(
     request.token = decodedToken;
     const userId = decodedToken.userId;
     const user = await getUserByIdAuthDB(userId);
+    // request.user = user;
     if (!user) {
       if (decodedToken.personId) {
         const divyang = await verifyDivyang(decodedToken.personId);

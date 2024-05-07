@@ -9,6 +9,7 @@ import {getDivyangDetailsByIdDB} from "../../services/database/divyangDetails/re
 import APIError from "../../services/errors/APIError.js";
 import {StatusCodes} from "http-status-codes";
 import {
+    deleteDivyangDetailsProfilePhotoFromS3andDB,
     filesResponse,
     getDivyangDetailsFileURLs,
     saveDivyangDetailsIdProofFilestoS3andDB,
@@ -44,8 +45,10 @@ const putDivyangDetails = async (
 
                     if (pageNumber === 1) {
                         // Profile Photo Only
-                        if (files["profilePhoto"][0]) {
+                        if (files["profilePhoto"]) {
                             await saveDivyangProfilePhotoToS3andDB(personId, files["profilePhoto"][0]);
+                        } else {
+                            await deleteDivyangDetailsProfilePhotoFromS3andDB(personId);
                         }
                     }
 

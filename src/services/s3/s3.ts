@@ -237,5 +237,6 @@ export {
     generateFileURLResponseFromResult,
     generateFileURLsResponseFromResult,
     saveFileBuffersToS3,
+    deleteFile
 }
 export default s3Client;

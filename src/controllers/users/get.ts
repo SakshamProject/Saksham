@@ -5,6 +5,8 @@ import {getUsersBySevaKendraIdDBTransaction} from "../../services/database/users
 import {AuditLogStatusEnum} from "@prisma/client";
 import {auditLogStatusEnumSchema} from "../../types/inputFieldSchema.js";
 import prisma from "../../services/database/database.js";
+import {generateFileURLResponseFromKey} from "../../services/s3/s3.js";
+import log from "../../services/logger/logger.js";
 
 async function getUserById(
     request: Request,
@@ -16,14 +18,29 @@ async function getUserById(
         const result = await getUserByIdDB(userId);
         const currentDate = new Date(Date.now()).toISOString();
         const auditLog = await getUserStatusDB(prisma, userId, currentDate);
-        const responseData = createResponseOnlyData({
+        let responseData = createResponseOnlyData({
             ...result,
             status: auditLog?.status,
             description: auditLog?.description,
             effectiveFromDate: auditLog?.date,
             timestamp: currentDate,
-        });
-        response.send(responseData);
+        }) as { data: object, file: object }
+
+        // File
+        // Profile Photo
+        let file = {};
+        if (result?.picture) {
+            file = {
+                "profilePhoto": generateFileURLResponseFromKey(result.picture)
+            }
+        }
+        log("info", "[getUserById]: %o", file);
+        responseData = {
+            ...responseData,
+            file: file
+        }
+
+        response.json(responseData);
     } catch (error) {
         next(error);
     }

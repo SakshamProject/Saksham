@@ -10,6 +10,7 @@ import {
 import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
 import {listUserWhereInput} from "../../dto/users/post.js";
 import {saveUserProfilePhotoToS3andDB} from "../../services/files/files.js";
+import {getUserByIdDB, getUserByPersonIdDB} from "../../services/database/users/read.js";
 
 
 async function postUser(request: Request, response: Response, next: NextFunction) {
@@ -27,11 +28,15 @@ async function postUser(request: Request, response: Response, next: NextFunction
         let file: object | undefined = {};
         const personId = newPerson?.id;
         if (personId && request.file) {
-            file = await saveUserProfilePhotoToS3andDB(personId, request.file);
         }
-
-        const responseData = createResponseWithFile(newPerson, file);
-        response.json(responseData);
+        if (personId) {
+            if (request.file) {
+                file = await saveUserProfilePhotoToS3andDB(personId, request.file);
+            }
+            const updatedResult = await getUserByPersonIdDB(personId);
+            const responseData = createResponseWithFile(updatedResult, file);
+            response.json(responseData);
+        }
     }
     catch(error) {
         next(error);
