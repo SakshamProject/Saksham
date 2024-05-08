@@ -63,7 +63,6 @@ const divyangDetailsRequestSchema = z
     addressRequest: addressRequestSchema,
     disabiltyDetails: disabiltyDetailsRequestSchema,
     employmentDetails: employmentDetailsRequestSchema,
-    updatedBy: uuidSchema.optional(),
     auditLog: auditLogSchema,
   })
   .refine((data) => {
@@ -77,7 +76,6 @@ const updateDivyangDetailsRequestSchema = z
     addressRequest: addressRequestSchema.optional(),
     disabiltyDetails: disabiltyDetailsRequestSchema.optional(),
     employmentDetails: employmentDetailsRequestSchema.optional(),
-    updatedBy: uuidSchema.optional(),
     auditLog: auditLogSchema.optional(),
     pageNumber: z.coerce.number().min(1).max(5),
   })
