@@ -12,7 +12,7 @@ import {
     deleteDivyangDetailsProfilePhotoFromS3andDB,
     filesResponse,
     getDivyangDetailsFileURLs,
-    saveDivyangDetailsIdProofFilestoS3andDB,
+    saveDivyangDetailsIdProofFilestoS3andDB, saveDivyangDisabilityDetailsToS3andDB,
     saveDivyangProfilePhotoToS3andDB
 } from "../../services/files/files.js";
 import log from "../../services/logger/logger.js";
@@ -25,7 +25,7 @@ const putDivyangDetails = async (
     try {
         const id: string = request.params.id;
         log("info", "[putDivyangDetails]: %o", request.body);
-        console.log(`[+]request body`,request.body)
+        console.log(`[+]request body`,request.body);
         const divyangDetails: updateDivyangDetailsRequest =
             updateDivyangDetailsRequestSchema.parse(request.body);
 
@@ -77,10 +77,10 @@ const putDivyangDetails = async (
 
                     if (pageNumber === 4) {
                         // Disability Details
-
-                        // await saveDivyangDisabilityDetailsToS3andDB(
-                        //
-                        // )
+                        if (request.files["disabilityCard"]) {
+                            await saveDivyangDisabilityDetailsToS3andDB(divyangDetails, request.files["disabilityCard"], personId);
+                        } else {
+                        }
                     }
 
                     fileURLs = await getDivyangDetailsFileURLs(personId);

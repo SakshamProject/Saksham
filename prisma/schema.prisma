@@ -408,11 +408,13 @@ model DisabilityOfDivyang {
   disabilityPercentage      Int?
   disabilityDueTo           String?
   certificateIssueAuthority CertificateIssueAuthorityEnum?
-  disabilityCardUrl         String? // url
+  // disabilityCardUrl         String? // url
+  disabilityCardFile        String? // url
 
   divyang           DivyangDetails     @relation(fields: [divyangId], references: [id])
   disabilitySubType DisabilitySubType? @relation(fields: [disabilitySubTypeId], references: [id])
   disabilityType    DisabilityType     @relation(fields: [disabilityTypeId], references: [id])
+  // @@unique([divyangId, disabilityTypeId, disabilitySubTypeId])
 }
 
 model DisabilitySubType {

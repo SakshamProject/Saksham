@@ -127,6 +127,12 @@ function generateKeyWithoutExtension(personId: string, file: Express.Multer.File
     return key;
 }
 
+function generateDisablityCardFileKey(personId: string, file: Express.Multer.File, disabilityOfDivyandId: string): string {
+    const key = path.join(personId, `${personId}-${file.fieldname}-${disabilityOfDivyandId}${path.extname(file.originalname)}`)
+    log("info", "[generateDisablityCardFileKey]: key: \n %s", key);
+    return key;
+}
+
 function generateKey(personId: string, file: Express.Multer.File): string {
     const key = path.join(personId, `${personId}-${file.fieldname}${path.extname(file.originalname)}`);
     log("info", "[generateKey]: key: \n %s", key);
@@ -150,9 +156,38 @@ async function deleteFile(key: string) {
     }
 }
 
+async function saveDisabilityCardFileBufferToS3(personId: string, file: Express.Multer.File, disabilityOfDivyangId: string): Promise<S3Result | undefined> {
+    try {
+        const oldFile = await fileWithDiffExtensionExists(personId, file);
+        if (oldFile) {
+            // delete it
+            log("info", "[saveDisabilityCardFileBufferToS3]: File already exists. Deleting it.");
+            log("info", "[saveDisabilityCardFileBufferToS3]: oldFile: %s", oldFile);
+
+            const s3Result = await deleteFile(oldFile);
+            log("info", "[saveDisabilityCardFileBufferToS3]: File Deleted. %o", s3Result);
+        }
+
+        const key = generateDisablityCardFileKey(personId, file, disabilityOfDivyangId);
+        const params: PutObjectCommandInput = {
+            Bucket: config.s3.bucket_name,
+            Key: key,
+            Body: file.buffer
+        }
+
+        log("info", "[saveDisabilityCardFileBufferToS3]: params: \n %o", params);
+        const putObjectCommand = new PutObjectCommand(params);
+
+        const output = await s3Client.send(putObjectCommand);
+        log("info", "[saveDisabilityCardFileBufferToS3]: File has been saved to S3. \n output: \n %o", output);
+
+        return {fieldName: file.fieldname, key, output: output};
+    } catch (error) {
+        throwS3Error(error);
+    }
+}
 async function saveFileBufferToS3(personId: string, file: Express.Multer.File): Promise<S3Result | undefined> {
     try {
-
         const oldFile = await fileWithDiffExtensionExists(personId, file);
         if (oldFile) {
             // delete it
@@ -237,6 +272,8 @@ export {
     generateFileURLResponseFromResult,
     generateFileURLsResponseFromResult,
     saveFileBuffersToS3,
-    deleteFile
+    deleteFile,
+    generateDisablityCardFileKey,
+    saveDisabilityCardFileBufferToS3
 }
 export default s3Client;

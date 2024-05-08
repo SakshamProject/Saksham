@@ -53,7 +53,7 @@ const updateDisabilityOfDivyangDB = async (
                     disabilityArea: disabilities.disabilityArea,
                     disabilityPercentage: disabilities.disabilityPercentage,
                     certificateIssueAuthority: disabilities.certificateIssueAuthority,
-                    disabilityCardUrl: disabilities.disabilityCardUrl,
+                    // disabilityCardUrl: disabilities.disabilityCardUrl,
                 },
             });
         return updatedDisabilityOfDivyang;

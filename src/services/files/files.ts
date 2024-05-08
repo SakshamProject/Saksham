@@ -1,7 +1,7 @@
 import prisma from "../database/database.js"
 import {updateUserProfileKeyDB} from "../database/users/update.js"
 import {
-    deleteFile,
+    deleteFile, generateDisablityCardFileKey,
     generateFileURLResponseFromKey,
     generateFileURLResponseFromResult,
     generateFileURLsResponseFromResult,
@@ -13,12 +13,13 @@ import APIError from "../errors/APIError.js"
 import {StatusCodes} from "http-status-codes"
 import {divayangDetailsUpdateFileKeysDB, updateDivyangProfileKeyDB} from "../database/divyangDetails/update.js";
 import log from "../logger/logger.js";
-import {getDivyangDetailsByPersonIdDB} from "../database/divyangDetails/read.js";
+import {getDivyangDetailsByPersonIdDB, getDivyangDisabilitiesByPersonIdDB} from "../database/divyangDetails/read.js";
 import {getUserByPersonIdDB} from "../database/users/read.js";
+import {updateDivyangDetailsRequest} from "../../types/divyangDetails/divyangDetailsSchema.js";
 
 async function getDivyangDetailsFileURLs(personId: string) {
     try {
-        const divyangDetails = await getDivyangDetailsByPersonIdDB(personId) as {[key: string]: any};
+        const divyangDetails = await getDivyangDetailsByPersonIdDB(personId) as { [key: string]: any };
         log("info", "[getDivyangDetailsFileURLs]: divyangDetails: %o", divyangDetails)
         const imageColumns = [
             "picture",
@@ -67,8 +68,7 @@ async function getDivyangDetailsFileURLs(personId: string) {
             log("info", "[getDivyangDetailsFileURLs]: files %o", files);
             return files;
         }
-    }
-    catch (error) {
+    } catch (error) {
         log("error", "[getDivyangDetailsFileURLs]: %o", error);
     }
 }
@@ -83,7 +83,7 @@ async function saveDivyangProfilePhotoToS3andDB(
                 const key = generateKey(personId, file)
                 const result = await updateDivyangProfileKeyDB(prisma, personId, {
                     picture: key,
-                })
+                });
                 log("info", "[saveDivyangProfilePhotoToS3andDB]: result: %o", result);
                 const s3Result = await saveFileBufferToS3(personId, file)
                 if (s3Result) {
@@ -114,12 +114,15 @@ async function deleteDivyangDetailsProfilePhotoFromS3andDB(personId: string) {
                 picture: null,
             });
             log("info", "[deleteDivyangDetailsProfilePhotoFromS3andDB]: result: %o", result);
-            if (key) {
-                const s3Result = await deleteFile(key);
-                if (s3Result) {
-                    return s3Result;
-                }
-            }
+
+            // Soft Delete only (for now)
+
+            // if (key) {
+            //     const s3Result = await deleteFile(key);
+            //     if (s3Result) {
+            //         return s3Result;
+            //     }
+            // }
         })
         return transaction
 
@@ -132,6 +135,7 @@ async function deleteDivyangDetailsProfilePhotoFromS3andDB(personId: string) {
         );
     }
 }
+
 async function deleteUserProfilePhotoFromS3andDB(personId: string) {
     try {
         const transaction = prisma.$transaction(async (prisma) => {
@@ -213,7 +217,10 @@ function IdProofFieldNameColumnNameMapper(files: { [fieldName: string]: Express.
     return data;
 }
 
-export type filesResponse = { [field: string]: {key: string, url: string, validUpto: string, expiresInSeconds: number}}[];
+export type filesResponse = {
+    [field: string]: { key: string, url: string, validUpto: string, expiresInSeconds: number }
+}[];
+
 async function saveDivyangDetailsIdProofFilestoS3andDB(
     personId: string,
     files: { [fieldname: string]: Express.Multer.File[] },
@@ -240,11 +247,56 @@ async function saveDivyangDetailsIdProofFilestoS3andDB(
     }
 }
 
+async function saveDivyangDisabilityDetailsToS3andDB(divyangDetails: updateDivyangDetailsRequest, files: Express.Multer.File[], personId: string) {
+    try {
+        const transaction = prisma.$transaction(async (prisma) => {
+
+            log("info", "[saveDivyangDisabilityDetailsToS3andDB]: divyangDetails: %o", divyangDetails);
+            log("info", "[saveDivyangDisabilityDetailsToS3andDB]: files: %o", files);
+
+            const existingDisabilities = await getDivyangDisabilitiesByPersonIdDB(
+                prisma,
+                personId
+            );
+
+            divyangDetails.disabilityDetails?.disabilities.forEach((disability) => {
+                existingDisabilities?.forEach((existingDisability) => {
+                    if (disability.disabilityTypeId === existingDisability.disabilityTypeId && (
+                        disability.disabilitySubTypeId ?
+                            disability.disabilitySubTypeId === existingDisability.disabilitySubTypeId : null
+                    )) {
+
+                        const requestCardName = disability.disabilityCardName;
+                        if (requestCardName) {
+                            files.forEach((file) => {
+                                if (requestCardName === file.originalname) {
+                                    const key = generateDisablityCardFileKey(personId, file, existingDisability.id)
+                                }
+                            })
+                        }
+                    }
+                })
+            });
+
+        });
+        return transaction
+
+    } catch (error) {
+        throw new APIError(
+            "There was an error uploading your files. Please try again.",
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "FileUploadError",
+            "E",
+        );
+    }
+}
+
 export {
     saveUserProfilePhotoToS3andDB,
     getDivyangDetailsFileURLs,
     saveDivyangDetailsIdProofFilestoS3andDB,
     saveDivyangProfilePhotoToS3andDB,
     deleteUserProfilePhotoFromS3andDB,
-    deleteDivyangDetailsProfilePhotoFromS3andDB
+    deleteDivyangDetailsProfilePhotoFromS3andDB,
+    saveDivyangDisabilityDetailsToS3andDB
 }

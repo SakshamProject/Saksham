@@ -19,8 +19,10 @@ type Defaults = {
     createdById: string;
     updatedById: string;
     hashingAlgorithm: string;
+    disabilities: number;
 }
 const defaults: Defaults = {
+    disabilities: 10,
     MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
     skip : 0,
     take : 10,

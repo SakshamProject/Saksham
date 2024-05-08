@@ -38,6 +38,9 @@ const getDivyangDetailsDB = async (
 async function getDivyangDetailsByPersonIdDB(personId: string) {
     try {
         const divyangDetails = await prisma.divyangDetails.findFirstOrThrow({
+            include: {
+                disabilities: true
+            },
             where: {
                 personId: personId,
             }
@@ -165,6 +168,24 @@ const getDivyangDetailsStatusDB = async (
         if (error instanceof Error) throwDatabaseError(error);
     }
 };
+const getDivyangDisabilitiesByPersonIdDB = async (
+    prismaTransaction: Prisma.TransactionClient,
+    personId: string
+) => {
+    try {
+        const disabilityOfDivyang =
+           await prismaTransaction.disabilityOfDivyang.findMany({
+                where: {
+                    divyang: {
+                        personId: personId
+                    },
+                },
+            });
+        return disabilityOfDivyang;
+    } catch (error) {
+        if (error instanceof Error) throwDatabaseError(error);
+    }
+};
 const getDisabilityOfDivyangByDivyangIdDB = async (
     prismaTransaction: Prisma.TransactionClient,
     divyangId: string
@@ -233,4 +254,5 @@ export {
     getDivyangDetailsDependencyStatusDB,
     getEducationQualificationOfDivyangByDivyangIdDB,
     getDivyangDetailsByPersonIdDB,
+    getDivyangDisabilitiesByPersonIdDB
 };

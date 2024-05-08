@@ -11,6 +11,7 @@ import authorization from "../../middlewares/authentication/authorization.js";
 import {AuthorizationEnum, MethodsEnum,} from "../../types/authentication/authorizationEnum.js";
 import {getServiceMappingByDivyangId} from "../../controllers/serviceMapping/get.js";
 import resetPassword from "../../controllers/authentication/resetPasssword.js";
+import defaults from "../../defaults.js";
 
 const divyangDetailsRouter = express.Router();
 
@@ -57,7 +58,7 @@ divyangDetailsRouter.put(
         {name: "medicalInsuranceCard", maxCount: 1},
         {name: "disabilitySchemeCard", maxCount: 1},
         {name: "BPL_OR_APL_Card", maxCount: 1},
-        {name: "disabilityCard", maxCount: 10},
+        {name: "disabilityCard", maxCount: defaults.disabilities},
         {name: "UDIDCard", maxCount: 1},
     ]),
     putDivyangDetails
