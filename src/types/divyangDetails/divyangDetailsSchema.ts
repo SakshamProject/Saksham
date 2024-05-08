@@ -79,7 +79,7 @@ const updateDivyangDetailsRequestSchema = z
     employmentDetails: employmentDetailsRequestSchema.optional(),
     updatedBy: uuidSchema.optional(),
     auditLog: auditLogSchema.optional(),
-    pageNumber: z.number().min(1).max(5),
+    pageNumber: z.coerce.number().min(1).max(5),
   })
   .refine((data) => {
     return Object.values(data).some((value) => value !== undefined);

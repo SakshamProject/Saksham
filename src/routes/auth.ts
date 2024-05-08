@@ -9,12 +9,17 @@ import updatePassword from "../controllers/authentication/updatePassword.js";
 import userForgetPassword from "../controllers/authentication/userForgotPassword.js";
 import errorHandler from "../middlewares/errorHandler/errorHandler.js";
 import superAdminLogin from "../controllers/authentication/superAdmin.js";
+import fileHandler from "../middlewares/fileHandler/fileHandler.js";
 const authRouter = Router();
 
 authRouter.use(express.json());
 
 authRouter.post("/divyang/login", divyangLogin);
-authRouter.post("/divyang/signup", postDivyang);
+authRouter.post(
+  "/divyang/signup",
+  fileHandler.single("profilePhoto"),
+  postDivyang
+);
 authRouter.post("/divyang/logout", divyangLogout);
 authRouter.post("/divyang/forgetpassword", divyangForgetPassword);
 authRouter.post("/user/login", userLogin);

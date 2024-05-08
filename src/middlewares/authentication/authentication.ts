@@ -24,12 +24,10 @@ async function authenticate(
     }
     const decodedToken = jwt.verify(token, config.SECRET) as Token;
     request.token = decodedToken;
-    console.log("decodedToken", decodedToken);
-    console.log("superAdminUSers", superAdminUserNames);
     if (
       superAdminUserNames.some((admin) => admin === decodedToken.superAdmin)
     ) {
-      next();
+      return next();
     }
     const userId = decodedToken.userId;
     const user = await getUserByIdAuthDB(userId);
