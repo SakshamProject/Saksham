@@ -78,7 +78,7 @@ const updateDivyangDetailsRequestSchema = z
         personalDetails: updatePersonalDetailsRequestSchema.optional(),
         IdProofUploads: IdProofUploadsRequestSchema.optional(),
         addressRequest: addressRequestSchema.optional(),
-        disabiltyDetails: disabiltyDetailsRequestSchema.optional(),
+        disabilityDetails: disabiltyDetailsRequestSchema.optional(),
         employmentDetails: employmentDetailsRequestSchema.optional(),
         // files: IdProofFileSchema.optional(),
         updatedBy: uuidSchema.optional(),
@@ -86,6 +86,8 @@ const updateDivyangDetailsRequestSchema = z
         pageNumber: z.coerce.number().min(1).max(5),
     })
     .refine((data) => {
+        // This does not work
+        // Requires rewrite
         return Object.values(data).some((value) => value !== undefined);
     }, "At least one of the five schemas must be provided.");
 

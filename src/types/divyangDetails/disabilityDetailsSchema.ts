@@ -15,7 +15,7 @@ const disabilityOfDivyangSchema = z.object({
   certificateIssueAuthority: z
     .nativeEnum(CertificateIssueAuthorityEnum)
     .optional(),
-  disabilityCardUrl: z.string().optional(), // url
+  disabilityCardFileName: z.string().optional(), // url
 });
 type DisabilityOfDivyang = z.infer<typeof disabilityOfDivyangSchema>;
 const disabiltyDetailsRequestSchema = z.object({
@@ -23,7 +23,7 @@ const disabiltyDetailsRequestSchema = z.object({
   districtCode: z.string(),
   stateCode: z.string(),
   identityCardNumber: z.string(),
-  // UDIDCardUrl: z.string(),
+  // UDIDCard: z.string(),
   UDIDEnrollmentNumber: z.string(),
 });
 

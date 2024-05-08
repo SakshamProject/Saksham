@@ -24,10 +24,15 @@ const putDivyangDetails = async (
 ) => {
     try {
         const id: string = request.params.id;
+        log("info", "[putDivyangDetails]: %o", request.body);
+        console.log(`[+]request body`,request.body)
         const divyangDetails: updateDivyangDetailsRequest =
             updateDivyangDetailsRequestSchema.parse(request.body);
 
         const pageNumber = divyangDetails.pageNumber;
+        console.log(`[+]pageNumber`,pageNumber)
+
+        console.log(`[+] divyangDetails: `, divyangDetails);
 
         const updatedBy = request.token?.personId;
         const updatedResult = await updateDivyangDetailsTransactionDB(
@@ -36,6 +41,7 @@ const putDivyangDetails = async (
             id
         );
 
+        log("info", "[putDivyangDetails]: request.files: %o", request.files);
         let fileURLs: filesResponse  | undefined = [];
         if (updatedResult) {
             const personId = updatedResult?.personId;
@@ -71,6 +77,10 @@ const putDivyangDetails = async (
 
                     if (pageNumber === 4) {
                         // Disability Details
+
+                        // await saveDivyangDisabilityDetailsToS3andDB(
+                        //
+                        // )
                     }
 
                     fileURLs = await getDivyangDetailsFileURLs(personId);

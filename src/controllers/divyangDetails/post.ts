@@ -52,6 +52,7 @@ const postDivyang = async (
         );
         log("info", "[postDivyang]: Divyang: %o", result);
 
+        log("info", "[putDivyangDetails]: request.file: %o", request.file);
         let file: object | undefined = {};
         const personId = result?.personId;
         if (personId && request.file) {

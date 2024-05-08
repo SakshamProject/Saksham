@@ -27,6 +27,7 @@ import defaults from "../../../../defaults.js";
 import { auditLogStatusEnumSchema } from "../../../../types/inputFieldSchema.js";
 import APIError from "../../../errors/APIError.js";
 import { StatusCodes } from "http-status-codes";
+import educationalQualification from "../../../../routes/typeMaster/generalMaster/educationalQualification.js";
 
 const updateDivyangDetailsTransactionDB = async (
   divyangDetails: updateDivyangDetailsRequest,
@@ -37,6 +38,7 @@ const updateDivyangDetailsTransactionDB = async (
     const transaction = await prisma.$transaction(
       async (prismaTransaction) => {
         const pageNumber = divyangDetails.pageNumber;
+        console.log(`pageNumber: ${pageNumber}`);
 
         //updating audit log
         if (divyangDetails.auditLog != null) {
@@ -77,6 +79,7 @@ const updateDivyangDetailsTransactionDB = async (
             id,
             pageNumber
           );
+        console.log(`[+]educationQualification`,educationQualification)
         if (pageNumber === 1 && educationQualification) {
           for (let education of educationQualification.educationQualificationsToUpdate) {
             const updatedEducationQualificationOfDivyang =
@@ -87,6 +90,7 @@ const updateDivyangDetailsTransactionDB = async (
                 id
               );
           }
+          console.log(`[+]updated successfully education qualification`)
         }
         // update disability of divyang if it exists
 
@@ -112,13 +116,14 @@ const updateDivyangDetailsTransactionDB = async (
         // updating divyang details table for corresponding pagenumber
 
         const updateDTOObject: updateDivyangDetails =
-          (await createUpdateDTOObject(
+          ( createUpdateDTOObject(
             pageNumber,
             divyangDetails,
             disabilities,
             educationQualification,
             updatedBy
           )) || {};
+        console.log(`[+]updateDTO`,updateDTOObject)
 
         const updatedDivyangDetails = await updateDivyangDetailsDB(
           prismaTransaction,
@@ -154,12 +159,12 @@ const disabilityOfDivyangUpdate = async (
       existingDisabilities?.map((disability) => disability.id) || [];
 
     const currentDisabilityId =
-      divyangDetails.disabiltyDetails?.disabilities.map(
+      divyangDetails.disabilityDetails?.disabilities.map(
         (disability) => disability.id
       ) || [];
 
     const disabilitiesToCreate =
-      divyangDetails.disabiltyDetails?.disabilities.filter(
+      divyangDetails.disabilityDetails?.disabilities.filter(
         (disabilities) => disabilities.id === undefined
       ) || [];
 
@@ -168,7 +173,7 @@ const disabilityOfDivyangUpdate = async (
     );
 
     const disabilitiesToUpdate =
-      divyangDetails.disabiltyDetails?.disabilities.filter(
+      divyangDetails.disabilityDetails?.disabilities.filter(
         (disabilities) => disabilities.id !== undefined
       ) || [];
 

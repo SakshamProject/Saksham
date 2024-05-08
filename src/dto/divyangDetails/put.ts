@@ -175,6 +175,7 @@ const updateDisabilityDetailsDBObject = (
   updatedBy: string,
   disabilities: DisabilityOfDivyangList,
 ): Prisma.DivyangDetailsUpdateInput => {
+  console.log("[DisabilityDetails]")
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     districtCode: disabilityDetails.districtCode,
     stateCode: disabilityDetails.stateCode,
@@ -210,6 +211,7 @@ function createUpdateDTOObject(
     | undefined,
   updatedBy: string
 ) {
+  console.log(`[+]enters dto`)
   if (
     pageNumber === 1 &&
     updateDivyangDetailsRequest.personalDetails &&
@@ -235,11 +237,11 @@ function createUpdateDTOObject(
     );
   } else if (
     pageNumber === 4 &&
-    updateDivyangDetailsRequest.disabiltyDetails &&
+    updateDivyangDetailsRequest.disabilityDetails &&
     disabilities
   ) {
     return updateDisabilityDetailsDBObject(
-      updateDivyangDetailsRequest.disabiltyDetails,
+      updateDivyangDetailsRequest.disabilityDetails,
       updatedBy,
       disabilities
     );
