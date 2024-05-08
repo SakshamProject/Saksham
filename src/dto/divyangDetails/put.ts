@@ -173,14 +173,14 @@ const updateIdProofUploadsDBObject = (
 const updateDisabilityDetailsDBObject = (
   disabilityDetails: DisabilityDetails,
   updatedBy: string,
-  disabilities: DisabilityOfDivyangList
+  disabilities: DisabilityOfDivyangList,
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     districtCode: disabilityDetails.districtCode,
     stateCode: disabilityDetails.stateCode,
     identityCardNumber: disabilityDetails.identityCardNumber,
     udidEnrollmentNumber: disabilityDetails.UDIDEnrollmentNumber,
-    udidCardUrl: disabilityDetails.UDIDCardUrl,
+    // udidCardUrl: disabilityDetails.UDIDCardUrl,
     updatedBy: {
       connect: {
         id: updatedBy,

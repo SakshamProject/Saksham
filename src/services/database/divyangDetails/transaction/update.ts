@@ -160,7 +160,7 @@ const disabilityOfDivyangUpdate = async (
 
     const disabilitiesToCreate =
       divyangDetails.disabiltyDetails?.disabilities.filter(
-        (disabilities) => disabilities.id == undefined
+        (disabilities) => disabilities.id === undefined
       ) || [];
 
     const disabilitiesToDelete = existingDisabilityId.filter(
