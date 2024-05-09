@@ -3,6 +3,7 @@ import {updateDivyangDetails} from "../../../types/divyangDetails/divyangDetails
 import throwDatabaseError from "../utils/errorHandler.js";
 import {DisabilityOfDivyang} from "../../../types/divyangDetails/disabilityDetailsSchema.js";
 import {EducationQualificationsSchemaType} from "../../../types/divyangDetails/personalDetailsSchema.js";
+import log from "../../logger/logger.js";
 
 const updateDivyangDetailsDB = async (
     prismaTransaction: Prisma.TransactionClient,
@@ -129,10 +130,26 @@ async function updateDivyangProfileKeyDB(prisma: Prisma.TransactionClient, perso
     }
 }
 
+async function saveDisabilityDetailsCardKey(prisma: Prisma.TransactionClient, disabilityOfDivyangId: string, data: Prisma.DisabilityOfDivyangUpdateInput) {
+    try {
+        const result = await prisma.disabilityOfDivyang.update({
+            data,
+            where: {
+                id: disabilityOfDivyangId
+            }
+        });
+        log("info", "[saveDisabilityDetailsCardKey]: %o", result);
+        return result;
+    } catch (error) {
+        throwDatabaseError(error);
+    }
+}
+
 export {
     updateDivyangDetailsDB,
     updateDisabilityOfDivyangDB,
     updateEducationQualificationOfDivyangDB,
     updateDivyangProfileKeyDB,
-    divayangDetailsUpdateFileKeysDB
+    divayangDetailsUpdateFileKeysDB,
+    saveDisabilityDetailsCardKey
 };

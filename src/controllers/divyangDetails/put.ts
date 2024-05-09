@@ -78,6 +78,7 @@ const putDivyangDetails = async (
                     if (pageNumber === 4) {
                         // Disability Details
                         if (request.files["disabilityCard"]) {
+                            log("info", "[putDivyangDetails] Page: %d", pageNumber);
                             await saveDivyangDisabilityDetailsToS3andDB(divyangDetails, request.files["disabilityCard"], personId);
                         } else {
                         }

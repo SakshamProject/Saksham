@@ -1,17 +1,22 @@
 import prisma from "../database/database.js"
 import {updateUserProfileKeyDB} from "../database/users/update.js"
-import {
-    deleteFile, generateDisablityCardFileKey,
+import s3, {
+    deleteFile,
+    generateDisablityCardFileKey,
     generateFileURLResponseFromKey,
     generateFileURLResponseFromResult,
     generateFileURLsResponseFromResult,
-    generateKey,
+    generateKey, saveDisabilityCardFileBufferToS3,
     saveFileBuffersToS3,
     saveFileBufferToS3,
 } from "../s3/s3.js"
 import APIError from "../errors/APIError.js"
 import {StatusCodes} from "http-status-codes"
-import {divayangDetailsUpdateFileKeysDB, updateDivyangProfileKeyDB} from "../database/divyangDetails/update.js";
+import {
+    divayangDetailsUpdateFileKeysDB,
+    saveDisabilityDetailsCardKey,
+    updateDivyangProfileKeyDB
+} from "../database/divyangDetails/update.js";
 import log from "../logger/logger.js";
 import {getDivyangDetailsByPersonIdDB, getDivyangDisabilitiesByPersonIdDB} from "../database/divyangDetails/read.js";
 import {getUserByPersonIdDB} from "../database/users/read.js";
@@ -54,7 +59,6 @@ async function getDivyangDetailsFileURLs(personId: string) {
                 if (field) {
                     console.log(typeof column);
                     const key = divyangDetails[column];
-                    log("info", "[getDivyangDetailsFileURLs]: column: %s", key)
                     if (key) {
                         const fileURL = await generateFileURLResponseFromKey(key)
                         if (fileURL) {
@@ -79,23 +83,18 @@ async function saveDivyangProfilePhotoToS3andDB(
 ) {
     try {
         const transaction = prisma.$transaction(async (prisma) => {
-            try {
-                const key = generateKey(personId, file)
-                const result = await updateDivyangProfileKeyDB(prisma, personId, {
-                    picture: key,
-                });
-                log("info", "[saveDivyangProfilePhotoToS3andDB]: result: %o", result);
-                const s3Result = await saveFileBufferToS3(personId, file)
-                if (s3Result) {
-                    return await generateFileURLResponseFromResult(s3Result)
-                }
-            } catch (error) {
-
+            const key = generateKey(personId, file)
+            const result = await updateDivyangProfileKeyDB(prisma, personId, {
+                picture: key,
+            });
+            log("info", "[saveDivyangProfilePhotoToS3andDB]: result: %o", result);
+            const s3Result = await saveFileBufferToS3(personId, file)
+            if (s3Result) {
+                return await generateFileURLResponseFromResult(s3Result)
             }
         })
         return transaction
     } catch (error) {
-
         throw new APIError(
             "There was an error uploading your files. Please try again.",
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -115,14 +114,12 @@ async function deleteDivyangDetailsProfilePhotoFromS3andDB(personId: string) {
             });
             log("info", "[deleteDivyangDetailsProfilePhotoFromS3andDB]: result: %o", result);
 
-            // Soft Delete only (for now)
-
-            // if (key) {
-            //     const s3Result = await deleteFile(key);
-            //     if (s3Result) {
-            //         return s3Result;
-            //     }
-            // }
+            if (key) {
+                const s3Result = await deleteFile(key);
+                if (s3Result) {
+                    return s3Result;
+                }
+            }
         })
         return transaction
 
@@ -252,31 +249,63 @@ async function saveDivyangDisabilityDetailsToS3andDB(divyangDetails: updateDivya
         const transaction = prisma.$transaction(async (prisma) => {
 
             log("info", "[saveDivyangDisabilityDetailsToS3andDB]: divyangDetails: %o", divyangDetails);
-            log("info", "[saveDivyangDisabilityDetailsToS3andDB]: files: %o", files);
 
             const existingDisabilities = await getDivyangDisabilitiesByPersonIdDB(
                 prisma,
                 personId
             );
 
-            divyangDetails.disabilityDetails?.disabilities.forEach((disability) => {
-                existingDisabilities?.forEach((existingDisability) => {
-                    if (disability.disabilityTypeId === existingDisability.disabilityTypeId && (
-                        disability.disabilitySubTypeId ?
-                            disability.disabilitySubTypeId === existingDisability.disabilitySubTypeId : null
-                    )) {
 
-                        const requestCardName = disability.disabilityCardName;
-                        if (requestCardName) {
-                            files.forEach((file) => {
-                                if (requestCardName === file.originalname) {
-                                    const key = generateDisablityCardFileKey(personId, file, existingDisability.id)
+            log("info", "[saveDivyangDisabilityDetailsToS3andDB]: existingDisabilities: %o", existingDisabilities);
+            const disabilities = divyangDetails.disabilityDetails?.disabilities;
+            log("info", "[saveDivyangDisabilityDetailsToS3andDB]: disabilities: %o", disabilities);
+            if (disabilities) {
+                console.log(`[+]enters disabilities`)
+                for (const disability of disabilities) {
+                    if (existingDisabilities) {
+
+                        for (const existingDisability of existingDisabilities) {
+                            if (disability.disabilityTypeId === existingDisability.disabilityTypeId && (
+                                disability.disabilitySubTypeId ?
+                                    disability.disabilitySubTypeId === existingDisability.disabilitySubTypeId : true
+
+                            )) {
+
+                                const requestCardName = disability.disabilityCardFile;
+                                log("info", "[saveDivyangDisabilityDetailsToS3andDB]: requestCardName: %o", requestCardName);
+                                if (requestCardName) {
+                                    for (const file of files) {
+                                        if (requestCardName === file.originalname) {
+                                            const key = generateDisablityCardFileKey(personId, file, existingDisability.id);
+
+                                            if (existingDisability.id) {
+                                                console.log(`Enters disability.id`)
+                                                // save key to db
+                                                const dbResult = await saveDisabilityDetailsCardKey(prisma, existingDisability.id, {
+                                                    disabilityCardFile: key
+                                                });
+                                                const s3Result = await saveDisabilityCardFileBufferToS3(personId, file, existingDisability.id)
+
+                                                log("info", "[saveDivyangDisabilityDetailsToS3andDB]: dbResult: %o", dbResult);
+                                                log("info", "[saveDivyangDisabilityDetailsToS3andDB]: s3Result: %o", s3Result);
+
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if (existingDisability.id) {
+                                        const dbResult = await saveDisabilityDetailsCardKey(prisma, existingDisability.id, {
+                                            disabilityCardFile: null
+                                        });
+                                        log("info", "[saveDivyangDisabilityDetailsToS3andDB]: dbResult: %o", dbResult);
+                                    }
+
                                 }
-                            })
+                            }
                         }
                     }
-                })
-            });
+                }
+            }
 
         });
         return transaction

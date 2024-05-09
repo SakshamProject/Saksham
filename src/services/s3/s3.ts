@@ -181,7 +181,7 @@ async function saveDisabilityCardFileBufferToS3(personId: string, file: Express.
         const output = await s3Client.send(putObjectCommand);
         log("info", "[saveDisabilityCardFileBufferToS3]: File has been saved to S3. \n output: \n %o", output);
 
-        return {fieldName: file.fieldname, key, output: output};
+        return {fieldName: file.fieldname, key, output};
     } catch (error) {
         throwS3Error(error);
     }
