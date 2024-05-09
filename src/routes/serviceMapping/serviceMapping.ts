@@ -20,7 +20,7 @@ serviceMappingRouter.post(
 );
 serviceMappingRouter.put(
   "/:id",
-  authorization(AuthorizationEnum.SERVICE_MAPPING),
+  authorization(AuthorizationEnum.SERVICE_MAPPING, MethodsEnum.USER_DROPDOWN),
   putServiceMapping
 );
 serviceMappingRouter.get(

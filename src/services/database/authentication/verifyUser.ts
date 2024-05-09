@@ -13,6 +13,7 @@ async function verifyUser(userName: string) {
           select: { id: true, userName: true, password: true },
         },
         id: true,
+        divyangServiceMapping: true,
         designation: {
           select: {
             id: true,
