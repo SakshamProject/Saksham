@@ -20,7 +20,12 @@ import DivyangDetailsGlobalSearchConditions from '../../services/database/utils/
 import {createDivyangDetailsFilterInputObject} from '../../dto/divyangDetails/post.js'
 import {divyangDetailsColumnNameMapper} from '../../services/database/utils/divyangDetails/divyangDetailsMapper.js'
 import prisma from '../../services/database/database.js'
-import {filesResponse, getDivyangDetailsFileURLs} from "../../services/files/files.js";
+import {
+    disabilityCardsResponse,
+    filesResponse,
+    getDivyangDetailsDisabilityCardsFileURLS,
+    getDivyangDetailsIDProofFileURLs
+} from "../../services/files/files.js";
 import log from "../../services/logger/logger.js";
 
 const getDivyangDetails = async (
@@ -88,17 +93,16 @@ const getDivyangDetailsbyId = async (
             timestamp: currentDate,
         }
         let fileURLs: filesResponse | undefined = [];
-        if (request.files) {
-            if (!(Array.isArray(request.files))) {
-                const personId = result?.personId;
-                if (personId) {
-                     fileURLs = await getDivyangDetailsFileURLs(personId);
-                }
-            }
+        let disabilityCards: disabilityCardsResponse | undefined = [];
+        const personId = result?.personId;
+        if (personId) {
+             fileURLs = await getDivyangDetailsIDProofFileURLs(personId);
+             disabilityCards = await getDivyangDetailsDisabilityCardsFileURLS(personId);
         }
         log("info", "[getDivyangDetailsById]: fileURLs: %o", fileURLs);
+        log("info", "[getDivyangDetailsById]: fileURLs: %o", fileURLs);
 
-        const responseData = createResponseWithFiles(result, fileURLs);
+        const responseData = createResponseWithFiles(result, fileURLs, disabilityCards);
         response.send(responseData)
     } catch (error) {
         next(error)

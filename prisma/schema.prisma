@@ -236,45 +236,54 @@ model FeaturesOnDesignations {
 }
 
 model DivyangDetails {
-  id                       String          @id @default(uuid())
-  firstName                String
-  lastName                 String
-  divyangId                String
-  picture                  String? // url
-  gender                   GenderEnum?
-  bloodGroup               BloodGroupEnum?
-  dateOfBirth              DateTime
-  age                      Int?
-  mailId                   String
-  mobileNumber             String
-  fatherName               String?
-  motherName               String?
-  isMarried                Boolean?
-  spouseName               String?
-  spouseNumber             String?
-  religion                 String?
-  community                String?
-  communityCategoryId      String?
-  extraCurricularActivity  String?
+  id                           String          @id @default(uuid())
+  firstName                    String
+  lastName                     String
+  divyangId                    String
+  picture                      String? // url
+  gender                       GenderEnum?
+  bloodGroup                   BloodGroupEnum?
+  dateOfBirth                  DateTime
+  age                          Int?
+  mailId                       String
+  mobileNumber                 String
+  fatherName                   String?
+  motherName                   String?
+  isMarried                    Boolean?
+  spouseName                   String?
+  spouseNumber                 String?
+  religion                     String?
+  community                    String?
+  communityCategoryId          String?
+  extraCurricularActivity      String?
   // all below here are in next page
-  voterId                  String?
-  voterIdFile              String?
-  panCardNumber            String?
-  panCardFile              String?
-  drivingLicense           String?
-  drivingLicenseFile       String?
-  rationCardNumber         String?
-  rationCardFile           String?
-  aadharCardNumber         String?
-  aadharCardFile           String?
-  pensionCardNumber        String?
-  pensionCardFile          String?
-  medicalInsuranceNumber   String?
-  medicalInsuranceCardFile String?
-  disabilitySchemeNumber   String?
-  disabilitySchemeCardFile String?
-  BPL_OR_APL_Number        String?
-  BPL_OR_APL_CardFile      String?
+  voterId                      String?
+  voterIdFile                  String?
+  voterIdFileName              String?
+  panCardNumber                String?
+  panCardFile                  String?
+  panCardFileName              String?
+  drivingLicense               String?
+  drivingLicenseFile           String?
+  drivingLicenseFileName       String?
+  rationCardNumber             String?
+  rationCardFile               String?
+  rationCardFileName           String?
+  aadharCardNumber             String?
+  aadharCardFile               String?
+  aadharCardFileName           String?
+  pensionCardNumber            String?
+  pensionCardFile              String?
+  pensionCardFileName          String?
+  medicalInsuranceNumber       String?
+  medicalInsuranceCardFile     String?
+  medicalInsuranceCardFileName String?
+  disabilitySchemeNumber       String?
+  disabilitySchemeCardFile     String?
+  disabilitySchemeCardFileName String?
+  BPL_OR_APL_Number            String?
+  BPL_OR_APL_CardFile          String?
+  BPL_OR_APL_CardFileName      String?
 
   doorNumber              String?
   flatNumber              String?
@@ -302,7 +311,8 @@ model DivyangDetails {
   identityCardNumber   String?
   udidCardNumber       String?
   udidEnrollmentNumber String?
-  udidCardUrl          String? // url
+  UDIDCardFile         String?
+  UDIDCardFileName     String?
 
   isEmployed              Boolean?
   unemployedSince         DateTime?
@@ -409,7 +419,8 @@ model DisabilityOfDivyang {
   disabilityDueTo           String?
   certificateIssueAuthority CertificateIssueAuthorityEnum?
   // disabilityCardUrl         String? // url
-  disabilityCardFile        String? // url
+  disabilityCardFileName    String? // url
+  disabilityCardKey         String? // url
 
   divyang           DivyangDetails     @relation(fields: [divyangId], references: [id])
   disabilitySubType DisabilitySubType? @relation(fields: [disabilitySubTypeId], references: [id])

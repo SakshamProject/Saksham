@@ -15,7 +15,7 @@ const disabilityOfDivyangSchema = z.object({
   certificateIssueAuthority: z
     .nativeEnum(CertificateIssueAuthorityEnum)
     .optional(),
-  disabilityCardFile: z.string().optional(), // url
+  disabilityCardFileName: z.string().optional(), // url
 });
 type DisabilityOfDivyang = z.infer<typeof disabilityOfDivyangSchema>;
 const disabiltyDetailsRequestSchema = z.object({

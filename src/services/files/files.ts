@@ -1,6 +1,6 @@
 import prisma from "../database/database.js"
 import {updateUserProfileKeyDB} from "../database/users/update.js"
-import s3, {
+import {
     deleteFile,
     generateDisablityCardFileKey,
     generateFileURLResponseFromKey,
@@ -22,7 +22,24 @@ import {getDivyangDetailsByPersonIdDB, getDivyangDisabilitiesByPersonIdDB} from 
 import {getUserByPersonIdDB} from "../database/users/read.js";
 import {updateDivyangDetailsRequest} from "../../types/divyangDetails/divyangDetailsSchema.js";
 
-async function getDivyangDetailsFileURLs(personId: string) {
+async function getDivyangDetailsDisabilityCardsFileURLS(personId: string) {
+    const disabilityCards: {[id: string]: {key: string, url: string, validUpto: string, expiresInSeconds: number}}[] = []
+    const disabilities = await getDivyangDisabilitiesByPersonIdDB(prisma, personId);
+    if (disabilities) {
+        for (const disability of disabilities) {
+            if (disability.disabilityCardKey && disability.id) {
+                const fileURL = await generateFileURLResponseFromKey(disability.disabilityCardKey);
+                if (fileURL) {
+                    disabilityCards.push({
+                        [disability.id]: fileURL
+                    });
+                }
+            }
+        }
+    }
+    return disabilityCards;
+}
+async function getDivyangDetailsIDProofFileURLs(personId: string) {
     try {
         const divyangDetails = await getDivyangDetailsByPersonIdDB(personId) as { [key: string]: any };
         log("info", "[getDivyangDetailsFileURLs]: divyangDetails: %o", divyangDetails)
@@ -54,6 +71,7 @@ async function getDivyangDetailsFileURLs(personId: string) {
 
         if (divyangDetails) {
             const files: filesResponse = []
+
             for (const column of imageColumns) {
                 const field = columnNameFieldNameMap.get(column);
                 if (field) {
@@ -69,6 +87,8 @@ async function getDivyangDetailsFileURLs(personId: string) {
                     }
                 }
             }
+
+
             log("info", "[getDivyangDetailsFileURLs]: files %o", files);
             return files;
         }
@@ -199,15 +219,30 @@ function IdProofFieldNameColumnNameMapper(files: { [fieldName: string]: Express.
     IdProofFieldNameColumnNameMap.set("disabilitySchemeCard", "disabilitySchemeCardFile");
     IdProofFieldNameColumnNameMap.set("BPL_OR_APL_Number", "BPL_OR_APL_CardFile");
 
+
+    const IdProofFileNameColumnNameMap: Map<string, string> = new Map();
+    IdProofFileNameColumnNameMap.set("voterId", "voterIdFileName");
+    IdProofFileNameColumnNameMap.set("panCard", "panCardFileName");
+    IdProofFileNameColumnNameMap.set("rationCard", "rationCardFileName");
+    IdProofFileNameColumnNameMap.set("drivingLicense", "drivingLicenseFileName");
+    IdProofFileNameColumnNameMap.set("pensionCard", "pensionCardFileName");
+    IdProofFileNameColumnNameMap.set("medicalInsuranceCard", "medicalInsuranceCardFileName");
+    IdProofFileNameColumnNameMap.set("disabilitySchemeCard", "disabilitySchemeCardFileName");
+    IdProofFileNameColumnNameMap.set("BPL_OR_APL_Number", "BPL_OR_APL_CardFileName");
+
     const data: any = {}; // I can"t do this! Cries~ Without using `any` *sobs*
-    log("info", "[IdProofFieldNameColumnNameMapper]: Keys: %o", IdProofFieldNameColumnNameMap.keys());
+    log("info", "[IdProofFileNameColumnNameMapper]: Keys: %o", IdProofFieldNameColumnNameMap.keys());
     for (const field of IdProofFieldNameColumnNameMap.keys()) {
         const columnName = IdProofFieldNameColumnNameMap.get(field);
-        if (columnName) {
+        const fileNameColumn = IdProofFileNameColumnNameMap.get(field);
+        if (columnName && fileNameColumn) {
             if (files[field]) {
-                data[columnName] = generateKey(personId, files[field][0]);
+                const file = files[field][0];
+                data[columnName] = generateKey(personId, file);
+                data[fileNameColumn] = file.originalname;
             } else {
-                data[columnName] = null; // Soft Delete the File
+                data[columnName] = null;
+                data[fileNameColumn] = null;
             }
         }
     }
@@ -215,7 +250,11 @@ function IdProofFieldNameColumnNameMapper(files: { [fieldName: string]: Express.
 }
 
 export type filesResponse = {
-    [field: string]: { key: string, url: string, validUpto: string, expiresInSeconds: number }
+    [field: string]: { key: string, url: string, validUpto: string, expiresInSeconds: number },
+}[];
+
+export type disabilityCardsResponse = {
+    [id: string]: { key: string, url: string, validUpto: string, expiresInSeconds: number },
 }[];
 
 async function saveDivyangDetailsIdProofFilestoS3andDB(
@@ -255,12 +294,10 @@ async function saveDivyangDisabilityDetailsToS3andDB(divyangDetails: updateDivya
                 personId
             );
 
-
             log("info", "[saveDivyangDisabilityDetailsToS3andDB]: existingDisabilities: %o", existingDisabilities);
             const disabilities = divyangDetails.disabilityDetails?.disabilities;
             log("info", "[saveDivyangDisabilityDetailsToS3andDB]: disabilities: %o", disabilities);
             if (disabilities) {
-                console.log(`[+]enters disabilities`)
                 for (const disability of disabilities) {
                     if (existingDisabilities) {
 
@@ -271,7 +308,7 @@ async function saveDivyangDisabilityDetailsToS3andDB(divyangDetails: updateDivya
 
                             )) {
 
-                                const requestCardName = disability.disabilityCardFile;
+                                const requestCardName = disability.disabilityCardFileName;
                                 log("info", "[saveDivyangDisabilityDetailsToS3andDB]: requestCardName: %o", requestCardName);
                                 if (requestCardName) {
                                     for (const file of files) {
@@ -282,7 +319,8 @@ async function saveDivyangDisabilityDetailsToS3andDB(divyangDetails: updateDivya
                                                 console.log(`Enters disability.id`)
                                                 // save key to db
                                                 const dbResult = await saveDisabilityDetailsCardKey(prisma, existingDisability.id, {
-                                                    disabilityCardFile: key
+                                                    disabilityCardFileName: file.originalname,
+                                                    disabilityCardKey: key
                                                 });
                                                 const s3Result = await saveDisabilityCardFileBufferToS3(personId, file, existingDisability.id)
 
@@ -295,11 +333,11 @@ async function saveDivyangDisabilityDetailsToS3andDB(divyangDetails: updateDivya
                                 } else {
                                     if (existingDisability.id) {
                                         const dbResult = await saveDisabilityDetailsCardKey(prisma, existingDisability.id, {
-                                            disabilityCardFile: null
+                                            disabilityCardKey: null,
+                                            disabilityCardFileName: null
                                         });
                                         log("info", "[saveDivyangDisabilityDetailsToS3andDB]: dbResult: %o", dbResult);
                                     }
-
                                 }
                             }
                         }
@@ -322,10 +360,11 @@ async function saveDivyangDisabilityDetailsToS3andDB(divyangDetails: updateDivya
 
 export {
     saveUserProfilePhotoToS3andDB,
-    getDivyangDetailsFileURLs,
+    getDivyangDetailsIDProofFileURLs,
     saveDivyangDetailsIdProofFilestoS3andDB,
     saveDivyangProfilePhotoToS3andDB,
     deleteUserProfilePhotoFromS3andDB,
     deleteDivyangDetailsProfilePhotoFromS3andDB,
-    saveDivyangDisabilityDetailsToS3andDB
+    saveDivyangDisabilityDetailsToS3andDB,
+    getDivyangDetailsDisabilityCardsFileURLS
 }

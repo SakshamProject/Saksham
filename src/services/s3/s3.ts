@@ -22,7 +22,7 @@ import APIError from "../errors/APIError.js";
 import {StatusCodes} from "http-status-codes";
 import {filesResponse} from "../files/files.js";
 
-type S3Result = { fieldName: string, key: string, output: PutObjectCommandOutput }
+type S3Result = { fieldName: string, key: string, output: PutObjectCommandOutput, name: string}
 const s3Client = new S3Client({
         credentials: {
             accessKeyId: config.s3.access_key,
@@ -85,7 +85,6 @@ async function generateFileURLResponseFromKey(key: string) {
 function addToCurrentTimeISO(seconds: number) {
     const currentTime = new Date();
     const addToCurrentTime = new Date(currentTime.getTime() + (seconds * 1000));
-
     return addToCurrentTime.toISOString();
 }
 
@@ -181,7 +180,7 @@ async function saveDisabilityCardFileBufferToS3(personId: string, file: Express.
         const output = await s3Client.send(putObjectCommand);
         log("info", "[saveDisabilityCardFileBufferToS3]: File has been saved to S3. \n output: \n %o", output);
 
-        return {fieldName: file.fieldname, key, output};
+        return {fieldName: file.fieldname, key, output, name: file.originalname};
     } catch (error) {
         throwS3Error(error);
     }
@@ -211,7 +210,7 @@ async function saveFileBufferToS3(personId: string, file: Express.Multer.File): 
         const output = await s3Client.send(putObjectCommand);
         log("info", "[saveFileBufferToS3]: File has been saved to S3. \n output: \n %o", output);
 
-        return {fieldName: file.fieldname, key, output: output};
+        return {fieldName: file.fieldname, key, output, name: file.originalname};
 
     } catch (error) {
         throwS3Error(error);

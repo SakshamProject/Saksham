@@ -1,4 +1,5 @@
 import { getRequestType } from "./getRequestSchema.js";
+import {disabilityCardsResponse, filesResponse} from "../services/files/files.js";
 
 const createResponseOnlyData = (result: Object = {}) => {
   const createdResponse = {
@@ -16,13 +17,14 @@ function createResponseWithFile(result: Object = {}, file: Object = {}) {
   )
 }
 
-function createResponseWithFiles(result: Object = {}, files: Object = []) {
+function createResponseWithFiles(result: Object = {}, files: filesResponse = [], disabilityCards:disabilityCardsResponse  = []) {
   return (
       {
         data: result,
-        files: files
+        files: files,
+        disabilityCards: disabilityCards,
       }
-  )
+  );
 }
 
 const createResponseWithQuery = (

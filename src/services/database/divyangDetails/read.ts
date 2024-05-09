@@ -82,12 +82,7 @@ const getDivyangDetailsByIdDB = async (id: string) => {
                 },
                 district: true,
                 districtCommunication: true,
-                disabilities: {
-                    include: {
-                        disabilitySubType: true,
-                        disabilityType: true,
-                    },
-                },
+                disabilities: true,
                 educationQualifications: {
                     include: {
                         educationQualification: true,

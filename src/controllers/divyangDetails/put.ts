@@ -9,9 +9,9 @@ import {getDivyangDetailsByIdDB} from "../../services/database/divyangDetails/re
 import APIError from "../../services/errors/APIError.js";
 import {StatusCodes} from "http-status-codes";
 import {
-    deleteDivyangDetailsProfilePhotoFromS3andDB,
-    filesResponse,
-    getDivyangDetailsFileURLs,
+    deleteDivyangDetailsProfilePhotoFromS3andDB, disabilityCardsResponse,
+    filesResponse, getDivyangDetailsDisabilityCardsFileURLS,
+    getDivyangDetailsIDProofFileURLs,
     saveDivyangDetailsIdProofFilestoS3andDB, saveDivyangDisabilityDetailsToS3andDB,
     saveDivyangProfilePhotoToS3andDB
 } from "../../services/files/files.js";
@@ -43,6 +43,7 @@ const putDivyangDetails = async (
 
         log("info", "[putDivyangDetails]: request.files: %o", request.files);
         let fileURLs: filesResponse  | undefined = [];
+        let disabilityCardURLs: disabilityCardsResponse | undefined = [];
         if (updatedResult) {
             const personId = updatedResult?.personId;
             if (request.files) {
@@ -84,14 +85,16 @@ const putDivyangDetails = async (
                         }
                     }
 
-                    fileURLs = await getDivyangDetailsFileURLs(personId);
+                    fileURLs = await getDivyangDetailsIDProofFileURLs(personId);
+                    disabilityCardURLs = await getDivyangDetailsDisabilityCardsFileURLS(personId);
                 }
             }
         }
         log("info", "[putDivyangDetails]: fileURLs: %o", fileURLs);
+        log("info", "[putDivyangDetails]: disabilityCardURLs: %o", disabilityCardURLs);
 
         const result = await getDivyangDetailsByIdDB(id);
-        const responseData = createResponseWithFiles(result, fileURLs);
+        const responseData = createResponseWithFiles(result, fileURLs, disabilityCardURLs);
         response.send(responseData);
 
     } catch (error) {
