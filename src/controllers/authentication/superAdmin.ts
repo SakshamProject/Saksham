@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from "express";
 import { StatusCodes } from "http-status-codes";
-import defaults, { superAdmin } from "../../defaults.js";
+import defaults from "../../defaults.js";
 import APIError from "../../services/errors/APIError.js";
 import {
   loginSchemaType,
