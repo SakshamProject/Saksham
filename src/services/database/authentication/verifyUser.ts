@@ -81,6 +81,7 @@ const getUserByIdAuthDB = async (id: string) => {
           select: {
             id: true,
             name: true,
+            sevaKendraId: true,
             sevaKendra: {
               select: {
                 id: true,

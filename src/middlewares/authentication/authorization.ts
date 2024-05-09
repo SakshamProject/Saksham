@@ -21,6 +21,7 @@ function authorization(
       }
       //user
       if (request.token?.userId) {
+        request.token.serviceMappingAccess = false;
         if (
           MethodsEnum.USER_DROPDOWN === method ||
           method === MethodsEnum.DIVYANG_DROPDOWN
@@ -30,14 +31,14 @@ function authorization(
         const user = await getUserByIdAuthDB(request.token.userId);
         const designationId = user?.designationId;
         const designation = await getDesignationByIDDB(designationId);
-
+        // handling access for servicemapping
         if (
           currentFeature === AuthorizationEnum.SERVICE_MAPPING &&
           !designation?.features.some(
             (feature) => feature.feature.name === currentFeature
           )
         ) {
-          request.admin = false;
+          request.token.serviceMappingAccess = true;
           return next();
         }
         if (
@@ -53,6 +54,7 @@ function authorization(
             "S"
           );
         }
+        //handling for divyang details
         if (
           currentFeature === AuthorizationEnum.DIVYANG_DETAILS &&
           !designation?.features.some(
@@ -60,7 +62,9 @@ function authorization(
               feature.feature.name === AuthorizationEnum.SERVICE_MAPPING
           )
         ) {
-          request.admin = false;
+          request.token.serviceMappingAccess = true;
+          request.token.userSevaKendraId =
+            user?.designation.sevaKendraId || "defaultSevaKendraId";
           return next();
         }
       } else {

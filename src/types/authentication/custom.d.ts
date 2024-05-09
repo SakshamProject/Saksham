@@ -6,6 +6,8 @@ interface Token {
   personId: string;
   userId: string;
   superAdminId: string;
+  serviceMappingAccess: Boolean;
+  userSevaKendraId: string;
 }
 
 declare namespace Express {

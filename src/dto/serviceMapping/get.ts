@@ -9,15 +9,13 @@ const createServiceMappingFilterInputObject = async (
   serviceMappingFilter: serviceMappingFilterType | undefined,
   globalSearchConditions: ServiceMappingWhere | null,
   serviceAdditionalWhere: ServiceAdditionalWhereSchemaType | undefined,
-  serviceMappingDefault: Boolean | undefined,
-  userId: string = "default"
+  token: Token | undefined
 ): Promise<ServiceMappingWhere> => {
   const serviceMappingWhereInput = generateServiceMappingFilter(
     serviceMappingFilter,
     globalSearchConditions,
-    serviceAdditionalWhere, 
-    serviceMappingDefault,
-    userId
+    serviceAdditionalWhere,
+    token
   );
   return serviceMappingWhereInput;
 };
