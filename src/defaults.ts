@@ -39,16 +39,5 @@ const auditLogDefaults = {
   description: "NEW RECORD CREATED",
 };
 
-const superAdmin: loginSchemaType[] = [
-  {
-    userName: "adminSaksham",
-    password: "c995c8da306900af12c2f562b959f85c2d5fe49075e872813610d2f697058e80",
-  },
-  {
-    userName: "admin",
-    password: "41e586bed587fb8d5fc4970928f460bdf8e3e455604b4a3f4aa2ca21bbe7f1f8",
-  },
-];
-const superAdminUserNames = ["admin@saksham", "admin"];
-export { auditLogDefaults, superAdmin, superAdminUserNames };
+export { auditLogDefaults };
 export default defaults;
