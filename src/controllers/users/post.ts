@@ -25,7 +25,7 @@ async function postUser(
     log("info", `[controller/post]:\n body: %o`, body);
     log("info", `[controller/post]:\n file: %o`, request.file || {});
 
-    const createdBy = request.token?.userId;
+    const createdBy = request.token?.personId;
     const userInputObject = createUserDBObject(request,createdBy);
     log("info", `[controller/post]:\n userInputObject: %o`, userInputObject);
 

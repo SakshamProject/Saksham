@@ -10,7 +10,7 @@ async function putUser(
   try {
     const id = request.params.id;
     const body = usersPutSchema.parse(request.body);
-    const updatedBy = request.token?.userId;
+    const updatedBy = request.token?.personId;
     const result = await updateUserTransactionDB(body, id, updatedBy);
     const responseData = createResponseOnlyData(result);
     response.json(responseData);

@@ -11,7 +11,7 @@ async function postDesignation(
 ) {
   try {
     const body = postDesignationRequestSchema.parse(request.body);
-    const createdById = request.token?.userId;
+    const createdById = request.token?.personId;
     const result = await postDesignationDBTransaction(body, createdById);
     const responseResult = await getDesignationByIDDB(result?.id);
     const responseData = createResponseOnlyData(responseResult || {});

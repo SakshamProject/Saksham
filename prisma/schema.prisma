@@ -16,16 +16,24 @@ datasource db {
 
 model Person {
   id         String          @id @default(uuid())
-  userName    String          @unique
+  userName   String          @unique
   passwordId String          @unique
   password   Password        @relation(fields: [passwordId], references: [id])
   user       User?           @relation("person")
   divyang    DivyangDetails? @relation("person")
+  superAdmin SuperAdmin?  
 
+
+  createdSevaKendra SevaKendra[] @relation("sevaKendraCreatedBy")
+  updatedSevaKendra SevaKendra[] @relation("sevaKendraUpdatedBy")
   divyangsCreated               DivyangDetails[]        @relation("divyangCreatedBy")
   divyangsUpdated               DivyangDetails[]        @relation("divyangUpdatedBy")
   createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
   updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
+  usersCreated User[] @relation("createdBy")
+  usersUpdated User[] @relation("updatedBy")
+  designationsCreated   Designation[]           @relation("createdBy")
+  designationsUpdated   Designation[]           @relation("updatedBy")
 }
 
 model Password {
@@ -33,6 +41,13 @@ model Password {
   password String
   person   Person?
 }
+
+model SuperAdmin {
+  id       String @id @default(uuid())
+  personId String @unique
+  person Person @relation(fields: [personId], references: [id])
+}
+
 
 model SevaKendra {
   id              String    @id @default(uuid())
@@ -53,8 +68,8 @@ model SevaKendra {
   contactPerson         ContactPerson           @relation(fields: [contactPersonId], references: [id])
   designations          Designation[]
   auditLog              SevaKendraAuditLog[]
-  createdBy             User?                   @relation("sevaKendraCreatedBy", fields: [createdById], references: [id])
-  updatedBy             User?                   @relation("sevaKendraUpdatedBy", fields: [updatedById], references: [id])
+  createdBy             Person?                   @relation("sevaKendraCreatedBy", fields: [createdById], references: [id])
+  updatedBy             Person?                   @relation("sevaKendraUpdatedBy", fields: [updatedById], references: [id])
   divyangServiceMapping DivyangServiceMapping[]
 
   @@unique([name, districtId])
@@ -157,22 +172,18 @@ model User {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 
-  usersCreated User[] @relation("createdBy")
-  usersUpdated User[] @relation("updatedBy")
+
 
   createdById String ?
-  createdBy   User?  @relation("createdBy", fields: [createdById], references: [id])
+  createdBy   Person?  @relation("createdBy", fields: [createdById], references: [id])
 
   updatedById String?
-  updatedBy   User?   @relation("updatedBy", fields: [updatedById], references: [id])
+  updatedBy   Person?   @relation("updatedBy", fields: [updatedById], references: [id])
 
   designation           Designation             @relation("Designation-Users", fields: [designationId], references: [id])
-  designationsCreated   Designation[]           @relation("createdBy")
-  designationsUpdated   Designation[]           @relation("updatedBy")
+  
   auditLog          UserAuditLog[]
   divyangServiceMapping DivyangServiceMapping[] @relation("inchargeUser")
-  createdSevaKendra SevaKendra[] @relation("sevaKendraCreatedBy")
-  updatedSevaKendra SevaKendra[] @relation("sevaKendraUpdatedBy")
 }
 
 model UserAuditLog {
@@ -204,8 +215,8 @@ model Designation {
   updatedAt   DateTime? @updatedAt
   updatedById String?
 
-  createdBy  User?      @relation("createdBy", fields: [createdById], references: [id])
-  updatedBy  User?      @relation("updatedBy", fields: [updatedById], references: [id])
+  createdBy  Person?      @relation("createdBy", fields: [createdById], references: [id])
+  updatedBy  Person?      @relation("updatedBy", fields: [updatedById], references: [id])
   sevaKendra SevaKendra @relation(fields: [sevaKendraId], references: [id])
 
   users               User[]                   @relation("Designation-Users")
