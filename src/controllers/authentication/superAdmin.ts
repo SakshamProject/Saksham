@@ -9,8 +9,7 @@ import {
 import config from "../../../config.js";
 import * as crypto from "crypto";
 import jwt from "jsonwebtoken";
-import { verifyDivyang } from "../../services/database/authentication/verifyUser.js";
-import verifySuperAdmin from "../../services/database/authentication/verifySuperAdmin.js";
+import verifySuperAdminDB from "../../services/database/authentication/verifySuperAdmin.js";
 
 async function superAdminLogin(
   request: Request,
@@ -23,7 +22,7 @@ async function superAdminLogin(
       .createHmac(defaults.hashingAlgorithm, config.SECRET)
       .update(body.password)
       .digest("hex");
-    const admin = await verifySuperAdmin(body.userName, hashedPassword);
+    const admin = await verifySuperAdminDB(body.userName, hashedPassword);
     if (!admin) {
       throw new APIError(
         "Username or password is incorrect",
