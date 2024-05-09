@@ -15,7 +15,8 @@ function authorization(
 ) {
   return async (request: Request, response: Response, next: NextFunction) => {
     try {
-      if (request.token?.superAdmin) {
+      //superAdmin
+      if (request.token?.superAdminId) {
         return next();
       }
       //user
@@ -46,7 +47,7 @@ function authorization(
         ) {
           // this can also be thrown when designation is changed after current login session
           throw new APIError(
-            "Permission denied",
+            "Permission denied for user",
             StatusCodes.UNAUTHORIZED,
             "AccessDenied",
             "S"
@@ -78,7 +79,7 @@ function authorization(
           )
         ) {
           throw new APIError(
-            "Permission denied",
+            "Permission denied for divyang",
             StatusCodes.UNAUTHORIZED,
             "AccessDenied",
             "S"
