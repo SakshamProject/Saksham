@@ -16,16 +16,16 @@ async function authenticate(
     const token = request.headers?.["authorization"];
     if (!token) {
       throw new APIError(
-        "Token Object Not Found",
+        "Unauthorized",
         StatusCodes.UNAUTHORIZED,
-        "UserNotFoundError",
+        "UnauthorizationError",
         "S"
       );
     }
     const decodedToken = jwt.verify(token, config.SECRET) as Token;
     request.token = decodedToken;
     // checking for token
-    if (request.token) {
+    if (!request.token) {
       throw new APIError(
         "Token Object Not Found",
         StatusCodes.UNAUTHORIZED,
