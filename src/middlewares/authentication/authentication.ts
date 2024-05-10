@@ -16,9 +16,9 @@ async function authenticate(
     const token = request.headers?.["authorization"];
     if (!token) {
       throw new APIError(
-        "Unauthorized",
+        "Token Object Not Found",
         StatusCodes.UNAUTHORIZED,
-        "UnauthorizationError",
+        "UserNotFoundError",
         "S"
       );
     }
@@ -85,9 +85,6 @@ async function authenticate(
       "UserNotFoundError",
       "S"
     );
-
-
-
   } catch (error) {
     if (error instanceof jwt.NotBeforeError) {
       next(
