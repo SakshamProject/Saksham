@@ -130,6 +130,19 @@ async function updateDivyangProfileKeyDB(prisma: Prisma.TransactionClient, perso
     }
 }
 
+async function updateUDIDCardKeyDB(prisma: Prisma.TransactionClient, personId: string, data: Prisma.DivyangDetailsUpdateInput) {
+    try {
+        const result = await prisma.divyangDetails.update({
+            data,
+            where: {
+                personId
+            }
+        });
+        return result;
+    } catch (error) {
+        throwDatabaseError(error);
+    }
+}
 async function saveDisabilityDetailsCardKey(prisma: Prisma.TransactionClient, disabilityOfDivyangId: string, data: Prisma.DisabilityOfDivyangUpdateInput) {
     try {
         const result = await prisma.disabilityOfDivyang.update({
@@ -151,5 +164,6 @@ export {
     updateEducationQualificationOfDivyangDB,
     updateDivyangProfileKeyDB,
     divayangDetailsUpdateFileKeysDB,
-    saveDisabilityDetailsCardKey
+    saveDisabilityDetailsCardKey,
+    updateUDIDCardKeyDB,
 };

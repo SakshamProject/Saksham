@@ -9,11 +9,12 @@ import {getDivyangDetailsByIdDB} from "../../services/database/divyangDetails/re
 import APIError from "../../services/errors/APIError.js";
 import {StatusCodes} from "http-status-codes";
 import {
-    deleteDivyangDetailsProfilePhotoFromS3andDB, disabilityCardsResponse,
+    deleteAllDisabilityCardsToS3andDB,
+    deleteDivyangDetailsProfilePhotoFromS3andDB, deleteUDIDCardFromS3andDB, disabilityCardsResponse,
     filesResponse, getDivyangDetailsDisabilityCardsFileURLS,
     getDivyangDetailsIDProofFileURLs,
-    saveDivyangDetailsIdProofFilestoS3andDB, saveDivyangDisabilityDetailsToS3andDB,
-    saveDivyangProfilePhotoToS3andDB
+    saveDivyangDetailsIdProofFilestoS3andDB, saveDivyangDisabilityCardsToS3andDB,
+    saveDivyangProfilePhotoToS3andDB, saveUDIDCardToS3andDB
 } from "../../services/files/files.js";
 import log from "../../services/logger/logger.js";
 
@@ -25,14 +26,10 @@ const putDivyangDetails = async (
     try {
         const id: string = request.params.id;
         log("info", "[putDivyangDetails]: %o", request.body);
-        console.log(`[+]request body`,request.body);
         const divyangDetails: updateDivyangDetailsRequest =
             updateDivyangDetailsRequestSchema.parse(request.body);
 
         const pageNumber = divyangDetails.pageNumber;
-        console.log(`[+]pageNumber`,pageNumber)
-
-        console.log(`[+] divyangDetails: `, divyangDetails);
 
         const updatedBy = request.token?.personId;
         const updatedResult = await updateDivyangDetailsTransactionDB(
@@ -78,10 +75,21 @@ const putDivyangDetails = async (
 
                     if (pageNumber === 4) {
                         // Disability Details
-                        if (request.files["disabilityCard"]) {
-                            log("info", "[putDivyangDetails] Page: %d", pageNumber);
-                            await saveDivyangDisabilityDetailsToS3andDB(divyangDetails, request.files["disabilityCard"], personId);
+
+                        // UDID Card
+                        if (request.files["UDIDCard"]) {
+                            const s3Result = await saveUDIDCardToS3andDB(personId, request.files["UDIDCard"][0]);
+                            log("info", "[putDivyangDetails]: s3Result: %o", s3Result);
                         } else {
+                            const s3Result = await deleteUDIDCardFromS3andDB(personId);
+                            log("info", "[putDivyangDetails]: s3Result: %o", s3Result);
+                        }
+
+                        // Disability Card
+                        if (request.files["disabilityCard"]?.length > 0) {
+                            await saveDivyangDisabilityCardsToS3andDB(divyangDetails, request.files["disabilityCard"], personId);
+                        } else {
+                            await deleteAllDisabilityCardsToS3andDB(personId);
                         }
                     }
 

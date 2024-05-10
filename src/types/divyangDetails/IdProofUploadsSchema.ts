@@ -3,12 +3,12 @@ import inputFieldSchema from '../inputFieldSchema.js'
 
 const IdProofUploadsRequestSchema = z
   .object({
-    voterId: inputFieldSchema.optional(),
+    voterIdNumber: inputFieldSchema.optional(),
     panCardNumber: z
       .string()
       .regex(/^[A-Z]{5}[0-9]{4}[A-Z]$/, 'Invalid PAN card number format')
       .optional(),
-    drivingLicense: z.string().length(64).optional(),
+    drivingLicenseNumber: z.string().length(64).optional(),
     rationCardNumber: z.string().length(64).optional(),
     aadharCardNumber: z
       .string()
@@ -22,6 +22,7 @@ const IdProofUploadsRequestSchema = z
   })
   .refine(
     (val) => Object.values(val).filter((v) => v !== undefined).length >= 2,
+      // (val) => console.log(val),
     'At least two fields must be present',
   )
 type IdProofUploads = z.infer<typeof IdProofUploadsRequestSchema>

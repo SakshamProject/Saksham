@@ -152,9 +152,9 @@ const updateIdProofUploadsDBObject = (
   updatedBy: string
 ): Prisma.DivyangDetailsUpdateInput => {
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
-    voterId: IdProofUploads.voterId,
+    voterId: IdProofUploads.voterIdNumber,
     panCardNumber: IdProofUploads.panCardNumber,
-    drivingLicense: IdProofUploads.drivingLicense,
+    drivingLicense: IdProofUploads.drivingLicenseNumber,
     rationCardNumber: IdProofUploads.rationCardNumber,
     aadharCardNumber: IdProofUploads.aadharCardNumber,
     pensionCardNumber: IdProofUploads.pensionCardNumber,

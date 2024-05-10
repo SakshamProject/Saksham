@@ -6,7 +6,8 @@ import {
     generateFileURLResponseFromKey,
     generateFileURLResponseFromResult,
     generateFileURLsResponseFromResult,
-    generateKey, saveDisabilityCardFileBufferToS3,
+    generateKey,
+    saveDisabilityCardFileBufferToS3,
     saveFileBuffersToS3,
     saveFileBufferToS3,
 } from "../s3/s3.js"
@@ -15,20 +16,28 @@ import {StatusCodes} from "http-status-codes"
 import {
     divayangDetailsUpdateFileKeysDB,
     saveDisabilityDetailsCardKey,
-    updateDivyangProfileKeyDB
+    updateDivyangProfileKeyDB,
+    updateUDIDCardKeyDB
 } from "../database/divyangDetails/update.js";
 import log from "../logger/logger.js";
-import {getDivyangDetailsByPersonIdDB, getDivyangDisabilitiesByPersonIdDB} from "../database/divyangDetails/read.js";
+import {
+    getDivyangDetailsByIdDB,
+    getDivyangDetailsByPersonIdDB,
+    getDivyangDisabilitiesByPersonIdDB
+} from "../database/divyangDetails/read.js";
 import {getUserByPersonIdDB} from "../database/users/read.js";
 import {updateDivyangDetailsRequest} from "../../types/divyangDetails/divyangDetailsSchema.js";
+import throwDatabaseError from "../database/utils/errorHandler.js";
 
 async function getDivyangDetailsDisabilityCardsFileURLS(personId: string) {
-    const disabilityCards: {[id: string]: {key: string, url: string, validUpto: string, expiresInSeconds: number}}[] = []
+    const disabilityCards: {
+        [id: string]: { key: string, url: string, validUpto: string, expiresInSeconds: number }
+    }[] = []
     const disabilities = await getDivyangDisabilitiesByPersonIdDB(prisma, personId);
     if (disabilities) {
         for (const disability of disabilities) {
-            if (disability.disabilityCardKey && disability.id) {
-                const fileURL = await generateFileURLResponseFromKey(disability.disabilityCardKey);
+            if (disability.disabilityCardFile && disability.id) {
+                const fileURL = await generateFileURLResponseFromKey(disability.disabilityCardFile);
                 if (fileURL) {
                     disabilityCards.push({
                         [disability.id]: fileURL
@@ -39,6 +48,7 @@ async function getDivyangDetailsDisabilityCardsFileURLS(personId: string) {
     }
     return disabilityCards;
 }
+
 async function getDivyangDetailsIDProofFileURLs(personId: string) {
     try {
         const divyangDetails = await getDivyangDetailsByPersonIdDB(personId) as { [key: string]: any };
@@ -54,6 +64,7 @@ async function getDivyangDetailsIDProofFileURLs(personId: string) {
             "medicalInsuranceCardFile",
             "disabilitySchemeCardFile",
             "BPL_OR_APL_CardFile",
+            "UDIDCardFile"
         ];
 
         const columnNameFieldNameMap: Map<string, string> = new Map();
@@ -68,6 +79,7 @@ async function getDivyangDetailsIDProofFileURLs(personId: string) {
         columnNameFieldNameMap.set("medicalInsuranceCardFile", "medicalInsuranceCard");
         columnNameFieldNameMap.set("disabilitySchemeCardFile", "disabilitySchemeCard");
         columnNameFieldNameMap.set("BPL_OR_APL_CardFile", "BPL_OR_APL_Card");
+        columnNameFieldNameMap.set("UDIDCardFile", "UDIDCard");
 
         if (divyangDetails) {
             const files: filesResponse = []
@@ -105,7 +117,9 @@ async function saveDivyangProfilePhotoToS3andDB(
         const transaction = prisma.$transaction(async (prisma) => {
             const key = generateKey(personId, file)
             const result = await updateDivyangProfileKeyDB(prisma, personId, {
-                picture: key,
+                // pictureFileName: file.originalname;
+                profilePhotoFile: key,
+                profilePhotoFileName: file.originalname,
             });
             log("info", "[saveDivyangProfilePhotoToS3andDB]: result: %o", result);
             const s3Result = await saveFileBufferToS3(personId, file)
@@ -128,9 +142,10 @@ async function deleteDivyangDetailsProfilePhotoFromS3andDB(personId: string) {
     try {
         const transaction = prisma.$transaction(async (prisma) => {
             const user = await getDivyangDetailsByPersonIdDB(personId);
-            const key = user?.picture;
+            const key = user?.profilePhotoFile;
             const result = await updateDivyangProfileKeyDB(prisma, personId, {
-                picture: null,
+                profilePhotoFile: null,
+                profilePhotoFileName: null,
             });
             log("info", "[deleteDivyangDetailsProfilePhotoFromS3andDB]: result: %o", result);
 
@@ -157,9 +172,10 @@ async function deleteUserProfilePhotoFromS3andDB(personId: string) {
     try {
         const transaction = prisma.$transaction(async (prisma) => {
             const user = await getUserByPersonIdDB(personId);
-            const key = user?.picture;
+            const key = user?.profilePhotoFile;
             const result = await updateUserProfileKeyDB(prisma, personId, {
-                picture: null,
+                profilePhotoFile: null,
+                profilePhotoFileName: null,
             });
             log("info", "[deleteUserProfilePhotoFromS3andDB]: result: %o", result);
             if (key) {
@@ -189,7 +205,8 @@ async function saveUserProfilePhotoToS3andDB(
         const transaction = prisma.$transaction(async (prisma) => {
             const key = generateKey(personId, file)
             const result = await updateUserProfileKeyDB(prisma, personId, {
-                picture: key,
+                profilePhotoFile: key,
+                profilePhotoFileName: file.originalname
             });
             log("info", "[saveUserProfilePhotoToS3AndDB]: result: %o", result);
             const s3Result = await saveFileBufferToS3(personId, file)
@@ -283,7 +300,86 @@ async function saveDivyangDetailsIdProofFilestoS3andDB(
     }
 }
 
-async function saveDivyangDisabilityDetailsToS3andDB(divyangDetails: updateDivyangDetailsRequest, files: Express.Multer.File[], personId: string) {
+async function deleteAllDisabilityCardsToS3andDB(personId: string) {
+    try {
+        const transaction = prisma.$transaction(async (prisma) => {
+
+            const existingDisabilities = await getDivyangDisabilitiesByPersonIdDB(
+                prisma,
+                personId);
+
+            log("info", "[deleteAllDisabilityCardsToS3andDB]: divyangDetails: %o", existingDisabilities);
+
+            if (existingDisabilities) {
+                for (const existingDisability of existingDisabilities) {
+                    if (existingDisability.disabilityCardFile || existingDisability.disabilityCardFileName) {
+                        const keyToDelete = existingDisability.disabilityCardFile;
+                        const dbResult = await saveDisabilityDetailsCardKey(prisma, existingDisability.id, {
+                            disabilityCardFile: null,
+                            disabilityCardFileName: null
+                        });
+                        log("info", "[deleteAllDisabilityCardsToS3andDB]: dbResult: %o", dbResult);
+                        if (keyToDelete) {
+                            const s3Result = deleteFile(keyToDelete);
+                            log("info", "[deleteAllDisabilityCardsToS3andDB]: s3Result: %o", s3Result);
+
+                        }
+                    }
+                }
+            }
+        });
+        return transaction;
+    } catch (error) {
+        throwDatabaseError(error);
+    }
+}
+
+async function deleteUDIDCardFromS3andDB(personId: string) {
+    try {
+
+        const transaction = prisma.$transaction(async (prisma) => {
+            const divyang = await getDivyangDetailsByPersonIdDB(personId);
+            if (divyang) {
+                const key = divyang.UDIDCardFile;
+                if (divyang?.UDIDCardFile) {
+                    const dbResult = await updateUDIDCardKeyDB(prisma, personId, {
+                        UDIDCardFile: null,
+                        UDIDCardFileName: null,
+                    });
+                    log("info", "[deleteUDIDCardFromS3andDB]: dbResult: %o", dbResult);
+                    if (key) {
+                        const s3Result = await deleteFile(key)
+                        log("info", "[deleteUDIDCardFromS3andDB]: s3Result: %o", s3Result);
+                    }
+                }
+            }
+        });
+        return transaction;
+    } catch(error) {
+        throwDatabaseError(error);
+    }
+
+}
+async function saveUDIDCardToS3andDB(personId: string, file: Express.Multer.File) {
+    try {
+        const transaction = prisma.$transaction(async (prisma) => {
+            const key = generateKey(personId, file);
+            const dbResult = await updateUDIDCardKeyDB(prisma, personId, {
+                UDIDCardFile: key,
+                UDIDCardFileName: file.originalname,
+            });
+            log("info", "[saveUDIDCardToS3andDB]: dbResult: %o", dbResult);
+
+            const s3Result = saveFileBufferToS3(personId, file);
+            log("info", "[saveUDIDCardToS3andDB]: s3Result: %o", s3Result);
+        });
+        return transaction;
+    } catch (error) {
+        throwDatabaseError(error);
+    }
+}
+
+async function saveDivyangDisabilityCardsToS3andDB(divyangDetails: updateDivyangDetailsRequest, files: Express.Multer.File[], personId: string) {
     try {
         const transaction = prisma.$transaction(async (prisma) => {
 
@@ -320,7 +416,7 @@ async function saveDivyangDisabilityDetailsToS3andDB(divyangDetails: updateDivya
                                                 // save key to db
                                                 const dbResult = await saveDisabilityDetailsCardKey(prisma, existingDisability.id, {
                                                     disabilityCardFileName: file.originalname,
-                                                    disabilityCardKey: key
+                                                    disabilityCardFile: key
                                                 });
                                                 const s3Result = await saveDisabilityCardFileBufferToS3(personId, file, existingDisability.id)
 
@@ -332,10 +428,15 @@ async function saveDivyangDisabilityDetailsToS3andDB(divyangDetails: updateDivya
                                     }
                                 } else {
                                     if (existingDisability.id) {
+                                        const keyToDelete = existingDisability.disabilityCardFile;
                                         const dbResult = await saveDisabilityDetailsCardKey(prisma, existingDisability.id, {
-                                            disabilityCardKey: null,
+                                            disabilityCardFile: null,
                                             disabilityCardFileName: null
                                         });
+                                        if (keyToDelete) {
+                                            const s3Result = deleteFile(keyToDelete);
+                                            log("info", "[saveDivyangDisabilityDetailsToS3andDB]: s3Result: %o", s3Result);
+                                        }
                                         log("info", "[saveDivyangDisabilityDetailsToS3andDB]: dbResult: %o", dbResult);
                                     }
                                 }
@@ -365,6 +466,9 @@ export {
     saveDivyangProfilePhotoToS3andDB,
     deleteUserProfilePhotoFromS3andDB,
     deleteDivyangDetailsProfilePhotoFromS3andDB,
-    saveDivyangDisabilityDetailsToS3andDB,
-    getDivyangDetailsDisabilityCardsFileURLS
+    saveDivyangDisabilityCardsToS3andDB,
+    getDivyangDetailsDisabilityCardsFileURLS,
+    deleteAllDisabilityCardsToS3andDB,
+    saveUDIDCardToS3andDB,
+    deleteUDIDCardFromS3andDB,
 }

@@ -139,17 +139,18 @@ model State {
 }
 
 model User {
-  id             String      @id @default(uuid())
-  userId         String      @unique
-  firstName      String
-  lastName       String
-  gender         GenderEnum?
-  dateOfBirth    DateTime?
-  contactNumber  String
-  whatsappNumber String?
-  designationId  String
-  picture        String? // url
-  email          String
+  id                   String      @id @default(uuid())
+  userId               String      @unique
+  firstName            String
+  lastName             String
+  gender               GenderEnum?
+  dateOfBirth          DateTime?
+  contactNumber        String
+  whatsappNumber       String?
+  designationId        String
+  profilePhotoFile     String?
+  profilePhotoFileName String?
+  email                String
 
   personId String @unique
   person   Person @relation("person", fields: [personId], references: [id])
@@ -240,7 +241,8 @@ model DivyangDetails {
   firstName                    String
   lastName                     String
   divyangId                    String
-  picture                      String? // url
+  profilePhotoFile             String?
+  profilePhotoFileName         String?
   gender                       GenderEnum?
   bloodGroup                   BloodGroupEnum?
   dateOfBirth                  DateTime
@@ -420,7 +422,7 @@ model DisabilityOfDivyang {
   certificateIssueAuthority CertificateIssueAuthorityEnum?
   // disabilityCardUrl         String? // url
   disabilityCardFileName    String? // url
-  disabilityCardKey         String? // url
+  disabilityCardFile        String? // url
 
   divyang           DivyangDetails     @relation(fields: [divyangId], references: [id])
   disabilitySubType DisabilitySubType? @relation(fields: [disabilitySubTypeId], references: [id])

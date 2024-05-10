@@ -32,6 +32,33 @@ const s3Client = new S3Client({
     }
 );
 
+async function disabilityCardFileWithDiffExtensionExists(personId: string, file: Express.Multer.File, disabilityOfDivyangId: string) {
+    try {
+        log("info", "[fileExists]: Checking if file exists...");
+        const fileNameWithoutExtension = generateDisabilityCardKeyWithoutExtension(personId, file, disabilityOfDivyangId);
+        const params: ListObjectsV2CommandInput = {
+            Bucket: config.s3.bucket_name,
+            Prefix: fileNameWithoutExtension,
+            MaxKeys: 1
+        }
+        const listObjectsV2Command = new ListObjectsV2Command(params);
+
+        const response = await s3Client.send(listObjectsV2Command);
+        log("info", "[fileExists]: Response Contents: %o", response.Contents?.[0]);
+
+        if (response.Contents && response.Contents.length > 0) {
+            if (response.Contents[0].Key) {
+                const existingExtension = path.extname(response.Contents[0].Key);
+                const currentExtension = path.extname(file.originalname);
+                if (existingExtension !== currentExtension) {
+                    return response.Contents[0].Key
+                }
+            }
+        }
+    } catch (error) {
+        throwS3Error(error);
+    }
+}
 // Check if a file already exists with an identical name sans extension
 async function fileWithDiffExtensionExists(personId: string, file: Express.Multer.File) {
     try {
@@ -126,14 +153,20 @@ function generateKeyWithoutExtension(personId: string, file: Express.Multer.File
     return key;
 }
 
-function generateDisablityCardFileKey(personId: string, file: Express.Multer.File, disabilityOfDivyandId: string): string {
-    const key = path.join(personId, `${personId}-${file.fieldname}-${disabilityOfDivyandId}${path.extname(file.originalname)}`)
+function generateDisabilityCardKeyWithoutExtension(personId: string, file: Express.Multer.File, disabilityOfDivyangId: string): string {
+    const key = path.join(personId, disabilityOfDivyangId,`DisabilityCard${path.extname(file.originalname)}`)
+    log("info", "[generateDisabilityCardKeyWithoutExtension]: key: \n %s", key);
+    return key;
+}
+
+function generateDisablityCardFileKey(personId: string, file: Express.Multer.File, disabilityOfDivyangId: string): string {
+    const key = path.join(personId, disabilityOfDivyangId,`DisabilityCard${path.extname(file.originalname)}`)
     log("info", "[generateDisablityCardFileKey]: key: \n %s", key);
     return key;
 }
 
 function generateKey(personId: string, file: Express.Multer.File): string {
-    const key = path.join(personId, `${personId}-${file.fieldname}${path.extname(file.originalname)}`);
+    const key = path.join(personId, `${file.fieldname}${path.extname(file.originalname)}`);
     log("info", "[generateKey]: key: \n %s", key);
     return key;
 }
@@ -146,7 +179,6 @@ async function deleteFile(key: string) {
         }
 
         const deleteObjectCommand = new DeleteObjectCommand(params);
-
         const response = await s3Client.send(deleteObjectCommand);
 
         return response;
@@ -157,7 +189,8 @@ async function deleteFile(key: string) {
 
 async function saveDisabilityCardFileBufferToS3(personId: string, file: Express.Multer.File, disabilityOfDivyangId: string): Promise<S3Result | undefined> {
     try {
-        const oldFile = await fileWithDiffExtensionExists(personId, file);
+
+        const oldFile = await disabilityCardFileWithDiffExtensionExists(personId, file, disabilityOfDivyangId);
         if (oldFile) {
             // delete it
             log("info", "[saveDisabilityCardFileBufferToS3]: File already exists. Deleting it.");
