@@ -107,4 +107,5 @@ const getSevaKendraByDistrictId = async (
     next(error);
   }
 };
+
 export { getSevaKendra, getSevaKendraById, getSevaKendraByDistrictId };

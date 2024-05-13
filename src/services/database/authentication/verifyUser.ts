@@ -13,6 +13,7 @@ async function verifyUser(userName: string) {
           select: { id: true, userName: true, password: true },
         },
         id: true,
+        divyangServiceMapping: true,
         designation: {
           select: {
             id: true,
@@ -81,6 +82,7 @@ const getUserByIdAuthDB = async (id: string) => {
           select: {
             id: true,
             name: true,
+            sevaKendraId: true,
             sevaKendra: {
               select: {
                 id: true,

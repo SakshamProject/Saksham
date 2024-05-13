@@ -15,18 +15,32 @@ function authorization(
 ) {
   return async (request: Request, response: Response, next: NextFunction) => {
     try {
+      //superAdmin
+      if (request.token?.superAdminId) {
+        return next();
+      }
       //user
       if (request.token?.userId) {
+        request.token.serviceMappingAccess = false;
         if (
           MethodsEnum.USER_DROPDOWN === method ||
           method === MethodsEnum.DIVYANG_DROPDOWN
         ) {
-          next();
+          return next();
         }
         const user = await getUserByIdAuthDB(request.token.userId);
         const designationId = user?.designationId;
         const designation = await getDesignationByIDDB(designationId);
-
+        // handling access for servicemapping
+        if (
+          currentFeature === AuthorizationEnum.SERVICE_MAPPING &&
+          !designation?.features.some(
+            (feature) => feature.feature.name === currentFeature
+          )
+        ) {
+          request.token.serviceMappingAccess = true;
+          return next();
+        }
         if (
           !designation?.features.some(
             (feature) => feature.feature.name === currentFeature
@@ -34,16 +48,29 @@ function authorization(
         ) {
           // this can also be thrown when designation is changed after current login session
           throw new APIError(
-            "Permission denied",
+            "Permission denied for user",
             StatusCodes.UNAUTHORIZED,
             "AccessDenied",
             "S"
           );
         }
+        //handling for divyang details
+        if (
+          currentFeature === AuthorizationEnum.DIVYANG_DETAILS &&
+          !designation?.features.some(
+            (feature) =>
+              feature.feature.name === AuthorizationEnum.SERVICE_MAPPING
+          )
+        ) {
+          request.token.serviceMappingAccess = true;
+          request.token.userSevaKendraId =
+            user?.designation.sevaKendraId || "defaultSevaKendraId";
+          return next();
+        }
       } else {
         //divyang
         if (method === MethodsEnum.DIVYANG_DROPDOWN) {
-          next();
+          return next();
         }
         if (
           !(
@@ -56,14 +83,14 @@ function authorization(
           )
         ) {
           throw new APIError(
-            "Permission denied",
+            "Permission denied for divyang",
             StatusCodes.UNAUTHORIZED,
             "AccessDenied",
             "S"
           );
         }
       }
-      next();
+      return next();
     } catch (error) {
       next(error);
     }

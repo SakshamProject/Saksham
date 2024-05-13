@@ -16,7 +16,7 @@ async function putDesignation(
   try {
     const body: updateDesignationRequestSchemaType =
       updateDesignationRequestSchema.parse(request.body);
-    const updatedById = request.token?.userId;
+    const updatedById = request.token?.personId;
     const id: string = request.params.id;
     const currentDate = new Date().toISOString();
     const auditLog = await getDesignationStatus(id, currentDate);

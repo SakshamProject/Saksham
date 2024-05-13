@@ -19,7 +19,6 @@ const createDivyangDetailsDBObject = (
     divyangId: divyangDetails.personalDetails.divyangId,
     firstName: divyangDetails.personalDetails.firstName,
     lastName: divyangDetails.personalDetails.lastName,
-    picture: divyangDetails.personalDetails.picture,
     bloodGroup: divyangDetails.personalDetails.bloodGroup,
     gender: divyangDetails.personalDetails.gender,
     dateOfBirth: divyangDetails.personalDetails.dateOfBirth,
@@ -123,11 +122,13 @@ const createDivyangDBObject = (
 
 const createDivyangDetailsFilterInputObject = (
   divyangDetailsFilter: DivyangDetailsFilterType | undefined,
-  globalSearchConditions: DivyangDetailsWhere | null
+  globalSearchConditions: DivyangDetailsWhere | null,
+  token: Token
 ): DivyangDetailsWhere => {
   const divyangDetailsWhereInput = generateDivyangDetailsFilter(
     divyangDetailsFilter,
-    globalSearchConditions
+    globalSearchConditions,
+    token
   );
   return divyangDetailsWhereInput;
 };

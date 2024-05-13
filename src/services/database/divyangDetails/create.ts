@@ -9,14 +9,35 @@ const createDivyangDetailsDB = async (
   divyangDetails: createDivyangDetails
 ): Promise<DivyangDetails | undefined> => {
   try {
-    const createdDivyangDetails = await prisma.divyangDetails.create({
-      data: divyangDetails,
-      include: {
-        person: true
-      }
+    const transaction = await prisma.$transaction(async (prismaTransaction) => {
+      const createdDivyangDetails =
+        await prismaTransaction.divyangDetails.create({
+          data: divyangDetails,
+        });
+      const updatedDivyang = await prismaTransaction.divyangDetails.update({
+        where: {
+          id: createdDivyangDetails.id,
+        },
+          include: {
+            person: true
+          },
+        data: {
+          createdBy: {
+            connect: {
+              id: createdDivyangDetails.personId,
+            },
+          },
+          updatedBy: {
+            connect: {
+              id: createdDivyangDetails.personId,
+            },
+          },
+        },
+      });
+      return updatedDivyang;
     });
 
-    return createdDivyangDetails;
+    return transaction;
   } catch (error) {
     if (error instanceof Error) {
       console.log(error);

@@ -63,7 +63,8 @@ const filterDivyangDetailsMapper = (
 
 const generateDivyangDetailsFilter = (
   divyangDetailsfilter: DivyangDetailsFilterType | undefined,
-  globalSearchConditions: DivyangDetailsWhere | null
+  globalSearchConditions: DivyangDetailsWhere | null,
+  token: Token
 ) => {
   const DivyangDetailsWhereInput: any = {
     AND: [],
@@ -75,6 +76,30 @@ const generateDivyangDetailsFilter = (
       );
     }
   }
+  if (!token.superAdminId && token.personId) {
+    /*Case if a user has divyang and also serviceMapping access
+     ---then user can see all divyangs which are created by sevaKendra of currentUser */
+    if (token.serviceMappingAccess) {
+      const additionalWhere: DivyangDetailsWhere = {
+        createdBy: {
+          user: {
+            designation: {
+              sevaKendraId: token.userSevaKendraId,
+            },
+          },
+        },
+      };
+      DivyangDetailsWhereInput.AND.push(additionalWhere);
+    } else {
+      /* If a user doesn't have serviceMapping access
+    --- then user can see divyang only created by user*/
+      const additionalWhere: DivyangDetailsWhere = {
+        createdById: token.personId,
+      };
+      DivyangDetailsWhereInput.AND.push(additionalWhere);
+    }
+  }
+
   if (globalSearchConditions != null)
     DivyangDetailsWhereInput.AND.push(globalSearchConditions);
   return DivyangDetailsWhereInput;

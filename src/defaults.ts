@@ -1,6 +1,7 @@
 
 import { AuditLogStatusEnum, Prisma } from "@prisma/client";
 import { sortOrderEnum } from "./types/getRequestSchema.js";
+import { loginSchemaType } from "./types/authentication/authenticationSchema.js";
 
 type Defaults = {
     skip: number,

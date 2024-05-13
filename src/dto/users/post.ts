@@ -1,6 +1,6 @@
 import {Prisma} from "@prisma/client";
 import {Request} from "express";
-import {userListType, userPutRequestType,} from "../../types/users/usersSchema.js";
+import {userListType, userPostRequestType, userPutRequestType,} from "../../types/users/usersSchema.js";
 import generateUserListWhereInput from "../../services/database/utils/users/usersFilterMapper.js";
 import {createHmac} from "node:crypto";
 import defaults from "../../defaults.js";
@@ -15,44 +15,44 @@ function hashPassword(password: string): string {
     return hashedPassword;
 }
 
-function createPersonDBObject(request: Request): Prisma.PersonCreateInput {
+function createPersonDBObject(body: userPostRequestType, createdBy: string = defaults.createdById, updatedBy: string = defaults.updatedById): Prisma.PersonCreateInput {
     const userInputObject: Prisma.PersonCreateInput = {
-        userName: request.body.userName,
+        userName: body.userName,
         password: {
             create: {
-                password: hashPassword(request.body.password)
+                password: hashPassword(body.password)
             },
         },
         user: {
             create: {
-                userId: request.body.userId,
-                firstName: request.body.firstName,
-                lastName: request.body.lastName,
-                gender: request.body.gender,
-                dateOfBirth: request.body.dateOfBirth,
-                contactNumber: request.body.contactNumber,
-                whatsappNumber: request.body.whatsappNumber,
-                email: request.body.email,
+                userId: body.userId,
+                firstName: body.firstName,
+                lastName: body.lastName,
+                gender: body.gender,
+                dateOfBirth: body.dateOfBirth,
+                contactNumber: body.contactNumber,
+                whatsappNumber: body.whatsappNumber,
+                email: body.email,
                 createdBy: {
                     connect: {
-                        id: request.token?.userId,
+                        id: createdBy
                     }
                 },
                 designation: {
                     connect: {
-                        id: request.body.designationId,
+                        id: body.designationId,
                     },
                 },
                 updatedBy: {
                     connect: {
-                        id: request.token?.userId,
+                        id: updatedBy
                     },
                 },
                 auditLog: {
                     create: {
-                        description: request.body.description,
-                        status: request.body.status,
-                        date: request.body.effectiveDate,
+                        description: body.description,
+                        status: body.status,
+                        date: body.effectiveDate,
                     },
                 },
             },

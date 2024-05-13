@@ -200,6 +200,7 @@ const getSevaKendraDependencyStatusDB = async (
     if (error instanceof Error) throwDatabaseError(error);
   }
 };
+ 
 export {
   getSevaKendraDB,
   getSevaKendraDBTotal,

@@ -106,10 +106,11 @@ const filterServiceMappingMapper = (
   return filterServiceMappingMap.get(columnName);
 };
 
-const generateServiceMappingFilter = (
+const generateServiceMappingFilter = async (
   serviceMappingfilter: serviceMappingFilterType | undefined,
   globalSearchConditions: ServiceMappingWhere | null,
-  serviceAdditionalWhere: ServiceAdditionalWhereSchemaType | undefined
+  serviceAdditionalWhere: ServiceAdditionalWhereSchemaType | undefined,
+  token: Token | undefined
 ) => {
   const ServiceMappingWhereInput: any = {
     AND: [],
@@ -162,6 +163,28 @@ const generateServiceMappingFilter = (
     };
     ServiceMappingWhereInput.AND.push(additionalWhere);
   }
+  // access control for users
+  if (token !== undefined && !token.superAdminId) {
+    // if user has service mapping access then he can see all service mapping in his sevakendra
+    if (token.serviceMappingAccess) {
+      const additionalWhere: ServiceMappingWhere = {
+        user: {
+          designation: {
+            sevaKendraId: token.userSevaKendraId,
+          },
+        },
+      };
+      ServiceMappingWhereInput.AND.push(additionalWhere);
+    }
+    // else he can see all service mapping assigned to him
+    else {
+      const additionalWhere: ServiceMappingWhere = {
+        userId: token.userId,
+      };
+      ServiceMappingWhereInput.AND.push(additionalWhere);
+    }
+  }
+
   return ServiceMappingWhereInput;
 };
 

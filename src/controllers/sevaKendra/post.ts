@@ -15,8 +15,8 @@ const postSevaKendra = async (
   try {
     const newSevaKendra: SevaKendraRequestSchemaType =
       SevaKendraRequestSchema.parse(request.body);
-    const createdBy = request.token?.userId;
-    const updatedBy = request.token?.userId;
+    const createdBy = request.token?.personId;
+    const updatedBy = request.token?.personId;
     const sevaKendraDBObject: SevaKendra = createSevaKendraDBObject(
       newSevaKendra,
       createdBy,

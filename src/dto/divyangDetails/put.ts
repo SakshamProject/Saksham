@@ -22,7 +22,6 @@ const updatePersonalDetailsDBObject = (
     divyangId: personalDetails.divyangId,
     firstName: personalDetails.firstName,
     lastName: personalDetails.lastName,
-    picture: personalDetails.picture,
     bloodGroup: personalDetails.bloodGroup,
     gender: personalDetails.gender,
     dateOfBirth: personalDetails.dateOfBirth,

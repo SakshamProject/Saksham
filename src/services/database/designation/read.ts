@@ -106,16 +106,14 @@ async function getDesignationByIDDB(id: string | undefined) {
         createdBy: {
           select: {
             id: true,
-            firstName: true,
-            lastName: true,
+            userName: true,
           },
         },
         updatedAt: true,
         updatedBy: {
           select: {
             id: true,
-            firstName: true,
-            lastName: true,
+            userName: true,
           },
         },
         auditLog: {
@@ -180,12 +178,12 @@ const getDesignationsBySevaKendraIdDB = async (sevaKendraId: string) => {
       where: {
         sevaKendraId: sevaKendraId,
       },
-      select:{
-        id:true,
-        name:true,
-        auditLog:{
-          select:{
-            status:true,
+      select: {
+        id: true,
+        name: true,
+        auditLog: {
+          select: {
+            status: true,
           },
           where: {
             date: {
@@ -196,11 +194,11 @@ const getDesignationsBySevaKendraIdDB = async (sevaKendraId: string) => {
             date: "desc",
           },
           take: 1,
-        }
+        },
       },
-      orderBy:{
-        name:"asc"
-      }
+      orderBy: {
+        name: "asc",
+      },
     });
     return designations;
   } catch (error) {

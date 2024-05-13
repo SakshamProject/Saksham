@@ -1,16 +1,15 @@
 import {NextFunction, Response, Request} from "express";
-import {userListSchema, usersPostSchema, usersPutSchema} from "../../types/users/usersSchema.js";
+import {userListSchema, usersPostSchema} from "../../types/users/usersSchema.js";
 import log from "../../services/logger/logger.js";
-import { createPersonDBObject } from "../../dto/users/post.js";
 import {createPersonDB} from "../../services/database/users/create.js";
 import {
     createResponseForFilter,
     createResponseWithFile
 } from "../../types/createResponseSchema.js";
 import { getUsersDBTransaction } from "../../services/database/users/transaction/read.js";
-import {listUserWhereInput} from "../../dto/users/post.js";
+import {createPersonDBObject, listUserWhereInput} from "../../dto/users/post.js";
 import {saveUserProfilePhotoToS3andDB} from "../../services/files/files.js";
-import {getUserByIdDB, getUserByPersonIdDB} from "../../services/database/users/read.js";
+import {getUserByPersonIdDB} from "../../services/database/users/read.js";
 
 
 async function postUser(request: Request, response: Response, next: NextFunction) {
@@ -19,8 +18,9 @@ async function postUser(request: Request, response: Response, next: NextFunction
         log( "info", `[controller/post]:\n body: %o`, body);
         log("info", `[controller/post]:\n file: %o`, request.file || {});
 
-        const userInputObject = createPersonDBObject(request);
-        log("info", `[controller/post]:\n userInputObject: %o`, userInputObject);
+    const createdBy = request.token?.personId;
+    const userInputObject = createPersonDBObject(body, request?.token?.personId, request?.token?.personId);
+    log("info", `[controller/post]:\n userInputObject: %o`, userInputObject);
 
         const newPerson = await createPersonDB(userInputObject);
         log("info", `[controller/postUser]:\n newUser: %o`, newPerson || {});
