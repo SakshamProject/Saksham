@@ -218,6 +218,7 @@ async function saveDisabilityCardFileBufferToS3(personId: string, file: Express.
         throwS3Error(error);
     }
 }
+
 async function saveFileBufferToS3(personId: string, file: Express.Multer.File): Promise<S3Result | undefined> {
     try {
         const oldFile = await fileWithDiffExtensionExists(personId, file);
