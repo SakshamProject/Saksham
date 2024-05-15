@@ -31,7 +31,7 @@ async function getUserById(
         let file = {};
         if (result?.profilePhotoFile) {
             file = {
-                "profilePhoto": generateFileURLResponseFromKey(result.profilePhotoFile)
+                "profilePhoto": await generateFileURLResponseFromKey(result.profilePhotoFile)
             }
         }
         log("info", "[getUserById]: %o", file);
