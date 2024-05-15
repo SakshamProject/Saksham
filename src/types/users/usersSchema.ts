@@ -41,7 +41,7 @@ const usersPutSchema = z.object({
   designationId: z.string().uuid(),
   email: emailSchema,
   userName: inputFieldSchema,
-  password: z.string(),
+  // password: z.string(),
   contactNumber: phoneNumberSchema,
   whatsappNumber: phoneNumberSchema.optional(),
   // audit log
@@ -109,9 +109,9 @@ const userListSchema = z.object({
 type userListType = z.infer<typeof userListSchema>;
 
 const fileSchema = z.object({
-    key: z.string()
+  key: z.string(),
 });
 
 export { userOrderByEnum };
-export { usersPostSchema, usersPutSchema, userListSchema, fileSchema};
+export { usersPostSchema, usersPutSchema, userListSchema, fileSchema };
 export { userPostRequestType, userPutRequestType, userListType };
