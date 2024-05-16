@@ -9,7 +9,6 @@ import {getDivyangDetailsByIdDB} from "../../services/database/divyangDetails/re
 import APIError from "../../services/errors/APIError.js";
 import {StatusCodes} from "http-status-codes";
 import {
-    deleteAllDisabilityCardsToS3andDB,
     deleteDivyangDetailsProfilePhotoFromS3andDB,
     deleteUDIDCardFromS3andDB,
     disabilityCardsResponse,
@@ -17,7 +16,7 @@ import {
     getDivyangDetailsDisabilityCardsFileURLS,
     getDivyangDetailsIDProofFileURLs,
     saveDivyangDetailsIdProofFilestoS3andDB,
-    saveDivyangDisabilityCardsToS3andDB,
+    updateDivyangDisabilityCardsToS3andDB,
     saveDivyangProfilePhotoToS3andDB,
     saveUDIDCardToS3andDB,
 } from "../../services/files/files.js";
@@ -112,13 +111,11 @@ const putDivyangDetails = async (
 
                         // Disability Card
                         if (request.files["disabilityCard"]?.length > 0) {
-                            await saveDivyangDisabilityCardsToS3andDB(
+                            await updateDivyangDisabilityCardsToS3andDB(
                                 divyangDetails,
                                 request.files["disabilityCard"],
                                 personId
                             );
-                        } else {
-                            await deleteAllDisabilityCardsToS3andDB(personId);
                         }
                     }
                 }

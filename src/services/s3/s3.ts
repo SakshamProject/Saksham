@@ -215,9 +215,10 @@ async function deleteFile(key: string) {
       Bucket: config.s3.bucket_name,
       Key: key,
     };
-
+    log("info", "[deleteFile]: Key: %s", key);
     const deleteObjectCommand = new DeleteObjectCommand(params);
     const response = await s3Client.send(deleteObjectCommand);
+    log("info", "[deleteFile]: response: %o", response);
 
     return response;
   } catch (error) {

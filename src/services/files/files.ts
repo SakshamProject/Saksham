@@ -310,8 +310,40 @@ export type disabilityCardsResponse = {
     };
 }[];
 
-async function filesToDelete(files: { [p: string]: Express.Multer.File[] }, IdProofUploads: { [column: string]: any}) {
+async function deleteIdProofFilesFromS3(personId: string, files: { [fieldname: string]: Express.Multer.File[] },divyangDetailsRequest: updateDivyangDetailsRequest) {
+    try {
+        const idProofUploads = divyangDetailsRequest.IdProofUploads;
 
+        const divyangDetails  = await getDivyangDetailsByPersonIdDB(personId) as {[column: string]: any};
+
+        if (idProofUploads) {
+            for (const fileField of keyMap.keys()) {
+                // If file does not exist
+                if (!files[fileField]) {
+                    // check if corresponding key field exists
+                    // (ex: panCardFile, aadharCardFile, etc exist)
+                    const keyField = keyMap.get(fileField);
+                    if (keyField) {
+                        if (!idProofUploads.hasOwnProperty(keyField)) {
+                            // key field (panCardFile) and file field (panCard) both don't exist
+                            // delete from S3
+                            const keyToDelete = divyangDetails[keyField];
+                            if (keyToDelete) {
+                                await deleteFile(keyToDelete);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        throw new APIError(
+            "There was an error uploading your files. Please try again.",
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            "FileUploadError",
+            "E"
+        );
+    }
 }
 
 async function saveDivyangDetailsIdProofFilestoS3andDB(
@@ -320,7 +352,7 @@ async function saveDivyangDetailsIdProofFilestoS3andDB(
     divyangDetails: updateDivyangDetailsRequest
 ): Promise<filesResponse | undefined> {
     try {
-        // WARN: Even if 1 file upload fails all keys are not updated
+
         const transaction = prisma.$transaction(async (prisma) => {
             const data = createKeyUpdateData(
                 files,
@@ -328,6 +360,9 @@ async function saveDivyangDetailsIdProofFilestoS3andDB(
                 divyangDetails.IdProofUploads
             );
             log("info", "[saveDivyangDetailsFilestoS3andDB]: data: %o", data);
+
+            await deleteIdProofFilesFromS3(personId, files, divyangDetails);
+
             const result = await divayangDetailsUpdateFileKeysDB(
                 prisma,
                 personId,
@@ -346,58 +381,6 @@ async function saveDivyangDetailsIdProofFilestoS3andDB(
             "FileUploadError",
             "E"
         );
-    }
-}
-
-async function deleteAllDisabilityCardsToS3andDB(personId: string) {
-    try {
-        const transaction = prisma.$transaction(async (prisma) => {
-            const existingDisabilities = await getDivyangDisabilitiesByPersonIdDB(
-                prisma,
-                personId
-            );
-
-            log(
-                "info",
-                "[deleteAllDisabilityCardsToS3andDB]: divyangDetails: %o",
-                existingDisabilities
-            );
-
-            if (existingDisabilities) {
-                for (const existingDisability of existingDisabilities) {
-                    if (
-                        existingDisability.disabilityCardFile ||
-                        existingDisability.disabilityCardFileName
-                    ) {
-                        const keyToDelete = existingDisability.disabilityCardFile;
-                        const dbResult = await saveDisabilityDetailsCardKey(
-                            prisma,
-                            existingDisability.id,
-                            {
-                                disabilityCardFile: null,
-                                disabilityCardFileName: null,
-                            }
-                        );
-                        log(
-                            "info",
-                            "[deleteAllDisabilityCardsToS3andDB]: dbResult: %o",
-                            dbResult
-                        );
-                        if (keyToDelete) {
-                            const s3Result = deleteFile(keyToDelete);
-                            log(
-                                "info",
-                                "[deleteAllDisabilityCardsToS3andDB]: s3Result: %o",
-                                s3Result
-                            );
-                        }
-                    }
-                }
-            }
-        });
-        return transaction;
-    } catch (error) {
-        throwDatabaseError(error);
     }
 }
 
@@ -448,18 +431,13 @@ async function saveUDIDCardToS3andDB(
     }
 }
 
-async function saveDivyangDisabilityCardsToS3andDB(
+async function updateDivyangDisabilityCardsToS3andDB(
     divyangDetails: updateDivyangDetailsRequest,
     files: Express.Multer.File[],
     personId: string
 ) {
     try {
         const transaction = prisma.$transaction(async (prisma) => {
-            log(
-                "info",
-                "[saveDivyangDisabilityDetailsToS3andDB]: divyangDetails: %o",
-                divyangDetails
-            );
 
             const existingDisabilities = await getDivyangDisabilitiesByPersonIdDB(
                 prisma,
@@ -505,7 +483,6 @@ async function saveDivyangDisabilityCardsToS3andDB(
                                             );
 
                                             if (existingDisability.id) {
-                                                console.log(`Enters disability.id`);
                                                 // save key to db
                                                 const dbResult = await saveDisabilityDetailsCardKey(
                                                     prisma,
@@ -584,9 +561,8 @@ export {
     saveDivyangProfilePhotoToS3andDB,
     deleteUserProfilePhotoFromS3andDB,
     deleteDivyangDetailsProfilePhotoFromS3andDB,
-    saveDivyangDisabilityCardsToS3andDB,
+    updateDivyangDisabilityCardsToS3andDB,
     getDivyangDetailsDisabilityCardsFileURLS,
-    deleteAllDisabilityCardsToS3andDB,
     saveUDIDCardToS3andDB,
     deleteUDIDCardFromS3andDB,
 };
