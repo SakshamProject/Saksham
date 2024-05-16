@@ -46,6 +46,8 @@ const usersPutSchema = z.object({
   whatsappNumber: phoneNumberSchema.optional(),
   // audit log
   auditlog: auditLogSchema.optional(),
+  profilePhotoFile: z.string().optional(),
+  profilePhotoFileName: z.string().optional(),
 });
 type userPutRequestType = z.infer<typeof usersPutSchema>;
 
