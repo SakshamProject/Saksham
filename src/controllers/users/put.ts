@@ -15,10 +15,10 @@ async function putUser(request: Request, response: Response, next: NextFunction)
         if (personId) {
             if (request.file) {
                 // update file
-                await saveUserProfilePhotoToS3andDB(personId, request.file);
+            await saveUserProfilePhotoToS3andDB(personId, request.file);
             } else {
                 // delete file
-                if (!body.profilePhotoFile && !body.profilePhotoFileName) {
+                if (!body.profilePhotoFile) {
                     log("info", "[controllers/users/put.ts]: Delete File")
                     await deleteUserProfilePhotoFromS3andDB(personId);
                 }

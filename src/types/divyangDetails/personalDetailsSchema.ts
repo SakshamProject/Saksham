@@ -23,7 +23,7 @@ const personalDetailsRequestSchema = z.object({
   firstName: inputFieldSchema,
   lastName: inputFieldSchema,
   divyangId: inputFieldSchema,
-  picture: inputFieldSchema.optional(),
+  profilePhotoFile: z.string().optional(),
   bloodGroup: z.nativeEnum(BloodGroupEnum),
   gender: z.nativeEnum(GenderEnum), // is optional in sheet
   dateOfBirth: z.string().datetime(),
@@ -47,7 +47,7 @@ const updatePersonalDetailsRequestSchema = z.object({
   firstName: inputFieldSchema,
   lastName: inputFieldSchema,
   divyangId: inputFieldSchema,
-  picture: inputFieldSchema.optional(),
+  profilePhotoFile: z.string().optional(),
   bloodGroup: z.nativeEnum(BloodGroupEnum),
   gender: z.nativeEnum(GenderEnum), // is optional in sheet
   dateOfBirth: z.string().datetime(),

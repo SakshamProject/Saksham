@@ -47,7 +47,6 @@ const usersPutSchema = z.object({
   // audit log
   auditlog: auditLogSchema.optional(),
   profilePhotoFile: z.string().optional(),
-  profilePhotoFileName: z.string().optional(),
 });
 type userPutRequestType = z.infer<typeof usersPutSchema>;
 
