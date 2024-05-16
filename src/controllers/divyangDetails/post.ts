@@ -29,8 +29,18 @@ async function postDivyangDetails(
         const result: DivyangDetails | undefined = await createDivyangDetailsDB(
             divyangDetailsDBObject
         );
-        const responseData = createResponseOnlyData(result);
-        response.send(responseData);
+        log("info", "[postDivyangDetails]: request.file: %o", request.file);
+        let file: object | undefined = {};
+        const personId = result?.personId;
+        if (personId && request.file) {
+            file = await saveDivyangProfilePhotoToS3andDB(personId, request.file);
+        }
+        if (result) {
+            const id = result?.id;
+            const final_result = await getDivyangDetailsByIdDB(id);
+            const responseData = createResponseWithFile(final_result, file);
+            response.send(responseData);
+        }
     } catch (error) {
         next(error);
     }
@@ -50,9 +60,9 @@ const postDivyang = async (
         const result: DivyangDetails | undefined = await createDivyangDetailsDB(
             divyangDetailsDBObject
         );
-        log("info", "[postDivyang]: Divyang: %o", result);
+        log("info", "[postDivyang]: result: %o", result);
 
-        log("info", "[putDivyangDetails]: request.file: %o", request.file);
+        log("info", "[postDivyang]: request.file: %o", request.file);
         let file: object | undefined = {};
         const personId = result?.personId;
         if (personId && request.file) {
@@ -63,13 +73,6 @@ const postDivyang = async (
             const final_result = await getDivyangDetailsByIdDB(id);
             const responseData = createResponseWithFile(final_result, file);
             response.send(responseData);
-        } else {
-            throw new APIError(
-                "There was an error creating the record!",
-                StatusCodes.INTERNAL_SERVER_ERROR,
-                "Error",
-                "E"
-            )
         }
     } catch (error) {
         next(error);

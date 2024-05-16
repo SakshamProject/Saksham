@@ -242,30 +242,31 @@ async function saveUserProfilePhotoToS3andDB(
     }
 }
 
-function IdProofFieldNameColumnNameMapper(
+const keyMap: Map<string, string> = new Map();
+keyMap.set("voterId", "voterIdFile");
+keyMap.set("panCard", "panCardFile");
+keyMap.set("rationCard", "rationCardFile");
+keyMap.set("drivingLicense", "drivingLicenseFile");
+keyMap.set("pensionCard", "pensionCardFile");
+keyMap.set("medicalInsuranceCard", "medicalInsuranceCardFile");
+keyMap.set("disabilitySchemeCard", "disabilitySchemeCardFile");
+keyMap.set("BPL_OR_APL_Number", "BPL_OR_APL_CardFile");
+
+const fileNameMap: Map<string, string> = new Map();
+fileNameMap.set("voterId", "voterIdFileName");
+fileNameMap.set("panCard", "panCardFileName");
+fileNameMap.set("rationCard", "rationCardFileName");
+fileNameMap.set("drivingLicense", "drivingLicenseFileName");
+fileNameMap.set("pensionCard", "pensionCardFileName");
+fileNameMap.set("medicalInsuranceCard", "medicalInsuranceCardFileName");
+fileNameMap.set("disabilitySchemeCard", "disabilitySchemeCardFileName");
+fileNameMap.set("BPL_OR_APL_Number", "BPL_OR_APL_CardFileName");
+
+function createKeyUpdateData(
     files: { [fieldName: string]: Express.Multer.File[] },
     personId: string,
     idProofUploads: { [column: string]: any } | undefined
 ) {
-    const keyMap: Map<string, string> = new Map();
-    keyMap.set("voterId", "voterIdFile");
-    keyMap.set("panCard", "panCardFile");
-    keyMap.set("rationCard", "rationCardFile");
-    keyMap.set("drivingLicense", "drivingLicenseFile");
-    keyMap.set("pensionCard", "pensionCardFile");
-    keyMap.set("medicalInsuranceCard", "medicalInsuranceCardFile");
-    keyMap.set("disabilitySchemeCard", "disabilitySchemeCardFile");
-    keyMap.set("BPL_OR_APL_Number", "BPL_OR_APL_CardFile");
-
-    const fileNameMap: Map<string, string> = new Map();
-    fileNameMap.set("voterId", "voterIdFileName");
-    fileNameMap.set("panCard", "panCardFileName");
-    fileNameMap.set("rationCard", "rationCardFileName");
-    fileNameMap.set("drivingLicense", "drivingLicenseFileName");
-    fileNameMap.set("pensionCard", "pensionCardFileName");
-    fileNameMap.set("medicalInsuranceCard", "medicalInsuranceCardFileName");
-    fileNameMap.set("disabilitySchemeCard", "disabilitySchemeCardFileName");
-    fileNameMap.set("BPL_OR_APL_Number", "BPL_OR_APL_CardFileName");
 
     const data: any = {}; // I can"t do this! Cries~ Without using `any` *sobs*
     log("info", "[IdProofFileNameColumnNameMapper]: Keys: %o", keyMap.keys());
@@ -278,11 +279,12 @@ function IdProofFieldNameColumnNameMapper(
                 data[key] = generateKey(personId, file);
                 data[fileName] = file.originalname;
             } else {
-                if (idProofUploads)
+                if (idProofUploads) {
                     if (!idProofUploads[key]) {
                         data[key] = null;
                         data[fileName] = null;
                     }
+                }
             }
         }
     }
@@ -308,6 +310,10 @@ export type disabilityCardsResponse = {
     };
 }[];
 
+async function filesToDelete(files: { [p: string]: Express.Multer.File[] }, IdProofUploads: { [column: string]: any}) {
+
+}
+
 async function saveDivyangDetailsIdProofFilestoS3andDB(
     personId: string,
     files: { [fieldname: string]: Express.Multer.File[] },
@@ -316,7 +322,7 @@ async function saveDivyangDetailsIdProofFilestoS3andDB(
     try {
         // WARN: Even if 1 file upload fails all keys are not updated
         const transaction = prisma.$transaction(async (prisma) => {
-            const data = IdProofFieldNameColumnNameMapper(
+            const data = createKeyUpdateData(
                 files,
                 personId,
                 divyangDetails.IdProofUploads

@@ -23,7 +23,7 @@ const disabiltyDetailsRequestSchema = z.object({
   districtCode: z.string(),
   stateCode: z.string(),
   identityCardNumber: z.string(),
-  // UDIDCard: z.string(),
+  UDIDCardFile: z.string(),
   UDIDEnrollmentNumber: z.string(),
 });
 

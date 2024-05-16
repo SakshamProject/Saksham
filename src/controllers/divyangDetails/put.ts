@@ -104,8 +104,10 @@ const putDivyangDetails = async (
                             );
                             log("info", "[putDivyangDetails]: s3Result: %o", s3Result);
                         } else {
-                            const s3Result = await deleteUDIDCardFromS3andDB(personId);
-                            log("info", "[putDivyangDetails]: s3Result: %o", s3Result);
+                            if (!divyangDetails.disabilityDetails?.UDIDCardFile) {
+                                const s3Result = await deleteUDIDCardFromS3andDB(personId);
+                                log("info", "[putDivyangDetails]: s3Result: %o", s3Result);
+                            }
                         }
 
                         // Disability Card
