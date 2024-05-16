@@ -126,7 +126,6 @@ const putDivyangDetails = async (
         if (updatedResult && updatedResult.personId) {
             const personId = updatedResult.personId;
             fileURLs = await getDivyangDetailsIDProofFileURLs(personId);
-            log("info", "putDivyangDetails]: fileURLs: %o", fileURLs);
             disabilityCardURLs = await getDivyangDetailsDisabilityCardsFileURLS(
                 personId
             );
