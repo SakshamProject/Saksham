@@ -22,8 +22,8 @@ async function superAdminLogin(
       .createHmac(defaults.hashingAlgorithm, config.SECRET)
       .update(body.password)
       .digest("hex");
-    const admin = await verifySuperAdminDB(body.userName, body.password);
-    console.log(body.password,body.userName,admin)
+    const admin = await verifySuperAdminDB(body.userName, hashedPassword);
+    console.log(body.password, body.userName, admin);
     if (!admin) {
       throw new APIError(
         "Username or password is incorrect",
