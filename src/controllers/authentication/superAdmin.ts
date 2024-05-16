@@ -28,7 +28,7 @@ async function superAdminLogin(
       throw new APIError(
         "Username or password is incorrect",
         StatusCodes.BAD_REQUEST,
-        "CreditialError",
+        "CredentialError",
         "S"
       );
     }
