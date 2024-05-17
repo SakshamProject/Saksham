@@ -10,6 +10,7 @@ import {
 } from "../../types/authentication/authenticationSchema.js";
 import log from "../../services/logger/logger.js";
 import {hashPassword} from "../../dto/users/post.js";
+import {generateFileURLResponseFromKey} from "../../services/s3/s3.js";
 
 async function userLogin(
   request: Request,
@@ -19,7 +20,7 @@ async function userLogin(
   try {
     const body: loginSchemaType = loginSchema.parse(request.body);
     log("info", "[post/userLogin] body: %o", body);
-    const user = await verifyUser(body.userName) as {id: string, person: {password?: {id: string, password: string}, id: string, userName: string}, designation: {id: string, name: string, features: {feature: {id: string, name: string}}[]}}
+    const user = await verifyUser(body.userName) as {id: string, person: {password?: {id: string, password: string}, id: string, userName: string}, profilePhotoFile?: string, profilePhotoFileName?: string, designation: {id: string, name: string, features: {feature: {id: string, name: string}}[]}}
     log("info", "[post/userLogin] user: %o", user);
     if (!user) {
       throw new APIError(
@@ -29,7 +30,6 @@ async function userLogin(
         "S"
       );
     }
-
     const givenPassword = hashPassword(body.password);
 
     log("info", "[post/userLogin] given password: %o", givenPassword);
@@ -56,9 +56,19 @@ async function userLogin(
     //   sameSite: true,
     // });
 
+    // profile photo
+
+    let file = {};
+    if (user?.profilePhotoFile) {
+      file = {
+        "profilePhoto": await generateFileURLResponseFromKey(user.profilePhotoFile)
+      }
+    }
+
     response.json({
       message: "Logged in successfully",
       user: user,
+      file: file,
       token: token,
     });
   } catch (err) {

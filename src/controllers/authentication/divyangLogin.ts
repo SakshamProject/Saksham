@@ -10,6 +10,7 @@ import config from "../../../config.js";
 import * as crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { verifyDivyang } from "../../services/database/authentication/verifyUser.js";
+import {generateFileURLResponseFromKey} from "../../services/s3/s3.js";
 
 async function divyangLogin(
   request: Request,
@@ -18,7 +19,7 @@ async function divyangLogin(
 ) {
   try {
     const body: loginSchemaType = loginSchema.parse(request.body);
-    const divyang = await verifyDivyang(body.userName) as {id: string, firstName: string, lastName: string, person: {id: string, userName: string, password?: {id: string, password: string}}};
+    const divyang = await verifyDivyang(body.userName) as {id: string, profilePhotoFile?: string, profilePhotoFileName?: string, firstName: string, lastName: string, person: {id: string, userName: string, password?: {id: string, password: string}}};
     if (!divyang) {
       throw new APIError(
         "Username or password is incorrect",
@@ -51,9 +52,17 @@ async function divyangLogin(
     //   sameSite: true,
     // });
 
+    let file = {};
+    if (divyang?.profilePhotoFile) {
+      file = {
+        "profilePhoto": await generateFileURLResponseFromKey(divyang.profilePhotoFile)
+      }
+    }
+
     response.json({
       message: "Logged in successfully",
       token: token,
+      file: file,
       divyang: divyang,
     });
   } catch (err) {

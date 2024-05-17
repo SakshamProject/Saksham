@@ -3,7 +3,7 @@ import { GenderEnum, AuditLogStatusEnum } from "@prisma/client";
 import inputFieldSchema, {
   auditLogSchema,
   dateSchema,
-  emailSchema,
+  emailSchema, passwordSchema,
   phoneNumberSchema,
   uuidSchema,
 } from "../inputFieldSchema.js";
@@ -20,7 +20,7 @@ const usersPostSchema = z.object({
   designationId: z.string().uuid(),
   email: emailSchema,
   userName: inputFieldSchema,
-  password: z.string(),
+  password: passwordSchema,
   contactNumber: phoneNumberSchema,
   whatsappNumber: phoneNumberSchema.optional(),
   // audit log

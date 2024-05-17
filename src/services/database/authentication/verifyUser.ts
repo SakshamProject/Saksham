@@ -13,6 +13,8 @@ async function verifyUser(userName: string) {
           select: { id: true, userName: true, password: true },
         },
         id: true,
+        profilePhotoFile: true,
+        profilePhotoFileName: true,
         divyangServiceMapping: true,
         designation: {
           select: {
@@ -56,6 +58,8 @@ async function verifyDivyang(userName: string) {
         id: true,
         firstName: true,
         lastName: true,
+        profilePhotoFileName: true,
+        profilePhotoFile: true,
       },
     });
     return divyangDetails;
