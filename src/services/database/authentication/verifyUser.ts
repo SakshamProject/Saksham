@@ -4,7 +4,7 @@ import throwDatabaseError from "../utils/errorHandler.js";
 
 async function verifyUser(userName: string) {
   try {
-    const person = await prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
       where: {
         person: { userName: userName },
       },
@@ -32,7 +32,7 @@ async function verifyUser(userName: string) {
         },
       },
     });
-    return person;
+    return user;
   } catch (error) {
     if (error instanceof Error) {
       throwDatabaseError(error);
@@ -41,7 +41,7 @@ async function verifyUser(userName: string) {
 }
 async function verifyDivyang(userName: string) {
   try {
-    const person = await prisma.divyangDetails.findFirst({
+    const divyangDetails = await prisma.divyangDetails.findFirst({
       where: {
         person: { userName: userName },
       },
@@ -58,7 +58,7 @@ async function verifyDivyang(userName: string) {
         lastName: true,
       },
     });
-    return person;
+    return divyangDetails;
   } catch (error) {
     if (error instanceof Error) {
       throwDatabaseError(error);

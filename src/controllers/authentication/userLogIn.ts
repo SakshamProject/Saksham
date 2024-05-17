@@ -25,7 +25,7 @@ async function userLogin(
       throw new APIError(
         "Username or password is incorrect",
         StatusCodes.BAD_REQUEST,
-        "CreditialError",
+        "CredentialError",
         "S"
       );
     }
@@ -37,7 +37,7 @@ async function userLogin(
       throw new APIError(
         "Username or password is incorrect",
         StatusCodes.BAD_REQUEST,
-        "CreditialError",
+        "CredentialError",
         "S"
       );
     }
