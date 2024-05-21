@@ -250,7 +250,8 @@ keyMap.set("drivingLicense", "drivingLicenseFile");
 keyMap.set("pensionCard", "pensionCardFile");
 keyMap.set("medicalInsuranceCard", "medicalInsuranceCardFile");
 keyMap.set("disabilitySchemeCard", "disabilitySchemeCardFile");
-keyMap.set("BPL_OR_APL_Number", "BPL_OR_APL_CardFile");
+keyMap.set("aadharCard", "aadharCardFile");
+keyMap.set("BPL_OR_APL_Card", "BPL_OR_APL_CardFile");
 
 const fileNameMap: Map<string, string> = new Map();
 fileNameMap.set("voterId", "voterIdFileName");
@@ -260,7 +261,8 @@ fileNameMap.set("drivingLicense", "drivingLicenseFileName");
 fileNameMap.set("pensionCard", "pensionCardFileName");
 fileNameMap.set("medicalInsuranceCard", "medicalInsuranceCardFileName");
 fileNameMap.set("disabilitySchemeCard", "disabilitySchemeCardFileName");
-fileNameMap.set("BPL_OR_APL_Number", "BPL_OR_APL_CardFileName");
+fileNameMap.set("aadharCard", "aadharCardFileName");
+fileNameMap.set("BPL_OR_APL_Card", "BPL_OR_APL_CardFileName");
 
 function createKeyUpdateData(
     files: { [fieldName: string]: Express.Multer.File[] },
@@ -269,7 +271,7 @@ function createKeyUpdateData(
 ) {
 
     const data: any = {}; // I can"t do this! Cries~ Without using `any` *sobs*
-    log("info", "[IdProofFileNameColumnNameMapper]: Keys: %o", keyMap.keys());
+    log("info", "[createKeyUpdateData]: Keys: %o", keyMap.keys());
     for (const field of keyMap.keys()) {
         const key = keyMap.get(field);
         const fileName = fileNameMap.get(field);
