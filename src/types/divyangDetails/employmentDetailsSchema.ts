@@ -2,7 +2,11 @@ import { z } from 'zod'
 import inputFieldSchema from '../inputFieldSchema.js'
 
 const employmentDetailsRequestSchema = z.object({
-  isEmployed: z.boolean().optional(),
+  isEmployed: z.string().transform((val) => {
+    if (val === 'true') return true;
+    if (val === 'false') return false;
+    throw new Error('Invalid boolean string');
+  }).optional(),
   unemployedSince: z.date().optional(),
   occupation: inputFieldSchema.optional(),
   income: z.number().optional(),

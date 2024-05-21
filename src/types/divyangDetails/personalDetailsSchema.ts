@@ -33,7 +33,11 @@ const personalDetailsRequestSchema = z.object({
   fatherName: inputFieldSchema,
   motherName: inputFieldSchema,
   UDIDCardNumber: z.string(),
-  isMarried: z.boolean().optional(),
+  isMarried: z.string().transform((val) => {
+    if (val === 'true') return true;
+    if (val === 'false') return false;
+    throw new Error('Invalid boolean string');
+  }).optional(),
   spouseName: inputFieldSchema.optional(),
   spouseNumber: phoneNumberSchema.optional(),
   religion: inputFieldSchema,
@@ -57,7 +61,11 @@ const updatePersonalDetailsRequestSchema = z.object({
   fatherName: inputFieldSchema,
   motherName: inputFieldSchema,
   UDIDCardNumber: z.string(),
-  isMarried: z.boolean().optional(),
+  isMarried: z.string().transform((val) => {
+    if (val === 'true') return true;
+    if (val === 'false') return false;
+    throw new Error('Invalid boolean string');
+  }).optional(),
   spouseName: inputFieldSchema.optional(),
   spouseNumber: phoneNumberSchema.optional(),
   religion: inputFieldSchema,

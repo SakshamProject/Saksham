@@ -12,7 +12,11 @@ const addressRequestSchema = z
     flatNumberCommunication: z.string().optional(),
     nagarNameCommunication: inputFieldSchema.optional(),
     districtIdCommunication: uuidSchema,
-    isRural: z.boolean(),
+    isRural: z.string().transform((val) => {
+      if (val === 'true') return true;
+      if (val === 'false') return false;
+      throw new Error('Invalid boolean string');
+    }),
     villageName: inputFieldSchema.optional(),
     panchayatUnionId: uuidSchema.optional(),
     talukId: uuidSchema.optional(),

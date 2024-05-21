@@ -7,7 +7,11 @@ const disabilityOfDivyangSchema = z.object({
   id: uuidSchema.optional(),
   disabilityTypeId: uuidSchema,
   disabilitySubTypeId: uuidSchema.optional(),
-  isDisabilitySinceBirth: z.boolean().optional(),
+  isDisabilitySinceBirth: z.string().transform((val) => {
+    if (val === 'true') return true;
+    if (val === 'false') return false;
+    throw new Error('Invalid boolean string');
+  }).optional(),
   disabilitySince: z.string().datetime().optional(),
   disabilityArea: z.string().optional(),
   disabilityPercentage: z.number().min(0).max(100).optional(),
