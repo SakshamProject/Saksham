@@ -19,7 +19,7 @@ const resetPassword = async (
       const body = resetPasswordSchema.parse(request.body);
       const hashedPassword = crypto
         .createHmac(defaults.hashingAlgorithm, config.SECRET)
-        .update(body.newPassword)
+        .update(body.oldPassword)
         .digest("hex");
 
       const isValidPassword = await checkPasswordDB(hashedPassword, personId);
