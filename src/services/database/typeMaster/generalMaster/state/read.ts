@@ -21,6 +21,9 @@ const getStateDB = async (
           mode: "insensitive",
         },
       },
+      include: {
+        districts: true,
+      },
     });
     return states;
   } catch (error) {
