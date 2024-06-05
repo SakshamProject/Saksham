@@ -12,11 +12,7 @@ async function getDisabilityTypeDB(
   try {
     const results = await prismaTransaction.disabilityType.findMany({
       include: {
-        disability: {
-          select: {
-            name: true,
-          },
-        },
+        disability: true,
       },
       orderBy: {
         name: sortOrder,
