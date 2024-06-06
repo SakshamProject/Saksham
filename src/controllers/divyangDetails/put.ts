@@ -83,7 +83,7 @@ const putDivyangDetails = async (
 
               await saveDivyangDetailsIdProofFilestoS3andDB(
                 updatedResult?.personId,
-                files,
+                files,  
                 divyangDetails
               );
             }
