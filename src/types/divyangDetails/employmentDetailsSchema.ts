@@ -7,15 +7,15 @@ const employmentDetailsRequestSchema = z.object({
     if (val === 'false') return false;
     throw new Error('Invalid boolean string');
   }).optional(),
-  unemployedSince: z.date().optional(),
+  unemployedSince: z.coerce.date().optional(),
   occupation: inputFieldSchema.optional(),
-  income: z.number().optional(),
+  income: z.coerce.number().optional(),
   fatherOccupation: inputFieldSchema.optional(),
-  fatherIncome: z.number().optional(),
+  fatherIncome: z.coerce.number().optional(),
   motherOccupation: inputFieldSchema.optional(),
-  motherIncome: z.number().optional(),
+  motherIncome: z.coerce.number().optional(),
   spouseOccupation: inputFieldSchema.optional(),
-  spouseIncome: z.number().optional(),
+  spouseIncome: z.coerce.number().optional(),
 })
 type EmploymentDetails = z.infer<typeof employmentDetailsRequestSchema>
 

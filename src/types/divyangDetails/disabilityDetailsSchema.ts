@@ -14,12 +14,13 @@ const disabilityOfDivyangSchema = z.object({
   }).optional(),
   disabilitySince: z.string().datetime().optional(),
   disabilityArea: z.string().optional(),
-  disabilityPercentage: z.number().min(0).max(100).optional(),
+  disabilityPercentage: z.coerce.number().min(0).max(100).optional(),
   disabilityDueTo: z.string(),
   certificateIssueAuthority: z
     .nativeEnum(CertificateIssueAuthorityEnum)
     .optional(),
   disabilityCardFileName: z.string().optional(), // url
+  dateOfIssue: z.string().datetime().optional(),
 });
 type DisabilityOfDivyang = z.infer<typeof disabilityOfDivyangSchema>;
 const disabiltyDetailsRequestSchema = z.object({
@@ -28,20 +29,16 @@ const disabiltyDetailsRequestSchema = z.object({
   stateCode: z.string(),
   identityCardNumber: z.string(),
   UDIDCardFile: z.string(),
-  UDIDEnrollmentNumber: z.string(),
-});
+  UDIDEnrollmentNumber: z.string().optional(),
+  UDIDCardNumber: z.string().optional(),
+}).refine((data) => {
+    return (
+      data.UDIDCardNumber !== undefined ||
+      data.UDIDEnrollmentNumber !== undefined
+    );
+  },"UDIDCardNumber or UDIDEnrollmentNumber must be present"
+);
 
-// .refine((data) => {
-//   if (data.isDisabilitySinceBirth) {
-//     return data.disabilitySince === null;
-//   } else {
-//     return (
-//       data.udidCardNumber !== undefined &&
-//       data.udidEnrollmentNumber !== undefined
-//     );
-//   }
-// }
-// );
 type DisabilityDetails = z.infer<typeof disabiltyDetailsRequestSchema>;
 
 type DisabilityOfDivyangList = {

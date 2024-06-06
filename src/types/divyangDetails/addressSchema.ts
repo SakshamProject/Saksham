@@ -25,7 +25,7 @@ const addressRequestSchema = z
     corporationId: uuidSchema.optional(),
     MLAConstituencyId: uuidSchema.optional(),
     MPConstituencyId: uuidSchema.optional(),
-    pincode: z.number().min(100000).max(999999),
+    pincode: z.coerce.number().min(100000).max(999999),
   })
   .refine(
     (data) => {

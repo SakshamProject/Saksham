@@ -27,7 +27,7 @@ const personalDetailsRequestSchema = z.object({
   bloodGroup: z.nativeEnum(BloodGroupEnum),
   gender: z.nativeEnum(GenderEnum), // is optional in sheet
   dateOfBirth: z.string().datetime(),
-  age: z.number().optional(),
+  age: z.coerce.number().optional(),
   mailId: emailSchema,
   mobileNumber: phoneNumberSchema,
   fatherName: inputFieldSchema,
@@ -55,7 +55,7 @@ const updatePersonalDetailsRequestSchema = z.object({
   bloodGroup: z.nativeEnum(BloodGroupEnum),
   gender: z.nativeEnum(GenderEnum), // is optional in sheet
   dateOfBirth: z.string().datetime(),
-  age: z.number().optional(),
+  age: z.coerce.number().optional(),
   mailId: emailSchema,
   mobileNumber: phoneNumberSchema,
   fatherName: inputFieldSchema,
