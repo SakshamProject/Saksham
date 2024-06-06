@@ -77,7 +77,7 @@ const updateAddressDBObject = (
     districtCommunication: {
       connect: {
         id: addressRequest.districtIdCommunication,
-      }
+      },
     },
     district: {
       connect: {
@@ -85,32 +85,12 @@ const updateAddressDBObject = (
       },
     },
     isRural: addressRequest.isRural,
-    villageName: addressRequest.villageName,
-    panchayatUnion: {
-      connect: {
-        id: addressRequest.panchayatUnionId,
-      },
-    },
     taluk: {
       connect: {
         id: addressRequest.talukId,
       },
     },
-    townPanchayat: {
-      connect: {
-        id: addressRequest.townPanchayatId,
-      },
-    },
-    municipality: {
-      connect: {
-        id: addressRequest.municipalityId,
-      },
-    },
-    corporation: {
-      connect: {
-        id: addressRequest.corporationId,
-      },
-    },
+
     mlaconstituency: {
       connect: {
         id: addressRequest.MLAConstituencyId,
@@ -128,6 +108,31 @@ const updateAddressDBObject = (
       },
     },
   };
+
+  if (addressRequest.isRural) {
+    (updateAddress.villageName = addressRequest.villageName),
+      (updateAddress.panchayatUnion = {
+        connect: {
+          id: addressRequest.panchayatUnionId,
+        },
+      });
+  } else {
+    (updateAddress.townPanchayat = {
+      connect: {
+        id: addressRequest.townPanchayatId,
+      },
+    }),
+      (updateAddress.municipality = {
+        connect: {
+          id: addressRequest.municipalityId,
+        },
+      }),
+      (updateAddress.corporation = {
+        connect: {
+          id: addressRequest.corporationId,
+        },
+      });
+  }
   return updateAddress;
 };
 
@@ -181,9 +186,9 @@ const updateIdProofUploadsDBObject = (
 const updateDisabilityDetailsDBObject = (
   disabilityDetails: DisabilityDetails,
   updatedBy: string,
-  disabilities: DisabilityOfDivyangList,
+  disabilities: DisabilityOfDivyangList
 ): Prisma.DivyangDetailsUpdateInput => {
-  console.log("[DisabilityDetails]")
+  console.log("[DisabilityDetails]");
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     districtCode: disabilityDetails.districtCode,
     stateCode: disabilityDetails.stateCode,
@@ -220,7 +225,7 @@ function createUpdateDTOObject(
     | undefined,
   updatedBy: string
 ) {
-  console.log(`[+]enters dto`)
+  console.log(`[+]enters dto`);
   if (
     pageNumber === 1 &&
     updateDivyangDetailsRequest.personalDetails &&
