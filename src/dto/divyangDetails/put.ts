@@ -70,6 +70,15 @@ const updateAddressDBObject = (
     flatNumber: addressRequest.flatNumber,
     streetName: addressRequest.streetName,
     nagarName: addressRequest.nagarName,
+    doorNumberCommunication: addressRequest.doorNumberCommunication,
+    flatNumberCommunication: addressRequest.flatNumberCommunication,
+    streetNameCommunication: addressRequest.streetNameCommunication,
+    nagarNameCommunication: addressRequest.nagarNameCommunication,
+    districtCommunication: {
+      connect: {
+        id: addressRequest.districtIdCommunication,
+      }
+    },
     district: {
       connect: {
         id: addressRequest.districtId,
@@ -180,6 +189,7 @@ const updateDisabilityDetailsDBObject = (
     stateCode: disabilityDetails.stateCode,
     identityCardNumber: disabilityDetails.identityCardNumber,
     udidEnrollmentNumber: disabilityDetails.UDIDEnrollmentNumber,
+    udidCardNumber: disabilityDetails.UDIDCardNumber,
     // udidCardUrl: disabilityDetails.UDIDCardUrl,
     updatedBy: {
       connect: {

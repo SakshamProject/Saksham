@@ -11,6 +11,7 @@ const addressRequestSchema = z
     doorNumberCommunication: z.string(),
     flatNumberCommunication: z.string().optional(),
     nagarNameCommunication: inputFieldSchema.optional(),
+    streetNameCommunication: inputFieldSchema.optional(),
     districtIdCommunication: uuidSchema,
     isRural: z.string().transform((val) => {
       if (val === 'true') return true;

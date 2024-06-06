@@ -306,6 +306,7 @@ model DivyangDetails {
   doorNumberCommunication String?
   flatNumberCommunication String?
   nagarNameCommunication  String?
+  streetNameCommunication String?
   districtIdCommunication String?
   isRural                 Boolean?
   villageName             String?
