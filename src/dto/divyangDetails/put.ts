@@ -70,15 +70,6 @@ const updateAddressDBObject = (
     flatNumber: addressRequest.flatNumber,
     streetName: addressRequest.streetName,
     nagarName: addressRequest.nagarName,
-    doorNumberCommunication: addressRequest.doorNumberCommunication,
-    flatNumberCommunication: addressRequest.flatNumberCommunication,
-    streetNameCommunication: addressRequest.streetNameCommunication,
-    nagarNameCommunication: addressRequest.nagarNameCommunication,
-    districtCommunication: {
-      connect: {
-        id: addressRequest.districtIdCommunication,
-      },
-    },
     district: {
       connect: {
         id: addressRequest.districtId,
@@ -102,6 +93,35 @@ const updateAddressDBObject = (
       },
     },
     pincode: addressRequest.pincode,
+
+    isSameAddress: addressRequest.isSameAddress,
+
+    doorNumberCommunication: addressRequest.doorNumberCommunication,
+    flatNumberCommunication: addressRequest.flatNumberCommunication,
+    streetNameCommunication: addressRequest.streetNameCommunication,
+    nagarNameCommunication: addressRequest.nagarNameCommunication,
+    districtCommunication: {
+      connect: {
+        id: addressRequest.districtIdCommunication,
+      },
+    },
+    isRuralCommunication: addressRequest.isRuralCommunication,
+    talukCommunication: {
+      connect: {
+        id: addressRequest.talukIdCommunication,
+      },
+    },
+    mlaconstituencyCommunication: {
+      connect: {
+        id: addressRequest.MLAConstituencyIdCommunication,
+      },
+    },
+    mpconstituencyCommunication: {
+      connect: {
+        id: addressRequest.MPConstituencyIdCommunication,
+      },
+    },
+    pincodeCommunication: addressRequest.pincodeCommunication,
     updatedBy: {
       connect: {
         id: updatedBy,
@@ -130,6 +150,31 @@ const updateAddressDBObject = (
       (updateAddress.corporation = {
         connect: {
           id: addressRequest.corporationId,
+        },
+      });
+  }
+  if (addressRequest.isRuralCommunication) {
+    (updateAddress.villageNameCommunication =
+      addressRequest.villageNameCommunication),
+      (updateAddress.panchayatUnionCommunication = {
+        connect: {
+          id: addressRequest.panchayatUnionIdCommunication,
+        },
+      });
+  } else {
+    (updateAddress.townPanchayatCommunication = {
+      connect: {
+        id: addressRequest.townPanchayatIdCommunication,
+      },
+    }),
+      (updateAddress.municipalityCommunication = {
+        connect: {
+          id: addressRequest.municipalityIdCommunication,
+        },
+      }),
+      (updateAddress.corporationCommunication = {
+        connect: {
+          id: addressRequest.corporationIdCommunication,
         },
       });
   }

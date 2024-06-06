@@ -8,11 +8,6 @@ const addressRequestSchema = z
     streetName: inputFieldSchema,
     nagarName: inputFieldSchema.optional(),
     districtId: uuidSchema,
-    doorNumberCommunication: z.string(),
-    flatNumberCommunication: z.string().optional(),
-    nagarNameCommunication: inputFieldSchema.optional(),
-    streetNameCommunication: inputFieldSchema.optional(),
-    districtIdCommunication: uuidSchema,
     isRural: z.string().transform((val) => {
       if (val === "true") return true;
       if (val === "false") return false;
@@ -27,6 +22,28 @@ const addressRequestSchema = z
     MLAConstituencyId: uuidSchema.optional(),
     MPConstituencyId: uuidSchema.optional(),
     pincode: z.coerce.number().min(100000).max(999999),
+    
+    isSameAddress: z.coerce.boolean(),
+
+    doorNumberCommunication: z.string(),
+    flatNumberCommunication: z.string().optional(),
+    nagarNameCommunication: inputFieldSchema.optional(),
+    streetNameCommunication: inputFieldSchema.optional(),
+    districtIdCommunication: uuidSchema,
+    isRuralCommunication: z.string().transform((val) => {
+      if (val === "true") return true;
+      if (val === "false") return false;
+      throw new Error("Invalid boolean string");
+    }),
+    villageNameCommunication: inputFieldSchema.optional(),
+    panchayatUnionIdCommunication: uuidSchema.optional(),
+    talukIdCommunication: uuidSchema.optional(),
+    townPanchayatIdCommunication: uuidSchema.optional(),
+    municipalityIdCommunication: uuidSchema.optional(),
+    corporationIdCommunication: uuidSchema.optional(),
+    MLAConstituencyIdCommunication: uuidSchema.optional(),
+    MPConstituencyIdCommunication: uuidSchema.optional(),
+    pincodeCommunication: z.coerce.number().min(100000).max(999999),
   })
   .refine(
     (data) => {

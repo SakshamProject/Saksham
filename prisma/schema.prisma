@@ -23,17 +23,16 @@ model Person {
   divyang    DivyangDetails? @relation("person")
   superAdmin SuperAdmin?
 
-
-  createdSevaKendra SevaKendra[] @relation("sevaKendraCreatedBy")
-  updatedSevaKendra SevaKendra[] @relation("sevaKendraUpdatedBy")
+  createdSevaKendra             SevaKendra[]            @relation("sevaKendraCreatedBy")
+  updatedSevaKendra             SevaKendra[]            @relation("sevaKendraUpdatedBy")
   divyangsCreated               DivyangDetails[]        @relation("divyangCreatedBy")
   divyangsUpdated               DivyangDetails[]        @relation("divyangUpdatedBy")
   createdDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingCreatedBy")
   updatedDivyangServiceMappings DivyangServiceMapping[] @relation("serviceMappingUpdatedBy")
-  usersCreated User[] @relation("createdBy")
-  usersUpdated User[] @relation("updatedBy")
-  designationsCreated   Designation[]           @relation("createdBy")
-  designationsUpdated   Designation[]           @relation("updatedBy")
+  usersCreated                  User[]                  @relation("createdBy")
+  usersUpdated                  User[]                  @relation("updatedBy")
+  designationsCreated           Designation[]           @relation("createdBy")
+  designationsUpdated           Designation[]           @relation("updatedBy")
 }
 
 model Password {
@@ -45,9 +44,8 @@ model Password {
 model SuperAdmin {
   id       String @id @default(uuid())
   personId String @unique
-  person Person @relation(fields: [personId], references: [id])
+  person   Person @relation(fields: [personId], references: [id])
 }
-
 
 model SevaKendra {
   id              String    @id @default(uuid())
@@ -68,8 +66,8 @@ model SevaKendra {
   contactPerson         ContactPerson           @relation(fields: [contactPersonId], references: [id])
   designations          Designation[]
   auditLog              SevaKendraAuditLog[]
-  createdBy             Person?                   @relation("sevaKendraCreatedBy", fields: [createdById], references: [id])
-  updatedBy             Person?                   @relation("sevaKendraUpdatedBy", fields: [updatedById], references: [id])
+  createdBy             Person?                 @relation("sevaKendraCreatedBy", fields: [createdById], references: [id])
+  updatedBy             Person?                 @relation("sevaKendraUpdatedBy", fields: [updatedById], references: [id])
   divyangServiceMapping DivyangServiceMapping[]
 
   @@unique([name, districtId])
@@ -129,20 +127,21 @@ model Service {
 }
 
 model District {
-  id                String            @id @default(uuid())
-  name              String
-  stateId           String
-  sevakendra        SevaKendra[]
-  state             State             @relation(fields: [stateId], references: [id])
-  disability        DivyangDetails[]  @relation("disability")
-  MPConstituencies  MPConstituency[]
-  MLAConstituencies MLAConstituency[]
-  TownPanchayats    TownPanchayat[]
-  Municipalities    Municipality[]
-  Corporations      Corporation[]
-  PanchayatUnions   PanchayatUnion[]
-  Taluks            Taluk[]
-  divyangDetails    DivyangDetails[]  @relation("divyangDetails")
+  id      String @id @default(uuid())
+  name    String
+  stateId String
+
+  sevakendra           SevaKendra[]
+  state                State             @relation(fields: [stateId], references: [id])
+  divyangPermanant     DivyangDetails[]  @relation("permanent")
+  divyangCommunication DivyangDetails[]  @relation("communication")
+  MPConstituencies     MPConstituency[]
+  MLAConstituencies    MLAConstituency[]
+  TownPanchayats       TownPanchayat[]
+  Municipalities       Municipality[]
+  Corporations         Corporation[]
+  PanchayatUnions      PanchayatUnion[]
+  Taluks               Taluk[]
 
   @@unique([name, stateId])
 }
@@ -173,17 +172,15 @@ model User {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 
-
-
-  createdById String ?
-  createdBy   Person?  @relation("createdBy", fields: [createdById], references: [id])
+  createdById String?
+  createdBy   Person? @relation("createdBy", fields: [createdById], references: [id])
 
   updatedById String?
-  updatedBy   Person?   @relation("updatedBy", fields: [updatedById], references: [id])
+  updatedBy   Person? @relation("updatedBy", fields: [updatedById], references: [id])
 
-  designation           Designation             @relation("Designation-Users", fields: [designationId], references: [id])
+  designation Designation @relation("Designation-Users", fields: [designationId], references: [id])
 
-  auditLog          UserAuditLog[]
+  auditLog              UserAuditLog[]
   divyangServiceMapping DivyangServiceMapping[] @relation("inchargeUser")
 }
 
@@ -216,12 +213,12 @@ model Designation {
   updatedAt   DateTime? @updatedAt
   updatedById String?
 
-  createdBy  Person?      @relation("createdBy", fields: [createdById], references: [id])
-  updatedBy  Person?      @relation("updatedBy", fields: [updatedById], references: [id])
+  createdBy  Person?    @relation("createdBy", fields: [createdById], references: [id])
+  updatedBy  Person?    @relation("updatedBy", fields: [updatedById], references: [id])
   sevaKendra SevaKendra @relation(fields: [sevaKendraId], references: [id])
 
-  users               User[]                   @relation("Designation-Users")
-  features            FeaturesOnDesignations[]
+  users    User[]                   @relation("Designation-Users")
+  features FeaturesOnDesignations[]
   auditLog DesignationAuditLog[]
 
   @@unique([sevaKendraId, name])
@@ -298,26 +295,37 @@ model DivyangDetails {
   BPL_OR_APL_CardFile          String?
   BPL_OR_APL_CardFileName      String?
 
-  doorNumber              String?
-  flatNumber              String?
-  streetName              String?
-  nagarName               String?
-  districtId              String?
-  doorNumberCommunication String?
-  flatNumberCommunication String?
-  nagarNameCommunication  String?
-  streetNameCommunication String?
-  districtIdCommunication String?
-  isRural                 Boolean?
-  villageName             String?
-  panchayatUnionId        String?
-  talukId                 String?
-  townPanchayatId         String?
-  municipalityId          String?
-  corporationId           String?
-  MLAConstituencyId       String?
-  MPConstituancyId        String?
-  pincode                 Int?
+  doorNumber                     String?
+  flatNumber                     String?
+  streetName                     String?
+  nagarName                      String?
+  districtId                     String?
+  isRural                        Boolean?
+  villageName                    String?
+  panchayatUnionId               String?
+  talukId                        String?
+  townPanchayatId                String?
+  municipalityId                 String?
+  corporationId                  String?
+  MLAConstituencyId              String?
+  MPConstituancyId               String?
+  pincode                        Int?
+  isSameAddress                  Boolean?
+  doorNumberCommunication        String?
+  flatNumberCommunication        String?
+  nagarNameCommunication         String?
+  streetNameCommunication        String?
+  districtIdCommunication        String?
+  isRuralCommunication           Boolean?
+  villageNameCommunication       String?
+  panchayatUnionIdCommunication  String?
+  talukIdCommunication           String?
+  townPanchayatIdCommunication   String?
+  municipalityIdCommunication    String?
+  corporationIdCommunication     String?
+  MLAConstituencyIdCommunication String?
+  MPConstituancyIdCommunication  String?
+  pincodeCommunication           Int?
 
   districtCode String?
   stateCode    String?
@@ -328,37 +336,47 @@ model DivyangDetails {
   UDIDCardFile         String?
   UDIDCardFileName     String?
 
-  isEmployed            Boolean?
-  unemployedSince       DateTime?
-  occupation            String?
-  income                Int?
-  fatherOccupation      String?
-  fatherIncome          Int?
-  motherOccupation      String?
-  motherIncome          Int?
-  spouseOccupation      String?
-  spouseIncome          Int?
-  createdAt             DateTime                          @default(now())
-  updatedAt             DateTime                          @updatedAt
-  createdById           String?
-  updatedById           String?
-  personId              String                            @unique
-  person                Person                            @relation("person", fields: [personId], references: [id])
-  communityCategory     CommunityCategory?                 @relation(fields: [communityCategoryId], references: [id])
-  corporation           Corporation?                      @relation(fields: [corporationId], references: [id])
-  mlaconstituency       MLAConstituency?                  @relation(fields: [MLAConstituencyId], references: [id])
-  mpconstituency        MPConstituency?                   @relation(fields: [MPConstituancyId], references: [id])
-  municipality          Municipality?                     @relation(fields: [municipalityId], references: [id])
-  townPanchayat         TownPanchayat?                    @relation(fields: [townPanchayatId], references: [id])
-  taluk                 Taluk?                            @relation(fields: [talukId], references: [id])
-  panchayatUnion        PanchayatUnion?                   @relation(fields: [panchayatUnionId], references: [id])
-  district              District?                         @relation("disability", fields: [districtId], references: [id])
-  disabilities          DisabilityOfDivyang[]
+  isEmployed       Boolean?
+  unemployedSince  DateTime?
+  occupation       String?
+  income           Int?
+  fatherOccupation String?
+  fatherIncome     Int?
+  motherOccupation String?
+  motherIncome     Int?
+  spouseOccupation String?
+  spouseIncome     Int?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  createdById      String?
+  updatedById      String?
+  personId         String    @unique
+
+  person            Person             @relation("person", fields: [personId], references: [id])
+  communityCategory CommunityCategory? @relation(fields: [communityCategoryId], references: [id])
+
+  corporation                  Corporation?     @relation("permanent", fields: [corporationId], references: [id])
+  mlaconstituency              MLAConstituency? @relation("permanent", fields: [MLAConstituencyId], references: [id])
+  mpconstituency               MPConstituency?  @relation("permanent", fields: [MPConstituancyId], references: [id])
+  municipality                 Municipality?    @relation("permanent", fields: [municipalityId], references: [id])
+  townPanchayat                TownPanchayat?   @relation("permanent", fields: [townPanchayatId], references: [id])
+  taluk                        Taluk?           @relation("permanent", fields: [talukId], references: [id])
+  panchayatUnion               PanchayatUnion?  @relation("permanent", fields: [panchayatUnionId], references: [id])
+  district                     District?        @relation("permanent", fields: [districtId], references: [id])
+  corporationCommunication     Corporation?     @relation("communication", fields: [corporationIdCommunication], references: [id])
+  mlaconstituencyCommunication MLAConstituency? @relation("communication", fields: [MLAConstituencyIdCommunication], references: [id])
+  mpconstituencyCommunication  MPConstituency?  @relation("communication", fields: [MPConstituancyIdCommunication], references: [id])
+  municipalityCommunication    Municipality?    @relation("communication", fields: [municipalityIdCommunication], references: [id])
+  townPanchayatCommunication   TownPanchayat?   @relation("communication", fields: [townPanchayatIdCommunication], references: [id])
+  talukCommunication           Taluk?           @relation("communication", fields: [talukIdCommunication], references: [id])
+  panchayatUnionCommunication  PanchayatUnion?  @relation("communication", fields: [panchayatUnionIdCommunication], references: [id])
+  districtCommunication        District?        @relation("communication", fields: [districtIdCommunication], references: [id])
+
+  disabilities            DisabilityOfDivyang[]
   educationQualifications DivyangEducationalQualification[]
-  services              DivyangServiceMapping[]
-  districtCommunication District?                         @relation("divyangDetails", fields: [districtIdCommunication], references: [id])
-  createdBy             Person?                            @relation("divyangCreatedBy", fields: [createdById], references: [id])
-  updatedBy             Person?                            @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
+  services                DivyangServiceMapping[]
+  createdBy               Person?                           @relation("divyangCreatedBy", fields: [createdById], references: [id])
+  updatedBy               Person?                           @relation("divyangUpdatedBy", fields: [updatedById], references: [id])
 
   auditLog DivyangDetailsAuditLog[]
 }
@@ -439,6 +457,7 @@ model DisabilityOfDivyang {
   divyang           DivyangDetails     @relation(fields: [divyangId], references: [id])
   disabilitySubType DisabilitySubType? @relation(fields: [disabilitySubTypeId], references: [id])
   disabilityType    DisabilityType     @relation(fields: [disabilityTypeId], references: [id])
+
   @@unique([divyangId, disabilityTypeId, disabilitySubTypeId])
 }
 
@@ -461,71 +480,85 @@ model DisabilityType {
 }
 
 model MPConstituency {
-  id             String           @id @default(uuid())
-  name           String
-  districtId     String
-  district       District         @relation(fields: [districtId], references: [id])
-  DivyangDetails DivyangDetails[]
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
+
+  DivyangDetails              DivyangDetails[] @relation("permanent")
+  DivyangDetailsCommunication DivyangDetails[] @relation("communication")
 
   @@unique([name, districtId])
 }
 
 model MLAConstituency {
-  id             String           @id @default(uuid())
-  name           String
-  districtId     String
-  district       District         @relation(fields: [districtId], references: [id])
-  DivyangDetails DivyangDetails[]
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
+
+  DivyangDetails              DivyangDetails[] @relation("permanent")
+  DivyangDetailsCommunication DivyangDetails[] @relation("communication")
 
   @@unique([name, districtId])
 }
 
 model PanchayatUnion {
-  id             String           @id @default(uuid())
-  name           String
-  districtId     String
-  district       District         @relation(fields: [districtId], references: [id])
-  divyangDetails DivyangDetails[]
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
+
+  DivyangDetails              DivyangDetails[] @relation("permanent")
+  DivyangDetailsCommunication DivyangDetails[] @relation("communication")
 
   @@unique([name, districtId])
 }
 
 model TownPanchayat {
-  id             String           @id @default(uuid())
-  name           String
-  districtId     String
-  district       District         @relation(fields: [districtId], references: [id])
-  DivyangDetails DivyangDetails[]
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
+
+  DivyangDetails              DivyangDetails[] @relation("permanent")
+  DivyangDetailsCommunication DivyangDetails[] @relation("communication")
 
   @@unique([name, districtId])
 }
 
 model Municipality {
-  id             String           @id @default(uuid())
-  name           String
-  districtId     String
-  district       District         @relation(fields: [districtId], references: [id])
-  DivyangDetails DivyangDetails[]
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
+
+  DivyangDetails              DivyangDetails[] @relation("permanent")
+  DivyangDetailsCommunication DivyangDetails[] @relation("communication")
 
   @@unique([name, districtId])
 }
 
 model Corporation {
-  id             String           @id @default(uuid())
-  name           String
-  districtId     String
-  district       District         @relation(fields: [districtId], references: [id])
-  DivyangDetails DivyangDetails[]
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
+
+  DivyangDetails              DivyangDetails[] @relation("permanent")
+  DivyangDetailsCommunication DivyangDetails[] @relation("communication")
 
   @@unique([name, districtId])
 }
 
 model Taluk {
-  id             String           @id @default(uuid())
-  name           String
-  districtId     String
-  district       District         @relation(fields: [districtId], references: [id])
-  DivyangDetails DivyangDetails[]
+  id         String   @id @default(uuid())
+  name       String
+  districtId String
+  district   District @relation(fields: [districtId], references: [id])
+
+  DivyangDetails              DivyangDetails[] @relation("permanent")
+  DivyangDetailsCommunication DivyangDetails[] @relation("communication")
 
   @@unique([name, districtId])
 }
@@ -538,14 +571,14 @@ model CommunityCategory {
 
 // mapping table DivyangDetails - EducationalQualification mapping table
 model DivyangEducationalQualification {
-  id                         String @id @default(uuid())
-  DivyangDetailsId           String
-  educationQualificationId String?
+  id                           String  @id @default(uuid())
+  DivyangDetailsId             String
+  educationQualificationId     String?
   educationQualificationTypeId String
 
-  educationQualificationType EducationQualificationType        @relation(fields: [educationQualificationTypeId], references: [id], onDelete: Cascade)
-  educationQualification EducationQualification? @relation(fields: [educationQualificationId], references: [id])
-  divyang   DivyangDetails         @relation(fields: [DivyangDetailsId], references: [id])
+  educationQualificationType EducationQualificationType @relation(fields: [educationQualificationTypeId], references: [id], onDelete: Cascade)
+  educationQualification     EducationQualification?    @relation(fields: [educationQualificationId], references: [id])
+  divyang                    DivyangDetails             @relation(fields: [DivyangDetailsId], references: [id])
 }
 
 // e.g. 1 - b.tech (IT)
@@ -561,9 +594,9 @@ model EducationQualification {
 }
 
 model EducationQualificationType {
-  id                     String                   @id @default(uuid())
-  name                   String                   @unique
-  educationQualification EducationQualification[]
+  id                            String                            @id @default(uuid())
+  name                          String                            @unique
+  educationQualification        EducationQualification[]
   divyangEducationQualification DivyangEducationalQualification[]
 }
 
