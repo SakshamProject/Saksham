@@ -25,7 +25,7 @@ serviceMasterRouter.post(
 );
 serviceMasterRouter.get(
   "/",
-  authorization(AuthorizationEnum.SERVICE_MASTER, MethodsEnum.USER_DROPDOWN),
+  authorization(AuthorizationEnum.SERVICE_MASTER, MethodsEnum.DIVYANG_DROPDOWN),
   getServices
 );
 serviceMasterRouter.put(
