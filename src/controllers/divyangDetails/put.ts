@@ -68,24 +68,26 @@ const putDivyangDetails = async (
 
       if (pageNumber === 2) {
         if (request.files) {
-          if (request.files.length !== 0) {
-            if (!Array.isArray(request.files)) {
-              const files = request.files;
-              // ID Proof Uploads
-              if (Object.keys(files).length < 2) {
-                throw new APIError(
-                  "Atlease 2 Files must be uploaded!",
-                  StatusCodes.BAD_REQUEST,
-                  "FileUploadError",
-                  "E"
+          if (request.files.length !== undefined) {
+            if (request.files.length !== 0) {
+              if (!Array.isArray(request.files)) {
+                const files = request.files;
+                // ID Proof Uploads
+                if (Object.keys(files).length < 2) {
+                  throw new APIError(
+                    "Atlease 2 Files must be uploaded!",
+                    StatusCodes.BAD_REQUEST,
+                    "FileUploadError",
+                    "E"
+                  );
+                }
+
+                await saveDivyangDetailsIdProofFilestoS3andDB(
+                  updatedResult?.personId,
+                  files,
+                  divyangDetails
                 );
               }
-
-              await saveDivyangDetailsIdProofFilestoS3andDB(
-                updatedResult?.personId,
-                files,  
-                divyangDetails
-              );
             }
           }
         }
