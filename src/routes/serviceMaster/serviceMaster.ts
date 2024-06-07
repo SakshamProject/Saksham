@@ -25,7 +25,7 @@ serviceMasterRouter.post(
 );
 serviceMasterRouter.get(
   "/",
-  authorization(AuthorizationEnum.SERVICE_MASTER, MethodsEnum.DIVYANG_DROPDOWN),
+  authorization(AuthorizationEnum.SERVICE_MASTER, MethodsEnum.USER_DROPDOWN),
   getServices
 );
 serviceMasterRouter.put(
@@ -50,7 +50,7 @@ serviceMasterRouter.delete(
 // );
 serviceMasterRouter.post(
   "/list",
-  authorization(AuthorizationEnum.SERVICE_MASTER),
+  authorization(AuthorizationEnum.SERVICE_MASTER, MethodsEnum.DIVYANG_DROPDOWN),
   listService
 );
 
