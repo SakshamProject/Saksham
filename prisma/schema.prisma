@@ -449,6 +449,7 @@ model DisabilityOfDivyang {
   disabilityArea            String?
   disabilityPercentage      Int?
   disabilityDueTo           String?
+  dateOfIssue               DateTime?
   certificateIssueAuthority CertificateIssueAuthorityEnum?
   // disabilityCardUrl         String? // url
   disabilityCardFileName    String? // url
