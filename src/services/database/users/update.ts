@@ -22,7 +22,6 @@ async function updateUserDB(
   }
 }
 
-// change to person
 async function updateUserProfileKeyDB(prisma: Prisma.TransactionClient, personId: string, data: Prisma.UserUpdateInput) {
   try {
     const result = await prisma.user.update({
