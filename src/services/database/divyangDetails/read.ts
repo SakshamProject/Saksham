@@ -70,7 +70,9 @@ const getDivyangDetailsByIdDB = async (id: string) => {
         townPanchayat: true,
         taluk: true,
         panchayatUnion: true,
-        district: true,
+        district: {
+          include: { state: true },
+        },
         corporationCommunication: true,
         mlaconstituencyCommunication: true,
         mpconstituencyCommunication: true,
@@ -78,7 +80,9 @@ const getDivyangDetailsByIdDB = async (id: string) => {
         townPanchayatCommunication: true,
         talukCommunication: true,
         panchayatUnionCommunication: true,
-        districtCommunication: true,
+        districtCommunication: {
+          include: { state: true },
+        },
         person: {
           select: {
             id: true,
