@@ -21,7 +21,7 @@ districtRouter.post(
 );
 districtRouter.get(
   "/",
-  authorization(AuthorizationEnum.TYPE_MASTERS),
+  authorization(AuthorizationEnum.TYPE_MASTERS,MethodsEnum.DIVYANG_DROPDOWN),
   getDistrict
 );
 districtRouter.get(
