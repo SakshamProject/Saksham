@@ -26,7 +26,7 @@ districtRouter.get(
 );
 districtRouter.get(
   "/:id",
-  authorization(AuthorizationEnum.TYPE_MASTERS),
+  authorization(AuthorizationEnum.TYPE_MASTERS, MethodsEnum.DIVYANG_DROPDOWN),
   getDistrictById
 );
 districtRouter.delete(
