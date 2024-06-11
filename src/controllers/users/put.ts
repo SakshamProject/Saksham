@@ -16,7 +16,7 @@ async function putUser(
       id,
       request.token?.personId
     );
-    await handleProfilePhotoFile(request, true);
+    await handleProfilePhotoFile(request, true, result?.personId);
     const responseData = createResponseOnlyData(result);
     // const personId = result?.personId;
     // if (personId) {

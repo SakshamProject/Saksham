@@ -38,7 +38,7 @@ async function postUser(
     const newPerson = await createPersonDB(userInputObject);
     log("info", `[controller/postUser]:\n newUser: %o`, newPerson || {});
 
-    await handleProfilePhotoFile(request, true);
+    await handleProfilePhotoFile(request, true,newPerson?.id);
     const responseData = createResponseOnlyData(newPerson);
     response.send(responseData);
     // let file: object | undefined = {};

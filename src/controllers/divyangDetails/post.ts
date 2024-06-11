@@ -31,7 +31,7 @@ async function postDivyangDetails(
     const result: DivyangDetails | undefined = await createDivyangDetailsDB(
       divyangDetailsDBObject
     );
-    await handleProfilePhotoFile(request, false);
+    await handleProfilePhotoFile(request, false, result?.personId);
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
     // log("info", "[postDivyangDetails]: request.file: %o", request.file);
@@ -65,7 +65,7 @@ const postDivyang = async (
     const result: DivyangDetails | undefined = await createDivyangDetailsDB(
       divyangDetailsDBObject
     );
-    await handleProfilePhotoFile(request, false);
+    await handleProfilePhotoFile(request, false, result?.personId);
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
     // log("info", "[postDivyang]: request.file: %o", request.file);

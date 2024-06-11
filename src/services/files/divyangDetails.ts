@@ -10,7 +10,11 @@ const handleDivyangDetailsFiles = async (request: Request) => {
   try {
     const divyangDetails: updateDivyangDetailsRequest = request.body;
     if (divyangDetails.pageNumber === 1) {
-      await handleProfilePhotoFile(request, false);
+      await handleProfilePhotoFile(
+        request,
+        false,
+        request.body.personalDetails.personId
+      );
     }
     if (divyangDetails.pageNumber === 2) {
       await handleIdProofFiles(request);

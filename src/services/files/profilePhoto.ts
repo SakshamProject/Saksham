@@ -7,27 +7,31 @@ import { cloudStorage } from "../s3/AWS_S3.js";
 import { Folders } from "./constants.js";
 import { updateDivyangProfileKeyDB } from "../database/divyangDetails/update.js";
 import { Request } from "express";
-const handleProfilePhotoFile = async (request: Request, isUser: Boolean) => {
+const handleProfilePhotoFile = async (
+  request: Request,
+  isUser: Boolean,
+  personId: string | undefined
+) => {
   try {
-    if (!request.body.personId) {
-      throw new APIError("Person ID is required", StatusCodes.BAD_REQUEST);
+    if (!personId) {
+      throw new APIError("Person ID is not generated", StatusCodes.BAD_REQUEST);
     }
     if (isUser) {
       if (request.body.files.profilePhotoFileName === null) {
-        await deleteProfilePhotoFile(request.body.personId, isUser);
+        await deleteProfilePhotoFile(personId, isUser);
       }
     } else {
       if (
         request.body.personalDetails.fileNames.profilePhotoFileName === null
       ) {
-        await deleteProfilePhotoFile(request.body.personId, isUser);
+        await deleteProfilePhotoFile(personId, isUser);
       }
     }
 
     if (!Array.isArray(request.files) && request.files) {
       const file = getFile(request.files, Folders.PROFILE_PHOTO);
       if (file) {
-        await updateProfilePhotoFile(request.body.personId, file, isUser);
+        await updateProfilePhotoFile(personId, file, isUser);
       }
     }
   } catch (error) {
