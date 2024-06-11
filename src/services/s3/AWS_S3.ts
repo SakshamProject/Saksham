@@ -87,7 +87,6 @@ class AWS_S3 {
         expiresIn: defaults.s3.expiresIn,
       });
       return {
-        key,
         url,
         createdAt: new Date(),
         expiresInSeconds: defaults.s3.expiresIn,
@@ -154,6 +153,6 @@ class AWS_S3 {
     }
   }
 }
-const aws_s3 = new AWS_S3();
+const cloudStorage = new AWS_S3();
 
-export { aws_s3 };
+export { cloudStorage };
