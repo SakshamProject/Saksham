@@ -14,7 +14,7 @@ const handleProfilePhotoFile = async (request: Request, isUser: Boolean) => {
         await deleteProfilePhotoFile(request.body.personId, isUser);
       }
     } else {
-      if (request.body.personalDetails.files.profilePhotoFileName === null) {
+      if (request.body.personalDetails.fileNames.profilePhotoFileName === null) {
         await deleteProfilePhotoFile(request.body.personId, isUser);
       }
     }
