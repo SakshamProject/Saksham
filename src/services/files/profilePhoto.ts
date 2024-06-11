@@ -9,9 +9,16 @@ import { updateDivyangProfileKeyDB } from "../database/divyangDetails/update.js"
 import { Request } from "express";
 const handleProfilePhotoFile = async (request: Request, isUser: Boolean) => {
   try {
-    if (request.body.files.profilePhotoFileName === null) {
-      await deleteProfilePhotoFile(request.body.personId, isUser);
+    if (isUser) {
+      if (request.body.files.profilePhotoFileName === null) {
+        await deleteProfilePhotoFile(request.body.personId, isUser);
+      }
+    } else {
+      if (request.body.personalDetails.files.profilePhotoFileName === null) {
+        await deleteProfilePhotoFile(request.body.personId, isUser);
+      }
     }
+
     if (!Array.isArray(request.files) && request.files) {
       const file = getFile(request.files, Folders.PROFILE_PHOTO);
       if (file) {
