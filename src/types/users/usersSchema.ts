@@ -1,9 +1,10 @@
 import { z } from "zod";
-import { GenderEnum, AuditLogStatusEnum } from "@prisma/client";
+import { GenderEnum, AuditLogStatusEnum, Prisma } from "@prisma/client";
 import inputFieldSchema, {
   auditLogSchema,
   dateSchema,
-  emailSchema, passwordSchema,
+  emailSchema,
+  passwordSchema,
   phoneNumberSchema,
   uuidSchema,
 } from "../inputFieldSchema.js";
@@ -27,6 +28,7 @@ const usersPostSchema = z.object({
   status: z.nativeEnum(AuditLogStatusEnum),
   effectiveDate: dateSchema, // effective date
   description: z.string().optional(),
+  files: z.object({ profilePhotoFileName: z.string().nullable() }),
 });
 type userPostRequestType = z.infer<typeof usersPostSchema>;
 
@@ -47,9 +49,45 @@ const usersPutSchema = z.object({
   // audit log
   auditlog: auditLogSchema.optional(),
   profilePhotoFile: z.string().optional(),
+  files: z.object({ profilePhotoFileName: z.string().nullable() }),
 });
 type userPutRequestType = z.infer<typeof usersPutSchema>;
-
+type getUserType = Prisma.UserGetPayload<{
+  include: {
+    auditLog: true;
+    createdBy: true;
+    updatedBy: true;
+    person: {
+      select: {
+        userName: true;
+      };
+    };
+    designation: {
+      select: {
+        id: true;
+        name: true;
+        sevaKendra: {
+          select: {
+            id: true;
+            name: true;
+            district: {
+              select: {
+                id: true;
+                name: true;
+                state: {
+                  select: {
+                    id: true;
+                    name: true;
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+}>;
 enum userFilterOperationsEnum {
   startsWith = "startsWith",
   endsWith = "endsWith",
@@ -115,4 +153,4 @@ const fileSchema = z.object({
 
 export { userOrderByEnum };
 export { usersPostSchema, usersPutSchema, userListSchema, fileSchema };
-export { userPostRequestType, userPutRequestType, userListType };
+export { userPostRequestType, userPutRequestType, userListType, getUserType };

@@ -7,11 +7,14 @@ const disabilityOfDivyangSchema = z.object({
   id: uuidSchema.optional(),
   disabilityTypeId: uuidSchema,
   disabilitySubTypeId: uuidSchema.optional(),
-  isDisabilitySinceBirth: z.string().transform((val) => {
-    if (val === 'true') return true;
-    if (val === 'false') return false;
-    throw new Error('Invalid boolean string');
-  }).optional(),
+  isDisabilitySinceBirth: z
+    .string()
+    .transform((val) => {
+      if (val === "true") return true;
+      if (val === "false") return false;
+      throw new Error("Invalid boolean string");
+    })
+    .optional(),
   disabilitySince: z.string().datetime().optional(),
   disabilityArea: z.string().optional(),
   disabilityPercentage: z.coerce.number().min(0).max(100).optional(),
@@ -23,21 +26,23 @@ const disabilityOfDivyangSchema = z.object({
   dateOfIssue: z.string().datetime().optional(),
 });
 type DisabilityOfDivyang = z.infer<typeof disabilityOfDivyangSchema>;
-const disabiltyDetailsRequestSchema = z.object({
-  disabilities: disabilityOfDivyangSchema.array(),
-  districtCode: z.string(),
-  stateCode: z.string(),
-  identityCardNumber: z.string(),
-  UDIDCardFile: z.string(),
-  UDIDEnrollmentNumber: z.string().optional(),
-  UDIDCardNumber: z.string().optional(),
-}).refine((data) => {
+const disabiltyDetailsRequestSchema = z
+  .object({
+    disabilities: disabilityOfDivyangSchema.array(),
+    districtCode: z.string(),
+    stateCode: z.string(),
+    identityCardNumber: z.string(),
+    UDIDCardFile: z.string(),
+    UDIDEnrollmentNumber: z.string().optional(),
+    UDIDCardNumber: z.string().optional(),
+    files: z.object({ UDIDCardFileName: z.string().nullable() }),
+  })
+  .refine((data) => {
     return (
       data.UDIDCardNumber !== undefined ||
       data.UDIDEnrollmentNumber !== undefined
     );
-  },"UDIDCardNumber or UDIDEnrollmentNumber must be present"
-);
+  }, "UDIDCardNumber or UDIDEnrollmentNumber must be present");
 
 type DisabilityDetails = z.infer<typeof disabiltyDetailsRequestSchema>;
 

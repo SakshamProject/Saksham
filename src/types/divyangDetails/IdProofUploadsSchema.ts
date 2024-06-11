@@ -29,12 +29,34 @@ const IdProofUploadsRequestSchema = z
     medicalInsuranceCardFile: z.string().optional(),
     disabilitySchemeCardFile: z.string().optional(),
     BPL_OR_APL_CardFile: z.string().optional(),
+    fileNames: z.object({
+      voterIdFileName: z.string().nullable(),
+      panCardFileName: z.string().nullable(),
+      drivingLicenseFileName: z.string().nullable(),
+      rationCardFileName: z.string().nullable(),
+      aadharCardFileName: z.string().nullable(),
+      pensionCardFileName: z.string().nullable(),
+      medicalInsuranceCardFileName: z.string().nullable(),
+      disabilitySchemeCardFileName: z.string().nullable(),
+      BPL_OR_APL_CardFileName: z.string().nullable(),
+    }),
   })
-  .refine(
-    (val) => Object.values(val).filter((v) => v !== undefined).length >= 2,
-    // (val) => console.log(val),
-    "At least two fields must be present"
-  );
+  .refine((val) => {
+    const fileNames = val.fileNames;
+    const fileNameFields = [
+      fileNames.voterIdFileName,
+      fileNames.panCardFileName,
+      fileNames.drivingLicenseFileName,
+      fileNames.rationCardFileName,
+      fileNames.aadharCardFileName,
+      fileNames.pensionCardFileName,
+      fileNames.medicalInsuranceCardFileName,
+      fileNames.disabilitySchemeCardFileName,
+      fileNames.BPL_OR_APL_CardFileName,
+    ];
+    return fileNameFields.filter((v) => v !== undefined).length >= 2;
+  }, "At least two file names must be present");
+
 type IdProofUploads = z.infer<typeof IdProofUploadsRequestSchema>;
 
 export { IdProofUploadsRequestSchema, IdProofUploads };

@@ -11,6 +11,7 @@ import { Prisma } from "@prisma/client";
 import {
   auditLogSchema,
   filterOperationsEnum,
+  uuidSchema,
 } from "../inputFieldSchema.js";
 import {
   DivyangDetailsColumnNamesEnum,
@@ -18,7 +19,39 @@ import {
 } from "./divyangDetailsDefaults.js";
 import { sortOrderEnum } from "../getRequestSchema.js";
 
-type getDivyangDetailsSchema = Prisma.DivyangDetailsGetPayload<{}>;
+type getDivyangDetailsType = Prisma.DivyangDetailsGetPayload<{
+  include: {
+    person: {
+      select: {
+        id: true;
+        userName: true;
+      };
+    };
+    auditLog: true;
+    communityCategory: true;
+    createdBy: {
+      select: {
+        id: true;
+        userName: true;
+      };
+    };
+    updatedBy: {
+      select: {
+        id: true;
+        userName: true;
+      };
+    };
+    district: true;
+    districtCommunication: true;
+    disabilities: true;
+    educationQualifications: {
+      include: {
+        educationQualification: true;
+        educationQualificationType: true;
+      };
+    };
+  };
+}>;
 const divyangDetailsFilter = z
   .object({
     operation: z.nativeEnum(filterOperationsEnum),
@@ -56,31 +89,35 @@ const getDivyangDetailsSchema = z.object({
 type DivyangDetailsSchemaType = z.infer<typeof getDivyangDetailsSchema>;
 
 const divyangDetailsRequestSchema = z
-    .object({
-        personalDetails: updatePersonalDetailsRequestSchema,
-        IdProofUploads: IdProofUploadsRequestSchema,
-        addressRequest: addressRequestSchema,
-        disabilityDetails: disabiltyDetailsRequestSchema,
-        employmentDetails: employmentDetailsRequestSchema,
-        auditLog: auditLogSchema,
-    })
-    .refine((data) => {
-        return Object.values(data).some((value) => value !== undefined);
-    }, "At least one of the five schemas must be provided.");
+  .object({
+    id: uuidSchema,
+    personId: uuidSchema,
+    personalDetails: updatePersonalDetailsRequestSchema,
+    IdProofUploads: IdProofUploadsRequestSchema,
+    addressRequest: addressRequestSchema,
+    disabilityDetails: disabiltyDetailsRequestSchema,
+    employmentDetails: employmentDetailsRequestSchema,
+    auditLog: auditLogSchema,
+  })
+  .refine((data) => {
+    return Object.values(data).some((value) => value !== undefined);
+  }, "At least one of the five schemas must be provided.");
 
 const updateDivyangDetailsRequestSchema = z
-    .object({
-        personalDetails: updatePersonalDetailsRequestSchema.optional(),
-        IdProofUploads: IdProofUploadsRequestSchema.optional(),
-        addressRequest: addressRequestSchema.optional(),
-        disabilityDetails: disabiltyDetailsRequestSchema.optional(),
-        employmentDetails: employmentDetailsRequestSchema.optional(),
-        auditLog: auditLogSchema.optional(),
-        pageNumber: z.coerce.number().min(1).max(5),
-    })
-    .refine((data) => {
-        return Object.values(data).some((value) => value !== undefined);
-    }, "At least one of the five schemas must be provided.");
+  .object({
+    id: uuidSchema,
+    personId: uuidSchema,
+    personalDetails: updatePersonalDetailsRequestSchema.optional(),
+    IdProofUploads: IdProofUploadsRequestSchema.optional(),
+    addressRequest: addressRequestSchema.optional(),
+    disabilityDetails: disabiltyDetailsRequestSchema.optional(),
+    employmentDetails: employmentDetailsRequestSchema.optional(),
+    auditLog: auditLogSchema.optional(),
+    pageNumber: z.coerce.number().min(1).max(5),
+  })
+  .refine((data) => {
+    return Object.values(data).some((value) => value !== undefined);
+  }, "At least one of the five schemas must be provided.");
 
 const postDivyangDetailsRequestSchema = z.object({
   personalDetails: personalDetailsRequestSchema,
@@ -105,7 +142,7 @@ export {
   DivyangDetailsFilterType,
   divyangDetailsRequestSchema,
   DivyangDetailsRequest,
-  getDivyangDetailsSchema,
+  getDivyangDetailsType,
   updateDivyangDetails,
   updateDivyangDetailsRequestSchema,
   updateDivyangDetailsRequest,
@@ -115,4 +152,5 @@ export {
   DivyangDetailsWhere,
   getDivyangDetailsSearch,
   DivyangDetailsSearchType,
+  getDivyangDetailsSchema,
 };
