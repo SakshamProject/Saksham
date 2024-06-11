@@ -97,7 +97,7 @@ async function createAuditLogIfExists(
         currentDate
       );
       if (auditLogDBObject.status != statusOfSevaKendra?.status) {
-        if ((auditLogDBObject.status = AuditLogStatusEnum.DEACTIVE)) {
+        if (auditLogDBObject.status === AuditLogStatusEnum.DEACTIVE) {
           const dependencyStatus = await getSevaKendraDependencyStatusDB(
             prismaTransaction,
             updateRequestSevaKendra.id
