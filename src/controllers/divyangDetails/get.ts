@@ -1,15 +1,16 @@
 import { NextFunction, Response, Request } from "express";
 import {
-    createResponseOnlyData,
-    createResponseWithFiles,
-    createResponseWithQuery,
-} from '../../types/createResponseSchema.js'
-import {getDivyangDetailsDBTransaction} from '../../services/database/divyangDetails/transaction/read.js'
+  createResponseOnlyData,
+  createResponseWithFiles,
+  createResponseWithQuery,
+} from "../../types/createResponseSchema.js";
+import { getDivyangDetailsDBTransaction } from "../../services/database/divyangDetails/transaction/read.js";
 import {
   DivyangDetailsSchemaType,
   DivyangDetailsSearchType,
   getDivyangDetailsSchema,
   getDivyangDetailsSearch,
+  getDivyangDetailsType,
 } from "../../types/divyangDetails/divyangDetailsSchema.js";
 import {
   getDivyangDetailsByIdDB,
@@ -20,13 +21,7 @@ import DivyangDetailsGlobalSearchConditions from "../../services/database/utils/
 import { createDivyangDetailsFilterInputObject } from "../../dto/divyangDetails/post.js";
 import { divyangDetailsColumnNameMapper } from "../../services/database/utils/divyangDetails/divyangDetailsMapper.js";
 import prisma from "../../services/database/database.js";
-import {
-    disabilityCardsResponse,
-    filesResponse,
-    getDivyangDetailsDisabilityCardsFileURLS,
-    getDivyangDetailsIDProofFileURLs
-} from "../../services/files/files.js";
-import log from "../../services/logger/logger.js";
+import { getDivyangFiles } from "../../services/files/get.js";
 
 const getDivyangDetails = async (
   request: Request,
@@ -70,44 +65,52 @@ const getDivyangDetails = async (
 };
 
 const getDivyangDetailsbyId = async (
-    request: Request,
-    response: Response,
-    next: NextFunction,
+  request: Request,
+  response: Response,
+  next: NextFunction
 ) => {
-    try {
-        const id: string = request.params.id
-        const divyangDetails:
-            | getDivyangDetailsSchema
-            | undefined = await getDivyangDetailsByIdDB(id)
-        const currentDate = new Date(Date.now()).toISOString()
-        const currentAuditLog = await getDivyangDetailsStatusDB(
-            prisma,
-            id,
-            currentDate,
-        )
-        const result = {
-            ...divyangDetails,
-            status: currentAuditLog?.status,
-            description: currentAuditLog?.description,
-            effectiveFromDate: currentAuditLog?.date,
-            timestamp: currentDate,
-        }
-        let fileURLs: filesResponse | undefined = [];
-        let disabilityCards: disabilityCardsResponse | undefined = [];
-        const personId = result?.personId;
-        if (personId) {
-             fileURLs = await getDivyangDetailsIDProofFileURLs(personId);
-             disabilityCards = await getDivyangDetailsDisabilityCardsFileURLS(personId);
-        }
-        log("info", "[getDivyangDetailsById]: fileURLs: %o", fileURLs);
-        log("info", "[getDivyangDetailsById]: fileURLs: %o", fileURLs);
+  try {
+    const id: string = request.params.id;
+    const divyangDetails: getDivyangDetailsType | undefined =
+      await getDivyangDetailsByIdDB(id);
+    const currentDate = new Date(Date.now()).toISOString();
+    const currentAuditLog = await getDivyangDetailsStatusDB(
+      prisma,
+      id,
+      currentDate
+    );
+    const result = {
+      ...divyangDetails,
+      status: currentAuditLog?.status,
+      description: currentAuditLog?.description,
+      effectiveFromDate: currentAuditLog?.date,
+      timestamp: currentDate,
+    };
+    const files = await getDivyangFiles(divyangDetails);
+    const responseData = createResponseWithFiles(result, files);
+    response.send(responseData);
+    // let fileURLs: filesResponse | undefined = [];
+    // let disabilityCards: disabilityCardsResponse | undefined = [];
+    // const personId = result?.personId;
+    // if (personId) {
+    //   fileURLs = await getDivyangDetailsIDProofFileURLs(personId);
+    //   disabilityCards = await getDivyangDetailsDisabilityCardsFileURLS(
+    //     personId
+    //   );
+    // }
+    // log("info", "[getDivyangDetailsById]: fileURLs: %o", fileURLs);
+    // log("info", "[getDivyangDetailsById]: fileURLs: %o", fileURLs);
 
-        const responseData = createResponseWithFiles(result, fileURLs, disabilityCards);
-        response.send(responseData)
-    } catch (error) {
-        next(error)
-    }
-}
+    // const responseData = createResponseWithFiles(
+    //   result,
+    //   fileURLs,
+    //   disabilityCards
+    // );
+    // response.send(responseData);
+  } catch (error) {
+    next(error);
+  }
+};
 
 const getDivyangDetailsSearchByColumn = async (
   request: Request,
