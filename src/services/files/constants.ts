@@ -81,4 +81,6 @@ export const IdProofKeyToFolderMap = new Map<string, Folders>([
   ["medicalInsuranceCardKey", Folders.MEDICAL_INSURANCE_CARD],
   ["disabilitySchemeCardKey", Folders.DISABILITY_SCHEME_CARD],
   ["BPL_OR_APL_CardKey", Folders.BPL_OR_APL_Card],
+  ["profilePhotoKey", Folders.PROFILE_PHOTO],
+  ["UDIDCardKey", Folders.UDID_CARD],
 ]);
