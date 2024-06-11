@@ -29,13 +29,15 @@ userRouter.get(
 userRouter.post(
   "",
   authorization(AuthorizationEnum.SEVAKENDRA_USERS),
-  fileHandler.single("profilePhoto"),
+  // fileHandler.single("profilePhoto"),
+  fileHandler.fields([{ name: "profilePhoto", maxCount: 1 }]),
   postUser
 );
 userRouter.put(
   "/:id",
   authorization(AuthorizationEnum.SEVAKENDRA_USERS),
-  fileHandler.single("profilePhoto"),
+  // fileHandler.single("profilePhoto"),
+  fileHandler.fields([{ name: "profilePhoto", maxCount: 1 }]),
   putUser
 );
 export default userRouter;
