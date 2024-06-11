@@ -9,12 +9,17 @@ import { updateDivyangProfileKeyDB } from "../database/divyangDetails/update.js"
 import { Request } from "express";
 const handleProfilePhotoFile = async (request: Request, isUser: Boolean) => {
   try {
+    if (!request.body.personId) {
+      throw new APIError("Person ID is required", StatusCodes.BAD_REQUEST);
+    }
     if (isUser) {
       if (request.body.files.profilePhotoFileName === null) {
         await deleteProfilePhotoFile(request.body.personId, isUser);
       }
     } else {
-      if (request.body.personalDetails.fileNames.profilePhotoFileName === null) {
+      if (
+        request.body.personalDetails.fileNames.profilePhotoFileName === null
+      ) {
         await deleteProfilePhotoFile(request.body.personId, isUser);
       }
     }
@@ -56,12 +61,15 @@ const updateProfilePhotoFile = async (
           profilePhotoKey: key,
           profilePhotoFileName: file.originalname,
         });
+        console.log("done");
       }
 
       await cloudStorage.uploadFile(file, key, folderPath);
+      console.log("done cloud");
     });
     return transaction;
   } catch (error) {
+    console.log(error);
     if (error instanceof APIError) throw error;
     else {
       throw new APIError(

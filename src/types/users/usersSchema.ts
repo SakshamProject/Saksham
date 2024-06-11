@@ -28,7 +28,7 @@ const usersPostSchema = z.object({
   status: z.nativeEnum(AuditLogStatusEnum),
   effectiveDate: dateSchema, // effective date
   description: z.string().optional(),
-  files: z.object({ profilePhotoFileName: z.string().nullable() }),
+  fileNames: z.object({ profilePhotoFileName: z.string().nullable() }),
 });
 type userPostRequestType = z.infer<typeof usersPostSchema>;
 
@@ -49,7 +49,7 @@ const usersPutSchema = z.object({
   // audit log
   auditlog: auditLogSchema.optional(),
   profilePhotoFile: z.string().optional(),
-  files: z.object({ profilePhotoFileName: z.string().nullable() }),
+  fileNames: z.object({ profilePhotoFileName: z.string().nullable() }),
 });
 type userPutRequestType = z.infer<typeof usersPutSchema>;
 type getUserType = Prisma.UserGetPayload<{
