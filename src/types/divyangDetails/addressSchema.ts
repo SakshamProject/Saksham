@@ -22,8 +22,12 @@ const addressRequestSchema = z
     MLAConstituencyId: uuidSchema.optional(),
     MPConstituencyId: uuidSchema.optional(),
     pincode: z.coerce.number().min(100000).max(999999),
-    
-    isSameAddress: z.coerce.boolean(),
+
+    isSameAddress: z.string().transform((val) => {
+      if (val === "true") return true;
+      if (val === "false") return false;
+      throw new Error("Invalid boolean string");
+    }),
 
     doorNumberCommunication: z.string(),
     flatNumberCommunication: z.string().optional(),

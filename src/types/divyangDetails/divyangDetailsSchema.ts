@@ -21,6 +21,26 @@ import { sortOrderEnum } from "../getRequestSchema.js";
 
 type getDivyangDetailsType = Prisma.DivyangDetailsGetPayload<{
   include: {
+    corporation: true;
+    mlaconstituency: true;
+    mpconstituency: true;
+    municipality: true;
+    townPanchayat: true;
+    taluk: true;
+    panchayatUnion: true;
+    district: {
+      include: { state: true };
+    };
+    corporationCommunication: true;
+    mlaconstituencyCommunication: true;
+    mpconstituencyCommunication: true;
+    municipalityCommunication: true;
+    townPanchayatCommunication: true;
+    talukCommunication: true;
+    panchayatUnionCommunication: true;
+    districtCommunication: {
+      include: { state: true };
+    };
     person: {
       select: {
         id: true;
@@ -41,15 +61,19 @@ type getDivyangDetailsType = Prisma.DivyangDetailsGetPayload<{
         userName: true;
       };
     };
-    district: true;
-    districtCommunication: true;
-    disabilities: true;
+    disabilities: {
+      include: {
+        disabilityType: true;
+        disabilitySubType: true;
+      };
+    };
     educationQualifications: {
       include: {
         educationQualification: true;
         educationQualificationType: true;
       };
     };
+    services: true;
   };
 }>;
 const divyangDetailsFilter = z

@@ -31,8 +31,6 @@ async function putServiceMappingDBTransaction(
   const transaction = await prisma.$transaction(
     async (prismaTransaction) => {
       try {
-        
-
         if (body.isCompleted === StatusEnum.COMPLETED) {
           if (body.donor) {
             const postDonorDBObject: donorSchemaType = createPostDonorObject(
@@ -63,8 +61,7 @@ async function putServiceMappingDBTransaction(
               id
             );
           }
-        } else if ((body.isCompleted === StatusEnum.STOPPED)) {
-
+        } else if (body.isCompleted === StatusEnum.STOPPED) {
           const updateServiceMappingDBObject =
             createUpdateServiceMappingStoppedDBObject(body, updatedById);
 
@@ -98,19 +95,18 @@ async function putServiceMappingDBTransaction(
               postNonsevaKendraFollowUpDBObject
             );
           }
-
-    
-        }else{
-          const serviceMappingDBObject = createUpdateServiceMappingWithSevaKendraFollowUpDBObject(body,updatedById);
+        } else {
+          const serviceMappingDBObject =
+            createUpdateServiceMappingWithSevaKendraFollowUpDBObject(
+              body,
+              updatedById
+            );
           const serviceMapping = await updateServiceMappingDB(
             prismaTransaction,
             serviceMappingDBObject,
             id
           );
-
         }
-
-  
 
         return id;
       } catch (error) {

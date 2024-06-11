@@ -22,7 +22,7 @@ educationalQualificationRouter.get(
 );
 educationalQualificationRouter.get(
   "/:id",
-  authorization(AuthorizationEnum.TYPE_MASTERS),
+  authorization(AuthorizationEnum.TYPE_MASTERS, MethodsEnum.DIVYANG_DROPDOWN),
   getEducationQualificationTypeById
 );
 educationalQualificationRouter.post(

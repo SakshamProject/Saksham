@@ -53,6 +53,21 @@ const getServiceMappingDB = async (
           divyang: {
             select: { id: true, firstName: true },
           },
+          sevaKendra: {
+            select: {
+              id: true,
+              name: true,
+              district: {
+                select: {
+                  id: true,
+                  name: true,
+                  state: {
+                    select: { id: true, name: true },
+                  },
+                },
+              },
+            },
+          },
         },
       });
     return serviceMapping;
@@ -94,6 +109,21 @@ const getServiceMappingByIdDB = async (id: string) => {
                       },
                     },
                   },
+                },
+              },
+            },
+          },
+        },
+        sevaKendra: {
+          select: {
+            id: true,
+            name: true,
+            district: {
+              select: {
+                id: true,
+                name: true,
+                state: {
+                  select: { id: true, name: true },
                 },
               },
             },
@@ -155,6 +185,21 @@ const getServiceMappingByDivyangIdDB = async (
                         },
                       },
                     },
+                  },
+                },
+              },
+            },
+          },
+          sevaKendra: {
+            select: {
+              id: true,
+              name: true,
+              district: {
+                select: {
+                  id: true,
+                  name: true,
+                  state: {
+                    select: { id: true, name: true },
                   },
                 },
               },

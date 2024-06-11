@@ -22,7 +22,7 @@ stateRouter.get(
 stateRouter.post("/", authorization(AuthorizationEnum.TYPE_MASTERS), postState);
 stateRouter.get(
   "/:id",
-  authorization(AuthorizationEnum.TYPE_MASTERS),
+  authorization(AuthorizationEnum.TYPE_MASTERS, MethodsEnum.DIVYANG_DROPDOWN),
   getStateById
 );
 stateRouter.delete(
