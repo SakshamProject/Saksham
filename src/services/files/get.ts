@@ -1,10 +1,10 @@
-import { StatusCodes } from "http-status-codes";
-import APIError from "../errors/APIError.js";
-import { cloudStorage } from "../s3/AWS_S3.js";
-import { Folders, IdProofKeyToFolderMap, divyangKeysSet } from "./constants.js";
-import { Prisma } from "@prisma/client";
-import { getDivyangDetailsType } from "../../types/divyangDetails/divyangDetailsSchema.js";
-import { getUserType } from "../../types/users/usersSchema.js";
+import { StatusCodes } from 'http-status-codes';
+import APIError from '../errors/APIError.js';
+import { cloudStorage } from '../s3/AWS_S3.js';
+import { Folders, IdProofKeyToFolderMap, divyangKeysSet } from './constants.js';
+import { Prisma } from '@prisma/client';
+import { getDivyangDetailsType } from '../../types/divyangDetails/divyangDetailsSchema.js';
+import { getUserType } from '../../types/users/usersSchema.js';
 
 const getUserFiles = async (user: getUserType | undefined) => {
   try {
@@ -24,9 +24,13 @@ const getDivyangFiles = async (
       let files = {};
       for (const [key, value] of Object.entries(divyangDetails)) {
         if (divyangKeysSet.has(key) && value != null) {
-          const file = await getFileFromCloud(key);
-          const fieldName = IdProofKeyToFolderMap.get(key) || "default";
-          files = { ...files, [fieldName]: file };
+          if (value === typeof String) {
+            const file = await getFileFromCloud(value);
+            const fieldName = IdProofKeyToFolderMap.get(key) || 'default';
+            files = { ...files, [fieldName]: file };
+          } else {
+            throw new APIError('Error in key value');
+          }
         }
       }
       const disabilityCards = await getDisabilityOfDivyangFiles(
@@ -53,7 +57,7 @@ const getDisabilityOfDivyangFiles = async (
     return files;
   } catch (error) {
     throw new APIError(
-      "There was an error retrieving disabilitycard files. Please try again."
+      'There was an error retrieving disabilitycard files. Please try again.'
     );
   }
 };
@@ -64,10 +68,10 @@ const getFileFromCloud = async (key: string) => {
     return response;
   } catch (error) {
     throw new APIError(
-      "There was an error retrieving File. Please try again.",
+      'There was an error retrieving File. Please try again.',
       StatusCodes.INTERNAL_SERVER_ERROR,
-      "FileUploadError",
-      "E"
+      'FileUploadError',
+      'E'
     );
   }
 };
