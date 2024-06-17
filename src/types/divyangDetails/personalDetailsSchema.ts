@@ -84,9 +84,11 @@ const updatePersonalDetailsRequestSchema = z.object({
   community: inputFieldSchema,
   extraCurricularActivity: inputFieldSchema.optional(),
   educationQualifications: educationQualificationsSchema.array(),
-  fileNames: z.object({
-    profilePhotoFileName: z.string().nullable().optional(),
-  }),
+  fileNames: z
+    .object({
+      profilePhotoFileName: z.string().nullable().optional(),
+    })
+    .optional(),
 });
 
 type PersonalDetails = z.infer<typeof personalDetailsRequestSchema>;
