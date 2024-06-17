@@ -1,6 +1,9 @@
 import { Request } from 'express';
 import { handleProfilePhotoFile } from './profilePhoto.js';
-import { updateDivyangDetailsRequest } from '../../types/divyangDetails/divyangDetailsSchema.js';
+import {
+  updateDivyangDetailsRequest,
+  updateDivyangDetailsRequestSchema,
+} from '../../types/divyangDetails/divyangDetailsSchema.js';
 import { handleIdProofFiles } from './IdProof.js';
 import { handleUDIDCardFile } from './udidCard.js';
 import { updateDisabilityCardsCloud } from './disabilityCard.js';
@@ -12,7 +15,11 @@ const handleDivyangDetailsFiles = async (
   request: Request
 ) => {
   try {
-    const divyangDetails: updateDivyangDetailsRequest = request.body;
+    const divyangDetails: updateDivyangDetailsRequest =
+      updateDivyangDetailsRequestSchema.parse(request.body);
+    if (request.body.fileNames === undefined) {
+      return;
+    }
     if (divyangDetails.pageNumber === 1) {
       await handleProfilePhotoFile(
         prismaTransaction,

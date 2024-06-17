@@ -65,12 +65,14 @@ const updateUserTransactionDB = async (
         if (updatedUser && request.file) {
           saveFile(updatedUser.id, request.file);
         }
-        await handleProfilePhotoFile(
-          prismaTransaction,
-          request,
-          true,
-          updatedUser?.personId
-        );
+        if (body.fileNames) {
+          await handleProfilePhotoFile(
+            prismaTransaction,
+            request,
+            true,
+            updatedUser?.personId
+          );
+        }
 
         return updatedUser;
       },
