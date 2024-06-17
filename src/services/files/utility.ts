@@ -1,6 +1,6 @@
-import path from "path";
-import { Folders } from "./constants.js";
-import { FilesType } from "../../types/files.js";
+import path from 'path';
+import { Folders } from './constants.js';
+import { FilesType } from '../../types/files.js';
 
 function generateKey(
   personId: string,
@@ -17,8 +17,8 @@ const generateKeyForDisabilityCard = (
   file: Express.Multer.File,
   disabilityId: string
 ) => {
-  const folderPath = personId + "/" + Folders.DISABILITY_CARDS;
-  const key = folderPath + "/" + disabilityId + "/" + file.originalname;
+  const folderPath = personId + '/' + Folders.DISABILITY_CARDS;
+  const key = folderPath + '/' + disabilityId + '/' + file.originalname;
   return { key, folderPath };
 };
 

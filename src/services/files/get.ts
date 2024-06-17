@@ -24,13 +24,9 @@ const getDivyangFiles = async (
       let files = {};
       for (const [key, value] of Object.entries(divyangDetails)) {
         if (divyangKeysSet.has(key) && value != null) {
-          if (value === typeof String) {
-            const file = await getFileFromCloud(value);
-            const fieldName = IdProofKeyToFolderMap.get(key) || 'default';
-            files = { ...files, [fieldName]: file };
-          } else {
-            throw new APIError('Error in key value');
-          }
+          const file = await getFileFromCloud(value.toString());
+          const fieldName = IdProofKeyToFolderMap.get(key) || 'default';
+          files = { ...files, [fieldName]: file };
         }
       }
       const disabilityCards = await getDisabilityOfDivyangFiles(
