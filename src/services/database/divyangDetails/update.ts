@@ -1,9 +1,9 @@
-import { Prisma } from "@prisma/client";
-import { updateDivyangDetails } from "../../../types/divyangDetails/divyangDetailsSchema.js";
-import throwDatabaseError from "../utils/errorHandler.js";
-import { DisabilityOfDivyang } from "../../../types/divyangDetails/disabilityDetailsSchema.js";
-import { EducationQualificationsSchemaType } from "../../../types/divyangDetails/personalDetailsSchema.js";
-import log from "../../logger/logger.js";
+import { Prisma } from '@prisma/client';
+import { updateDivyangDetails } from '../../../types/divyangDetails/divyangDetailsSchema.js';
+import throwDatabaseError from '../utils/errorHandler.js';
+import { DisabilityOfDivyang } from '../../../types/divyangDetails/disabilityDetailsSchema.js';
+import { EducationQualificationsSchemaType } from '../../../types/divyangDetails/personalDetailsSchema.js';
+import log from '../../logger/logger.js';
 
 const updateDivyangDetailsDB = async (
   prismaTransaction: Prisma.TransactionClient,
@@ -115,12 +115,12 @@ async function divayangDetailsUpdateFileKeysDB(
 }
 
 async function updateDivyangProfileKeyDB(
-  prisma: Prisma.TransactionClient,
+  prismaTransaction: Prisma.TransactionClient,
   personId: string,
   data: Prisma.DivyangDetailsUpdateInput
 ) {
   try {
-    const result = await prisma.divyangDetails.update({
+    const result = await prismaTransaction.divyangDetails.update({
       where: {
         personId: personId,
       },

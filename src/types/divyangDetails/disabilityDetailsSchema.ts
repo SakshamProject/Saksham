@@ -1,7 +1,7 @@
-import { z } from "zod";
-import inputFieldSchema, { uuidSchema } from "../inputFieldSchema.js";
-import { CertificateIssueAuthorityEnum, Prisma } from "@prisma/client";
-import { EducationQualificationsSchemaType } from "./personalDetailsSchema.js";
+import { z } from 'zod';
+import inputFieldSchema, { uuidSchema } from '../inputFieldSchema.js';
+import { CertificateIssueAuthorityEnum, Prisma } from '@prisma/client';
+import { EducationQualificationsSchemaType } from './personalDetailsSchema.js';
 
 const disabilityOfDivyangSchema = z.object({
   id: uuidSchema.optional(),
@@ -10,9 +10,9 @@ const disabilityOfDivyangSchema = z.object({
   isDisabilitySinceBirth: z
     .string()
     .transform((val) => {
-      if (val === "true") return true;
-      if (val === "false") return false;
-      throw new Error("Invalid boolean string");
+      if (val === 'true') return true;
+      if (val === 'false') return false;
+      throw new Error('Invalid boolean string');
     })
     .optional(),
   disabilitySince: z.string().datetime().optional(),
@@ -22,7 +22,7 @@ const disabilityOfDivyangSchema = z.object({
   certificateIssueAuthority: z
     .nativeEnum(CertificateIssueAuthorityEnum)
     .optional(),
-  disabilityCardFileName: z.string().optional(), // url
+  disabilityCardFileName: z.string().optional(), // fileName with extension
   dateOfIssue: z.string().datetime().optional(),
 });
 type DisabilityOfDivyang = z.infer<typeof disabilityOfDivyangSchema>;
@@ -35,14 +35,14 @@ const disabiltyDetailsRequestSchema = z
     UDIDCardFile: z.string(),
     UDIDEnrollmentNumber: z.string().optional(),
     UDIDCardNumber: z.string().optional(),
-    files: z.object({ UDIDCardFileName: z.string().nullable() }),
+    fileNames: z.object({ UDIDCardFileName: z.string().nullable().optional() }),
   })
   .refine((data) => {
     return (
       data.UDIDCardNumber !== undefined ||
       data.UDIDEnrollmentNumber !== undefined
     );
-  }, "UDIDCardNumber or UDIDEnrollmentNumber must be present");
+  }, 'UDIDCardNumber or UDIDEnrollmentNumber must be present');
 
 type DisabilityDetails = z.infer<typeof disabiltyDetailsRequestSchema>;
 

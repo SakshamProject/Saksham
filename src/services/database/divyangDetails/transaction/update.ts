@@ -1,35 +1,38 @@
-import { AuditLogStatusEnum, Prisma } from "@prisma/client";
-import { createUpdateDTOObject } from "../../../../dto/divyangDetails/put.js";
+import { AuditLogStatusEnum, Prisma } from '@prisma/client';
+import { createUpdateDTOObject } from '../../../../dto/divyangDetails/put.js';
 import {
   updateDivyangDetails,
   updateDivyangDetailsRequest,
-} from "../../../../types/divyangDetails/divyangDetailsSchema.js";
-import prisma from "../../database.js";
-import throwDatabaseError from "../../utils/errorHandler.js";
-import { createDivyangDetailsAuditLogDB } from "../create.js";
+} from '../../../../types/divyangDetails/divyangDetailsSchema.js';
+import prisma from '../../database.js';
+import throwDatabaseError from '../../utils/errorHandler.js';
+import { createDivyangDetailsAuditLogDB } from '../create.js';
 import {
   getDisabilityOfDivyangByDivyangIdDB,
   getDivyangDetailsDependencyStatusDB,
   getDivyangDetailsStatusDB,
   getEducationQualificationOfDivyangByDivyangIdDB,
-} from "../read.js";
+} from '../read.js';
 import {
   updateDisabilityOfDivyangDB,
   updateDivyangDetailsDB,
   updateEducationQualificationOfDivyangDB,
-} from "../update.js";
+} from '../update.js';
 import {
   DisabilityOfDivyangList,
   EducationQualificationOfDivyangList,
-} from "../../../../types/divyangDetails/disabilityDetailsSchema.js";
-import defaults from "../../../../defaults.js";
-import APIError from "../../../errors/APIError.js";
-import { StatusCodes } from "http-status-codes";
+} from '../../../../types/divyangDetails/disabilityDetailsSchema.js';
+import defaults from '../../../../defaults.js';
+import APIError from '../../../errors/APIError.js';
+import { StatusCodes } from 'http-status-codes';
+import { handleDivyangDetailsFiles } from '../../../files/divyangDetails.js';
+import { Request } from 'express';
 
 const updateDivyangDetailsTransactionDB = async (
   divyangDetails: updateDivyangDetailsRequest,
   updatedBy: string = defaults.updatedById,
-  id: string
+  id: string,
+  request: Request
 ) => {
   try {
     const transaction = await prisma.$transaction(
@@ -56,7 +59,7 @@ const updateDivyangDetailsTransactionDB = async (
                 );
               if (dependencyStatus) {
                 throw new APIError(
-                  "Divyang might be added mapped with incomplete services. Cannot be deactivated",
+                  'Divyang might be added mapped with incomplete services. Cannot be deactivated',
                   StatusCodes.BAD_REQUEST
                 );
               }
@@ -126,6 +129,7 @@ const updateDivyangDetailsTransactionDB = async (
           updateDTOObject,
           id
         );
+        await handleDivyangDetailsFiles(prismaTransaction, request);
         return updatedDivyangDetails;
       },
       {
