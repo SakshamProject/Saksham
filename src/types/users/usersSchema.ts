@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { GenderEnum, AuditLogStatusEnum, Prisma } from "@prisma/client";
+import { z } from 'zod';
+import { GenderEnum, AuditLogStatusEnum, Prisma } from '@prisma/client';
 import inputFieldSchema, {
   auditLogSchema,
   dateSchema,
@@ -7,9 +7,9 @@ import inputFieldSchema, {
   passwordSchema,
   phoneNumberSchema,
   uuidSchema,
-} from "../inputFieldSchema.js";
-import { specialCharsRegex, userNameRegex } from "../regex.js";
-import { sortOrderEnum } from "../getRequestSchema.js";
+} from '../inputFieldSchema.js';
+import { specialCharsRegex, userNameRegex } from '../regex.js';
+import { sortOrderEnum } from '../getRequestSchema.js';
 
 const usersPostSchema = z.object({
   sevaKendraId: uuidSchema.optional(),
@@ -28,7 +28,9 @@ const usersPostSchema = z.object({
   status: z.nativeEnum(AuditLogStatusEnum),
   effectiveDate: dateSchema, // effective date
   description: z.string().optional(),
-  fileNames: z.object({ profilePhotoFileName: z.string().nullable() }),
+  fileNames: z.object({
+    profilePhotoFileName: z.string().nullable().optional(),
+  }),
 });
 type userPostRequestType = z.infer<typeof usersPostSchema>;
 
@@ -49,7 +51,9 @@ const usersPutSchema = z.object({
   // audit log
   auditlog: auditLogSchema.optional(),
   profilePhotoFile: z.string().optional(),
-  fileNames: z.object({ profilePhotoFileName: z.string().nullable() }),
+  fileNames: z.object({
+    profilePhotoFileName: z.string().nullable().optional(),
+  }),
 });
 type userPutRequestType = z.infer<typeof usersPutSchema>;
 type getUserType = Prisma.UserGetPayload<{
@@ -89,30 +93,30 @@ type getUserType = Prisma.UserGetPayload<{
   };
 }>;
 enum userFilterOperationsEnum {
-  startsWith = "startsWith",
-  endsWith = "endsWith",
-  equals = "equals",
-  notEquals = "notEquals",
+  startsWith = 'startsWith',
+  endsWith = 'endsWith',
+  equals = 'equals',
+  notEquals = 'notEquals',
 }
 
 enum userFilterColumnNamesEnum {
-  firstName = "firstName",
-  lastName = "lastName",
-  name = "name",
-  district = "district",
-  state = "state",
-  sevaKendraName = "sevaKendraName",
-  designation = "designationName",
+  firstName = 'firstName',
+  lastName = 'lastName',
+  name = 'name',
+  district = 'district',
+  state = 'state',
+  sevaKendraName = 'sevaKendraName',
+  designation = 'designationName',
 }
 
 enum userOrderByEnum {
-  createdAt = "createdAt",
-  updatedAt = "updatedAt",
-  name = "name",
-  district = "district",
-  state = "state",
-  sevaKendraName = "sevaKendraName",
-  designation = "designationName",
+  createdAt = 'createdAt',
+  updatedAt = 'updatedAt',
+  name = 'name',
+  district = 'district',
+  state = 'state',
+  sevaKendraName = 'sevaKendraName',
+  designation = 'designationName',
 }
 
 const userFilterSchema = z

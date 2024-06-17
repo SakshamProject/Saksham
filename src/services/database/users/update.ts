@@ -1,6 +1,6 @@
-import { Prisma } from "@prisma/client";
-import throwDatabaseError from "../utils/errorHandler.js";
-import prisma from "../database.js";
+import { Prisma } from '@prisma/client';
+import throwDatabaseError from '../utils/errorHandler.js';
+import prisma from '../database.js';
 
 async function updateUserDB(
   prismaTransaction: Prisma.TransactionClient,
@@ -23,12 +23,12 @@ async function updateUserDB(
 }
 
 async function updateUserProfileKeyDB(
-  prisma: Prisma.TransactionClient,
+  prismaTransaction: Prisma.TransactionClient,
   personId: string,
   data: Prisma.UserUpdateInput
 ) {
   try {
-    const result = await prisma.user.update({
+    const result = await prismaTransaction.user.update({
       where: {
         personId: personId,
       },
