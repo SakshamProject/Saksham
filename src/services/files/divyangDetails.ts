@@ -17,10 +17,12 @@ const handleDivyangDetailsFiles = async (
   try {
     const divyangDetails: updateDivyangDetailsRequest =
       updateDivyangDetailsRequestSchema.parse(request.body);
-    if (request.body.fileNames === undefined) {
-      return;
-    }
+
     if (divyangDetails.pageNumber === 1) {
+      if (request.body.personalDetails.fileNames === undefined) {
+        console.log('no filenames');
+        return;
+      }
       await handleProfilePhotoFile(
         prismaTransaction,
         request,
@@ -29,9 +31,18 @@ const handleDivyangDetailsFiles = async (
       );
     }
     if (divyangDetails.pageNumber === 2) {
+      if (request.body.IdProofUploads.fileNames === undefined) {
+        console.log('no filenames');
+
+        return;
+      }
       await handleIdProofFiles(prismaTransaction, request);
     }
-    if (divyangDetails.pageNumber === 3) {
+    if (divyangDetails.pageNumber === 4) {
+      if (request.body.disabilityDetails.fileNames === undefined) {
+        console.log('no filenames');
+        return;
+      }
       await handleUDIDCardFile(prismaTransaction, request);
 
       if (!Array.isArray(request.files) && request.files) {
