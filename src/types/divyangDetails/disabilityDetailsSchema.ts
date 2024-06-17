@@ -35,7 +35,9 @@ const disabiltyDetailsRequestSchema = z
     UDIDCardFile: z.string(),
     UDIDEnrollmentNumber: z.string().optional(),
     UDIDCardNumber: z.string().optional(),
-    fileNames: z.object({ UDIDCardFileName: z.string().nullable().optional() }),
+    fileNames: z
+      .object({ UDIDCardFileName: z.string().nullable().optional() })
+      .optional(),
   })
   .refine((data) => {
     return (

@@ -28,17 +28,19 @@ const IdProofUploadsRequestSchema = z.object({
   // medicalInsuranceCardFile: z.string().optional(),
   // disabilitySchemeCardFile: z.string().optional(),
   // BPL_OR_APL_CardFile: z.string().optional(),
-  fileNames: z.object({
-    voterIdFileName: z.string().nullable().optional(),
-    panCardFileName: z.string().nullable().optional(),
-    drivingLicenseFileName: z.string().nullable().optional(),
-    rationCardFileName: z.string().nullable().optional(),
-    aadharCardFileName: z.string().nullable().optional(),
-    pensionCardFileName: z.string().nullable().optional(),
-    medicalInsuranceCardFileName: z.string().nullable().optional(),
-    disabilitySchemeCardFileName: z.string().nullable().optional(),
-    BPL_OR_APL_CardFileName: z.string().nullable().optional(),
-  }),
+  fileNames: z
+    .object({
+      voterIdFileName: z.string().nullable().optional(),
+      panCardFileName: z.string().nullable().optional(),
+      drivingLicenseFileName: z.string().nullable().optional(),
+      rationCardFileName: z.string().nullable().optional(),
+      aadharCardFileName: z.string().nullable().optional(),
+      pensionCardFileName: z.string().nullable().optional(),
+      medicalInsuranceCardFileName: z.string().nullable().optional(),
+      disabilitySchemeCardFileName: z.string().nullable().optional(),
+      BPL_OR_APL_CardFileName: z.string().nullable().optional(),
+    })
+    .optional(),
 });
 // .refine((val) => {
 //   const fileNames = val.fileNames;
