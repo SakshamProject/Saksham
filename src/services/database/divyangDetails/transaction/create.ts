@@ -15,12 +15,17 @@ export const createDivyangDetailsTransactionDB = (
         prismaTransaction,
         divyangDetailsDBObject
       );
-      await handleProfilePhotoFile(
-        prismaTransaction,
-        request,
-        false,
-        result?.personId
-      );
+      if (
+        request.body.personalDetails &&
+        request.body.personalDetails.fileNames
+      ) {
+        await handleProfilePhotoFile(
+          prismaTransaction,
+          request,
+          false,
+          result?.personId
+        );
+      }
       return result;
     });
     return transaction;
