@@ -33,29 +33,36 @@ const updateDisabilityOfDivyangDB = async (
   divyangId: string
 ) => {
   try {
+    let data: Prisma.DisabilityOfDivyangUpdateInput = {
+      divyang: {
+        connect: { id: divyangId },
+      },
+      disabilityType: {
+        connect: { id: disabilities.disabilityTypeId },
+      },
+      disabilityDueTo: disabilities.disabilityDueTo,
+
+      isDisabilitySinceBirth: disabilities.isDisabilitySinceBirth,
+      disabilitySince: disabilities.disabilitySince,
+      disabilityArea: disabilities.disabilityArea,
+      disabilityPercentage: disabilities.disabilityPercentage,
+      certificateIssueAuthority: disabilities.certificateIssueAuthority,
+      // disabilityCardUrl: disabilities.disabilityCardUrl,
+    };
+    if (disabilities.disabilitySubTypeId) {
+      data = {
+        ...data,
+        disabilitySubType: {
+          connect: { id: disabilities.disabilitySubTypeId },
+        },
+      };
+    }
     const updatedDisabilityOfDivyang =
       await prismaTrasaction.disabilityOfDivyang.update({
         where: {
           id: id,
         },
-        data: {
-          divyang: {
-            connect: { id: divyangId },
-          },
-          disabilityType: {
-            connect: { id: disabilities.disabilityTypeId },
-          },
-          disabilityDueTo: disabilities.disabilityDueTo,
-          disabilitySubType: {
-            connect: { id: disabilities.disabilitySubTypeId },
-          },
-          isDisabilitySinceBirth: disabilities.isDisabilitySinceBirth,
-          disabilitySince: disabilities.disabilitySince,
-          disabilityArea: disabilities.disabilityArea,
-          disabilityPercentage: disabilities.disabilityPercentage,
-          certificateIssueAuthority: disabilities.certificateIssueAuthority,
-          // disabilityCardUrl: disabilities.disabilityCardUrl,
-        },
+        data: data,
       });
     return updatedDisabilityOfDivyang;
   } catch (error) {
