@@ -1,10 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { DisabilityOfDivyang } from '../../../types/divyangDetails/disabilityDetailsSchema.js';
 
-const createDisabilityOfDivyangDBObject = (
-  disability: DisabilityOfDivyang,
-  key: string
-) => {
+const createDisabilityOfDivyangDBObject = (disability: DisabilityOfDivyang) => {
   const newDisability: Prisma.DisabilityOfDivyangCreateInput = {
     disabilityType: {
       connect: { id: disability.disabilityTypeId },
@@ -22,10 +19,6 @@ const createDisabilityOfDivyangDBObject = (
     disabilitySince: disability.disabilitySince,
     isDisabilitySinceBirth: disability.isDisabilitySinceBirth,
   };
-  if (key) {
-    newDisability.disabilityCardKey = key;
-    newDisability.disabilityCardFileName = disability.disabilityCardFileName;
-  }
   if (disability.disabilitySubTypeId) {
     newDisability.disabilitySubType = {
       connect: { id: disability.disabilitySubTypeId },

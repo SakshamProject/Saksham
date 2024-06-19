@@ -1,18 +1,69 @@
 import { Prisma } from '@prisma/client';
 import throwDatabaseError from '../../utils/errorHandler.js';
 import prisma from '../../database.js';
+import { Request } from 'express';
+import { handleUpdateDisabilityCard } from '../../../files/disabilityOfDivyang.js';
 
-const createDisabilityOfDivyangDB = async (
-  disabilityOfDivyang: Prisma.DisabilityOfDivyangCreateInput
+const createDisabilityOfDivyangTransactionDB = async (
+  request: Request,
+  disability: Prisma.DisabilityOfDivyangCreateInput
 ) => {
   try {
-    const newDisability = await prisma.disabilityOfDivyang.create({
-      data: disabilityOfDivyang,
+    const transaction = await prisma.$transaction(async (prismaTransaction) => {
+      const result = await createDisabilityOfDivyangDB(
+        prismaTransaction,
+        disability
+      );
+      const disabilityId = result?.id;
+      const personId = result?.divyang.personId;
+      if (
+        disabilityId !== undefined &&
+        personId !== undefined &&
+        disability.disabilityCardFileName !== undefined
+      ) {
+        const key: string | null = await handleUpdateDisabilityCard(
+          request,
+          personId,
+          disabilityId
+        );
+        return await prismaTransaction.disabilityOfDivyang.update({
+          where: {
+            id: disabilityId,
+          },
+          data: {
+            disabilityCardFileName: disability.disabilityCardFileName,
+            disabilityCardKey: key,
+          },
+        });
+      }
+
+      return result;
     });
-    return newDisability;
+    return transaction;
   } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
+    throwDatabaseError(error);
   }
 };
 
-export { createDisabilityOfDivyangDB };
+const createDisabilityOfDivyangDB = async (
+  prismaTransaction: Prisma.TransactionClient,
+  disabilityOfDivyang: Prisma.DisabilityOfDivyangCreateInput
+) => {
+  try {
+    const newDisability = await prismaTransaction.disabilityOfDivyang.create({
+      data: disabilityOfDivyang,
+      include: {
+        divyang: {
+          select: {
+            personId: true,
+          },
+        },
+      },
+    });
+    return newDisability;
+  } catch (error) {
+    throwDatabaseError(error);
+  }
+};
+
+export { createDisabilityOfDivyangDB, createDisabilityOfDivyangTransactionDB };
