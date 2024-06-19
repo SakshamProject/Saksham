@@ -71,4 +71,9 @@ const getFileFromCloud = async (key: string) => {
     );
   }
 };
-export { getDivyangFiles, getUserFiles, getDisabilityOfDivyangFiles };
+export {
+  getDivyangFiles,
+  getUserFiles,
+  getDisabilityOfDivyangFiles,
+  getFileFromCloud,
+};
