@@ -32,7 +32,7 @@ const handleUDIDCardFile = async (
   }
 };
 
-const updateUDIDCardToCloud = (personId: string, file: Express.Multer.File) => {
+const updateUDIDCardToCloud = async (personId: string, file: Express.Multer.File) => {
   try {
     const transaction = prisma.$transaction(async (prismaTransaction) => {
       const { key, folderPath } = generateKey(
