@@ -4,6 +4,8 @@ import { CertificateIssueAuthorityEnum, Prisma } from '@prisma/client';
 import { EducationQualificationsSchemaType } from './personalDetailsSchema.js';
 
 const disabilityOfDivyangSchema = z.object({
+  personId: uuidSchema,
+  divyangId: uuidSchema,
   id: uuidSchema.optional(),
   disabilityTypeId: uuidSchema,
   disabilitySubTypeId: uuidSchema.optional(),
