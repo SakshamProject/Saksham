@@ -4,8 +4,10 @@ import { cloudStorage } from '../s3/AWS_S3.js';
 import { Folders } from './constants.js';
 import { generateKeyForDisabilityCard, getFile } from './utility.js';
 import { Request } from 'express';
+import { Prisma } from '@prisma/client';
 
 const handleUpdateDisabilityCard = async (
+  prismaTransaction: Prisma.TransactionClient,
   request: Request,
   personId: string,
   disabilityId: string
@@ -13,14 +15,19 @@ const handleUpdateDisabilityCard = async (
   if (!Array.isArray(request.files) && request.files) {
     const file = getFile(request.files, Folders.DISABILITY_CARDS);
     if (file) {
-      return await updateDisabilityCardToCloud(personId, file, disabilityId);
+      return await updateDisabilityCardToCloud(
+        prismaTransaction,
+        personId,
+        file,
+        disabilityId
+      );
     }
   }
-
-  return null;
+  return {};
 };
 
 const updateDisabilityCardToCloud = async (
+  prismaTransaction: Prisma.TransactionClient,
   personId: string,
   file: Express.Multer.File,
   disabilityId: string
@@ -31,8 +38,17 @@ const updateDisabilityCardToCloud = async (
       file,
       disabilityId
     );
+    const result = await prismaTransaction.disabilityOfDivyang.update({
+      where: {
+        id: disabilityId,
+      },
+      data: {
+        disabilityCardFileName: file.originalname,
+        disabilityCardKey: key,
+      },
+    });
     const s3Result = await cloudStorage.uploadFile(file, key, folderPath);
-    return key;
+    return result;
   } catch (error) {
     throw new APIError(
       'There was an error uploading Disability card. Please try again.',

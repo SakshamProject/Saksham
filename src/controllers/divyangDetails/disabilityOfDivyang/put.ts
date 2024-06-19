@@ -3,23 +3,25 @@ import {
   DisabilityOfDivyang,
   disabilityOfDivyangSchema,
 } from '../../../types/divyangDetails/disabilityDetailsSchema.js';
-import { createDisabilityOfDivyangDBObject } from '../../../dto/divyangDetails/disabilityOfDivyang/post.js';
-import { createDisabilityOfDivyangTransactionDB } from '../../../services/database/divyangDetails/disabilityOfDivyang/create.js';
+import { updateDisabilityOfDivyangDBObject } from '../../../dto/divyangDetails/disabilityOfDivyang/put.js';
+import { updateDisabilityOfDivyangTrasactionDB } from '../../../services/database/divyangDetails/disabilityOfDivyang/update.js';
 import { createResponseOnlyData } from '../../../types/createResponseSchema.js';
 
-const postDisabilityOfDivyang = async (
+const putDisabilityOfDivyang = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
   try {
+    const id: string = request.params.id;
     const disability: DisabilityOfDivyang = disabilityOfDivyangSchema.parse(
       request.body
     );
-    const newDisability = createDisabilityOfDivyangDBObject(disability);
-    const result = await createDisabilityOfDivyangTransactionDB(
+    const disabilityDBObject = updateDisabilityOfDivyangDBObject(disability);
+    const result = await updateDisabilityOfDivyangTrasactionDB(
       request,
-      newDisability
+      id,
+      disabilityDBObject
     );
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
@@ -28,4 +30,4 @@ const postDisabilityOfDivyang = async (
   }
 };
 
-export { postDisabilityOfDivyang };
+export { putDisabilityOfDivyang };
