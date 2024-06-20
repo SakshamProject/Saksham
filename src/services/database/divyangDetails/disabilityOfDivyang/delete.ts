@@ -7,6 +7,13 @@ const deleteDisabilityOfDivyangDB = (id: string) => {
       where: {
         id: id,
       },
+      include: {
+        divyang: {
+          select: {
+            personId: true,
+          },
+        },
+      },
     });
     return deletedDisability;
   } catch (error) {
