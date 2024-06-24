@@ -3,7 +3,6 @@ import throwDatabaseError from '../../utils/errorHandler.js';
 import prisma from '../../database.js';
 import { Request } from 'express';
 import { handleUpdateDisabilityCard } from '../../../files/disabilityOfDivyang.js';
-import { updateDisabilityOfDivyangDBObject } from '../../../../dto/divyangDetails/disabilityOfDivyang/put.js';
 
 const updateDisabilityOfDivyangTrasactionDB = async (
   request: Request,

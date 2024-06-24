@@ -19,7 +19,7 @@ const disabilityOfDivyangSchema = z.object({
   disabilityPercentage: z.coerce.number().min(0).max(100),
   disabilityDueTo: z.string(),
   certificateIssueAuthority: z.nativeEnum(CertificateIssueAuthorityEnum),
-  disabilityCardFileName: z.string(), // fileName with extension
+  disabilityCardFileName: z.string().optional(), // fileName with extension
   dateOfIssue: z.string().datetime(),
 });
 type DisabilityOfDivyang = z.infer<typeof disabilityOfDivyangSchema>;
