@@ -13,7 +13,7 @@ const handleUDIDCardFile = async (
   request: Request
 ) => {
   try {
-    if (request.body.fileNames.UDIDCardFileName === null) {
+    if (request.body.disabilityDetails.fileNames.UDIDCardFileName === null) {
       deleteUDIDCardFromCloud(prismaTransaction, request.body.personId);
     }
     if (!Array.isArray(request.files) && request.files) {
