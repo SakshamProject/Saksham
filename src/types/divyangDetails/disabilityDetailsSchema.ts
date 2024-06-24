@@ -9,28 +9,23 @@ const disabilityOfDivyangSchema = z.object({
   id: uuidSchema.optional(),
   disabilityTypeId: uuidSchema,
   disabilitySubTypeId: uuidSchema.optional(),
-  isDisabilitySinceBirth: z
-    .string()
-    .transform((val) => {
-      if (val === 'true') return true;
-      if (val === 'false') return false;
-      throw new Error('Invalid boolean string');
-    })
-    .optional(),
+  isDisabilitySinceBirth: z.string().transform((val) => {
+    if (val === 'true') return true;
+    if (val === 'false') return false;
+    throw new Error('Invalid boolean string');
+  }),
   disabilitySince: z.string().datetime().optional(),
-  disabilityArea: z.string().optional(),
-  disabilityPercentage: z.coerce.number().min(0).max(100).optional(),
+  disabilityArea: z.string(),
+  disabilityPercentage: z.coerce.number().min(0).max(100),
   disabilityDueTo: z.string(),
-  certificateIssueAuthority: z
-    .nativeEnum(CertificateIssueAuthorityEnum)
-    .optional(),
-  disabilityCardFileName: z.string().optional(), // fileName with extension
-  dateOfIssue: z.string().datetime().optional(),
+  certificateIssueAuthority: z.nativeEnum(CertificateIssueAuthorityEnum),
+  disabilityCardFileName: z.string(), // fileName with extension
+  dateOfIssue: z.string().datetime(),
 });
 type DisabilityOfDivyang = z.infer<typeof disabilityOfDivyangSchema>;
 const disabiltyDetailsRequestSchema = z
   .object({
-    disabilities: disabilityOfDivyangSchema.array(),
+    // disabilities: disabilityOfDivyangSchema.array(),
     districtCode: z.string(),
     stateCode: z.string(),
     identityCardNumber: z.string(),

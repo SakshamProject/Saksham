@@ -1,9 +1,9 @@
 import prisma from '../../database.js';
 import throwDatabaseError from '../../utils/errorHandler.js';
 
-const deleteDisabilityOfDivyangDB = (id: string) => {
+const deleteDisabilityOfDivyangDB = async (id: string) => {
   try {
-    const deletedDisability = prisma.disabilityOfDivyang.delete({
+    const deletedDisability = await prisma.disabilityOfDivyang.delete({
       where: {
         id: id,
       },

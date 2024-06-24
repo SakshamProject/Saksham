@@ -19,22 +19,15 @@ const createDisabilityOfDivyangTransactionDB = async (
       if (
         disabilityId !== undefined &&
         personId !== undefined &&
-        disability.disabilityCardFileName !== undefined
+        request.body.disabilityCardFileName !== undefined
       ) {
-        const key: string | null = await handleUpdateDisabilityCard(
+        const fileUpdateResult = await handleUpdateDisabilityCard(
+          prismaTransaction,
           request,
           personId,
           disabilityId
         );
-        return await prismaTransaction.disabilityOfDivyang.update({
-          where: {
-            id: disabilityId,
-          },
-          data: {
-            disabilityCardFileName: disability.disabilityCardFileName,
-            disabilityCardKey: key,
-          },
-        });
+        return fileUpdateResult;
       }
 
       return result;
