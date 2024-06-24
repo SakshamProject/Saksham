@@ -64,7 +64,7 @@ divyangDetailsRouter.put(
     { name: 'disabilitySchemeCard', maxCount: 1 },
     { name: 'bplOrAplCard', maxCount: 1 },
     { name: 'disabilitySchemeCard', maxCount: 1 },
-    { name: 'UDIDCard', maxCount: 1 },
+    { name: 'udidCard', maxCount: 1 },
     { name: 'disabilityCards', maxCount: defaults.disabilities },
   ]),
   putDivyangDetails
