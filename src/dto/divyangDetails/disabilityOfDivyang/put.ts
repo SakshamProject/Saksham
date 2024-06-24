@@ -2,15 +2,9 @@ import { Prisma } from '@prisma/client';
 import { DisabilityOfDivyang } from '../../../types/divyangDetails/disabilityDetailsSchema.js';
 
 const updateDisabilityOfDivyangDBObject = (disability: DisabilityOfDivyang) => {
-  const newDisability: Prisma.DisabilityOfDivyangCreateInput = {
-    disabilityType: {
-      connect: { id: disability.disabilityTypeId },
-    },
-    divyang: {
-      connect: {
-        id: disability.divyangId,
-      },
-    },
+  const newDisability: Prisma.DisabilityOfDivyangUncheckedCreateInput = {
+    disabilityTypeId: disability.disabilityTypeId,
+    divyangId: disability.divyangId,
     certificateIssueAuthority: disability.certificateIssueAuthority,
     dateOfIssue: disability.dateOfIssue,
     disabilityArea: disability.disabilityArea,
@@ -18,12 +12,9 @@ const updateDisabilityOfDivyangDBObject = (disability: DisabilityOfDivyang) => {
     disabilityPercentage: disability.disabilityPercentage,
     disabilitySince: disability.disabilitySince,
     isDisabilitySinceBirth: disability.isDisabilitySinceBirth,
+    disabilitySubTypeId: disability.disabilitySubTypeId,
   };
-  if (disability.disabilitySubTypeId) {
-    newDisability.disabilitySubType = {
-      connect: { id: disability.disabilitySubTypeId },
-    };
-  }
+
   return newDisability;
 };
 
