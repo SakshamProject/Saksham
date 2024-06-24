@@ -19,7 +19,7 @@ const handleUDIDCardFile = async (
     if (!Array.isArray(request.files) && request.files) {
       const file = getFile(request.files, Folders.UDID_CARD);
       if (file) {
-        updateUDIDCardToCloud(request.body.personId, file);
+        updateUDIDCardToCloud(prismaTransaction, request.body.personId, file);
       }
     }
   } catch (error) {
@@ -32,22 +32,19 @@ const handleUDIDCardFile = async (
   }
 };
 
-const updateUDIDCardToCloud = async (personId: string, file: Express.Multer.File) => {
+const updateUDIDCardToCloud = async (
+  prismaTransaction: Prisma.TransactionClient,
+  personId: string,
+  file: Express.Multer.File
+) => {
   try {
-    const transaction = prisma.$transaction(async (prismaTransaction) => {
-      const { key, folderPath } = generateKey(
-        personId,
-        file,
-        Folders.UDID_CARD
-      );
-      const result = await updateUDIDCardKeyDB(prismaTransaction, personId, {
-        UDIDCardKey: key,
-        UDIDCardFileName: file.originalname,
-      });
-
-      const s3Result = await cloudStorage.uploadFile(file, key, folderPath);
+    const { key, folderPath } = generateKey(personId, file, Folders.UDID_CARD);
+    const result = await updateUDIDCardKeyDB(prismaTransaction, personId, {
+      UDIDCardKey: key,
+      UDIDCardFileName: file.originalname,
     });
-    return transaction;
+    const s3Result = await cloudStorage.uploadFile(file, key, folderPath);
+    return result;
   } catch (error) {
     throw new APIError(
       'There was an error uploading UDID card. Please try again.',
@@ -69,6 +66,7 @@ const deleteUDIDCardFromCloud = async (
     });
     const folderPath = personId + '/' + Folders.UDID_CARD;
     const s3Result = await cloudStorage.deleteFolder(folderPath);
+    return result;
   } catch (error) {
     throw new APIError(
       'There was an error deleting UDID card. Please try again.',
