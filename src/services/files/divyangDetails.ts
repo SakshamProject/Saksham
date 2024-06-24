@@ -6,8 +6,6 @@ import {
 } from '../../types/divyangDetails/divyangDetailsSchema.js';
 import { handleIdProofFiles } from './IdProof.js';
 import { handleUDIDCardFile } from './udidCard.js';
-import { updateDisabilityCardsCloud } from './disabilityCard.js';
-import { Folders } from './constants.js';
 import { Prisma } from '@prisma/client';
 
 const handleDivyangDetailsFiles = async (
@@ -44,16 +42,6 @@ const handleDivyangDetailsFiles = async (
         return;
       }
       await handleUDIDCardFile(prismaTransaction, request);
-
-      if (!Array.isArray(request.files) && request.files) {
-        const disabilitiesFiles = request.files[`${Folders.DISABILITY_CARDS}`];
-        await updateDisabilityCardsCloud(
-          prismaTransaction,
-          divyangDetails.id,
-          request.body,
-          disabilitiesFiles
-        );
-      }
     }
   } catch (error) {
     throw error;
