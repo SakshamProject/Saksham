@@ -19,7 +19,11 @@ const handleUDIDCardFile = async (
     if (!Array.isArray(request.files) && request.files) {
       const file = getFile(request.files, Folders.UDID_CARD);
       if (file) {
-        updateUDIDCardToCloud(prismaTransaction, request.body.personId, file);
+        await updateUDIDCardToCloud(
+          prismaTransaction,
+          request.body.personId,
+          file
+        );
       }
     }
   } catch (error) {
@@ -44,7 +48,6 @@ const updateUDIDCardToCloud = async (
       UDIDCardFileName: file.originalname,
     });
     const s3Result = await cloudStorage.uploadFile(file, key, folderPath);
-    return result;
   } catch (error) {
     throw new APIError(
       'There was an error uploading UDID card. Please try again.',

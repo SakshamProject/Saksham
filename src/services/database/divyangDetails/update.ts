@@ -140,12 +140,12 @@ async function updateDivyangProfileKeyDB(
 }
 
 async function updateUDIDCardKeyDB(
-  prisma: Prisma.TransactionClient,
+  prismaTransaction: Prisma.TransactionClient,
   personId: string,
   data: Prisma.DivyangDetailsUpdateInput
 ) {
   try {
-    const result = await prisma.divyangDetails.update({
+    const result = await prismaTransaction.divyangDetails.update({
       data,
       where: {
         personId,
