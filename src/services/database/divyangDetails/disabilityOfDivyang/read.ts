@@ -7,6 +7,10 @@ const getDisabilityOfDivyangDB = async (divyangId: string) => {
       where: {
         divyangId: divyangId,
       },
+      include: {
+        disabilitySubType: true,
+        disabilityType: true,
+      },
     });
     return disabilities;
   } catch (error) {
