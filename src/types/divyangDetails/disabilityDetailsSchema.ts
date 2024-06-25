@@ -8,7 +8,7 @@ const disabilityOfDivyangSchema = z.object({
   divyangId: uuidSchema,
   id: uuidSchema.optional(),
   disabilityTypeId: uuidSchema,
-  disabilitySubTypeId: uuidSchema.nullable().optional(),
+  disabilitySubTypeId: z.union([z.string().uuid(), z.null()]).optional(),
   isDisabilitySinceBirth: z.string().transform((val) => {
     if (val === 'true') return true;
     if (val === 'false') return false;
