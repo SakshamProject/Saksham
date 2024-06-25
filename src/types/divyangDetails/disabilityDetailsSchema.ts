@@ -15,6 +15,7 @@ const disabilityOfDivyangSchema = z.object({
       if (value === 'null') {
         return null;
       }
+      return value;
     }),
   isDisabilitySinceBirth: z.string().transform((val) => {
     if (val === 'true') return true;
