@@ -1,20 +1,20 @@
-import { userForgetPasswordSchemaType } from "../../../types/authentication/authenticationSchema.js";
-import prisma from "../database.js";
-import throwDatabaseError from "../utils/errorHandler.js";
+import { userForgetPasswordSchemaType } from '../../../types/authentication/authenticationSchema.js';
+import prisma from '../database.js';
+import throwDatabaseError from '../utils/errorHandler.js';
 
-async function verifyUser(userName: string) {
+async function verifyUser(userName: string, givenPassword: string) {
   try {
     const user = await prisma.user.findFirst({
       where: {
-        person: { userName: userName },
+        person: { userName: userName, password: { password: givenPassword } },
       },
       select: {
         person: {
           select: { id: true, userName: true, password: true },
         },
         id: true,
-        profilePhotoFile: true,
         profilePhotoFileName: true,
+        profilePhotoKey: true,
         divyangServiceMapping: true,
         designation: {
           select: {
@@ -41,16 +41,20 @@ async function verifyUser(userName: string) {
     }
   }
 }
-async function verifyDivyang(userName: string) {
+async function verifyDivyang(userName: string, givenPassword: string) {
   try {
     const divyangDetails = await prisma.divyangDetails.findFirst({
       where: {
-        person: { userName: userName },
+        person: {
+          userName: userName,
+          password: {
+            password: givenPassword,
+          },
+        },
       },
       select: {
         person: {
           select: {
-            password: true,
             id: true,
             userName: true,
           },
@@ -59,7 +63,7 @@ async function verifyDivyang(userName: string) {
         firstName: true,
         lastName: true,
         profilePhotoFileName: true,
-        profilePhotoFile: true,
+        profilePhotoKey: true,
       },
     });
     return divyangDetails;
