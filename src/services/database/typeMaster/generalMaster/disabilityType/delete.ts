@@ -1,36 +1,63 @@
-import prisma from "../../../database.js";
-import throwDatabaseError from "../../../utils/errorHandler.js";
+import { Prisma } from '@prisma/client';
+import APIError from '../../../../errors/APIError.js';
+import prisma from '../../../database.js';
+import throwDatabaseError from '../../../utils/errorHandler.js';
 
 async function deleteDisabilityTypeDB(id: string) {
   try {
-    const deleteddisabilityType = await prisma.disabilityType.delete({
-      where: {
-        id: id,
-      },
-      include: {
-        disability: true,
-      },
-    });
-    return deleteddisabilityType;
-  } catch (err) {
-    if (err instanceof Error) {
-      throwDatabaseError(err);
-    }
+    const deleteTransaction = await prisma.$transaction(
+      async (prismaTransaction) => {
+        const dependency = await prismaTransaction.disabilityType.findFirst({
+          where: { id },
+          include: { disability: true, disabilityOfDivyang: true },
+        });
+        if (
+          dependency &&
+          (dependency.disability.length > 0 ||
+            dependency.disabilityOfDivyang.length > 0)
+        ) {
+          throw new APIError('Disability type has dependencies');
+        } else {
+          const deleteddisabilityType = await prisma.disabilityType.delete({
+            where: {
+              id: id,
+            },
+            include: {
+              disability: true,
+            },
+          });
+          return deleteddisabilityType;
+        }
+      }
+    );
+    return deleteTransaction;
+  } catch (error) {
+    throwDatabaseError(error);
   }
 }
 
-async function deleteDisabilitySubTypeDB(prismaTransaction:any,id: string) {
+async function deleteDisabilitySubTypeDB(
+  prismaTransaction: Prisma.TransactionClient,
+  id: string
+) {
   try {
-    const deletedDisabilitySubType = await prismaTransaction.disabilitySubType.delete({
-      where: {
-        id: id,
-      },
+    const dependency = await prismaTransaction.disabilitySubType.findFirst({
+      where: { id },
+      include: { divyang: true },
     });
-    return deletedDisabilitySubType;
-  } catch (err) {
-    if (err instanceof Error) {
-      throwDatabaseError(err);
+    if (dependency && dependency.divyang.length > 0) {
+      throw new APIError('Disability sub type has dependencies');
+    } else {
+      const deletedDisabilitySubType =
+        await prismaTransaction.disabilitySubType.delete({
+          where: {
+            id: id,
+          },
+        });
+      return deletedDisabilitySubType;
     }
+  } catch (error) {
+    throwDatabaseError(error);
   }
 }
 
