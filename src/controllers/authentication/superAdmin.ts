@@ -23,7 +23,6 @@ async function superAdminLogin(
       .update(body.password)
       .digest("hex");
     const admin = await verifySuperAdminDB(body.userName, hashedPassword);
-    console.log(body.password, body.userName, admin);
     if (!admin) {
       throw new APIError(
         "Username or password is incorrect",
@@ -40,13 +39,6 @@ async function superAdminLogin(
         expiresIn: "7d",
       }
     );
-
-    // response.cookie("token", token, {
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === "production",
-    //   maxAge: 3600000,
-    //   sameSite: true,
-    // });
 
     response.json({
       message: "Logged in successfully",
