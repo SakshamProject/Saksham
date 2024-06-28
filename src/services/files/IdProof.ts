@@ -22,7 +22,7 @@ const handleIdProofFiles = async (
       const folder = IdProofFileNameToFolderMap.get(key);
 
       // delete file
-      if (value === null) {
+      if (value === 'null') {
         const folderPath = requestDivyangdetails.personId + '/' + folder;
         await cloudStorage.deleteFolder(folderPath);
       }
