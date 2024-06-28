@@ -11,7 +11,6 @@ async function deleteEducationQualificationType(
   try {
     const id: string = request.params.id
     const deletedEducationQualification = await deleteEducationQualificationTypeDB(
-      prisma,
       id
     )
     const responseData = createResponseOnlyData(deletedEducationQualification || {})
