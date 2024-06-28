@@ -1,8 +1,5 @@
-import { Prisma, StatusEnum } from "@prisma/client";
-import {
-  DivyangDetailsSearchType,
-  DivyangDetailsWhere,
-} from "../../../types/divyangDetails/divyangDetailsSchema.js";
+import {Prisma, StatusEnum} from "@prisma/client";
+import {DivyangDetailsSearchType, DivyangDetailsWhere, getDivyangDetailsType,} from "../../../types/divyangDetails/divyangDetailsSchema.js";
 import prisma from "../database.js";
 import throwDatabaseError from "../utils/errorHandler.js";
 
@@ -58,7 +55,7 @@ async function getDivyangDetailsByPersonIdDB(personId: string) {
 
 const getDivyangDetailsByIdDB = async (id: string) => {
   try {
-    const divyangDetails = await prisma.divyangDetails.findFirstOrThrow({
+    const divyangDetails:getDivyangDetailsType = await prisma.divyangDetails.findFirstOrThrow({
       where: {
         id: id,
       },

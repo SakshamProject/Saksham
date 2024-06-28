@@ -162,7 +162,7 @@ model User {
   contactNumber        String
   whatsappNumber       String?
   designationId        String
-  profilePhotoFile     String?
+  profilePhotoKey      String?
   profilePhotoFileName String?
   email                String
 
@@ -249,7 +249,7 @@ model DivyangDetails {
   firstName                    String
   lastName                     String
   divyangId                    String
-  profilePhotoFile             String?
+  profilePhotoKey              String?
   profilePhotoFileName         String?
   gender                       GenderEnum?
   bloodGroup                   BloodGroupEnum?
@@ -268,31 +268,31 @@ model DivyangDetails {
   extraCurricularActivity      String?
   // all below here are in next page
   voterId                      String?
-  voterIdFile                  String?
+  voterIdKey                   String?
   voterIdFileName              String?
   panCardNumber                String?
-  panCardFile                  String?
+  panCardKey                   String?
   panCardFileName              String?
   drivingLicense               String?
-  drivingLicenseFile           String?
+  drivingLicenseKey            String?
   drivingLicenseFileName       String?
   rationCardNumber             String?
-  rationCardFile               String?
+  rationCardKey                String?
   rationCardFileName           String?
   aadharCardNumber             String?
-  aadharCardFile               String?
+  aadharCardKey                String?
   aadharCardFileName           String?
   pensionCardNumber            String?
-  pensionCardFile              String?
+  pensionCardKey               String?
   pensionCardFileName          String?
   medicalInsuranceNumber       String?
-  medicalInsuranceCardFile     String?
+  medicalInsuranceCardKey      String?
   medicalInsuranceCardFileName String?
   disabilitySchemeNumber       String?
-  disabilitySchemeCardFile     String?
+  disabilitySchemeCardKey      String?
   disabilitySchemeCardFileName String?
   BPL_OR_APL_Number            String?
-  BPL_OR_APL_CardFile          String?
+  BPL_OR_APL_CardKey           String?
   BPL_OR_APL_CardFileName      String?
 
   doorNumber                     String?
@@ -333,7 +333,7 @@ model DivyangDetails {
   identityCardNumber   String?
   udidCardNumber       String?
   udidEnrollmentNumber String?
-  UDIDCardFile         String?
+  UDIDCardKey          String?
   UDIDCardFileName     String?
 
   isEmployed       Boolean?
@@ -453,7 +453,7 @@ model DisabilityOfDivyang {
   certificateIssueAuthority CertificateIssueAuthorityEnum?
   // disabilityCardUrl         String? // url
   disabilityCardFileName    String? // url
-  disabilityCardFile        String? // url
+  disabilityCardKey         String? // url
 
   divyang           DivyangDetails     @relation(fields: [divyangId], references: [id])
   disabilitySubType DisabilitySubType? @relation(fields: [disabilitySubTypeId], references: [id])

@@ -1,22 +1,24 @@
-import { AuditLogStatusEnum, Prisma } from "@prisma/client";
-import prisma from "../../database.js";
-import throwDatabaseError from "../../utils/errorHandler.js";
-import { updateUserDBObject } from "../../../../dto/users/put.js";
-import { request } from "express";
-import { saveFile } from "../../../../middlewares/fileHandler/fileHandler.js";
-import { userPutRequestType } from "../../../../types/users/usersSchema.js";
-import { updateUserDB } from "../update.js";
-import { getUserDependencyStatusDB, getUserStatusDB } from "../read.js";
-import { createUserAuditLogDB } from "../create.js";
-import { createAuditLogDBObject } from "../../../../dto/users/post.js";
-import defaults from "../../../../defaults.js";
-import APIError from "../../../errors/APIError.js";
-import { StatusCodes } from "http-status-codes";
+import { AuditLogStatusEnum, Prisma } from '@prisma/client';
+import prisma from '../../database.js';
+import throwDatabaseError from '../../utils/errorHandler.js';
+import { updateUserDBObject } from '../../../../dto/users/put.js';
+import { Request } from 'express';
+import { saveFile } from '../../../../middlewares/fileHandler/fileHandler.js';
+import { userPutRequestType } from '../../../../types/users/usersSchema.js';
+import { updateUserDB } from '../update.js';
+import { getUserDependencyStatusDB, getUserStatusDB } from '../read.js';
+import { createUserAuditLogDB } from '../create.js';
+import { createAuditLogDBObject } from '../../../../dto/users/post.js';
+import defaults from '../../../../defaults.js';
+import APIError from '../../../errors/APIError.js';
+import { StatusCodes } from 'http-status-codes';
+import { handleProfilePhotoFile } from '../../../files/profilePhoto.js';
 
 const updateUserTransactionDB = async (
   body: userPutRequestType,
   id: string,
-  updatedBy: string = defaults.updatedById
+  updatedBy: string = defaults.updatedById,
+  request: Request
 ) => {
   try {
     const transaction = await prisma.$transaction(
@@ -36,9 +38,9 @@ const updateUserTransactionDB = async (
               );
               if (dependencyStatus) {
                 throw new APIError(
-                  "Cannot deactivate the user due to the dependent services assigned to the user",
+                  'Cannot deactivate the user due to the dependent services assigned to the user',
                   StatusCodes.BAD_REQUEST,
-                  "S"
+                  'S'
                 );
               }
             }
@@ -63,6 +65,15 @@ const updateUserTransactionDB = async (
         if (updatedUser && request.file) {
           saveFile(updatedUser.id, request.file);
         }
+        if (body.fileNames) {
+          await handleProfilePhotoFile(
+            prismaTransaction,
+            request,
+            true,
+            updatedUser?.personId
+          );
+        }
+
         return updatedUser;
       },
       {

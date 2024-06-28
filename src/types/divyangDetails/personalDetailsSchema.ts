@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from 'zod';
 import inputFieldSchema, {
   emailSchema,
   passwordSchema,
   phoneNumberSchema,
   userNameSchema,
   uuidSchema,
-} from "../inputFieldSchema.js";
-import { BloodGroupEnum, GenderEnum } from "@prisma/client";
+} from '../inputFieldSchema.js';
+import { BloodGroupEnum, GenderEnum } from '@prisma/client';
 
 const educationQualificationsSchema = z.object({
   id: uuidSchema.optional(),
@@ -33,11 +33,14 @@ const personalDetailsRequestSchema = z.object({
   fatherName: inputFieldSchema,
   motherName: inputFieldSchema,
   UDIDCardNumber: z.string(),
-  isMarried: z.string().transform((val) => {
-    if (val === 'true') return true;
-    if (val === 'false') return false;
-    throw new Error('Invalid boolean string');
-  }).optional(),
+  isMarried: z
+    .string()
+    .transform((val) => {
+      if (val === 'true') return true;
+      if (val === 'false') return false;
+      throw new Error('Invalid boolean string');
+    })
+    .optional(),
   spouseName: inputFieldSchema.optional(),
   spouseNumber: phoneNumberSchema.optional(),
   religion: inputFieldSchema,
@@ -45,6 +48,11 @@ const personalDetailsRequestSchema = z.object({
   community: inputFieldSchema,
   extraCurricularActivity: inputFieldSchema.optional(),
   educationQualifications: educationQualificationsSchema.array(),
+  fileNames: z
+    .object({
+      profilePhotoFileName: z.string().nullable(),
+    })
+    .optional(),
 });
 
 const updatePersonalDetailsRequestSchema = z.object({
@@ -61,11 +69,14 @@ const updatePersonalDetailsRequestSchema = z.object({
   fatherName: inputFieldSchema,
   motherName: inputFieldSchema,
   UDIDCardNumber: z.string(),
-  isMarried: z.string().transform((val) => {
-    if (val === 'true') return true;
-    if (val === 'false') return false;
-    throw new Error('Invalid boolean string');
-  }).optional(),
+  isMarried: z
+    .string()
+    .transform((val) => {
+      if (val === 'true') return true;
+      if (val === 'false') return false;
+      throw new Error('Invalid boolean string');
+    })
+    .optional(),
   spouseName: inputFieldSchema.optional(),
   spouseNumber: phoneNumberSchema.optional(),
   religion: inputFieldSchema,
@@ -73,6 +84,11 @@ const updatePersonalDetailsRequestSchema = z.object({
   community: inputFieldSchema,
   extraCurricularActivity: inputFieldSchema.optional(),
   educationQualifications: educationQualificationsSchema.array(),
+  fileNames: z
+    .object({
+      profilePhotoFileName: z.string().nullable().optional(),
+    })
+    .optional(),
 });
 
 type PersonalDetails = z.infer<typeof personalDetailsRequestSchema>;

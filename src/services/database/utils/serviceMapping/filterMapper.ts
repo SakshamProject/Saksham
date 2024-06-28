@@ -1,12 +1,12 @@
-import { Prisma, StatusEnum } from "@prisma/client";
+import { Prisma, StatusEnum } from '@prisma/client';
 
-import { ServiceMappingColumnNamesEnum } from "../../../../types/serviceMapping/serviceMappingDefaults.js";
-import { filterOperationsEnum } from "../../../../types/inputFieldSchema.js";
+import { ServiceMappingColumnNamesEnum } from '../../../../types/serviceMapping/serviceMappingDefaults.js';
+import { filterOperationsEnum } from '../../../../types/inputFieldSchema.js';
 import {
   ServiceAdditionalWhereSchemaType,
   ServiceMappingWhere,
   serviceMappingFilterType,
-} from "../../../../types/serviceMapping/serviceMappingScreens.js";
+} from '../../../../types/serviceMapping/serviceMappingScreens.js';
 
 const filterServiceMappingMapper = (
   columnName: string,
@@ -27,7 +27,7 @@ const filterServiceMappingMapper = (
     divyang: {
       firstName: {
         [operation]: value,
-        mode: "insensitive",
+        mode: 'insensitive',
       },
     },
   });
@@ -41,7 +41,7 @@ const filterServiceMappingMapper = (
             district: {
               name: {
                 [operation]: value,
-                mode: "insensitive",
+                mode: 'insensitive',
               },
             },
           },
@@ -57,7 +57,7 @@ const filterServiceMappingMapper = (
             state: {
               name: {
                 [operation]: value,
-                mode: "insensitive",
+                mode: 'insensitive',
               },
             },
           },
@@ -71,7 +71,7 @@ const filterServiceMappingMapper = (
         sevaKendra: {
           name: {
             [operation]: value,
-            mode: "insensitive",
+            mode: 'insensitive',
           },
         },
       },
@@ -81,7 +81,7 @@ const filterServiceMappingMapper = (
     service: {
       name: {
         [operation]: value,
-        mode: "insensitive",
+        mode: 'insensitive',
       },
     },
   });
@@ -151,7 +151,7 @@ const generateServiceMappingFilter = async (
   ) {
     const additionalWhere: ServiceMappingWhere = {
       dateOfService: {
-        lte: serviceAdditionalWhere.startDate,
+        lte: serviceAdditionalWhere.endDate,
         gte: serviceAdditionalWhere.startDate,
       },
     };

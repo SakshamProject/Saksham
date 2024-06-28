@@ -1,17 +1,17 @@
-import { Prisma } from "@prisma/client";
-import { updateDivyangDetailsRequest } from "../../types/divyangDetails/divyangDetailsSchema.js";
+import { Prisma } from '@prisma/client';
+import { updateDivyangDetailsRequest } from '../../types/divyangDetails/divyangDetailsSchema.js';
 import {
   PersonalDetails,
   UpdatePersonalDetails,
-} from "../../types/divyangDetails/personalDetailsSchema.js";
-import { Address } from "../../types/divyangDetails/addressSchema.js";
-import { EmploymentDetails } from "../../types/divyangDetails/employmentDetailsSchema.js";
-import { IdProofUploads } from "../../types/divyangDetails/IdProofUploadsSchema.js";
+} from '../../types/divyangDetails/personalDetailsSchema.js';
+import { Address } from '../../types/divyangDetails/addressSchema.js';
+import { EmploymentDetails } from '../../types/divyangDetails/employmentDetailsSchema.js';
+import { IdProofUploads } from '../../types/divyangDetails/IdProofUploadsSchema.js';
 import {
   DisabilityDetails,
   DisabilityOfDivyangList,
   EducationQualificationOfDivyangList,
-} from "../../types/divyangDetails/disabilityDetailsSchema.js";
+} from '../../types/divyangDetails/disabilityDetailsSchema.js';
 
 const updatePersonalDetailsDBObject = (
   personalDetails: UpdatePersonalDetails,
@@ -230,10 +230,8 @@ const updateIdProofUploadsDBObject = (
 
 const updateDisabilityDetailsDBObject = (
   disabilityDetails: DisabilityDetails,
-  updatedBy: string,
-  disabilities: DisabilityOfDivyangList
+  updatedBy: string
 ): Prisma.DivyangDetailsUpdateInput => {
-  console.log("[DisabilityDetails]");
   const updateEmploymentDetails: Prisma.DivyangDetailsUpdateInput = {
     districtCode: disabilityDetails.districtCode,
     stateCode: disabilityDetails.stateCode,
@@ -246,16 +244,6 @@ const updateDisabilityDetailsDBObject = (
         id: updatedBy,
       },
     },
-    disabilities: {
-      createMany: {
-        data: disabilities.disabilitiesToCreate,
-      },
-      deleteMany: {
-        id: {
-          in: disabilities.disabilitiesToDelete,
-        },
-      },
-    },
   };
   return updateEmploymentDetails;
 };
@@ -263,7 +251,6 @@ const updateDisabilityDetailsDBObject = (
 function createUpdateDTOObject(
   pageNumber: number,
   updateDivyangDetailsRequest: updateDivyangDetailsRequest,
-  disabilities: DisabilityOfDivyangList | null | undefined,
   educationQualification:
     | EducationQualificationOfDivyangList
     | null
@@ -296,13 +283,11 @@ function createUpdateDTOObject(
     );
   } else if (
     pageNumber === 4 &&
-    updateDivyangDetailsRequest.disabilityDetails &&
-    disabilities
+    updateDivyangDetailsRequest.disabilityDetails
   ) {
     return updateDisabilityDetailsDBObject(
       updateDivyangDetailsRequest.disabilityDetails,
-      updatedBy,
-      disabilities
+      updatedBy
     );
   } else if (pageNumber === 2 && updateDivyangDetailsRequest.IdProofUploads) {
     return updateIdProofUploadsDBObject(
@@ -310,7 +295,7 @@ function createUpdateDTOObject(
       updatedBy
     );
   } else {
-    console.log("Error - Enter a valid page number or object not present");
+    console.log('Error - Enter a valid page number or object not present');
   }
 }
 

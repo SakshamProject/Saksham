@@ -1,5 +1,4 @@
 import { getRequestType } from "./getRequestSchema.js";
-import {disabilityCardsResponse, filesResponse} from "../services/files/files.js";
 
 const createResponseOnlyData = (result: Object = {}) => {
   const createdResponse = {
@@ -9,22 +8,17 @@ const createResponseOnlyData = (result: Object = {}) => {
 };
 
 function createResponseWithFile(result: Object = {}, file: Object = {}) {
-  return (
-      {
-        data: result,
-        file: file
-      }
-  )
+  return {
+    data: result,
+    file: file,
+  };
 }
 
-function createResponseWithFiles(result: Object = {}, files: filesResponse = [], disabilityCards:disabilityCardsResponse  = []) {
-  return (
-      {
-        data: result,
-        files: files,
-        disabilityCards: disabilityCards,
-      }
-  );
+function createResponseWithFiles(result: Object = {}, files: Object = {}) {
+  return {
+    data: result,
+    files: files,
+  };
 }
 
 const createResponseWithQuery = (
@@ -67,6 +61,6 @@ export {
   createResponseOnlyData,
   createResponseWithQuery,
   createResponseForFilter,
-    createResponseWithFiles,
-    createResponseWithFile
+  createResponseWithFiles,
+  createResponseWithFile,
 };
