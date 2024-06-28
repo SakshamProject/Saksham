@@ -1,6 +1,8 @@
 import path from 'path';
 import { Folders } from './constants.js';
 import { FilesType } from '../../types/files.js';
+import APIError from '../errors/APIError.js';
+import { StatusCodes } from 'http-status-codes';
 
 function generateKey(
   personId: string,
@@ -23,9 +25,13 @@ const generateKeyForDisabilityCard = (
 };
 
 const getFile = (files: FilesType, folder: Folders) => {
-  return Object.entries(files).filter((data) => {
-    if (data[1][0].fieldname === folder) return data;
-  })[0][1][0];
+  try {
+    return Object.entries(files).filter((data) => {
+      if (data[1][0].fieldname === folder) return data;
+    })[0][1][0];
+  } catch (error) {
+    throw new APIError('File Not send', StatusCodes.BAD_REQUEST);
+  }
   //[0] getting the 1st {  [fieldname: string]: Express.Multer.File[];}
   //[1] getting the array of files
   //[0] getting the 1st file
