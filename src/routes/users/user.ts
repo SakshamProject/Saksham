@@ -34,7 +34,7 @@ userRouter.post(
 );
 userRouter.put(
   '/:id',
-  authorization(AuthorizationEnum.SEVAKENDRA_USERS),
+  authorization(AuthorizationEnum.SEVAKENDRA_USERS, MethodsEnum.USER_DROPDOWN),
   fileHandler.fields([{ name: 'profilePhoto', maxCount: 1 }]),
   putUser
 );
