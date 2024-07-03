@@ -6,6 +6,7 @@ import inputFieldSchema, {
   emailSchema,
   passwordSchema,
   phoneNumberSchema,
+  userNameSchema,
   uuidSchema,
 } from '../inputFieldSchema.js';
 import { specialCharsRegex, userNameRegex } from '../regex.js';
@@ -20,7 +21,7 @@ const usersPostSchema = z.object({
   dateOfBirth: dateSchema.optional(),
   designationId: z.string().uuid(),
   email: emailSchema,
-  userName: inputFieldSchema,
+  userName: userNameSchema,
   password: passwordSchema,
   contactNumber: phoneNumberSchema,
   whatsappNumber: phoneNumberSchema.optional(),
@@ -46,7 +47,7 @@ const usersPutSchema = z.object({
   dateOfBirth: dateSchema.optional(),
   designationId: z.string().uuid(),
   email: emailSchema,
-  userName: inputFieldSchema,
+  userName: userNameSchema,
   // password: z.string(),
   contactNumber: phoneNumberSchema,
   whatsappNumber: phoneNumberSchema.optional(),
