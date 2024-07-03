@@ -33,7 +33,7 @@ serviceMappingRouter.get(
 );
 serviceMappingRouter.post(
   '/list',
-  authorization(AuthorizationEnum.SERVICE_MAPPING),
+  authorization(AuthorizationEnum.SERVICE_MAPPING, MethodsEnum.USER_DROPDOWN),
   getServiceMapping
 );
 

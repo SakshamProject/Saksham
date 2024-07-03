@@ -1,13 +1,13 @@
-import { NextFunction, Request, Response } from "express";
-import { getDesignationByIDDB } from "../../services/database/designation/read.js";
-import { designationGetByIdType } from "../../types/designation/designationSchema.js";
-import APIError from "../../services/errors/APIError.js";
-import { StatusCodes } from "http-status-codes";
+import { NextFunction, Request, Response } from 'express';
+import { getDesignationByIDDB } from '../../services/database/designation/read.js';
+import { designationGetByIdType } from '../../types/designation/designationSchema.js';
+import APIError from '../../services/errors/APIError.js';
+import { StatusCodes } from 'http-status-codes';
 import {
   AuthorizationEnum,
   MethodsEnum,
-} from "../../types/authentication/authorizationEnum.js";
-import { getUserByIdAuthDB } from "../../services/database/authentication/verifyUser.js";
+} from '../../types/authentication/authorizationEnum.js';
+import { getUserByIdAuthDB } from '../../services/database/authentication/verifyUser.js';
 
 function authorization(
   currentFeature: AuthorizationEnum,
@@ -34,11 +34,13 @@ function authorization(
         // handling access for servicemapping
         if (
           currentFeature === AuthorizationEnum.SERVICE_MAPPING &&
-          !designation?.features.some(
+          designation?.features.some(
             (feature) => feature.feature.name === currentFeature
           )
         ) {
           request.token.serviceMappingAccess = true;
+          request.token.userSevaKendraId =
+            user?.designation.sevaKendraId || 'defaultSevaKendraId';
           return next();
         }
         if (
@@ -48,10 +50,10 @@ function authorization(
         ) {
           // this can also be thrown when designation is changed after current login session
           throw new APIError(
-            "Permission denied for user",
+            'Permission denied for user',
             StatusCodes.UNAUTHORIZED,
-            "AccessDenied",
-            "S"
+            'AccessDenied',
+            'S'
           );
         }
         //handling for divyang details
@@ -64,7 +66,7 @@ function authorization(
         ) {
           request.token.serviceMappingAccess = true;
           request.token.userSevaKendraId =
-            user?.designation.sevaKendraId || "defaultSevaKendraId";
+            user?.designation.sevaKendraId || 'defaultSevaKendraId';
           return next();
         }
       } else {
@@ -83,10 +85,10 @@ function authorization(
           )
         ) {
           throw new APIError(
-            "Permission denied for divyang",
+            'Permission denied for divyang',
             StatusCodes.UNAUTHORIZED,
-            "AccessDenied",
-            "S"
+            'AccessDenied',
+            'S'
           );
         }
       }

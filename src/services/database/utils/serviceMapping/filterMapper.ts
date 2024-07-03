@@ -165,22 +165,28 @@ const generateServiceMappingFilter = async (
   }
   // access control for users
   if (token !== undefined && !token.superAdminId) {
-    // console.log("user has entered: ", token.serviceMappingAccess)
     // if user has service mapping access then he can see all service mapping in his sevakendra
     if (token.serviceMappingAccess) {
       const additionalWhere: ServiceMappingWhere = {
-        user: {
-          designation: {
-            sevaKendraId: token.userSevaKendraId,
+        OR: [
+          {
+            user: {
+              designation: {
+                sevaKendraId: token.userSevaKendraId,
+              },
+            },
           },
-        },
+          {
+            createdById: token.personId,
+          },
+        ],
       };
       ServiceMappingWhereInput.AND.push(additionalWhere);
     }
     // else he can see all service mapping assigned to him
     else {
       const additionalWhere: ServiceMappingWhere = {
-        userId: token.userId,
+        OR: [{ userId: token.userId }, { createdById: token.personId }],
       };
       ServiceMappingWhereInput.AND.push(additionalWhere);
     }
