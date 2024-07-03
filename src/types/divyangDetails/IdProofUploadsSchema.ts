@@ -38,7 +38,7 @@ const IdProofUploadsRequestSchema = z.object({
       pensionCardFileName: z.string().nullable().optional(),
       medicalInsuranceCardFileName: z.string().nullable().optional(),
       disabilitySchemeCardFileName: z.string().nullable().optional(),
-      BPL_OR_APL_CardFileName: z.string().nullable().optional(),
+      bplOrAplCardFileName: z.string().nullable().optional(),
     })
     .optional(),
 });

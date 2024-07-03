@@ -90,10 +90,10 @@ const filterServiceMappingMapper = (
       equals: value,
     },
   });
-  filterServiceMappingMap.set(ServiceMappingColumnNamesEnum.SERVICE_DATE, {
+  filterServiceMappingMap.set(ServiceMappingColumnNamesEnum.SERVICE_STATUS, {
     isCompleted: {
       equals:
-        StatusEnum.COMPLETED == value
+        StatusEnum.COMPLETED === value.toUpperCase()
           ? StatusEnum.COMPLETED
           : StatusEnum.PENDING,
     },

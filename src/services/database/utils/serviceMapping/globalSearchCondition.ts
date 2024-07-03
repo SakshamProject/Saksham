@@ -1,7 +1,7 @@
-import { StatusEnum } from "@prisma/client";
-import { ServiceMappingWhere } from "../../../../types/serviceMapping/serviceMappingScreens.js";
+import { StatusEnum } from '@prisma/client';
+import { ServiceMappingWhere } from '../../../../types/serviceMapping/serviceMappingScreens.js';
 
-const ServiceMappingGlobalSearchConditions = (searchText: string = "") => {
+const ServiceMappingGlobalSearchConditions = (searchText: string = '') => {
   const searchConditions: ServiceMappingWhere = {
     OR: [
       {
@@ -12,7 +12,7 @@ const ServiceMappingGlobalSearchConditions = (searchText: string = "") => {
                 state: {
                   name: {
                     contains: searchText,
-                    mode: "insensitive",
+                    mode: 'insensitive',
                   },
                 },
               },
@@ -27,7 +27,7 @@ const ServiceMappingGlobalSearchConditions = (searchText: string = "") => {
               district: {
                 name: {
                   contains: searchText,
-                  mode: "insensitive",
+                  mode: 'insensitive',
                 },
               },
             },
@@ -40,7 +40,7 @@ const ServiceMappingGlobalSearchConditions = (searchText: string = "") => {
             sevaKendra: {
               name: {
                 contains: searchText,
-                mode: "insensitive",
+                mode: 'insensitive',
               },
             },
           },
@@ -49,7 +49,7 @@ const ServiceMappingGlobalSearchConditions = (searchText: string = "") => {
       {
         divyang: {
           firstName: {
-            mode: "insensitive",
+            mode: 'insensitive',
             contains: searchText,
           },
         },
@@ -57,22 +57,9 @@ const ServiceMappingGlobalSearchConditions = (searchText: string = "") => {
       {
         service: {
           name: {
-            mode: "insensitive",
+            mode: 'insensitive',
             contains: searchText,
           },
-        },
-      },
-      {
-        dateOfService: {
-          equals: searchText,
-        },
-      },
-      {
-        isCompleted: {
-          equals:
-            StatusEnum.COMPLETED == searchText.toUpperCase()
-              ? StatusEnum.COMPLETED
-              : StatusEnum.PENDING,
         },
       },
     ],

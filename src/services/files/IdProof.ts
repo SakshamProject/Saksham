@@ -2,7 +2,11 @@ import { Request } from 'express';
 import { updateDivyangDetailsRequest } from '../../types/divyangDetails/divyangDetailsSchema.js';
 import prisma from '../database/database.js';
 import { cloudStorage } from '../s3/AWS_S3.js';
-import { Folders, IdProofFileNameToFolderMap } from './constants.js';
+import {
+  Folders,
+  IdProofFileNameToFolderMap,
+  IdProofFolderToFunctionMap,
+} from './constants.js';
 import { generateKey, getFile } from './utility.js';
 import APIError from '../errors/APIError.js';
 import { StatusCodes } from 'http-status-codes';
@@ -19,12 +23,21 @@ const handleIdProofFiles = async (
   const fileNames = requestDivyangdetails.IdProofUploads?.fileNames;
   if (fileNames) {
     for (const [key, value] of Object.entries(fileNames)) {
-      const folder = IdProofFileNameToFolderMap.get(key);
-
+      const folder: Folders | undefined = IdProofFileNameToFolderMap.get(key);
       // delete file
-      if (value === null) {
-        const folderPath = requestDivyangdetails.personId + '/' + folder;
-        await cloudStorage.deleteFolder(folderPath);
+      if (value === 'null' && folder) {
+        const updateFunction = IdProofFolderToFunctionMap.get(folder);
+        if (updateFunction) {
+          const whereCondition = updateFunction(null, null);
+          await prismaTransaction.divyangDetails.update({
+            where: {
+              id: request.body.id,
+            },
+            data: whereCondition,
+          });
+          const folderPath = requestDivyangdetails.personId + '/' + folder;
+          await cloudStorage.deleteFolder(folderPath);
+        }
       }
       // update file
       else {
