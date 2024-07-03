@@ -49,7 +49,7 @@ function prismaKnownErrors(error: Prisma.PrismaClientKnownRequestError) {
 
   if (error.code === PrismaKnownErrors.UniqueConstraintViolation) {
     throw new APIError(
-      `Duplicate -> ${error.meta?.modelName} ${error.meta?.target} should be`,
+      `Duplicate -> ${error.meta?.modelName} ${error.meta?.target} should be unique`,
       StatusCodes.BAD_REQUEST,
       "Unique constraint violation",
       "E"
