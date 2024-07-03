@@ -165,6 +165,7 @@ const generateServiceMappingFilter = async (
   }
   // access control for users
   if (token !== undefined && !token.superAdminId) {
+    // console.log("user has entered: ", token.serviceMappingAccess)
     // if user has service mapping access then he can see all service mapping in his sevakendra
     if (token.serviceMappingAccess) {
       const additionalWhere: ServiceMappingWhere = {
