@@ -26,7 +26,7 @@ const defaults: Defaults = {
   MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
   skip: 0,
   take: 10,
-  minFieldLength: 3,
+  minFieldLength: 0,
   sortOrder: sortOrderEnum.ascending,
   transactionOptions: {
     isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
