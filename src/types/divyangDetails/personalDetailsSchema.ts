@@ -84,6 +84,7 @@ const updatePersonalDetailsRequestSchema = z.object({
   community: inputFieldSchema,
   extraCurricularActivity: inputFieldSchema.optional(),
   educationQualifications: educationQualificationsSchema.array(),
+  userName: inputFieldSchema,
   fileNames: z
     .object({
       profilePhotoFileName: z.string().nullable().optional(),

@@ -40,6 +40,11 @@ const updatePersonalDetailsDBObject = (
         id: personalDetails.communityCategoryId,
       },
     },
+    person: {
+      update: {
+        userName: personalDetails.userName
+      }
+    },
     community: personalDetails.community,
     extraCurricularActivity: personalDetails.extraCurricularActivity,
     updatedBy: {
