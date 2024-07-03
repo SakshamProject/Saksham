@@ -1,6 +1,11 @@
-import { userForgetPasswordSchemaType } from '../../../types/authentication/authenticationSchema.js';
-import prisma from '../database.js';
-import throwDatabaseError from '../utils/errorHandler.js';
+import { AuditLogStatusEnum } from '@prisma/client'
+import { userForgetPasswordSchemaType } from '../../../types/authentication/authenticationSchema.js'
+import { auditLogStatusEnumSchema } from '../../../types/inputFieldSchema.js'
+import APIError from '../../errors/APIError.js'
+import prisma from '../database.js'
+import { getUserStatusDB } from '../users/read.js'
+import throwDatabaseError from '../utils/errorHandler.js'
+import { StatusCodes } from 'http-status-codes'
 
 async function verifyUser(userName: string, givenPassword: string) {
   try {
@@ -33,11 +38,19 @@ async function verifyUser(userName: string, givenPassword: string) {
           },
         },
       },
-    });
-    return user;
+    })
+    if (user) {
+      const currentDate = new Date(Date.now()).toISOString()
+      const auditLog = await getUserStatusDB(prisma, user.id, currentDate)
+      if (auditLog?.status === AuditLogStatusEnum.ACTIVE) {
+        return user
+      } else {
+        throw new APIError('User is not active', StatusCodes.BAD_REQUEST)
+      }
+    }
   } catch (error) {
     if (error instanceof Error) {
-      throwDatabaseError(error);
+      throwDatabaseError(error)
     }
   }
 }
@@ -65,11 +78,11 @@ async function verifyDivyang(userName: string, givenPassword: string) {
         profilePhotoFileName: true,
         profilePhotoKey: true,
       },
-    });
-    return divyangDetails;
+    })
+    return divyangDetails
   } catch (error) {
     if (error instanceof Error) {
-      throwDatabaseError(error);
+      throwDatabaseError(error)
     }
   }
 }
@@ -115,19 +128,19 @@ const getUserByIdAuthDB = async (id: string) => {
       where: {
         id: id,
       },
-    });
-    return user;
+    })
+    return user
   } catch (error) {
     if (error instanceof Error) {
-      throwDatabaseError(error);
+      throwDatabaseError(error)
     }
   }
-};
+}
 const verifyUserForForgetPassword = async (
-  body: userForgetPasswordSchemaType
+  body: userForgetPasswordSchemaType,
 ) => {
   try {
-    const user = await prisma.person.findFirst({
+    const person = await prisma.person.findFirst({
       where: {
         AND: [
           {
@@ -151,16 +164,24 @@ const verifyUserForForgetPassword = async (
           },
         },
       },
-    });
-    return user;
+    })
+    if (person && person.user) {
+      const currentDate = new Date(Date.now()).toISOString()
+      const auditLog = await getUserStatusDB(prisma, person.user.id, currentDate)
+      if (auditLog?.status === AuditLogStatusEnum.ACTIVE) {
+        return person
+      } else {
+        throw new APIError('User is not active', StatusCodes.BAD_REQUEST)
+      }
+    }
   } catch (error) {
-    if (error instanceof Error) throwDatabaseError(error);
+    if (error instanceof Error) throwDatabaseError(error)
   }
-};
+}
 
 export {
   verifyUser,
   getUserByIdAuthDB,
   verifyUserForForgetPassword,
   verifyDivyang,
-};
+}
