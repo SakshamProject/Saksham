@@ -28,7 +28,7 @@ const resetPassword = async (
         response.send("Password reset successfull");
       } else {
         throw new APIError(
-          "Incorrect Password",
+          "Incorrect Old Password",
           StatusCodes.BAD_REQUEST,
           "PasswordError",
           "S"
