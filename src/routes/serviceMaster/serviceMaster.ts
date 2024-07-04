@@ -1,45 +1,46 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   getServiceByID,
   getServices,
-} from "../../controllers/serviceMaster/get.js";
-import { deleteService } from "../../controllers/serviceMaster/delete.js";
+  getSevaKendrasByServiceId,
+} from '../../controllers/serviceMaster/get.js';
+import { deleteService } from '../../controllers/serviceMaster/delete.js';
 import {
   postService,
   filterService,
   listService,
-} from "../../controllers/serviceMaster/post.js";
-import { putService } from "../../controllers/serviceMaster/put.js";
-import authorization from "../../middlewares/authentication/authorization.js";
+} from '../../controllers/serviceMaster/post.js';
+import { putService } from '../../controllers/serviceMaster/put.js';
+import authorization from '../../middlewares/authentication/authorization.js';
 import {
   AuthorizationEnum,
   MethodsEnum,
-} from "../../types/authentication/authorizationEnum.js";
+} from '../../types/authentication/authorizationEnum.js';
 
 const serviceMasterRouter: Router = Router();
 
 serviceMasterRouter.post(
-  "/",
+  '/',
   authorization(AuthorizationEnum.SERVICE_MASTER),
   postService
 );
 serviceMasterRouter.get(
-  "/",
+  '/',
   authorization(AuthorizationEnum.SERVICE_MASTER, MethodsEnum.USER_DROPDOWN),
   getServices
 );
 serviceMasterRouter.put(
-  "/:serviceID",
+  '/:serviceID',
   authorization(AuthorizationEnum.SERVICE_MASTER),
   putService
 );
 serviceMasterRouter.get(
-  "/:serviceID",
+  '/:serviceID',
   authorization(AuthorizationEnum.SERVICE_MASTER),
   getServiceByID
 );
 serviceMasterRouter.delete(
-  "/:serviceID",
+  '/:serviceID',
   authorization(AuthorizationEnum.SERVICE_MASTER),
   deleteService
 );
@@ -49,9 +50,15 @@ serviceMasterRouter.delete(
 //   filterService
 // );
 serviceMasterRouter.post(
-  "/list",
+  '/list',
   authorization(AuthorizationEnum.SERVICE_MASTER, MethodsEnum.DIVYANG_DROPDOWN),
   listService
+);
+
+serviceMasterRouter.get(
+  '/sevakendras/:serviceId',
+  authorization(AuthorizationEnum.SERVICE_MASTER, MethodsEnum.DIVYANG_DROPDOWN),
+  getSevaKendrasByServiceId
 );
 
 export default serviceMasterRouter;
