@@ -77,6 +77,21 @@ async function getServiceByServiceTypeIdDB(prismaTransaction: Prisma.Transaction
       orderBy: {
         name: sortOrder,
       },
+      include: {
+        sevaKendras: {
+          include: {
+            sevakendra: {
+              include: {
+                district: {
+                  include: {
+                    state: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
     });
 
     return services;
