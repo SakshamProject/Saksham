@@ -13,6 +13,9 @@ async function updateUserDB(
         id: id,
       },
       data: userUpdateObject,
+      include: {
+        person: true,
+      },
     });
     return newUser;
   } catch (error) {
