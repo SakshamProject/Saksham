@@ -7,13 +7,15 @@ import { Request } from 'express';
 
 export const createDivyangDetailsTransactionDB = (
   request: Request,
-  divyangDetailsDBObject: createDivyangDetails
+  divyangDetailsDBObject: createDivyangDetails,
+  createdByDivyang: Boolean
 ) => {
   try {
     const transaction = prisma.$transaction(async (prismaTransaction) => {
       const result: DivyangDetails | undefined = await createDivyangDetailsDB(
         prismaTransaction,
-        divyangDetailsDBObject
+        divyangDetailsDBObject,
+        createdByDivyang
       );
       if (
         request.body.personalDetails &&

@@ -30,7 +30,11 @@ async function postDivyangDetails(
     const divyangDetailsDBObject: createDivyangDetails =
       createDivyangDetailsDBObject(divyangDetails, createdBy);
     const result: DivyangDetails | undefined =
-      await createDivyangDetailsTransactionDB(request, divyangDetailsDBObject);
+      await createDivyangDetailsTransactionDB(
+        request,
+        divyangDetailsDBObject,
+        false // createdByDivyang = false
+      );
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
   } catch (error) {
@@ -50,7 +54,11 @@ const postDivyang = async (
     const divyangDetailsDBObject: createDivyangDetails =
       createDivyangDBObject(divyangDetails);
     const result: DivyangDetails | undefined =
-      await createDivyangDetailsTransactionDB(request, divyangDetailsDBObject);
+      await createDivyangDetailsTransactionDB(
+        request,
+        divyangDetailsDBObject,
+        true // createdByDivyang = true
+      );
     const responseData = createResponseOnlyData(result);
     response.send(responseData);
   } catch (error) {

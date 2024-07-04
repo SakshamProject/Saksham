@@ -22,6 +22,7 @@ function authorization(
       //user
       if (request.token?.userId) {
         request.token.serviceMappingAccess = false;
+        request.token.divyangDetailsAccess = false;
         if (
           MethodsEnum.USER_DROPDOWN === method ||
           method === MethodsEnum.DIVYANG_DROPDOWN
@@ -43,6 +44,28 @@ function authorization(
             user?.designation.sevaKendraId || 'defaultSevaKendraId';
           return next();
         }
+        //handling for divyang details
+        if (currentFeature === AuthorizationEnum.DIVYANG_DETAILS) {
+          if (
+            designation?.features.some(
+              (feature) =>
+                feature.feature.name === AuthorizationEnum.DIVYANG_DETAILS
+            )
+          ) {
+            request.token.divyangDetailsAccess = true;
+          }
+          if (
+            designation?.features.some(
+              (feature) =>
+                feature.feature.name === AuthorizationEnum.SERVICE_MAPPING
+            )
+          ) {
+            request.token.serviceMappingAccess = true;
+          }
+          request.token.userSevaKendraId =
+            user?.designation.sevaKendraId || 'defaultSevaKendraId';
+          return next();
+        }
         if (
           !designation?.features.some(
             (feature) => feature.feature.name === currentFeature
@@ -55,20 +78,6 @@ function authorization(
             'AccessDenied',
             'S'
           );
-        }
-        //handling for divyang details
-        if (
-          currentFeature === AuthorizationEnum.DIVYANG_DETAILS &&
-          !designation?.features.some(
-            (feature) =>
-              feature.feature.name === AuthorizationEnum.SERVICE_MAPPING
-          )
-        ) {
-          request.token.serviceMappingAccess = true;
-          request.token.divyangDetailsAccess = true;
-          request.token.userSevaKendraId =
-            user?.designation.sevaKendraId || 'defaultSevaKendraId';
-          return next();
         }
       } else {
         //divyang
