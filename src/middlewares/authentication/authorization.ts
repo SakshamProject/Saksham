@@ -46,6 +46,9 @@ function authorization(
         }
         //handling for divyang details
         if (currentFeature === AuthorizationEnum.DIVYANG_DETAILS) {
+          if (method === MethodsEnum.GET_BY_ID) {
+            return next();
+          }
           if (
             designation?.features.some(
               (feature) =>
