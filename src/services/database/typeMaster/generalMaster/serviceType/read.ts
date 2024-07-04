@@ -1,4 +1,4 @@
-import { Service, ServiceType } from "@prisma/client";
+import { Prisma, Service, ServiceType } from "@prisma/client";
 import { sortOrderEnum } from "../../../../../types/getRequestSchema.js";
 import defaults from "../../../../../defaults.js";
 import { getServiceTypeWithServiceSchema } from "../../../../../types/typeMaster/generalMaster/serviceTypeSchema.js";
@@ -68,7 +68,7 @@ async function getServiceTypeTotal( prismaTransaction: any,searchText:string|und
 
 }
 
-async function getServiceByServiceTypeIdDB(prismaTransaction: any,id: string | undefined,sortOrder:sortOrderEnum=defaults.sortOrder) {
+async function getServiceByServiceTypeIdDB(prismaTransaction: Prisma.TransactionClient, id: string | undefined,sortOrder:sortOrderEnum=defaults.sortOrder) {
   try {
     const services: Service[] = await prismaTransaction.service.findMany({
       where: {
