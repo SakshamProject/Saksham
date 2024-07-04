@@ -1,10 +1,10 @@
-import { Prisma } from "@prisma/client";
-import { DivyangDetailsColumnNamesEnum } from "../../../../types/divyangDetails/divyangDetailsDefaults.js";
+import { Prisma } from '@prisma/client';
+import { DivyangDetailsColumnNamesEnum } from '../../../../types/divyangDetails/divyangDetailsDefaults.js';
 import {
   DivyangDetailsFilterType,
   DivyangDetailsWhere,
-} from "../../../../types/divyangDetails/divyangDetailsSchema.js";
-import { filterOperationsEnum } from "../../../../types/inputFieldSchema.js";
+} from '../../../../types/divyangDetails/divyangDetailsSchema.js';
+import { filterOperationsEnum } from '../../../../types/inputFieldSchema.js';
 
 const filterDivyangDetailsMapper = (
   columnName: string,
@@ -24,32 +24,32 @@ const filterDivyangDetailsMapper = (
     {
       firstName: {
         [operation]: value,
-        mode: "insensitive",
+        mode: 'insensitive',
       },
     }
   );
   filterDivyangDetailsMap.set(DivyangDetailsColumnNamesEnum.DIVYANG_LAST_NAME, {
     lastName: {
       [operation]: value,
-      mode: "insensitive",
+      mode: 'insensitive',
     },
   });
   filterDivyangDetailsMap.set(DivyangDetailsColumnNamesEnum.DIVYANG_ID, {
     divyangId: {
       [operation]: value,
-      mode: "insensitive",
+      mode: 'insensitive',
     },
   });
   filterDivyangDetailsMap.set(DivyangDetailsColumnNamesEnum.MOBILE_NUMBER, {
     mobileNumber: {
       [operation]: value,
-      mode: "insensitive",
+      mode: 'insensitive',
     },
   });
   filterDivyangDetailsMap.set(DivyangDetailsColumnNamesEnum.EMAIL_ID, {
     mailId: {
       [operation]: value,
-      mode: "insensitive",
+      mode: 'insensitive',
     },
   });
 
@@ -76,23 +76,30 @@ const generateDivyangDetailsFilter = (
       );
     }
   }
-  if (!token.superAdminId && token.personId) {
-    /*Case if a user has divyang and also serviceMapping access
-     ---then user can see all divyangs which are created by sevaKendra of currentUser */
+  // if a user have divyang accesss => can see all servicemapping
+  // if not then this condition
+  if (!token.superAdminId && token.personId && !token.divyangDetailsAccess) {
     if (token.serviceMappingAccess) {
+      // if a user don't have divyang details access but has servicemapping access
+      // then show details of divyang created by him in past and divyang assigned to him in servicemapping
       const additionalWhere: DivyangDetailsWhere = {
-        createdBy: {
-          user: {
-            designation: {
-              sevaKendraId: token.userSevaKendraId,
+        OR: [
+          {
+            createdById: token.personId,
+          },
+          {
+            services: {
+              some: {
+                userId: token.userId,
+              },
             },
           },
-        },
+        ],
       };
       DivyangDetailsWhereInput.AND.push(additionalWhere);
-    } else {
-      /* If a user doesn't have serviceMapping access
-    --- then user can see divyang only created by user*/
+    }
+    // if user don't have divyang and service mapping access show them the divyang created by them in past only
+    else {
       const additionalWhere: DivyangDetailsWhere = {
         createdById: token.personId,
       };

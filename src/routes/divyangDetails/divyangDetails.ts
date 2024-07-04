@@ -29,7 +29,7 @@ divyangDetailsRouter.post(
 );
 divyangDetailsRouter.post(
   '/list/',
-  authorization(AuthorizationEnum.DIVYANG_DETAILS),
+  authorization(AuthorizationEnum.DIVYANG_DETAILS, MethodsEnum.USER_DROPDOWN),
   getDivyangDetails
 );
 divyangDetailsRouter.get(

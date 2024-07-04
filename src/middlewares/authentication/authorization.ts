@@ -65,6 +65,7 @@ function authorization(
           )
         ) {
           request.token.serviceMappingAccess = true;
+          request.token.divyangDetailsAccess = true;
           request.token.userSevaKendraId =
             user?.designation.sevaKendraId || 'defaultSevaKendraId';
           return next();

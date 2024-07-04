@@ -8,6 +8,7 @@ interface Token {
   superAdminId: string;
   serviceMappingAccess: Boolean;
   userSevaKendraId: string;
+  divyangDetailsAccess: Boolean;
 }
 
 declare namespace Express {
