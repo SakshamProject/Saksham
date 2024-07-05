@@ -248,7 +248,7 @@ model DivyangDetails {
   id                           String          @id @default(uuid())
   firstName                    String
   lastName                     String
-  divyangId                    String
+  divyangId                    String          @unique
   profilePhotoKey              String?
   profilePhotoFileName         String?
   gender                       GenderEnum?
@@ -267,31 +267,31 @@ model DivyangDetails {
   communityCategoryId          String?
   extraCurricularActivity      String?
   // all below here are in next page
-  voterId                      String?
+  voterId                      String?         @unique
   voterIdKey                   String?
   voterIdFileName              String?
-  panCardNumber                String?
+  panCardNumber                String?         @unique
   panCardKey                   String?
   panCardFileName              String?
-  drivingLicense               String?
+  drivingLicense               String?         @unique
   drivingLicenseKey            String?
   drivingLicenseFileName       String?
   rationCardNumber             String?
   rationCardKey                String?
   rationCardFileName           String?
-  aadharCardNumber             String?
+  aadharCardNumber             String?         @unique
   aadharCardKey                String?
   aadharCardFileName           String?
-  pensionCardNumber            String?
+  pensionCardNumber            String?         @unique
   pensionCardKey               String?
   pensionCardFileName          String?
-  medicalInsuranceNumber       String?
+  medicalInsuranceNumber       String?         @unique
   medicalInsuranceCardKey      String?
   medicalInsuranceCardFileName String?
-  disabilitySchemeNumber       String?
+  disabilitySchemeNumber       String?         @unique
   disabilitySchemeCardKey      String?
   disabilitySchemeCardFileName String?
-  BPL_OR_APL_Number            String?
+  BPL_OR_APL_Number            String?         @unique
   BPL_OR_APL_CardKey           String?
   BPL_OR_APL_CardFileName      String?
 
@@ -331,7 +331,7 @@ model DivyangDetails {
   stateCode    String?
 
   identityCardNumber   String?
-  udidCardNumber       String?
+  udidCardNumber       String? @unique
   udidEnrollmentNumber String?
   UDIDCardKey          String?
   UDIDCardFileName     String?
