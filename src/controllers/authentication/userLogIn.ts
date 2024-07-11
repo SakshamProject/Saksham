@@ -8,9 +8,7 @@ import {
   loginSchema,
   loginSchemaType,
 } from '../../types/authentication/authenticationSchema.js';
-import log from '../../services/logger/logger.js';
 import { hashPassword } from '../../dto/users/post.js';
-import { generateFileURLResponseFromKey } from '../../services/s3/s3.js';
 import { getFileFromCloud } from '../../services/files/get.js';
 
 async function userLogin(

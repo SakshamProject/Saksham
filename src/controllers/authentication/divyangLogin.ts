@@ -10,7 +10,6 @@ import config from '../../../config.js';
 import * as crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { verifyDivyang } from '../../services/database/authentication/verifyUser.js';
-import { generateFileURLResponseFromKey } from '../../services/s3/s3.js';
 import { getFileFromCloud } from '../../services/files/get.js';
 
 async function divyangLogin(

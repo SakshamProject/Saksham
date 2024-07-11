@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { deleteDisabilityOfDivyangDB } from '../../../services/database/divyangDetails/disabilityOfDivyang/delete.js';
 import { createResponseOnlyData } from '../../../types/createResponseSchema.js';
-import s3Client from '../../../services/s3/s3.js';
 import { deleteDisabilityCardFromCloud } from '../../../services/files/disabilityOfDivyang.js';
 
 const deleteDisabilityOfDivyang = async (
