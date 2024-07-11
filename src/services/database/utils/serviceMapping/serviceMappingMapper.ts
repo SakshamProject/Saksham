@@ -1,15 +1,11 @@
-import { Prisma } from "@prisma/client";
-import { sortOrderEnum } from "../../../../types/getRequestSchema.js";
-import { ServiceMappingColumnNamesEnum } from "../../../../types/serviceMapping/serviceMappingDefaults.js";
+import { sortOrderEnum } from '../../../../types/getRequestSchema.js';
+import { ServiceMappingColumnNamesEnum } from '../../../../types/serviceMapping/serviceMappingDefaults.js';
 
 const serviceMappingColumnNameMapper = (
   orderByColumn: ServiceMappingColumnNamesEnum = ServiceMappingColumnNamesEnum.UPDATED_AT,
   sortOrder: sortOrderEnum = sortOrderEnum.ascending
 ) => {
-  const serviceMappingColumnNameMap: Map<
-    string,
-    Prisma.DivyangServiceMappingOrderByWithRelationAndSearchRelevanceInput
-  > = new Map();
+  const serviceMappingColumnNameMap: Map<string, Object> = new Map();
 
   serviceMappingColumnNameMap.set(ServiceMappingColumnNamesEnum.DIVYANG_NAME, {
     divyang: { firstName: sortOrder },
