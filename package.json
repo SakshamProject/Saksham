@@ -1,8 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "start": "npm dotenvx run -- tsx watch server.ts",
-    "build": "npm dotenvx run -- tsc --build",
+    "start": "npx @dotenvx/dotenvx run -- tsx watch server.ts",
+    "build": "npx @dotenvx/dotenvx run -- tsc --build",
     "test": "mocha --timeout 10000 --exit",
     "studio": "prisma studio"
   },
